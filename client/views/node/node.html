@@ -9,10 +9,7 @@
 			<label for="referenceStatus">Merke</label>
 			<input type="text" class="form-control" id="referenceStatus" value="{{status}}*en status, bør være radiobuttons*">
 		</div>
-		<div class="form-group">
-			<label for="referenceKeywords">Nøkkelord</label>
-			<input type="text" class="form-control" id="referenceKeywords" value="{{keywords}}*en liste av nøkkelord kommaseparert*">
-		</div>
+		{{> TagInput values=keywords placeholder="Nøkkelord" id="referenceKeywords"}}
 
 		<div class="form-group">
 			<label for="referenceSummary">Sammendrag</label>

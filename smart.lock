@@ -2,13 +2,19 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "bootstrap3-sass": {}
+      "bootstrap3-sass": {},
+      "typeahead": {}
     },
     "packages": {
       "bootstrap3-sass": {
         "git": "https://github.com/reywood/meteor-bootstrap3-sass.git",
         "tag": "v3.1.1-5",
         "commit": "d61b7c69aecf1c2033db6b8d283fcfabe9788451"
+      },
+      "typeahead": {
+        "git": "https://github.com/sergeyt/meteor-typeahead.git",
+        "tag": "v0.0.10",
+        "commit": "fe0bb03aea8493037de134d815f9663feb21a944"
       },
       "scss": {
         "git": "https://github.com/fourseven/meteor-scss.git",
