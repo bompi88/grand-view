@@ -6,3 +6,5 @@
 standard-app-packages
 autopublish
 insecure
+bootstrap3-sass
+scss

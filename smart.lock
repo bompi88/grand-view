@@ -1,0 +1,20 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "bootstrap3-sass": {}
+    },
+    "packages": {
+      "bootstrap3-sass": {
+        "git": "https://github.com/reywood/meteor-bootstrap3-sass.git",
+        "tag": "v3.1.1-5",
+        "commit": "d61b7c69aecf1c2033db6b8d283fcfabe9788451"
+      },
+      "scss": {
+        "git": "https://github.com/fourseven/meteor-scss.git",
+        "tag": "v0.9.3",
+        "commit": "185f3b2787fb85e653f7b7bf603d1493ed14943d"
+      }
+    }
+  }
+}
