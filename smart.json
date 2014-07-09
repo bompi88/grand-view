@@ -1,6 +1,7 @@
 {
   "packages": {
     "bootstrap3-sass": {},
-    "typeahead": {}
+    "typeahead": {},
+    "iron-router": {}
   }
 }
