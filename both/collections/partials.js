@@ -1,0 +1,1 @@
+Partials = new Meteor.Collection('partials');
