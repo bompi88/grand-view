@@ -1,4 +1,4 @@
-Partials.allow({
+Paragraphs.allow({
   insert: userIsLoggedIn,
   
   update: ownsDocument,
