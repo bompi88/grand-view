@@ -13,7 +13,8 @@ Router.map(function () {
   });
 
   this.route('Document', {
-  	path: '/document/:_id'
+  	path: '/document/:_id',
+  	controller: 'DocumentController'
   });
-  
+
 });

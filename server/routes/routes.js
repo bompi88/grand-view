@@ -1,3 +1,7 @@
+/**
+ * Server Routes
+ */
+
 Router.map(function () {
 
   this.route('PdfExport', {
