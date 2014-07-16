@@ -1,0 +1,40 @@
+<template name="NodeDetail">
+	<h3>Referanse</h3>
+	<form role="form">
+		<div class="form-group">
+			<label for="referenceTitle">Tittel</label>
+			<input type="text" class="form-control" id="referenceTitle" value="{{title}}*referansenavn*">
+		</div>
+		<div class="form-group">
+			<label for="referenceStatus">Merke</label>
+			<input type="text" class="form-control" id="referenceStatus" value="{{status}}*en status, bør være radiobuttons*">
+		</div>
+		{{> TagsInput values=keywords placeholder="Nøkkelord" id="referenceKeywords" minChars="2" collection="tags"}}
+
+		<div class="form-group">
+			<label for="referenceSummary">Sammendrag</label>
+			<textarea class="form-control" id="referenceSummary" rows="3"></textarea>
+		</div>
+
+		<div class="form-group">
+			<label for="referenceInputFile">Fil</label>
+			<input type="file" id="referenceInputFile">
+			<p class="help-block">Velg en fil å tilknytte til ressursen.</p>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-6">
+				<h5><b>Kilder</b></h5>
+				<label class="radio-inline"><input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Bøker osv.</label>
+				<label class="radio-inline"><input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Webside</label>
+			</div>
+
+			<div class="col-lg-6">
+				<h5><b>Kryssreferanser</b></h5>
+			</div>
+		</div>
+
+		<button type="submit" class="btn btn-default">Lagre</button>
+	</form>
+
+</template>

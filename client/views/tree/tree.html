@@ -1,7 +1,8 @@
 <template name="Tree">
+  <h3>{{title}}</h3>
+  <p>{{> UI.contentBlock}}</p>
 
-  <h3>Struktur</h3>
-  <p>en tekst her</p>
-  <div id="tree1"></div>
-
+  <div id="{{id}}" class="tree {{class}}">
+  	{{> NodeLevel nodes=this.nodes.children level=0}}
+  </div>
 </template>

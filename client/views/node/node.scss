@@ -1,0 +1,40 @@
+/**
+ * Node: SCSS style
+ */
+
+.slot-top {
+	position: absolute;
+	top:-4px;
+	left:0;
+	z-index: 1000;
+	width: 100%;
+	height: 15px;
+}
+
+.slot-bottom {
+	position: absolute;
+	bottom:7px;
+	left:0;
+	z-index: 1000;
+	width: 100%;
+	height: 15px;
+}
+
+.slot-visible {
+	&.slot-top {
+		top:-10px;
+	}
+
+	&.slot-bottom {
+		top:10px;
+	}
+	
+	height: 30px;
+	position: relative;
+	border: 1px dashed darken(#fff, 40%);
+	border-radius: 2px;
+	background-color: darken(#fff, 5%);
+	margin-bottom: 0px;
+	margin-top: -4px;
+	padding: 10px;
+}

@@ -1,7 +1,8 @@
 {
   "packages": {
     "bootstrap3-sass": {},
-    "typeahead": {},
-    "iron-router": {}
+    "iron-router": {},
+    "fake": {},
+    "simple-tags": {}
   }
 }

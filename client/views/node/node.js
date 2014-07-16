@@ -1,18 +1,27 @@
-Template.Node.rendered = function () {
+/**
+ * NodeLevel: Helpers
+ */
 
-   var typeaheadAdapter = new Bloodhound({
-      local: Tags.find().map(function(tag) { return {value: tag.name}; }),
-      datumTokenizer: function(d) {
-       return Bloodhound.tokenizers.whitespace(d.name); 
-     },
-     queryTokenizer: Bloodhound.tokenizers.whitespace    
-   });
+Template.NodeLevel.helpers({
+  hasChild: function() {
+    return this.children && this.children.length > 0;
+  },
 
-   typeaheadAdapter.initialize();
+  nodesWithIndex: function() {
+    if (this.nodes) {
+      return this.nodes.map(function (node, index) {
+        return _.extend(node, {index: index + 1 });
+      });
+    }
+    return null;
+  },
 
-   $(this.find('#referenceKeywords')).tokenfield({
-      typeahead: {
-         source: typeaheadAdapter.ttAdapter()
-      }
-   });
-};
+  nextLevelText: function (cur, next) {
+    var lvl =  "" + cur + "." + next;
+
+    if(parseInt(cur) == 0)
+      lvl = next;
+  
+    return _.extend(this, {level: lvl});
+  } 
+});

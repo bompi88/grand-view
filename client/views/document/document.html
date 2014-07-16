@@ -1,0 +1,20 @@
+<template name="Document">
+  <div class="container">
+    <h1 class="text-center">Velkommen til GrandView</h1>
+    <hr>
+    <div class="row">
+      <div class="col-lg-4">
+        {{#Tree title="Struktur" nodes=this}}
+        Klikk og dra nodene i trestrukturen der du vil ha dem. Klikker man dobbelt på en av nodene, så åpnes
+        det en fane til høyre med den valgte informasjonen.
+        {{/Tree}}
+      </div>
+
+      <div class="col-lg-8">
+        {{> Tabs}}
+        {{> NodeDetail}}
+      </div>
+
+    </div>
+  </div>
+</template>
