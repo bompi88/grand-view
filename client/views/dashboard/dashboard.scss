@@ -1,0 +1,10 @@
+.table-row {
+	&:hover {
+		
+		cursor:pointer;
+
+		td {
+			color:#008cba;
+		}
+	}
+}

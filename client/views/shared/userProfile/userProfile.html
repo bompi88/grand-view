@@ -1,0 +1,33 @@
+<template name="UserProfile">
+	{{#if currentUser}}
+	<div class="btn-group">
+		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    		<span class="glyphicon glyphicon-log-out"></span> Logget inn som: <b>{{currentUser.emails.[0].address}}</b> <span class="caret"></span>
+  		</button>
+		<div class="dropdown-menu col-sm-3" style="width:330px; padding:15px">
+			{{#if $.Session.equals 'dropdownState' 'userButtons'}}
+				{{>UserButtons}}
+			{{else}}
+				{{>ChangePassword}}
+			{{/if}}
+		</div>
+	</div>
+	{{>notifications}}
+	{{/if}}
+</template>
+
+
+<template name="UserButtons">
+	<button type="button" id="btn-changePass" class="btn btn-default btn-block" style="margin-top: 5px;">Bytt passord</button>
+	<button type="button" id="btn-logout" class="btn btn-primary btn-block" style="margin-top: 5px;">Logg ut</button>
+</template>
+
+
+<template name="ChangePassword">
+	<form class="form-signup">
+		<input name="oldPassword" id="oldPassword" type="password" class="form-control" placeholder="Gammelt passord" required autofocus>
+		<input name="newPassword" id="newPassword" type="password" class="form-control" placeholder="Nytt passord" required>
+		<button id='submit' class="btn btn-lg btn-primary btn-block" type="submit">Bytt passord</button>
+		<a href="#" type="button" id='cancel' class="btn btn-lg btn-primary btn-block">Avbryt</a>
+	</form>
+</template>

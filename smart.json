@@ -3,6 +3,13 @@
     "bootstrap3-sass": {},
     "iron-router": {},
     "fake": {},
-    "simple-tags": {}
+    "simple-tags": {},
+    "notifications": {},
+    "handlebar-helpers": {},
+    "bootboxjs": {
+    	"git": "https://github.com/TimHeckel/meteor-bootboxjs.git",
+    	"branch": "master",
+    	"commit": "9d68c5b442efedf90fb2c08682239afcba455911"
+    }
   }
 }

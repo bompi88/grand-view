@@ -1,0 +1,47 @@
+<template name="Dashboard">
+	<div class="container">
+		<div class="row">
+			<div class="pull-right" style="margin-top:25px;">
+				{{>UserProfile}}
+			</div>
+		</div>
+		<div class="row">
+			<div class="page-header">
+				<h2>
+					<span class="glyphicon glyphicon-book"></span> Dokumenter
+				</h2>
+			</div>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Navn</th>
+						<th>Sist endret</th>
+					</tr>
+				</thead>
+				<tbody>
+					{{#each documents}}
+					<tr class="table-row">
+						<td class="row-item">{{title}}</td>
+						<td class="row-item">{{lastChanged}}</td>
+						<td>
+							<div class="btn-group pull-right">
+								<button type="button" class="btn btn-success btn-sm">
+									<span class="glyphicon glyphicon-edit"></span> Rediger
+								</button>
+								<button type="button" class="btn btn-danger btn-sm">
+									<span class="glyphicon glyphicon-remove"></span> Fjern
+								</button>
+							</div>
+						</td>
+					</tr>
+					{{/each}}
+				</tbody>
+			</table>
+
+		</div>
+		<button type="button" class="btn btn-success pull-right" id="btn-newDoc">
+			<span class="glyphicon glyphicon-pencil"></span> Nytt dokument
+		</button>
+
+	</div>
+</template>

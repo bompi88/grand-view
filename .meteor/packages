@@ -11,3 +11,7 @@ fake
 accounts-base
 accounts-password
 simple-tags
+notifications
+handlebar-helpers
+bootboxjs
+http
