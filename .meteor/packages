@@ -6,4 +6,8 @@
 standard-app-packages
 bootstrap3-sass
 scss
-typeahead
+iron-router
+fake
+accounts-base
+accounts-password
+simple-tags
