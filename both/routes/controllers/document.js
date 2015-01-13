@@ -1,5 +1,5 @@
 DocumentController = AuthRouteController.extend({
-	waitOn: function() {
+	subscriptions: function() {
 		return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('paragraphsByDoc', this.params._id)];
 	},
 	data: function() {
@@ -8,7 +8,7 @@ DocumentController = AuthRouteController.extend({
 });
 
 DocumentsController = AuthRouteController.extend({
-  waitOn: function() {
+  subscriptions: function() {
     return Meteor.subscribe('documents');
   },
   data: function() {
