@@ -14,3 +14,4 @@ reywood:bootstrap3-sass
 gfk:notifications
 iron:router
 cwohlman:bootboxjs
+momentjs:moment

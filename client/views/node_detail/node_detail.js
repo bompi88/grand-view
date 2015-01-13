@@ -17,6 +17,14 @@ Template.NodeDetail.events({
         summary: summary,
         lastChanged: new Date(),
       }
+    }, function(error, sum) {
+      if(error) {
+        Notifications.error('Feil', 'Dokumentet ble ikke lagret');
+      }
+      else {
+        Notifications.success('Suksess', 'Dokumentet ble oppdatert!');
+      }
     });
+
   }
 });

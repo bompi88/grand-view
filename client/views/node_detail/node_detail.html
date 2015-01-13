@@ -3,17 +3,17 @@
 	<form role="form">
 		<div class="form-group">
 			<label for="referenceTitle">Tittel</label>
-			<input type="text" class="form-control" id="referenceTitle" value="{{title}}*referansenavn*">
+			<input type="text" class="form-control" id="referenceTitle" value="{{title}}">
 		</div>
 		<div class="form-group">
 			<label for="referenceStatus">Merke</label>
-			<input type="text" class="form-control" id="referenceStatus" value="{{status}}*en status, bør være radiobuttons*">
+			<input type="text" class="form-control" id="referenceStatus" value="{{status}}">
 		</div>
-		{{> TagsInput values=keywords placeholder="Nøkkelord" id="referenceKeywords" minChars="2" collection="tags"}}
+		{{! {{> TagsInput values=keywords placeholder="Nøkkelord" id="referenceKeywords" minChars="2" collection="tags"}}
 
 		<div class="form-group">
 			<label for="referenceSummary">Sammendrag</label>
-			<textarea class="form-control" id="referenceSummary" rows="3"></textarea>
+			<textarea class="form-control" id="referenceSummary" rows="3">{{summary}}</textarea>
 		</div>
 
 		<div class="form-group">
