@@ -1,1 +1,0 @@
-//moment.locale('nb');
