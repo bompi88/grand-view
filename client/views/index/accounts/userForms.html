@@ -6,9 +6,8 @@
 				{{formTitle}}
 			</h1>
 			{{!-- {{Display warnings, info, success on form submit}} --}}
-			{{> notifications}}
 			<div class="account-wall">
-				{{!-- {{We have three form state inside the account wall}} --}}
+				{{!-- We have three form state inside the account wall --}}
 				{{#if $.Session.equals 'formState' 'login'}}
 				{{> Login}}
 				{{/if}}
