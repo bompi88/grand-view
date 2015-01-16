@@ -8,8 +8,6 @@ AuthRouteController = RouteController.extend({
         if(!Meteor.userId()) {
             this.redirect('Index');
         }
-        else {
-          this.next();
-        }
+        this.next();
     }
 });

@@ -4,8 +4,6 @@ IndexController = RouteController.extend({
         if (Meteor.userId()) {
           this.redirect('Dashboard');
         }
-        else {
-          this.next();
-        }
+        this.next();
     }
 });

@@ -1,10 +1,9 @@
 AccountsController = RouteController.extend({
-  template: 'Index',
   resetThePassword: function () {
     var token = this.params.token;
     var passwordPrompt = {
       title: "Nytt passord",
-      message: '<form role="form"><input name="password" id="passwordID" class="form-control" type="password" placeholder="Passord" required></form>',
+      message: '<input name="password" id="passwordID" class="form-control" type="password" placeholder="Passord" required>',
       buttons: {
         confirm: {
           label: "Bekreft",
@@ -21,12 +20,11 @@ AccountsController = RouteController.extend({
               }
             });
           }
-
         }
       }
-
     };
     bootbox.dialog(passwordPrompt);
+    this.render("Index");
   },
   verifyEmail: function () {
     Accounts.verifyEmail(this.params.token, function (error) {
@@ -39,5 +37,6 @@ AccountsController = RouteController.extend({
         Router.go('Dashboard');
       }
     });
+    this.render("Index");
   }
 });
