@@ -75,6 +75,15 @@ Meteor.methods({
 	    	callback();
 	    }
 	    return true;
+	},
+
+	removeNodes: function(ids, callback) {
+		Nodes.remove({_id: { $in: ids || []}});
+
+		if (typeof callback !== 'undefined') {
+	    	callback();
+	    }
+	    return true;
 	}
 
 });

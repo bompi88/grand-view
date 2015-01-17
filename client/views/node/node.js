@@ -3,25 +3,26 @@
  */
 
 Template.NodeLevel.helpers({
-  hasChild: function() {
-    return this.children && this.children.length > 0;
+  hasChildren: function() {
+    return Nodes.find({parent: this._id}).count() > 0;
   },
 
-  nodesWithIndex: function() {
-    if (this.nodes) {
-      return this.nodes.map(function (node, index) {
-        return _.extend(node, {index: index + 1 });
-      });
-    }
-    return null;
-  },
+  children: function() {
+    return Nodes.find({parent: this._id});
+  }
+});
 
-  nextLevelText: function (cur, next) {
-    var lvl =  "" + cur + "." + next;
+Template.NodeLevel.events({
+  'click .add-node-level': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
 
-    if(parseInt(cur) == 0)
-      lvl = next;
-  
-    return _.extend(this, {level: lvl});
-  } 
+    Nodes.insert({ parent: this._id, title: "Ingen tittel", level: this.level + 1, userId: this.userId }, function(error, nodeId) {
+      console.log(nodeId)
+      if(!error) {
+        Documents.update({_id: Session.get('mainDocument')}, { $addToSet: {children: nodeId} });
+        Meteor.subscribe('nodeById', nodeId);
+      }
+    });
+  }
 });

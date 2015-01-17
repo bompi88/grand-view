@@ -12,11 +12,15 @@ Template.Dashboard.events({
     Router.go(Router.path('Document', {_id: this._id}));
   },
   'click #btn-remove': function(event, tmpl) {
+    var doc = Documents.findOne({_id: this._id});
+    var children = doc && doc.children || [];
+
     Documents.remove({_id: this._id}, function(error) {
       if(error) {
         Notifications.warn('Feil', error.message);
       }
       else {
+        Meteor.call('removeNodes', children);
         Notifications.success('Dokument slettet', 'Dokument slettet');
       }
     });

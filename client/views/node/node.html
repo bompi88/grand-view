@@ -1,21 +1,21 @@
 <template name="NodeLevel">
 	<ul>
-		{{#each nodesWithIndex}}
-            {{#with nextLevelText ../level index}}
-    		<li class="node" style="margin-top:0;" data-id="{{guid}}">
-                <div class="slot slot-top"></div>
-
-        		<span draggable="true"><span class="glyphicon glyphicon-minus-sign"></span> {{level}} {{title}}</span>
-        		
-                {{#if hasChild}}
-                    {{> NodeLevel nodes=children level=level}}
-        		{{/if}}
-        	</li>
-            {{/with}}
-    	{{/each}}
+		<li class="node" style="margin-top:0;" data-id="{{guid}}">
+            
+            <div class="slot slot-top"></div>
+            <span draggable="true">{{#if hasChildren}}<span class="glyphicon glyphicon-minus-sign"></span> {{/if}}{{title}}</span>
+            
+            {{#if hasChildren}}
+                {{#each children}}
+                    {{> NodeLevel}}
+            	{{/each}}
+            {{/if}}
+        </li>
         <div class="slot slot-bottom"></div>
-    	<li>
-    		<a href="#" draggable="false">legg til <span class="glyphicon glyphicon-plus-sign"></span></a>
-    	</li>
+        {{#if $lte level 3}}
+        	<li>
+        		<a href="#" draggable="false" class="add-node-level">legg til <span class="glyphicon glyphicon-plus-sign"></span></a>
+        	</li>
+        {{/if}}
     </ul>
 </template>

@@ -3,6 +3,19 @@
   <p>{{> UI.contentBlock}}</p>
 
   <div id="{{id}}" class="tree {{class}}">
-  	{{> NodeLevel nodes=this.nodes.children level=0}}
+	<ul>
+		<li class="node" style="margin-top:0;" data-id="{{guid}}">
+            <div class="slot slot-top"></div>
+         	<span draggable="true">{{#if hasChildren}}<span class="glyphicon glyphicon-minus-sign"></span> {{/if}}{{documentTitle}}</span>
+
+			{{#each treeItems}}
+				{{> NodeLevel}}
+			{{/each}}
+		</li>
+        <div class="slot slot-bottom"></div>
+    	<li>
+    		<a href="#" draggable="false" class="add-node">legg til <span class="glyphicon glyphicon-plus-sign"></span></a>
+    	</li>
+    </ul>
   </div>
 </template>

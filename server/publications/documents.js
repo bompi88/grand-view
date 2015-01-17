@@ -7,6 +7,7 @@ Meteor.publish('documents', function() {
 	// At a later time it should return documents to
 	// a specific logged in user, if the user dont have administrator
 	// rights.
+	console.log("hhmamnsd")
 	return Documents.find({});
 });
 

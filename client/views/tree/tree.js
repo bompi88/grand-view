@@ -1,7 +1,6 @@
-
 Tabs = {
     open: [],
-    dep: new Deps.Dependency(),
+    dep: new Tracker.Dependency(),
     addTab: function(docId) {
         if (this.open.indexOf(docId)==-1)
             this.open.push(docId);
@@ -20,22 +19,15 @@ Tabs = {
     }
 }
 
-tree = {
-    dep: new Deps.Dependency(),
-    getTree: function() {
-        this.dep.depend();
-        return this.tree;
-    },
-    updated:function() {
-        this.dep.changed();
-        return this.tree;
-    },
-    tree: {}
-};
-
 Template.Tree.helpers({
-    nodes: function() {
-        return tree.getTree().children;
+    treeItems: function() {
+        return this.tree && Nodes.find({parent: this.tree._id}) || [];
+    },
+    hasChildren: function() {
+        return this.tree && Nodes.find({parent: this.tree._id}).count() > 0;
+    },
+    documentTitle: function() {
+        return this.tree && this.tree.title;
     }
 });
 
@@ -56,15 +48,6 @@ Template.Tree.rendered = function () {
     //     e.stopPropagation();
     // });
 };
-
-var getLevel = function(node) {
-    var count = 0;
-
-    while (node = getParent(node)) {
-        count++;
-    }
-    return count;
-}
 
 var getParent = function(node) {
     if(node && node._parent) {
@@ -89,8 +72,18 @@ var isPartOfSubTree = function(root, target) {
 
 var dragElement;
 
-Template.NodeLevel.events({
-    
+Template.Tree.events({
+  'click .add-node': function(event, tmpl) {
+    var self = this;
+    Nodes.insert({ parent: this.tree._id, title: "Ingen tittel", level: 1, userId: this.tree.userId }, function(error, nodeId) {
+        console.log(nodeId)
+        console.log(self)
+        if(!error) {
+            Documents.update({_id: self.tree._id}, { $addToSet: {children: nodeId} });
+            Meteor.subscribe('nodeById', nodeId);
+        }
+    });
+  }
 });
 
 

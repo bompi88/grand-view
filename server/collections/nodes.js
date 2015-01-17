@@ -1,4 +1,4 @@
-Paragraphs.allow({
+Nodes.allow({
   insert: userIsLoggedIn,
   
   update: ownsDocument,
