@@ -23,7 +23,11 @@
 
       <div class="col-lg-8">
         {{> Tabs}}
-        {{> NodeDetail}}
+        {{#if focusOnMainDoc}}
+          {{> GeneralInfo}}
+        {{else}}
+          {{> NodeDetail}}
+        {{/if}}
       </div>
 
     </div>

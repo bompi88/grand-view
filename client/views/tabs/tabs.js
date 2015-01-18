@@ -25,6 +25,8 @@ Template.Tabs.events({
 		event.preventDefault && event.preventDefault();
 		event.stopPropagation && event.stopPropagation();
 
+		// If tab removed, go to the general tab. This should be changed to be the nearest tab.
+		Session.set('nodeInFocus', Session.get('mainDocument'));
 		Tabs.removeTab(this);
 	}
 

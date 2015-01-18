@@ -3,3 +3,9 @@ Template.Document.events({
     Router.go('Dashboard');
   }
 });
+
+Template.Document.helpers({
+	focusOnMainDoc: function() {
+		return Session.get('nodeInFocus') == Session.get('mainDocument');
+	}
+});
