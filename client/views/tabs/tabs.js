@@ -49,7 +49,14 @@ Template.Tabs.events({
 		$('.list').animate({left:"-="+getLeftPosi()+"px"},'slow',function(){
 		
 		});
-	}    
+	},
+
+	'mouseenter .list span.glyphicon': function(event, tmpl) {
+		$(event.target).parent().addClass('hovered');
+	},
+	'mouseleave .list span.glyphicon': function(event, tmpl) {
+		$(event.target).parent().removeClass('hovered');
+	}
 
 });
 

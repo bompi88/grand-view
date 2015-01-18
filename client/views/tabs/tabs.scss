@@ -21,6 +21,10 @@
   }
 }
 
+.list li.hovered a, .list li.active.hovered a {
+  background-color: lighten(red, 40%);
+}
+
 .tab-wrapper {
   position:relative;
   margin:0 auto;
