@@ -8,30 +8,30 @@
 }
 
 .tab-wrapper {
-    position:relative;
-    margin:0 auto;
-    overflow:hidden;
+  position:relative;
+  margin:0 auto;
+  overflow:hidden;
 	padding:0px;
-  	height:50px;
+  height:50px;
 }
 
 .list {
-    position:absolute;
-    left:0px;
-    top:0px;
-  	min-width:3000px;
-  	margin-left:0px;
-    margin-top:0px;
+  position:absolute;
+  left:0px;
+  top:0px;
+  min-width:3000px;
+  margin-left:0px;
+  margin-top:0px;
 }
 
 .list li{
 	display:table-cell;
-    position:relative;
-    text-align:center;
-    cursor:grab;
-    cursor:-webkit-grab;
-    color:#efefef;
-    vertical-align:middle;
+  position:relative;
+  text-align:center;
+  cursor:grab;
+  cursor:-webkit-grab;
+  color:#efefef;
+  vertical-align:middle;
 }
 
 .scroller {

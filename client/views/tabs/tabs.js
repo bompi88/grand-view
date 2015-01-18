@@ -4,6 +4,11 @@ Template.Tabs.helpers({
     },
     isMainDocument: function() {
     	return Session.get('nodeInFocus') == Session.get('mainDocument');
+    },
+    getTitle: function(id) {
+    	var node = Nodes.findOne({_id: id}, { fields: { title:1}});
+    	console.log(node)
+    	return node && node.title || null;
     }
 });
 
@@ -77,7 +82,6 @@ reAdjust = function() {
     $('.scroller-right').show();
   } else {
     $('.scroller-right').hide();
-    
     if (getLeftPosi() < 0) {
     	$('.list').animate({left:"-="+getLeftPosi()+"px"},'slow',function(){
 		});
