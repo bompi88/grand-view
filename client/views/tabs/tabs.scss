@@ -1,0 +1,8 @@
+.delete-tab {
+	color: darken(grey, 2%);
+	cursor: pointer;
+
+	&:hover {
+		color: darken(red, 20%);
+	}
+}

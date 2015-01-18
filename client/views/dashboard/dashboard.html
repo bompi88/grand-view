@@ -2,46 +2,51 @@
 	<div class="container">
 		<div class="row">
 			<div class="pull-right" style="margin-top:25px;">
-				{{>UserProfile}}
+				{{> UserProfile}}
 			</div>
 		</div>
 		<div class="row">
 			<div class="page-header">
 				<h2>
 					<span class="glyphicon glyphicon-book"></span> Dokumenter
+					<button type="button" class="btn btn-success pull-right" id="btn-newDoc">
+						<span class="glyphicon glyphicon-pencil"></span> Nytt dokument
+					</button>
 				</h2>
+
 			</div>
+			{{!-- The document table --}}
 			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th>Navn</th>
 						<th>Sist endret</th>
+						<th></th>
 					</tr>
 				</thead>
 				<tbody>
 					{{#each documents}}
-					<tr class="table-row">
-						<td class="row-item">{{title}}</td>
-						<td class="row-item">{{formatDate lastChanged}}</td>
-						<td>
-							<div class="btn-group pull-right">
-								<button type="button" id="btn-editDoc" class="btn btn-success btn-sm">
-									<span class="glyphicon glyphicon-edit"></span> Rediger
-								</button>
-								<button type="button" id="btn-remove" class="btn btn-danger btn-sm">
-									<span class="glyphicon glyphicon-remove"></span> Fjern
-								</button>
-							</div>
-						</td>
-					</tr>
+						{{> DocumentRow}}
 					{{/each}}
 				</tbody>
 			</table>
-
 		</div>
-		<button type="button" class="btn btn-success pull-right" id="btn-newDoc">
-			<span class="glyphicon glyphicon-pencil"></span> Nytt dokument
-		</button>
-
 	</div>
+</template>
+
+<template name="DocumentRow">
+	<tr class="table-row">
+		<td class="row-item">{{title}}</td>
+		<td class="row-item">{{formatDate lastChanged}}</td>
+		<td>
+			<div class="btn-group pull-right">
+				<button type="button" id="btn-editDoc" class="btn btn-success btn-sm">
+					<span class="glyphicon glyphicon-edit"></span> Rediger
+				</button>
+				<button type="button" id="btn-remove" class="btn btn-danger btn-sm">
+					<span class="glyphicon glyphicon-remove"></span> Fjern
+				</button>
+			</div>
+		</td>
+	</tr>
 </template>

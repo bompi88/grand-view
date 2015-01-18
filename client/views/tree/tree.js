@@ -9,7 +9,11 @@ Tabs = {
         return this.open;
     },
     removeTab: function(docId) {
-        this.open.remove(docId);
+        var index = this.open.indexOf(docId.toString());
+        
+        if (index > -1) {
+            this.open.splice(index, 1);
+        }
         this.dep.changed();
         return this.open;
     },
@@ -279,9 +283,12 @@ Template.Tree.events({
     'dblclick li span': function(evt, tmpl) {
         if(evt.stopPropagation) { evt.stopPropagation(); }
 
-        // TODO: Adds a tab and fills the form with data. The
-        // correct information should also be set to the form.
-        Tabs.addTab(UI.getElementData(evt.currentTarget)._id);
+        var data = Blaze.getData(evt.currentTarget);
+
+        // Adds a tab
+        if(typeof data._id !== "undefined") {
+            Tabs.addTab(data._id);
+        }
     },
 
     'click li span': function(evt, tmpl) {

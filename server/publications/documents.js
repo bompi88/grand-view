@@ -1,16 +1,22 @@
 /**
- * Publish methods: Documents
+ * Publish all documents that a user owns or has access to
  */
-
 Meteor.publish('documents', function() {
-	// For now, just return all documents. Easier to be creative.
-	// At a later time it should return documents to
-	// a specific logged in user, if the user dont have administrator
-	// rights.
-	console.log("hhmamnsd")
-	return Documents.find({});
+	// return the documents that the current user owns
+	if(this.userId)
+		return Documents.find({ userId: this.userId });
+
+	return this.ready();
 });
 
+/**
+ * Publish a particular document by its id, if the user owns it or
+ * has access to it.
+ */
 Meteor.publish('documentById', function(id) {
-	return Documents.find({_id: id});
+
+	if(this.userId)
+		return Documents.find({ $and: [ { _id: id }, { userId: this.userId }] });
+
+	return this.ready();
 });

@@ -1,10 +1,10 @@
 Meteor.methods({
 
-	/* verifyCaptcha
-	// verifies a google captcha solved by a user
-	// @data: parameter that contains the challengeid and the proposed captcha solution
-	// returns a json object with a boolean success variable and an error message
-	*/
+	/**
+	 * Verifies a google captcha solved by a user
+	 * @data: parameter that contains the challengeid and the proposed captcha solution
+	 * returns a json object with a boolean success variable and an error message
+	 */
 	verifyCaptcha: function(data) {
 
 		var captchaData = {
@@ -53,22 +53,22 @@ Meteor.methods({
 				'error': 'captcha_verification_failed'
 			};
 		}
-		console.log('Captcha verification passed!');
+
 		return {
 			'success': true
 		};
 	},
 
-	/* registerUser
-	// called from the client side to create user with automatic verification email sending
-	// @user: object with password and email variables
-	// @callback: (optional) callback on complete
-	// returns true after invokation
-	*/
+	/**
+	 * Called from the client side to create user with automatic verification email sending
+	 * @user: object with password and email variables
+	 * @callback: (optional) callback on complete
+	 * returns true after invokation
+	 */
 	registerUser: function(user, callback) {
 
 		var userId = Accounts.createUser(user);
-		console.log("Email to verify:" +user.email + " | userId: "+userId);
+
 	    Accounts.sendVerificationEmail(userId, user.email);
 
 	    if (typeof callback !== 'undefined') {
@@ -77,6 +77,12 @@ Meteor.methods({
 	    return true;
 	},
 
+	/**
+	 * Called from the client side to remove all nodes in the array ids
+	 * @ids: Array of nodes ids
+	 * @callback: (optional) callback on complete
+	 * returns true after invokation
+	 */
 	removeNodes: function(ids, callback) {
 		Nodes.remove({_id: { $in: ids || []}});
 
@@ -89,9 +95,9 @@ Meteor.methods({
 });
 
 
-/* This is global login validator that runs every time someone tries to login.
-	In our case, we have implemented a filter that only allows users with verified email adresses to login. */
 
+// This is global login validator that runs every time someone tries to login.
+// In our case, we have implemented a filter that only allows users with verified email adresses to login.
 Accounts.validateLoginAttempt(function(info) {
 	if(info && info.user && info.user.emails){
 		var emails = info.user.emails;

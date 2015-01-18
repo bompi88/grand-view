@@ -1,16 +1,10 @@
-/**
- * userForms.js
- */
-
-
 //keep track of state: login, sign-up and forgotton-password
 Session.setDefault('formState', 'login');
-
 
 // -- Rendered --------------------------------------------------------
 
 Template.SignUp.rendered = function() {
-	//insert google captcha into the template
+	//inject google captcha into the template
 	jQuery.getScript('http://www.google.com/recaptcha/api/js/recaptcha_ajax.js', function() {
 		Recaptcha.create('6LfUzPYSAAAAAAEiGvFJswtWAAVJo4Om_rXaSEjD', 'rendered-captcha-container', {
 			theme: 'white',
@@ -28,7 +22,9 @@ Template.SignUp.destroyed = function() {
 // -- Helpers --------------------------------------------------------
 
 Template.UserForms.formTitle = function() {
+  
   var state = Session.get('formState');
+
   if(state === 'login')
     return 'Vennligst logg inn';
   else if(state === 'sign-up')
@@ -77,10 +73,12 @@ Template.UserForms.events({
 
     }
   },
-  //submit event on signup
+
+  // Submit event on signup
   'submit form.form-signup': function(event, tmpl) {
   	event.preventDefault();
-  	try {
+  	
+    try {
   		var email = tmpl.find('#email').value;
   		var password = tmpl.find('#password').value.toString();
   		var user = {email: email, password: password};
@@ -100,36 +98,33 @@ Template.UserForms.events({
   						Notifications.success('Info', 'You created a new user. Please verify your email before logging in by checking your mail inbox and click on the email verification link.');
   						Session.set('formState', 'login');
 
-  					}
-  					else {
+  					} else {
   						Notifications.error('Error', error.message);
 
   					}
   				});
-            }
-            else {
-            	//the user has to try the captcha again
-            	Recaptcha.reload();
-	            // alert error message according to received code
-	            switch (result.error) {
-	            	case 'captcha_verification_failed':
-	            	Notifications.error('Captcha solution is wrong!');
-	            	break;
-	            	case 'google_service_not_accessible':
-	            	Notifications.warn('Google Service not accessible');
-	            	break;
-	            	default:
-	            	Notifications.warn('error');
-	            }
-        	}
+        } else {
+        	//the user has to try the captcha again
+        	Recaptcha.reload();
+          
+          // alert error message according to received code
+          switch (result.error) {
+          	case 'captcha_verification_failed':
+              Notifications.error('Captcha solution is wrong!');
+              break;
+          	case 'google_service_not_accessible':
+              Notifications.warn('Google Service not accessible');
+              break;
+          	default:
+              Notifications.warn('error');
+          }
+      	}
     	});
 
   	}
-  	catch(error) {
+    catch(error) {
   		Notifications.error('Error', error.message);
-
   	}
-
   },
 
   // Submit event on login
@@ -142,20 +137,16 @@ Template.UserForms.events({
 
       // log into app with email and password
       Meteor.loginWithPassword(email, password, function(error){
-
         if(error) {
           Notifications.error('Error', error.message);
-        }
-        else {
+        } else {
           Router.go('Dashboard');
         }
       });
-
-    // Catch and display error
     }
+    // Catch and display error
     catch(error) {
       Notifications.error('Error', error.message);
     }
   }
 });
-

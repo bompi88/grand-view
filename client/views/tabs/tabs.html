@@ -1,5 +1,9 @@
 <template name="Tabs">
-	{{#each tabs}}
-		{{this}}
-	{{/each}}
+	<ul class="nav nav-tabs nav-justified">
+		<li role="presentation" class="{{#if isMainDocument}}active{{/if}}"><a href="#" class="general-info">Generelt</a></li>
+		
+		{{#each tabs}}
+			<li role="presentation" class="{{#if $.Session.equals 'nodeInFocus' this}}active{{/if}}"><a href="#" class="tab">{{this}} <span class="glyphicon glyphicon-remove pull-right delete-tab" aria-hidden="true"></span></a></li>
+		{{/each}}
+	</ul>	
 </template>

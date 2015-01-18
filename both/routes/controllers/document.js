@@ -7,6 +7,7 @@ DocumentController = AuthRouteController.extend({
 	},
   onAfterAction: function() {
     Session.set('mainDocument', this.params._id);
+    Session.set('nodeInFocus', this.params._id);
   }
 });
 

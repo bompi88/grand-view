@@ -28,4 +28,3 @@
     controller: 'AccountsController',
     action: 'resetThePassword'
   });
-
