@@ -26,6 +26,11 @@ Tabs = {
             }
         }, 200);
         return this.open;
+    },
+    reset: function() {
+        this.open = [];
+        this.dep.changed();
+        return this.open;
     }
 }
 
