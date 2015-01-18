@@ -77,6 +77,11 @@ reAdjust = function() {
     $('.scroller-right').show();
   } else {
     $('.scroller-right').hide();
+    
+    if (getLeftPosi() < 0) {
+    	$('.list').animate({left:"-="+getLeftPosi()+"px"},'slow',function(){
+		});
+	}
   }
   
   if (getLeftPosi() < 0) {
