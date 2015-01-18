@@ -14,11 +14,17 @@ Tabs = {
         if (index > -1) {
             this.open.splice(index, 1);
         }
+
         this.dep.changed();
         return this.open;
     },
     getTabs: function() {
         this.dep.depend();
+        Meteor.setTimeout(function() {
+            if(this.open.length) {
+                reAdjust();
+            }
+        }, 200);
         return this.open;
     }
 }
