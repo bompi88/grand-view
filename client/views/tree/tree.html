@@ -4,18 +4,17 @@
 
   <div id="{{id}}" class="tree {{class}}">
 	<ul>
-		<li class="node" style="margin-top:0;" data-id="{{guid}}">
+		<li class="node root" style="margin-top:0;" data-id="{{guid}}">
             <div class="slot slot-top"></div>
-         	<span draggable="true">{{#if hasChildren}}<span class="glyphicon glyphicon-minus-sign"></span> {{/if}}{{documentTitle}}</span>
+         	<span draggable="true" class="element">{{#if hasChildren}}{{#if tree.collapsed}}<span class="glyphicon glyphicon-plus-sign show-root"></span>{{else}}<span class="glyphicon glyphicon-minus-sign hide-root"></span>{{/if}} {{/if}}{{documentTitle}}</span>
 
-			{{#each treeItems}}
-				{{> NodeLevel}}
-			{{/each}}
+      {{#unless tree.collapsed}}
+  			{{#each treeItems}}
+  				{{> NodeLevel}}
+  			{{/each}}
+      {{/unless}}
 		</li>
         <div class="slot slot-bottom"></div>
-    	<li>
-    		<a href="#" draggable="false" class="add-node">legg til <span class="glyphicon glyphicon-plus-sign"></span></a>
-    	</li>
     </ul>
   </div>
 </template>
