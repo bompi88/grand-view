@@ -1,10 +1,13 @@
 AccountsController = RouteController.extend({
-  template: 'Index',
+  
+  /**
+   * Creates a modal for resetting the password, and redirects based on the result
+   */
   resetThePassword: function () {
     var token = this.params.token;
     var passwordPrompt = {
       title: "Nytt passord",
-      message: '<form role="form"><input name="password" id="passwordID" class="form-control" type="password" placeholder="Passord" required></form>',
+      message: '<input name="password" id="passwordID" class="form-control" type="password" placeholder="Passord" required>',
       buttons: {
         confirm: {
           label: "Bekreft",
@@ -21,13 +24,16 @@ AccountsController = RouteController.extend({
               }
             });
           }
-
         }
       }
-
     };
     bootbox.dialog(passwordPrompt);
+    this.render("Index");
   },
+
+  /**
+   * Verifies an email and redirects based on the results
+   */
   verifyEmail: function () {
     Accounts.verifyEmail(this.params.token, function (error) {
       if(error) {
@@ -39,5 +45,7 @@ AccountsController = RouteController.extend({
         Router.go('Dashboard');
       }
     });
+    this.render("Index");
   }
+
 });

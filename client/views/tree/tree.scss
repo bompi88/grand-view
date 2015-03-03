@@ -13,15 +13,20 @@
     }
 }
 
-.tree li.add-node {
-    padding:10px 5px 0 5px;
+.tree li.node {
+    display:inline-block;
+    margin:0;
+    padding:0px 0px 0px 0px;
     position:relative;
+
+    span.glyphicon:hover {
+        color: darken(orange, 10%);
+    }
 }
 
-.tree li.node {
-    margin:0;
-    padding:10px 5px 0 5px;
-    position:relative;
+.tree ul {
+    margin-top: 0;
+    padding-top: 0;
 }
 
 // .tree li.node::before, .tree li::after {

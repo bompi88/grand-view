@@ -4,14 +4,14 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-bootstrap3-sass
-scss
-iron-router
-fake
+mrt:fake@0.3.4
 accounts-base
 accounts-password
-simple-tags
-notifications
-handlebar-helpers
-bootboxjs
+bompi88:simple-tags@0.0.4
+raix:handlebar-helpers@0.1.1
 http
+reywood:bootstrap3-sass
+gfk:notifications
+iron:router
+cwohlman:bootboxjs
+momentjs:moment

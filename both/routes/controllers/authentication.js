@@ -5,8 +5,9 @@
  */
 AuthRouteController = RouteController.extend({
     onBeforeAction: function() {
-        if(!Meteor.loggingIn() && !Meteor.user()) {
+        if(!Meteor.userId()) {
             this.redirect('Index');
         }
+        this.next();
     }
 });

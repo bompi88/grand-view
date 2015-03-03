@@ -1,0 +1,72 @@
+.delete-tab {
+	color: darken(grey, 2%);
+	cursor: pointer;
+
+	&:hover {
+		color: darken(red, 20%);
+	}
+}
+
+.list li.active a.general-info {
+  background-color: darken(#ffffff, 10%);
+  &:hover {
+    background-color: darken(#ffffff, 10%);
+  }
+}
+
+.list li a.general-info {
+  background-color: darken(#ffffff, 5%);
+  &:hover {
+    background-color: darken(#ffffff, 15%);
+  }
+}
+
+.list li.hovered a, .list li.active.hovered a {
+  background-color: lighten(red, 40%);
+}
+
+.tab-wrapper {
+  position:relative;
+  margin:0 auto;
+  overflow:hidden;
+	padding:0px;
+  height:50px;
+}
+
+.list {
+  position:absolute;
+  left:0px;
+  top:0px;
+  min-width:3000px;
+  margin-left:0px;
+  margin-top:0px;
+}
+
+.list li{
+	display:table-cell;
+  position:relative;
+  text-align:center;
+  cursor:grab;
+  cursor:-webkit-grab;
+  color:#efefef;
+  vertical-align:middle;
+}
+
+.scroller {
+  text-align:center;
+  cursor:pointer;
+  display:none;
+  padding:7px;
+  padding-top:11px;
+  white-space:no-wrap;
+  vertical-align:middle;
+  background-color:#fff;
+}
+
+.scroller-right{
+  float:right;
+}
+
+.scroller-left {
+  float:left;
+}

@@ -1,27 +1,24 @@
 <template name="UserProfile">
 	{{#if currentUser}}
-	<div class="btn-group">
-		<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-    		<span class="glyphicon glyphicon-log-out"></span> Logget inn som: <b>{{currentUser.emails.[0].address}}</b> <span class="caret"></span>
-  		</button>
-		<div class="dropdown-menu col-sm-3" style="width:330px; padding:15px">
-			{{#if $.Session.equals 'dropdownState' 'userButtons'}}
-				{{>UserButtons}}
-			{{else}}
-				{{>ChangePassword}}
-			{{/if}}
+		<div class="btn-group">
+			<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+	    		<span class="glyphicon glyphicon-log-out"></span> Logget inn som: <b>{{currentUser.emails.[0].address}}</b> <span class="caret"></span>
+	  		</button>
+			<div class="dropdown-menu col-sm-3" style="width:330px; padding:15px">
+				{{#if $.Session.equals 'dropdownState' 'userButtons'}}
+					{{>UserButtons}}
+				{{else}}
+					{{>ChangePassword}}
+				{{/if}}
+			</div>
 		</div>
-	</div>
-	{{>notifications}}
 	{{/if}}
 </template>
-
 
 <template name="UserButtons">
 	<button type="button" id="btn-changePass" class="btn btn-default btn-block" style="margin-top: 5px;">Bytt passord</button>
 	<button type="button" id="btn-logout" class="btn btn-primary btn-block" style="margin-top: 5px;">Logg ut</button>
 </template>
-
 
 <template name="ChangePassword">
 	<form class="form-signup">

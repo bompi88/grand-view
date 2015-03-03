@@ -1,1 +1,0 @@
-Paragraphs = new Meteor.Collection('paragraphs');

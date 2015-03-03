@@ -1,14 +1,18 @@
 DocumentController = AuthRouteController.extend({
-	waitOn: function() {
-		return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('paragraphsByDoc', this.params._id)];
+	subscriptions: function() {
+		return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('nodesByDoc', this.params._id)];
 	},
 	data: function() {
 		return Documents.findOne({ _id: this.params._id });
-	}
+	},
+  onAfterAction: function() {
+    Session.set('mainDocument', this.params._id);
+    Session.set('nodeInFocus', this.params._id);
+  }
 });
 
 DocumentsController = AuthRouteController.extend({
-  waitOn: function() {
+  subscriptions: function() {
     return Meteor.subscribe('documents');
   },
   data: function() {

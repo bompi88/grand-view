@@ -1,20 +1,33 @@
 <template name="Document">
   <div class="container">
-    <h1 class="text-center">Velkommen til GrandView</h1>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="pull-left" style="margin-top:25px;">
+          <div class="btn btn-warning back-to-dashboard"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Tilbake til dashbord</div>
+        </div>
+        <div class="pull-right" style="margin-top:25px;">
+          {{> UserProfile}}
+        </div>
+      </div>
+    </div>
+    
     <hr>
+    
     <div class="row">
       <div class="col-lg-4">
-        <div class="btn btn-warning back-to-dashboard">&#60;- Tilbake</div>
-
-        {{#Tree title="Struktur" nodes=this}}
-        Klikk og dra nodene i trestrukturen der du vil ha dem. Klikker man dobbelt på en av nodene, så åpnes
-        det en fane til høyre med den valgte informasjonen.
-        {{/Tree}}
+          {{#Tree title="Struktur" tree=this}}
+          Klikk og dra nodene i trestrukturen der du vil ha dem. Klikker man dobbelt på en av nodene, så åpnes
+          det en fane til høyre med den valgte informasjonen.
+          {{/Tree}}
       </div>
 
       <div class="col-lg-8">
         {{> Tabs}}
-        {{> NodeDetail}}
+        {{#if focusOnMainDoc}}
+          {{> GeneralInfo}}
+        {{else}}
+          {{> NodeDetail}}
+        {{/if}}
       </div>
 
     </div>
