@@ -7,7 +7,6 @@ standard-app-packages
 mrt:fake@0.3.4
 accounts-base
 accounts-password
-bompi88:simple-tags@0.0.4
 raix:handlebar-helpers@0.1.1
 http
 reywood:bootstrap3-sass
@@ -15,3 +14,7 @@ gfk:notifications
 iron:router
 cwohlman:bootboxjs
 momentjs:moment
+aldeed:autoform
+chhib:selectize-bootstrap-3
+comerc:autoform-selectize
+aldeed:collection2

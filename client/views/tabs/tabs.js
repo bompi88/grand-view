@@ -7,7 +7,7 @@ Template.Tabs.helpers({
     },
     getTitle: function(id) {
     	var node = Nodes.findOne({_id: id}, { fields: { title:1}});
-    	console.log(node)
+
     	return node && node.title || null;
     }
 });
