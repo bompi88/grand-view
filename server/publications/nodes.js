@@ -9,9 +9,10 @@ Meteor.publish('nodesByDoc', function(id) {
 
 		// If there is a document, return all its nodes
 		return doc && doc[0] ? Nodes.find({ $and: [{_id: { $in : doc[0].children || [] }}, { userId: this.userId }]}) : this.ready();		
+	} else {
+		return this.ready();
 	}
 
-	return this.ready();
 });
 
 /**

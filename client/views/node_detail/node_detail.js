@@ -5,42 +5,12 @@ Template.NodeDetail.helpers({
 });
 
 Template.NodeDetail.events({
-  'submit form': function (event, tmpl) {
-    event.preventDefault && event.preventDefault();
-
-    var title = tmpl.find('#referenceTitle').value.trim();
-    var status = tmpl.find('#referenceStatus').value.trim();
-    var summary = tmpl.find('#referenceSummary').value.trim();
-
-    Nodes.update({
-      _id: Session.get('nodeInFocus')
-    },
-    {
-      $set: {
-        title: title,
-        status: status,
-        summary: summary,
-        lastChanged: new Date(),
-      }
-    }, function(error, sum) {
-      if(error) {
-        Notifications.error('Feil', 'Referansen ble ikke lagret');
-      }
-      else {
-        Notifications.success('Suksess', 'Referansen ble oppdatert!');
-      }
-    });
-  },
 
   /**
    * Reset the form on click on cancel button
    */
   'click .cancel': function(event, tmpl) {
-    var doc = Nodes.findOne({_id: Session.get('nodeInFocus') });
-
-    $(tmpl.find('#referenceTitle')).val(doc.title);
-    $(tmpl.find('#referenceStatus')).val(doc.status);
-    $(tmpl.find('#referenceSummary')).val(doc.summary);
+    AutoForm.resetForm("update-node-form");
   },
 
   'click .delete-reference': function(event, tmpl) {
@@ -86,40 +56,47 @@ Template.NodeDetail.events({
 });
 
 Template.GeneralInfo.events({
-  'submit form': function (event, tmpl) {
-    event.preventDefault && event.preventDefault();
 
-    var title = tmpl.find('#referenceTitle').value.trim();
-    var status = tmpl.find('#referenceStatus').value.trim();
-    var summary = tmpl.find('#referenceSummary').value.trim();
+'click .delete-document': function(event, tmpl) {
+  var self = this;
+    // A confirmation prompt before removing the document
+    var confirmationPrompt = {
+      title: "Bekreftelse på slettingen",
+      message: 'Er du sikker på at du vil slette <b><em>hele</em></b> dokumentet?',
+      buttons: {
+        cancel: {
+          label: "Nei"
+        },
+        confirm: {
+          label: "Ja",
+          callback: function(result) {
+            if(result) {
+              // Remove the document
+              Documents.remove({_id: self._id}, function(error) {
+                if(error) {
+                  Notifications.warn('Feil', error.message);
+                } else {
+                  // Remove all the children nodes that rely on the document
+                  Meteor.call('removeNodes', self.children);
 
-    Documents.update({
-      _id: this._id
-    },
-    {
-      $set: {
-        title: title,
-        status: status,
-        summary: summary,
-        lastChanged: new Date(),
+                  // Notify the user
+                  Notifications.success('Sletting fullført', 'Dokument sammen med alle referanser er nå slettet.');
+                  Router.go('Dashboard');
+                }
+              });
+            }
+          }
+        }
       }
-    }, function(error, sum) {
-      if(error) {
-        Notifications.error('Feil', 'Dokumentet ble ikke lagret');
-      }
-      else {
-        Notifications.success('Suksess', 'Dokumentet ble oppdatert!');
-      }
-    });
+    }
+    bootbox.dialog(confirmationPrompt);
   },
 
   /**
    * Reset the form on click on cancel button
    */
   'click .cancel': function(event, tmpl) {
-    $(tmpl.find('#referenceTitle')).val(this.title);
-    $(tmpl.find('#referenceStatus')).val(this.status);
-    $(tmpl.find('#referenceSummary')).val(this.summary);
+    AutoForm.resetForm("update-document-form");
   }
 
 });

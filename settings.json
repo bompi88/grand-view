@@ -1,0 +1,12 @@
+{
+    "app_name": "GrandView",
+    "public": {
+        "ga": {
+            "id": "<ga-ID>"
+        }
+    },
+    "kadira": { 
+		"appId": "<app-id>", 
+		"appSecret": "<app-secret>" 
+	}
+}

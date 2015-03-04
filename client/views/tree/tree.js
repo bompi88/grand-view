@@ -92,16 +92,20 @@ Template.Tree.rendered = function () {
                 var elData = UI.getData(t);
 
                 if(elData) {
-                    Nodes.insert({ parent: elData.tree._id, title: "Ingen tittel", level: 1, userId: elData.tree.userId }, function(error, nodeId) {
-                        if(!error) {
-                            Documents.update({_id: Session.get('mainDocument')}, { $addToSet: {children: nodeId} });
-                            Meteor.subscribe('nodeById', nodeId);
+                    console.log("INNAFOR")
+                    Nodes.insert({ parent: elData.tree._id, title: "Ingen tittel", level: 1, userId: elData.tree.userId, lastChanged: new Date() }, function(error, nodeId) {
+                        if(error) {
+                            Notifications.error(error);
                         }
+
+                        Documents.update({_id: Session.get('mainDocument')}, { $addToSet: {children: nodeId} });
+                        Meteor.subscribe('nodeById', nodeId);
+                        
                     });
                 }
             },
             'delete-node': function(t) {
-                alert('Kan ikke slette rotnoden.');
+                Notifications.error('Sletting feilet', 'Kan ikke slette rotnoden.');
             },
             'edit-node': function(t) {
                 Session.set('nodeInFocus', Session.get('mainDocument'));
@@ -122,7 +126,6 @@ var isPartOfSubTree = function(root, target) {
 
     node = target;
 
-    console.log(getParent(node))
     while (node = getParent(node)) {
 
         if (node.guid === root.guid)
@@ -242,8 +245,6 @@ Template.Tree.events({
             var filteredList;
 
             _.walk.preorder(tree.getTree(), function(value, key, parent) {
-                console.log(value);
-                console.log(dataParent)
                 if(parent && parseInt(key) >= 0)
                     parent.children[key]._parent = parent;
 
@@ -271,8 +272,6 @@ Template.Tree.events({
                 return el.children;
             });
 
-
-            console.log(tree.getTree());
 
             // if we have found our element that we want
             // to place our selected subtree in, push the
@@ -376,7 +375,7 @@ Template.Tree.events({
     },
 
     // Selects a node on regular mouse click
-    'click li.root span.element': function(evt, tmpl) {
+    'click li.root > span.element': function(evt, tmpl) {
         //if(evt.stopPropagation) { evt.stopPropagation(); }
 
         // "Unselect" all selected nodes
@@ -384,6 +383,10 @@ Template.Tree.events({
 
         // Style the current selected node.
         $(evt.currentTarget).addClass('selected');
+
+        Tabs.setDummyTab(null);
+        
+        Session.set('nodeInFocus', Session.get('mainDocument'));
     },
 
     // On right click on node
