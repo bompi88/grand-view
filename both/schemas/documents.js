@@ -1,3 +1,5 @@
+var subscriptions = {};
+
 DocumentsScheme = new SimpleSchema({
 
   // A document title
