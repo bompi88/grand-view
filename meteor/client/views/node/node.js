@@ -12,6 +12,12 @@ Template.NodeLevel.helpers({
   }
 });
 
+/**
+* NodeLevel: deleteNode
+* parameter: _id (node collection id)
+* description: recursively deletes all children
+* from a node in a post-order manner
+*/
 
 function deleteNode(_id) {
 
