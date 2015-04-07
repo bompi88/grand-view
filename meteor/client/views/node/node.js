@@ -13,10 +13,32 @@ Template.NodeLevel.helpers({
 });
 
 
+function deleteNode(_id) {
+
+  var nodes = Nodes.find({parent: _id}).fetch();
+
+  nodes.forEach(function(node) {
+    deleteNode(node._id)
+  });
+
+  // Remove the node
+  Nodes.remove({_id: _id}, function(error) {
+    // Remove the tab
+    Tabs.removeTab(_id);
+    // Remove the reference from the document
+    Documents.update({_id: Session.get('mainDocument')}, { $pull: { children: _id} } , function(error) {
+      if(error) {
+        Notifications.warn('Feil', error.message);
+      }
+    });
+  });
+};
+
+
 Template.NodeLevel.rendered = function() {
 
-  var self = this;  
-    
+  var self = this;
+
     $('.tree li.node.root li.node span').contextMenu('right-click-menu', {
         bindings: {
             'add-node': function(t) {
@@ -53,25 +75,12 @@ Template.NodeLevel.rendered = function() {
                       label: "Ja",
                       callback: function(result) {
                         if(result) {
-                          // Remove the node
-                          Nodes.remove({_id: elData._id}, function(error) {
-                            
-                            // Remove the tab
-                            Tabs.removeTab(elData._id);
 
-                            // Remove the reference from the document
-                            Documents.update({_id: Session.get('mainDocument')}, { $pull: { children: elData._id} } , function(error) {
-                              if(error) {
-                                Notifications.warn('Feil', error.message);
-                              } else {
-
-                                // Set the main document in focus
-                                Session.set('nodeInFocus', Session.get('mainDocument'));
-                                // Notify the user
-                                Notifications.success('Sletting fullført', 'Referansen ble slettet fra systemet.');
-                              }
-                            });
-                          });
+                          deleteNode(elData._id);
+                          // Set the main document in focus
+                          Session.set('nodeInFocus', Session.get('mainDocument'));
+                          // Notify the user
+                          Notifications.success('Sletting fullført', 'Referansen ble slettet fra systemet.');
                         }
                       }
                     }
