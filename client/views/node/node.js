@@ -72,7 +72,7 @@ Template.NodeLevel.rendered = function() {
               if(elData && elData._id) {
                 var confirmationPrompt = {
                   title: "Bekreftelse på slettingen",
-                  message: 'Er du sikker på at du vil slette referansen?',
+                  message: 'Er du sikker på at du vil slette referansen? NB: Vil slette alle underkategorier til referansen!',
                   buttons: {
                     cancel: {
                       label: "Nei"
