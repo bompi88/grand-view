@@ -12,7 +12,14 @@ AutoForm.hooks({
 			Notifications.error('Feil', 'Referansen ble ikke lagret');
 			console.log(error);
 		},
-		onSuccess: function() {
+		onSuccess: function(result) {
+      // set new lastChanged date on the root document
+      var allDocs = Documents.find({children: this.docId}).fetch();
+      allDocs.forEach(function(doc) {
+        Documents.update({_id: doc._id}, {$set: {lastChanged: new Date()}});
+      });
+
+      console.log(result);
 			 Notifications.success('Suksess', 'Referansen ble oppdatert!');
 		}
 	},
