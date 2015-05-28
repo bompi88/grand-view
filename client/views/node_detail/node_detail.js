@@ -17,7 +17,7 @@ Template.NodeDetail.events({
     // A confirmation prompt before removing the document
     var confirmationPrompt = {
       title: "Bekreftelse på slettingen",
-      message: 'Er du sikker på at du vil slette referansen?',
+      message: 'Er du sikker på at du vil slette referansen? NB: Vil slette alle underkategorier til referansen!',
       buttons: {
         cancel: {
           label: "Nei"
@@ -26,25 +26,13 @@ Template.NodeDetail.events({
           label: "Ja",
           callback: function(result) {
             if(result) {
-              // Remove the node
-              Nodes.remove({_id: Session.get('nodeInFocus')}, function(error) {
+
+              deleteNode(Session.get('nodeInFocus'));
                 
-                // Remove the tab
-                Tabs.removeTab(Session.get('nodeInFocus'));
+              // Set the main document in focus
+              Session.set('nodeInFocus', Session.get('mainDocument'));
 
-                // Remove the reference from the document
-                Documents.update({_id: Session.get('mainDocument')}, { $pull: { children: Session.get('nodeInFocus')} } , function(error) {
-                  if(error) {
-                    Notifications.warn('Feil', error.message);
-                  } else {
-
-                    // Set the main document in focus
-                    Session.set('nodeInFocus', Session.get('mainDocument'));
-                    // Notify the user
-                    Notifications.success('Suksess', 'Referanse slettet');
-                  }
-                });
-              });
+              Notifications.success('Sletting fullført', 'Referansen ble slettet fra systemet.');
             }
           }
         }
