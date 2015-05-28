@@ -19,7 +19,7 @@ Template.NodeLevel.helpers({
 * from a node in a post-order manner
 */
 
-function deleteNode(_id) {
+deleteNode = function(_id) {
 
   var nodes = Nodes.find({parent: _id}).fetch();
 
@@ -85,7 +85,7 @@ Template.NodeLevel.rendered = function() {
                           deleteNode(elData._id);
                           // Set the main document in focus
                           Session.set('nodeInFocus', Session.get('mainDocument'));
-                          // Notify the user
+
                           Notifications.success('Sletting fullført', 'Referansen ble slettet fra systemet.');
                         }
                       }
