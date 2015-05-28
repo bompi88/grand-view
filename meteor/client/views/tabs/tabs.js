@@ -39,7 +39,7 @@ Template.Tabs.events({
 		$('.scroller-left').fadeIn('slow');
 		$('.scroller-right').fadeOut('slow');
 		$('.list').animate({left:"+="+widthOfHidden()+"px"},'slow',function(){
-		
+
 		});
 	},
 
@@ -47,7 +47,7 @@ Template.Tabs.events({
 		$('.scroller-right').fadeIn('slow');
 		$('.scroller-left').fadeOut('slow');
 		$('.list').animate({left:"-="+getLeftPosi()+"px"},'slow',function(){
-		
+
 		});
 	},
 
@@ -66,7 +66,7 @@ var scrollBarWidths = 40;
 
 var widthOfList = function() {
   var itemsWidth = 0;
-  
+
   $('.list li').each(function() {
     var it = $(this).outerWidth();
     itemsWidth = itemsWidth + it;
@@ -80,7 +80,7 @@ var widthOfHidden = function() {
 };
 
 var getLeftPosi = function() {
-  return $('.list').position().left;
+  return $('.list') && $('.list').position() && $('.list').position().left;
 };
 
 reAdjust = function() {
@@ -94,7 +94,7 @@ reAdjust = function() {
 		});
 	}
   }
-  
+
   if (getLeftPosi() < 0) {
     $('.scroller-left').show();
   } else {
@@ -106,6 +106,6 @@ Template.Tabs.rendered = function() {
 	reAdjust();
 };
 
-$(window).on('resize',function(e){  
+$(window).on('resize',function(e){
   	reAdjust();
 });

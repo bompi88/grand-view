@@ -1,3 +1,3 @@
 Template.registerHelper('formatDate', function(date) {
-  return moment(date).calendar();
+  return moment && moment(date).calendar();
 });

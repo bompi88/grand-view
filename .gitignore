@@ -1,5 +1,9 @@
 .meteor/local
 .meteor/meteorite
+node_modules/*
+resources/*
+cache
+dist
 .DS_Store
 .idea/
 *.iml
