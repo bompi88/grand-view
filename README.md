@@ -1,4 +1,37 @@
 # Grand View
 
-## Desktop app
-First clone the repo, then run `npm install` in the root folder. After the dependencies has been installed, run `node ./script/setup.js`, and run the app with: `node ./script/setup.js`.›
+[ABOUT GRANDVIEW HERE]
+
+## Development
+First clone the repo:
+``` bash
+$ git clone --recursive git@github.com:andybb/grand-view.git
+```
+
+### Desktop app
+You have to install all node dependencies, so execute:
+``` bash
+$ npm install
+```
+
+After this, run the setup script to install some necessary prerequisites:
+```bash
+$ node ./script/setup.js
+```
+
+Then you can either run it in dev mode:
+```bash
+$ node ./script/run.js
+```
+
+or build for distribution:
+```bash
+$ node ./script/dist.js
+```
+
+### Regular Meteor app
+As usual (inside the `meteor` folder) run:
+``` bash
+$ meteor
+```
+
