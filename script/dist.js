@@ -37,7 +37,7 @@ var npmPath = base + '/cache/node/bin/npm';
 var nodePath = base + '/cache/node/bin/node';
 var projectVersion = require('../package.json').version;
 
-var distName = 'Electrometeor';
+var distName = 'GrandView';
 
 if (onWindows) {
   npmPath = path.join(base, '/cache/nodejs/npm');
