@@ -1,0 +1,3 @@
+[submodule "meteor/packages/meteor-simple-schema"]
+	path = meteor/packages/meteor-simple-schema
+	url = git@github.com:bompi88/meteor-simple-schema.git
