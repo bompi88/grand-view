@@ -20,7 +20,7 @@ Tabs = {
         }
 
         var index = this.open.indexOf(docId.toString());
-        
+
         if (index > -1) {
             this.open.splice(index, 1);
         }
@@ -72,10 +72,10 @@ Tabs = {
 
 Template.Tree.helpers({
     treeItems: function() {
-        return this.tree && Nodes.find({parent: this.tree._id}) || [];
+        return this.tree && GV.collections.Nodes.find({parent: this.tree._id}) || [];
     },
     hasChildren: function() {
-        return this.tree && Nodes.find({parent: this.tree._id}).count() > 0;
+        return this.tree && GV.collections.Nodes.find({parent: this.tree._id}).count() > 0;
     },
     documentTitle: function() {
         return this.tree && this.tree.title;
@@ -83,7 +83,7 @@ Template.Tree.helpers({
 });
 
 Template.Tree.rendered = function () {
-    
+
     var self = this;
 
     $('.tree li.node.root span').contextMenu('right-click-menu', {
@@ -93,14 +93,14 @@ Template.Tree.rendered = function () {
 
                 if(elData) {
                     console.log("INNAFOR")
-                    Nodes.insert({ parent: elData.tree._id, title: "Ingen tittel", level: 1, userId: elData.tree.userId, lastChanged: new Date() }, function(error, nodeId) {
+                    GV.collections.Nodes.insert({ parent: elData.tree._id, title: "Ingen tittel", level: 1, userId: elData.tree.userId, lastChanged: new Date() }, function(error, nodeId) {
                         if(error) {
                             Notifications.error(error);
                         }
 
-                        Documents.update({_id: Session.get('mainDocument')}, { $addToSet: {children: nodeId} });
+                        GV.collections.Documents.update({_id: Session.get('mainDocument')}, { $addToSet: {children: nodeId} });
                         Meteor.subscribe('nodeById', nodeId);
-                        
+
                     });
                 }
             },
@@ -116,7 +116,7 @@ Template.Tree.rendered = function () {
 
 var getParent = function(node) {
     if(node && node._parent) {
-        return node._parent;  
+        return node._parent;
     } else {
         return null;
     }
@@ -139,19 +139,19 @@ var dragElement;
 
 Template.Tree.events({
 
-    // Do NOT remove this!! This snippet necessary 
+    // Do NOT remove this!! This snippet necessary
     // for the drop event to work.
     'dragover li span.element': function(evt, tmpl) {
         if(evt.preventDefault) { evt.preventDefault(); }
     },
 
-    // Do NOT remove this!! This snippet necessary 
+    // Do NOT remove this!! This snippet necessary
     // for the drop event to work.
     'dragover div.slot.slot-top': function(evt, tmpl) {
         if(evt.preventDefault) { evt.preventDefault(); }
     },
 
-    // Do NOT remove this!! This snippet necessary 
+    // Do NOT remove this!! This snippet necessary
     // for the drop event to work.
     'dragover div.slot.slot-bottom': function(evt, tmpl) {
         if(evt.preventDefault) { evt.preventDefault(); }
@@ -166,7 +166,7 @@ Template.Tree.events({
 
     'dragleave div.slot': function (evt, tmpl) {
         if(evt.preventDefault) { evt.preventDefault(); }
-        if(evt.stopPropagation) { evt.stopPropagation(); } 
+        if(evt.stopPropagation) { evt.stopPropagation(); }
 
         $(evt.currentTarget).removeClass("slot-visible");
     },
@@ -195,12 +195,12 @@ Template.Tree.events({
 
         // compute the new index position in the target array
         var index = parseInt(c[c.length - 1] - 1);
-        
+
         // Tries to fetch a index in target array. If a number
         // other than -1, then the node is already in there and
-        // we should 
+        // we should
         var oldIndex = dataTarget.children.indexOf(data);
-        
+
         if(oldIndex > -1) {
             // Reposition the elements
             dataTarget.children.splice(oldIndex, 1);
@@ -216,11 +216,11 @@ Template.Tree.events({
 
     'drop div.slot.slot-bottom': function (evt, tmpl) {
         if(evt.preventDefault) { evt.preventDefault(); }
-        if(evt.stopPropagation) { evt.stopPropagation(); } 
+        if(evt.stopPropagation) { evt.stopPropagation(); }
 
         $(evt.currentTarget).removeClass("slot-visible");
     },
-    
+
     'drop li span.element': function(evt, tmpl) {
         if(evt.preventDefault) { evt.preventDefault(); }
         if(evt.stopPropagation) { evt.stopPropagation(); }
@@ -230,10 +230,10 @@ Template.Tree.events({
 
         var targetData = UI.getElementData(evt.currentTarget);
         var targetGUID = targetData.guid;
-        
+
         var data = UI.getElementData(dragElement);
         var dataParent = UI.getElementData(dragElement.parentNode.parentNode.parentNode);
-        
+
         var guidParent = dataParent.guid;
         var guid = data.guid;
 
@@ -262,7 +262,7 @@ Template.Tree.events({
                 } else if (value.guid === guidParent) {
                     // reference to old branch
                     oldHook = value;
-                    
+
                     // remove the selected node from the parents children list
                     filteredList = _.filter(value.children, function(child){ return child.guid !== guid; });
 
@@ -276,9 +276,9 @@ Template.Tree.events({
             // if we have found our element that we want
             // to place our selected subtree in, push the
             // subtree onto this branch and set an updated value
-            // to the previous branch. Also check whether the target 
+            // to the previous branch. Also check whether the target
             // node is inside our selected subtree, if so: don't move the
-            // subtree. 
+            // subtree.
             if(newHook && oldHook && !isPartOfSubTree(data, targetData)) {
                 oldHook.children = filteredList;
                 newHook.children.push(data);
@@ -319,7 +319,7 @@ Template.Tree.events({
         // Store the node that is being dragged for a
         // later reference.
         dragElement = evt.currentTarget;
-        
+
         // Unselect all selected nodes
         $('li span').removeClass('selected');
 
@@ -341,19 +341,19 @@ Template.Tree.events({
     },
 
     'click .hide-node': function(evt, tmpl) {
-        Nodes.update({_id: this._id}, { $set: { collapsed: true } });
+        GV.collections.Nodes.update({_id: this._id}, { $set: { collapsed: true } });
     },
 
     'click .show-node': function(evt, tmpl) {
-        Nodes.update({_id: this._id}, { $set: { collapsed: false } });
+        GV.collections.Nodes.update({_id: this._id}, { $set: { collapsed: false } });
     },
 
     'click .hide-root': function(evt, tmpl) {
-        Documents.update({_id: this.tree._id}, { $set: { collapsed: true } });
+        GV.collections.Documents.update({_id: this.tree._id}, { $set: { collapsed: true } });
     },
 
     'click .show-root': function(evt, tmpl) {
-        Documents.update({_id: this.tree._id}, { $set: { collapsed: false } });
+        GV.collections.Documents.update({_id: this.tree._id}, { $set: { collapsed: false } });
     },
 
     // Selects a node on regular mouse click
@@ -385,7 +385,7 @@ Template.Tree.events({
         $(evt.currentTarget).addClass('selected');
 
         Tabs.setDummyTab(null);
-        
+
         Session.set('nodeInFocus', Session.get('mainDocument'));
     },
 

@@ -1,6 +1,4 @@
-var subscriptions = {};
-
-DocumentsScheme = new SimpleSchema({
+GV.schemas.Documents = new SimpleSchema({
 
   // A document title
   title: {
@@ -48,7 +46,7 @@ DocumentsScheme = new SimpleSchema({
           // Can create new tags
           create: function(input) {
 
-            Tags.insert({ value: input, text: input });
+            GV.collections.Tags.insert({ value: input, text: input });
 
             return {
               value: input,
@@ -71,11 +69,11 @@ DocumentsScheme = new SimpleSchema({
           load: function(query, callback) {
             if (!query.length) return callback();
 
-            if (subscriptions['tags'])
-              subscriptions['tags'].stop();
+            if (GV.subscriptions['tags'])
+              GV.subscriptions['tags'].stop();
 
-            subscriptions['tags'] = Meteor.subscribe('tagsByQuery', { text: { $regex: query, $options: 'i' } });
-            var tags = Tags.find({ text: { $regex: query, $options: 'i' } }).fetch();
+            GV.subscriptions['tags'] = Meteor.subscribe('tagsByQuery', { text: { $regex: query, $options: 'i' } });
+            var tags = GV.collections.Tags.find({ text: { $regex: query, $options: 'i' } }).fetch();
 
             callback(tags);
           }
@@ -132,11 +130,12 @@ DocumentsScheme = new SimpleSchema({
     type: [String],
     optional: true
   }
+
 });
 
 
 // TODO: update these schema messages to represent the actual schema
-DocumentsScheme.messages({
+GV.schemas.Documents.messages({
   // "required email": "Epost må fylles inn",
   // "required message": "Melding må vedlegges",
   // "required title": "Emnefeltet må fylles inn",
@@ -149,4 +148,4 @@ DocumentsScheme.messages({
 });
 
 // Attach the schema to the collection
-Documents.attachSchema(DocumentsScheme);
+GV.collections.Documents.attachSchema(GV.schemas.Documents);

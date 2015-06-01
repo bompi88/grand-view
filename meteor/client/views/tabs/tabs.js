@@ -6,7 +6,7 @@ Template.Tabs.helpers({
     	return Session.get('nodeInFocus') == Session.get('mainDocument');
     },
     getTitle: function(id) {
-    	var node = Nodes.findOne({_id: id}, { fields: { title:1}});
+    	var node = GV.collections.Nodes.findOne({_id: id}, { fields: { title:1}});
 
     	return node && node.title || null;
     }

@@ -4,11 +4,11 @@ Template.Dashboard.events({
 		var doc = {
       title: 'Mitt nye dokument',
       lastChanged: new Date(),
-      userId: Meteor.userId()
+      userId: GV.helpers.userId(Meteor.userId())
     };
-		
+
     // create a new document
-    var _id = Documents.insert(doc);
+    var _id = GV.collections.Documents.insert(doc);
 
     Tabs.reset();
     // redirect to the new document
@@ -26,7 +26,7 @@ Template.Dashboard.events({
   },
 
   'click #btn-remove': function(event, tmpl) {
-    var doc = Documents.findOne({_id: this._id});
+    var doc = GV.collections.Documents.findOne({_id: this._id});
     var children = doc && doc.children || [];
 
     var docId = this._id;
@@ -44,7 +44,7 @@ Template.Dashboard.events({
           callback: function(result) {
             if(result) {
               // Remove the document
-              Documents.remove({_id: docId}, function(error) {
+              GV.collections.Documents.remove({_id: docId}, function(error) {
                 if(error) {
                   Notifications.warn('Feil', error.message);
                 } else {

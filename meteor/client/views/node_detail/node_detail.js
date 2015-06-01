@@ -1,6 +1,6 @@
 Template.NodeDetail.helpers({
   node: function() {
-    return Nodes.findOne({_id: Session.get('nodeInFocus')});
+    return GV.collections.Nodes.findOne({_id: Session.get('nodeInFocus')});
   }
 });
 
@@ -28,7 +28,7 @@ Template.NodeDetail.events({
             if(result) {
 
               deleteNode(Session.get('nodeInFocus'));
-                
+
               // Set the main document in focus
               Session.set('nodeInFocus', Session.get('mainDocument'));
 
@@ -60,7 +60,7 @@ Template.GeneralInfo.events({
           callback: function(result) {
             if(result) {
               // Remove the document
-              Documents.remove({_id: self._id}, function(error) {
+              GV.collections.Documents.remove({_id: self._id}, function(error) {
                 if(error) {
                   Notifications.warn('Feil', error.message);
                 } else {

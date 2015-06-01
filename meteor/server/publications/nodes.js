@@ -2,16 +2,14 @@
  * Publish all nodes that are being used by a document with a particular id.
  */
 Meteor.publish('nodesByDoc', function(id) {
-	
-	if(this.userId) {
-		// get the document
-		var doc = Documents.find({ $and: [{ _id: id }, { userId: this.userId }] }).fetch();
 
-		// If there is a document, return all its nodes
-		return doc && doc[0] ? Nodes.find({ $and: [{_id: { $in : doc[0].children || [] }}, { userId: this.userId }]}) : this.ready();		
-	} else {
-		return this.ready();
-	}
+  var uid = GV.helpers.userId(this.userId);
+
+	// get the document
+	var doc = GV.collections.Documents.find({ $and: [{ _id: id }, { userId: uid }] }).fetch();
+
+	// If there is a document, return all its nodes
+	return doc && doc[0] ? GV.collections.Nodes.find({ $and: [{_id: { $in : doc[0].children || [] }}, { userId: uid }]}) : this.ready();
 
 });
 
@@ -20,8 +18,7 @@ Meteor.publish('nodesByDoc', function(id) {
  */
 Meteor.publish('nodeById', function(id) {
 
-	if(this.userId)
-		return Nodes.find({ $and: [{ _id: id }, { userId: this.userId }] });
+  var uid = GV.helpers.userId(this.userId);
 
-	return this.ready();
+  return GV.collections.Nodes.find({ $and: [{ _id: id }, { userId: uid }] });
 });

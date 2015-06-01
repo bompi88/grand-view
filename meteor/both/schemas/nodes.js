@@ -1,8 +1,4 @@
-// Keeps all the current subsriptions created by all the tags input fields. This is necessary because it could
-// potentially result in high memory usage at server if subscriptions do not get stopped.
-var subscriptions = {};
-
-NodesScheme = new SimpleSchema({
+GV.schemas.Nodes = new SimpleSchema({
 
   // A document title
   title: {
@@ -73,10 +69,10 @@ NodesScheme = new SimpleSchema({
           load: function(query, callback) {
             if (!query.length) return callback();
 
-            if (subscriptions['tags'])
-              subscriptions['tags'].stop();
+            if (GV.subscriptions['tags'])
+              GV.subscriptions['tags'].stop();
 
-            subscriptions['tags'] = Meteor.subscribe('tagsByQuery', { text: { $regex: query, $options: 'i' } });
+            GV.subscriptions['tags'] = Meteor.subscribe('tagsByQuery', { text: { $regex: query, $options: 'i' } });
             var tags = Tags.find({ text: { $regex: query, $options: 'i' } }).fetch();
 
             callback(tags);
@@ -144,7 +140,7 @@ NodesScheme = new SimpleSchema({
 });
 
 // TODO: update these schema messages to represent the actual schema
-NodesScheme.messages({
+GV.schemas.Nodes.messages({
   // "required email": "Epost må fylles inn",
   // "required message": "Melding må vedlegges",
   // "required title": "Emnefeltet må fylles inn",
@@ -157,4 +153,4 @@ NodesScheme.messages({
 });
 
 // Attach the schema to the collection
-Nodes.attachSchema(NodesScheme);
+GV.collections.Nodes.attachSchema(GV.schemas.Nodes);

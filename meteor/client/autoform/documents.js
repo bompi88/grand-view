@@ -4,7 +4,7 @@ AutoForm.hooks({
   "update-node-form": {
     formToDoc: function(doc) {
       doc.lastChanged = new Date();
-      doc.userId = Meteor.userId();
+      doc.userId = GV.helpers.userId(Meteor.userId());
 
       return doc;
     },
@@ -14,9 +14,9 @@ AutoForm.hooks({
     },
     onSuccess: function(result) {
       // set new lastChanged date on the root document
-      var allDocs = Documents.find({children: this.docId}).fetch();
+      var allDocs = GV.collections.Documents.find({children: this.docId}).fetch();
       allDocs.forEach(function(doc) {
-        Documents.update({_id: doc._id}, {$set: {lastChanged: new Date()}});
+        GV.collections.Documents.update({_id: doc._id}, {$set: {lastChanged: new Date()}});
       });
 
       console.log(result);
@@ -28,7 +28,7 @@ AutoForm.hooks({
   "update-document-form": {
     formToDoc: function(doc) {
       doc.lastChanged = new Date();
-      doc.userId = Meteor.userId();
+      doc.userId = GV.helpers.userId(Meteor.userId());
 
       return doc;
     },

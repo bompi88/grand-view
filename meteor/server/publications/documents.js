@@ -2,9 +2,11 @@
  * Publish all documents that a user owns or has access to
  */
 Meteor.publish('documents', function() {
+
+  var uid = GV.helpers.userId(this.userId);
+
 	// return the documents that the current user owns
-	if(this.userId)
-		return Documents.find({ userId: this.userId });
+	return GV.collections.Documents.find({ userId: uid });
 
 	return this.ready();
 });
@@ -15,8 +17,8 @@ Meteor.publish('documents', function() {
  */
 Meteor.publish('documentById', function(id) {
 
-	if(this.userId)
-		return Documents.find({ $and: [ { _id: id }, { userId: this.userId }] });
+  var uid = GV.helpers.userId(this.userId);
+	return GV.collections.Documents.find({ $and: [ { _id: id }, { userId: uid }] });
 
 	return this.ready();
 });

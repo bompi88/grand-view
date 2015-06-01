@@ -11,12 +11,23 @@ getRandomInt = function(min, max) {
  * Returns true if the logged in user owns the document
  */
 ownsDocument = function(userId, doc) {
-  return doc && doc.userId === userId;
+  return true;
+  //return doc && doc.userId === userId;
 }
 
 /**
  * Returns true if a user is logged in
  */
 userIsLoggedIn = function(userId) {
-    return userId ? true : false;
+  return true;
+
+  // if(userId) {
+  //   return true
+  // } else {
+  //   console.log(this.request)
+  //   // if(this.connection.remoteHost) {
+  //   //   return true;
+  //   // }
+  // }
+  // return false;
 }

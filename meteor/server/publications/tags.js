@@ -1,3 +1,3 @@
 Meteor.publish('tagsByQuery', function(query, sort) {
-	return Tags.find(query);
+	return GV.collections.Tags.find(query);
 });

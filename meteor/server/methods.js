@@ -21,7 +21,7 @@ Meteor.methods({
 		'&response=' + captchaData.response;
 
 		var captchaVerificationResult = null;
-		
+
 		// used to process response string
 		var success, parts;
 
@@ -34,7 +34,7 @@ Meteor.methods({
 					'Content-Length': serializedCaptchaData.length
 				}
 			});
-		} 
+		}
 		catch(e) {
 			console.log('google_service_not_accessible:' + e);
 			return {
@@ -84,7 +84,7 @@ Meteor.methods({
 	 * returns true after invokation
 	 */
 	removeNodes: function(ids, callback) {
-		Nodes.remove({_id: { $in: ids || []}});
+		GV.collections.Nodes.remove({_id: { $in: ids || []}});
 
 		if (typeof callback !== 'undefined') {
 	    	callback();

@@ -1,6 +1,6 @@
 "use strict";
 
-Tags.allow({
+GV.collections.Tags.allow({
   insert: function (userId) {
     if(userId) {
       return true;

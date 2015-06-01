@@ -1,10 +1,10 @@
 <template name="NodeDetail">
 	<h3>Referanse</h3>
-	{{#autoForm collection="Nodes" id="update-node-form" doc=node type="update"}}
+	{{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
 		{{> afQuickField name="title" }}
 		{{> afQuickField name="status" }}
 		{{> afQuickField name="description" rows="6" }}
-		{{> afQuickField name="tags" }}		
+		{{> afQuickField name="tags" }}
 
 <!-- 		<div class="form-group">
 			<label for="referenceInputFile">Fil</label>
@@ -36,11 +36,11 @@
 
 <template name="GeneralInfo">
 	<h3>Generelt om dokumentet</h3>
-	{{#autoForm collection="Documents" id="update-document-form" doc=this type="update"}}
+	{{#autoForm collection="GV.collections.Documents" id="update-document-form" doc=this type="update"}}
 		{{> afQuickField name="title" }}
 		{{> afQuickField name="status" }}
 		{{> afQuickField name="summary" rows="6" }}
-		{{> afQuickField name="tags" }}		
+		{{> afQuickField name="tags" }}
 
 <!-- 		<div class="form-group">
 			<label for="referenceInputFile">Fil</label>
