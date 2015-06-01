@@ -201,7 +201,7 @@ app.on('ready', function () {
     };
     // Create the browser window.
     var windowOptions = {
-      width: 1024,
+      width: 1200,
       height: 800,
       resizeable: true,
       frame: true
