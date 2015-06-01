@@ -10,3 +10,7 @@ $font-family-sans-serif:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-
 /*****************************************************************************/
 
 @import ".meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap";
+
+ul.notifications {
+	position: fixed;
+}
