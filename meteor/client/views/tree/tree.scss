@@ -1,70 +1,85 @@
 
-.tree li {
-    list-style-type:none;
+.tree {
+
+    ul {
+        margin-top: 0;
+        padding-top: 0;
+        padding-left: 20px;
+
+        // root node
+        &:first-child {
+            padding-left:10px;
+        }
+    }
+
+    // For all nodes in tree
+    li {
+        list-style-type:none;
     
-    span {
-        cursor: pointer;
+        >span {
+
+            display:inline-block;
+            padding:3px 5px;
+            text-decoration:none
+        }
+
+        span {
+            cursor: pointer;
+        }
+        
+        .parent_li>span {
+            cursor:pointer
+
+            &:hover, &:hover+ul li >span {
+                background:#eee;
+                color:#000
+            }
+        }
+
+        >ul {
+            >li::before, >li::after {
+                border:0
+            }
+        }
+
+        &:last-child::before {
+            height:30px
+        }
+
+        .selected {
+            background-color: darken(#fff, 14%);
+        }
+
+        .hover {
+            background-color: darken(#fff, 30%);
+        }
+
+        .node {
+            &::before {
+                bottom:50px;
+                height:100%;
+                top:0;
+                width:1px;
+            }
+
+            &::after {
+                border-top:1px solid #999;
+                height:20px;
+                top:25px;
+                width:25px
+            }
+        }
+
+        // For all nodes inside root node
+        li.node {
+            display:inline-block;
+            margin:0;
+            padding:0px 0px 0px 0px;
+            position:relative;
+
+            span.glyphicon:hover {
+                color: darken(orange, 10%);
+            }
+        }
     }
-    .selected {
-        background-color: darken(#fff, 14%);
-    }
-    .hover {
-        background-color: darken(#fff, 30%);
-    }
-}
-
-.tree li.node {
-    display:inline-block;
-    margin:0;
-    padding:0px 0px 0px 0px;
-    position:relative;
-
-    span.glyphicon:hover {
-        color: darken(orange, 10%);
-    }
-}
-
-.tree ul {
-    margin-top: 0;
-    padding-top: 0;
-}
-
-// .tree li.node::before, .tree li::after {
-//     content:'';
-//     left:-20px;
-//     position:absolute;
-//     right:auto
-// }
-.tree li.node::before {
-//     border-left:1px solid #999;
-    bottom:50px;
-    height:100%;
-    top:0;
-    width:1px;
-}
-.tree li.node::after {
-    border-top:1px solid #999;
-    height:20px;
-    top:25px;
-    width:25px
-}
-.tree li >span {
-
-    display:inline-block;
-    padding:3px 5px;
-    text-decoration:none
-}
-.tree li.parent_li>span {
-    cursor:pointer
-}
-.tree>ul>li::before, .tree>ul>li::after {
-    border:0
-}
-.tree li:last-child::before {
-    height:30px
-}
-.tree li.parent_li>span:hover, .tree li.parent_li>span:hover+ul li >span {
-    background:#eee;
-    //border:1px solid #94a0b4;
-    color:#000
 }
