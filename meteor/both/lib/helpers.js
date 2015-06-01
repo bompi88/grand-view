@@ -35,11 +35,11 @@ GV.helpers = _.extend(GV.helpers, {
 
     if(constructedURL === "http://localhost:3000/") {
       console.log("Local mode...");
-      this.render(page);
+      this.redirect(page);
     } else {
       console.log("Remote mode...");
       if(Meteor.user()) {
-        this.render(page);
+        this.redirect(page);
       } else {
         this.render(elsePage);
       }
@@ -58,7 +58,7 @@ GV.helpers = _.extend(GV.helpers, {
       this.render();
     } else {
       if(!Meteor.user()) {
-        this.render(page);
+        this.redirect(page);
       } else {
         this.render();
       }
