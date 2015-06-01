@@ -62,6 +62,9 @@ GV.schemas.Nodes = new SimpleSchema({
                 '<span class="name">' + item.text + '</span>' +
                 '</span>' +
                 '</div>';
+            },
+            option_create: function(data, escape) {
+              return '<div class="create">Legg til <strong>' + escape(data.input) + '</strong>&hellip;</div>';
             }
           },
 
@@ -128,6 +131,12 @@ GV.schemas.Nodes = new SimpleSchema({
   // Which depth level the node is at
   level: {
     type: Number,
+    optional: false
+  },
+
+  // Which depth level the node is at
+  sectionLabel: {
+    type: String,
     optional: false
   },
 

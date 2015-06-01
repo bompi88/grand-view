@@ -62,6 +62,9 @@ GV.schemas.Documents = new SimpleSchema({
                 '<span class="name">' + item.text + '</span>' +
                 '</span>' +
                 '</div>';
+            },
+            option_create: function(data, escape) {
+              return '<div class="create">Legg til <strong>' + escape(data.input) + '</strong>&hellip;</div>';
             }
           },
 
