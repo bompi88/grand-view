@@ -4,6 +4,7 @@
 
 Template.NodeLevel.helpers({
   hasChildren: function() {
+    console.log(this)
     return GV.collections.Nodes.find({parent: this._id}).count() > 0;
   },
 
@@ -30,7 +31,7 @@ deleteNode = function(_id) {
   // Remove the node
   GV.collections.Nodes.remove({_id: _id}, function(error) {
     // Remove the tab
-    Tabs.removeTab(_id);
+    GV.tabs.removeTab(_id);
     // Remove the reference from the document
     GV.collections.Documents.update({_id: Session.get('mainDocument')}, { $pull: { children: _id} } , function(error) {
       if(error) {
@@ -55,7 +56,7 @@ Template.NodeLevel.rendered = function() {
                 return;
               } else {
                 if(elData && elData._id) {
-                  GV.collections.Nodes.insert({ parent: elData._id, title: "Ingen tittel", level: elData.level + 1, userId: elData.userId, lastChanged: new Date() }, function(error, nodeId) {
+                  GV.collections.Nodes.insert({ parent: elData._id, title: "Ingen tittel", level: elData.level + 1, sectionLabel: elData.sectionLabel + "." + (elData.level), userId: elData.userId, lastChanged: new Date() }, function(error, nodeId) {
                     if(!error) {
                       GV.collections.Documents.update({_id: Session.get('mainDocument')}, { $addToSet: {children: nodeId} });
 
@@ -99,7 +100,7 @@ Template.NodeLevel.rendered = function() {
               var elData = UI.getData(t);
 
               if(elData && elData._id) {
-                Tabs.addTab(elData._id);
+                GV.tabs.addTab(elData._id);
                 Session.set('nodeInFocus', elData._id);
               }
             }

@@ -10,18 +10,18 @@ Template.Dashboard.events({
     // create a new document
     var _id = GV.collections.Documents.insert(doc);
 
-    Tabs.reset();
+    GV.tabs.reset();
     // redirect to the new document
 		Router.go(Router.path('Document', {_id: _id}));
 	},
 
 	'click .row-item' : function(event, tmpl) {
-    Tabs.reset();
+    GV.tabs.reset();
 		Router.go(Router.path('Document', {_id: this._id}));
 	},
 
   'click #btn-editDoc': function(event, tmpl) {
-    Tabs.reset();
+    GV.tabs.reset();
     Router.go(Router.path('Document', {_id: this._id}));
   },
 

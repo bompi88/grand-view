@@ -5,6 +5,7 @@ The tree constructor template.
   <h3>{{title}}</h3>
   <p>{{> UI.contentBlock}}</p>
 
+  {{!-- Start of tree / the root node --}}
   <div id="{{id}}" class="tree {{class}}">
   	<ul>
   		<li class="node root" style="margin-top:0;" data-id="{{guid}}">
@@ -13,6 +14,7 @@ The tree constructor template.
             <span class="glyphicon glyphicon-book"></span> {{documentTitle}}
           </span>
 
+          {{!-- Render rest of the visible nodes --}}
           {{#unless tree.collapsed}}
       			{{#each treeItems}}
       				{{> NodeLevel}}

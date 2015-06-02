@@ -1,10 +1,20 @@
 <template name="NodeLevel">
 	<ul>
 		<li class="node" style="margin-top:0;" data-id="{{guid}}">
-            
+
             <div class="slot slot-top"></div>
-            <span draggable="true" class="element">{{#if hasChildren}}{{#if collapsed}}<span class="glyphicon glyphicon-plus-sign show-node"></span>{{else}}<span class="glyphicon glyphicon-minus-sign hide-node"></span>{{/if}} {{/if}}{{title}}</span>
-            
+            <span draggable="true" class="element">
+              {{#if hasChildren}}
+                {{#if collapsed}}
+                  <span class="glyphicon glyphicon-plus-sign show-node"></span>
+                {{else}}
+                  <span class="glyphicon glyphicon-minus-sign hide-node"></span>
+                {{/if}}
+              {{/if}}
+
+              {{sectionLabel}} {{title}}
+            </span>
+
             {{#unless collapsed}}
                 {{#if hasChildren}}
                     {{#each children}}

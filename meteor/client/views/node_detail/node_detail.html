@@ -1,31 +1,15 @@
+<!--
+Edit information about a reference.
+-->
 <template name="NodeDetail">
-	<h3>Referanse</h3>
-	{{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
+	<h3>Rediger referanse</h3>
+
+  {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
 		{{> afQuickField name="title" }}
 		{{> afQuickField name="status" }}
 		{{> afQuickField name="description" rows="6" }}
 		{{> afQuickField name="tags" }}
 
-<!-- 		<div class="form-group">
-			<label for="referenceInputFile">Fil</label>
-			<input type="file" id="referenceInputFile">
-			<p class="help-block">Velg en fil å tilknytte til ressursen.</p>
-		</div>
-
-		<div class="form-group">
-			<div class="row">
-				<div class="col-lg-6">
-					<h5><b>Kilder</b></h5>
-					<label class="radio-inline"><input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Bøker osv.</label>
-					<label class="radio-inline"><input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Webside</label>
-				</div>
-
-				<div class="col-lg-6">
-					<h5><b>Kryssreferanser</b></h5>
-				</div>
-			</div>
-		</div>
- -->
 		<div class="form-group">
 			<button type="button" class="btn btn-danger pull-left delete-reference">Slett referansen</button>
 			<button type="submit" class="btn btn-primary pull-right">Lagre</button>
@@ -34,39 +18,23 @@
 	{{/autoForm}}
 </template>
 
+<!--
+Edit top level information about a document. This is basically the root node.
+-->
 <template name="GeneralInfo">
 	<h3>Generelt om dokumentet</h3>
+  <p><em>Denne noden beskriver dokumentet som helhet. Denne informasjonen brukes for å lett kunne finne dokumentet ved en seinere anledning.</em></p>
+
 	{{#autoForm collection="GV.collections.Documents" id="update-document-form" doc=this type="update"}}
 		{{> afQuickField name="title" }}
 		{{> afQuickField name="status" }}
 		{{> afQuickField name="summary" rows="6" }}
 		{{> afQuickField name="tags" }}
 
-<!-- 		<div class="form-group">
-			<label for="referenceInputFile">Fil</label>
-			<input type="file" id="referenceInputFile">
-			<p class="help-block">Velg en fil å tilknytte til ressursen.</p>
-		</div>
-
-		<div class="form-group">
-			<div class="row">
-				<div class="col-lg-6">
-					<h5><b>Kilder</b></h5>
-					<label class="radio-inline"><input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> Bøker osv.</label>
-					<label class="radio-inline"><input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> Webside</label>
-				</div>
-
-				<div class="col-lg-6">
-					<h5><b>Kryssreferanser</b></h5>
-				</div>
-			</div>
-		</div>
- -->
 		<div class="form-group">
 			<button type="button" class="btn btn-danger pull-left delete-document">Slett hele dokumentet</button>
 			<button type="submit" class="btn btn-primary pull-right">Lagre</button>
 			<button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Avbryt</button>
 		</div>
 	{{/autoForm}}
-
 </template>
