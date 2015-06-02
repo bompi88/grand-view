@@ -1,13 +1,24 @@
+<!--
+Tabs template render tabs for nodes that are opened during the session.
+-->
 <template name="Tabs">
-	<div class="scroller scroller-left"><i class="glyphicon glyphicon-chevron-left"></i></div>
-  	<div class="scroller scroller-right"><i class="glyphicon glyphicon-chevron-right"></i></div>
-	
+	{{!-- Scroll areas to scroll through tabs if they take up to much space --}}
+  <div class="scroller scroller-left"><i class="glyphicon glyphicon-chevron-left"></i></div>
+  <div class="scroller scroller-right"><i class="glyphicon glyphicon-chevron-right"></i></div>
+
+  {{!-- Tabs container to make sure tabs not overflow the window --}}
 	<div class="tab-wrapper">
 		<ul class="nav nav-tabs list">
-			<li role="presentation" class="{{#if isMainDocument}}active{{/if}}"><a href="#" class="general-info">Generelt</a></li>
-			
+			<li role="presentation" class="{{#if isMainDocument}}active{{/if}}">
+        <a href="#" class="general-info">Generelt</a>
+      </li>
+
+      {{!-- The actual tabs --}}
 			{{#each tabs}}
-				<li role="presentation" class="{{#if $.Session.equals 'nodeInFocus' this}}active{{/if}}"><a href="#" class="tab" style="padding-right:30px;padding-left:-30px;">{{getTitle this}}</a><span class="glyphicon glyphicon-remove pull-right delete-tab" style="position:absolute; right:10px; top:13px;" aria-hidden="true"></span></li>
+				<li role="presentation" class="{{#if $.Session.equals 'nodeInFocus' this}}active{{/if}}">
+          <a href="#" class="tab" style="padding-right:30px;padding-left:-30px;">{{getTitle this}}</a>
+          <span class="glyphicon glyphicon-remove pull-right delete-tab" style="position:absolute; right:10px; top:13px;" aria-hidden="true"></span>
+        </li>
 			{{/each}}
 		</ul>
 	</div>
