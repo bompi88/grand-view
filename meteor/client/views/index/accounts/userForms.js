@@ -22,7 +22,7 @@ Template.SignUp.destroyed = function() {
 // -- Helpers --------------------------------------------------------
 
 Template.UserForms.formTitle = function() {
-  
+
   var state = Session.get('formState');
 
   if(state === 'login')
@@ -50,7 +50,7 @@ Template.UserForms.events({
 
   // Submit event on forgotton password
   'submit form.form-password-lookup': function(event, tmpl) {
-    event.preventDefault();
+    event.preventDefault && event.preventDefault();
 
     try {
       var submitButton = tmpl.find('#submit');
@@ -76,8 +76,8 @@ Template.UserForms.events({
 
   // Submit event on signup
   'submit form.form-signup': function(event, tmpl) {
-  	event.preventDefault();
-  	
+  	event.preventDefault && event.preventDefault();
+
     try {
   		var email = tmpl.find('#email').value;
   		var password = tmpl.find('#password').value.toString();
@@ -106,7 +106,7 @@ Template.UserForms.events({
         } else {
         	//the user has to try the captcha again
         	Recaptcha.reload();
-          
+
           // alert error message according to received code
           switch (result.error) {
           	case 'captcha_verification_failed':
@@ -129,7 +129,7 @@ Template.UserForms.events({
 
   // Submit event on login
   'submit form.form-signin': function(event,tmpl) {
-    event.preventDefault();
+    event.preventDefault && event.preventDefault();
 
     try {
       var email = tmpl.find('#email').value;

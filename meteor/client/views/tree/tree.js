@@ -107,51 +107,51 @@ Template.Tree.events({
 
   // Do NOT remove this!! This snippet necessary
   // for the drop event to work.
-  'dragover li span.element': function(evt, tmpl) {
-      if(evt.preventDefault) { evt.preventDefault(); }
+  'dragover li span.element': function(event, tmpl) {
+      if(event.preventDefault) { event.preventDefault(); }
   },
 
   // Do NOT remove this!! This snippet necessary
   // for the drop event to work.
-  'dragover div.slot.slot-top': function(evt, tmpl) {
-      if(evt.preventDefault) { evt.preventDefault(); }
+  'dragover div.slot.slot-top': function(event, tmpl) {
+      if(event.preventDefault) { event.preventDefault(); }
   },
 
   // Do NOT remove this!! This snippet necessary
   // for the drop event to work.
-  'dragover div.slot.slot-bottom': function(evt, tmpl) {
-      if(evt.preventDefault) { evt.preventDefault(); }
+  'dragover div.slot.slot-bottom': function(event, tmpl) {
+      if(event.preventDefault) { event.preventDefault(); }
   },
 
 
   // -- Toggle drop slot visibility events -------------------------------------
 
 
-  'dragenter div.slot': function (evt, tmpl) {
-      if(evt.preventDefault) { evt.preventDefault(); }
-      if(evt.stopPropagation) { evt.stopPropagation(); }
+  'dragenter div.slot': function (event, tmpl) {
+      if(event.preventDefault) { event.preventDefault(); }
+      if(event.stopPropagation) { event.stopPropagation(); }
 
-      $(evt.currentTarget).addClass("slot-visible");
+      $(event.currentTarget).addClass("slot-visible");
   },
 
-  'dragleave div.slot': function (evt, tmpl) {
-      if(evt.preventDefault) { evt.preventDefault(); }
-      if(evt.stopPropagation) { evt.stopPropagation(); }
+  'dragleave div.slot': function (event, tmpl) {
+      if(event.preventDefault) { event.preventDefault(); }
+      if(event.stopPropagation) { event.stopPropagation(); }
 
-      $(evt.currentTarget).removeClass("slot-visible");
+      $(event.currentTarget).removeClass("slot-visible");
   },
 
 
   // -- Drop events ------------------------------------------------------------
 
 
-  'drop div.slot.slot-top, drop div.slot.slot-bottom': function (evt, tmpl) {
-    if(evt.preventDefault) { evt.preventDefault(); }
-    if(evt.stopPropagation) { evt.stopPropagation(); }
+  'drop div.slot.slot-top, drop div.slot.slot-bottom': function (event, tmpl) {
+    if(event.preventDefault) { event.preventDefault(); }
+    if(event.stopPropagation) { event.stopPropagation(); }
 
-    $(evt.currentTarget).removeClass("slot-visible");
+    $(event.currentTarget).removeClass("slot-visible");
 
-    var dataTarget = UI.getElementData(evt.currentTarget.parentNode.parentNode.parentNode);
+    var dataTarget = UI.getElementData(event.currentTarget.parentNode.parentNode.parentNode);
     var data = UI.getElementData(dragElement.parentNode);
 
     // Update the node position
@@ -169,14 +169,14 @@ Template.Tree.events({
     return false;
   },
 
-  'drop li span.element': function(evt, tmpl) {
-    if(evt.preventDefault) { evt.preventDefault(); }
-    if(evt.stopPropagation) { evt.stopPropagation(); }
+  'drop li span.element': function(event, tmpl) {
+    if(event.preventDefault) { event.preventDefault(); }
+    if(event.stopPropagation) { event.stopPropagation(); }
 
-    if ($(evt.currentTarget).hasClass('hover'))
-      $(evt.currentTarget).removeClass('hover');
+    if ($(event.currentTarget).hasClass('hover'))
+      $(event.currentTarget).removeClass('hover');
 
-    var dataTarget = UI.getElementData(evt.currentTarget);
+    var dataTarget = UI.getElementData(event.currentTarget);
     var data = UI.getElementData(dragElement);
 
     // Update the node position
@@ -198,24 +198,24 @@ Template.Tree.events({
   // -- Drag over node events --------------------------------------------------
 
 
-  'dragenter li span.element, dragleave li span.element': function(evt, tmpl) {
-    if(evt.preventDefault) { evt.preventDefault(); }
-    if(evt.stopPropagation) { evt.stopPropagation(); }
+  'dragenter li span.element, dragleave li span.element': function(event, tmpl) {
+    if(event.preventDefault) { event.preventDefault(); }
+    if(event.stopPropagation) { event.stopPropagation(); }
 
     // Add class '.hover' it not already present
-    var target = $(evt.currentTarget);
+    var target = $(event.currentTarget);
 
     if (!target.hasClass('hover'))
       target.addClass('hover');
   },
 
-  'dragleave li span.element': function(evt, tmpl) {
-    if(evt.preventDefault) { evt.preventDefault(); }
-    if(evt.stopPropagation) { evt.stopPropagation(); }
+  'dragleave li span.element': function(event, tmpl) {
+    if(event.preventDefault) { event.preventDefault(); }
+    if(event.stopPropagation) { event.stopPropagation(); }
 
     // if the element being hovered has a class '.hover'
     // remove it.
-    var target = $(evt.currentTarget);
+    var target = $(event.currentTarget);
 
     if (target.hasClass('hover'))
       target.removeClass('hover');
@@ -225,37 +225,37 @@ Template.Tree.events({
   // -- On drag start of node --------------------------------------------------
 
 
-  'dragstart li span.element': function(evt, tmpl) {
+  'dragstart li span.element': function(event, tmpl) {
 
-    if(evt.stopPropagation) { evt.stopPropagation(); }
+    if(event.stopPropagation) { event.stopPropagation(); }
 
     // Store the node that is being dragged for a
     // later reference.
-    dragElement = evt.currentTarget;
+    dragElement = event.currentTarget;
 
     // Unselect all selected nodes
     $('li span').removeClass('selected');
 
     // Select the node that is being dragged.
-    $(evt.currentTarget).addClass('selected');
+    $(event.currentTarget).addClass('selected');
   },
 
 
   // -- Hide/unhide node events ------------------------------------------------
 
-  'click .hide-node': function(evt, tmpl) {
+  'click .hide-node': function(event, tmpl) {
     toggleVisibility(GV.collections.Nodes, this._id, false);
   },
 
-  'click .show-node': function(evt, tmpl) {
+  'click .show-node': function(event, tmpl) {
     toggleVisibility(GV.collections.Nodes, this._id, true);
   },
 
-  'click .hide-root': function(evt, tmpl) {
+  'click .hide-root': function(event, tmpl) {
     toggleVisibility(GV.collections.Documents, this.tree._id, false);
   },
 
-  'click .show-root': function(evt, tmpl) {
+  'click .show-root': function(event, tmpl) {
     toggleVisibility(GV.collections.Documents, this.tree._id, true);
   },
 
@@ -264,15 +264,15 @@ Template.Tree.events({
 
 
   // Selects a node on regular mouse click
-  'click li.root li span.element': function(evt, tmpl) {
+  'click li.root li span.element': function(event, tmpl) {
 
     // "Unselect" all selected nodes
     $('li span').removeClass('selected');
 
     // Style the current selected node.
-    $(evt.currentTarget).addClass('selected');
+    $(event.currentTarget).addClass('selected');
 
-    var elData = UI.getData(evt.currentTarget);
+    var elData = UI.getData(event.currentTarget);
 
     if(elData && elData._id) {
       GV.tabs.setDummyTab(elData._id);
@@ -281,13 +281,13 @@ Template.Tree.events({
   },
 
   // Selects a node on regular mouse click
-  'click li.root > span.element': function(evt, tmpl) {
+  'click li.root > span.element': function(event, tmpl) {
 
     // "Unselect" all selected nodes
     $('li span').removeClass('selected');
 
     // Style the current selected node.
-    $(evt.currentTarget).addClass('selected');
+    $(event.currentTarget).addClass('selected');
 
     GV.tabs.setDummyTab(null);
 
@@ -295,9 +295,9 @@ Template.Tree.events({
   },
 
   // Opens a tab if double click on a node
-  'dblclick li span.element': function(evt, tmpl) {
+  'dblclick li span.element': function(event, tmpl) {
 
-    var data = Blaze.getData(evt.currentTarget);
+    var data = Blaze.getData(event.currentTarget);
 
     // Adds a tab
     if(typeof data._id !== "undefined") {
@@ -306,14 +306,14 @@ Template.Tree.events({
   },
 
   // On right click on node
-  'mousedown li span.element': function(evt, tmpl) {
+  'mousedown li span.element': function(event, tmpl) {
 
-    if(evt.which == 3) {
+    if(event.which == 3) {
       // "Unselect" all selected nodes
       $('li span').removeClass('selected');
 
       // Style the current selected node.
-      $(evt.currentTarget).addClass('selected');
+      $(event.currentTarget).addClass('selected');
     }
   }
 });
