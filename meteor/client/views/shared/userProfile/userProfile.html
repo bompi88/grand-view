@@ -1,3 +1,6 @@
+<!--
+Template that gives access to user settings and login status.
+-->
 <template name="UserProfile">
 	{{#if currentUser}}
 		<div class="btn-group">
@@ -15,11 +18,17 @@
 	{{/if}}
 </template>
 
+<!--
+The user menu buttons
+-->
 <template name="UserButtons">
 	<button type="button" id="btn-changePass" class="btn btn-default btn-block" style="margin-top: 5px;">Bytt passord</button>
 	<button type="button" id="btn-logout" class="btn btn-primary btn-block" style="margin-top: 5px;">Logg ut</button>
 </template>
 
+<!--
+The change password menu
+-->
 <template name="ChangePassword">
 	<form class="form-signup">
 		<input name="oldPassword" id="oldPassword" type="password" class="form-control" placeholder="Gammelt passord" required autofocus>

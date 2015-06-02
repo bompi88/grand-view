@@ -17,7 +17,7 @@
   "setupNode": true,
 
   // WARNING: If nodeVersion omitted will setup 0.10.26 by default. Do not use v, only version number.
-  "nodeVersion": "0.10.33",
+  "nodeVersion": "0.10.36",
 
   // Install PhantomJS in the server
   "setupPhantom": true,
@@ -26,12 +26,12 @@
   "appName": "lp",
 
   // Location of app (local directory)
-  "app": "~/projects/grand-view",
+  "app": "~/projects/grand-view/meteor",
 
   // Configure environment
   "env": {
     //"PORT": 3001,
-    "ROOT_URL": "https://www.laererportalen.no",
+    "ROOT_URL": "http://www.mydomain.no",
 
     // using mandrill to send email
     //"MAIL_URL": "smtp://username%40gmail.com:password-from-mandrill@smtp.mandrillapp.com:587/"

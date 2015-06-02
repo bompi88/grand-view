@@ -88,7 +88,7 @@ Template.Tree.rendered = function () {
 
       // Delete button
       'delete-node': function(t) {
-        Notifications.error('Sletting feilet', 'Kan ikke slette rotnoden.', { timeout: GV.timeout });
+        Notifications.error('Sletting feilet', 'Kan ikke slette rotnoden.');
       },
 
       // Edit button

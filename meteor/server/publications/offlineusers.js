@@ -1,17 +1,12 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Allow / Deny rules for Tags collection
+// Publications for OfflineUsers collection
 ////////////////////////////////////////////////////////////////////////////////
 
 
 "use strict";
 
 
-GV.collections.Tags.allow({
-
-  insert: userIsLoggedIn,
-
-  update: userIsLoggedIn,
-
-  remove: userIsLoggedIn
-
+// publish all offline users
+Meteor.publish(null, function() {
+  return GV.collections.OfflineUsers.find();
 });

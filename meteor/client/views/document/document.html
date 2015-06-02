@@ -1,5 +1,11 @@
+<!--
+This template should render a view that contains a tree structure and a system
+for editing of nodes in the tree
+-->
 <template name="Document">
   <div class="container">
+
+    {{!-- Header --}}
     <div class="row">
       <div class="col-lg-12">
         <div class="pull-left" style="margin-top:25px;">
@@ -10,10 +16,12 @@
         </div>
       </div>
     </div>
-    
+
     <hr>
-    
+
     <div class="row">
+
+      {{!-- The tree structure --}}
       <div class="col-lg-4">
           {{#Tree title="Struktur" tree=this}}
           <em>Klikk og dra nodene i trestrukturen der du vil ha dem. Klikker man dobbelt på en av nodene, så åpnes
@@ -21,6 +29,7 @@
           {{/Tree}}
       </div>
 
+      {{!-- The detail view of nodes --}}
       <div class="col-lg-8">
         {{> Tabs}}
         {{#if focusOnMainDoc}}

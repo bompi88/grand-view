@@ -1,8 +1,22 @@
+////////////////////////////////////////////////////////////////////////////////
+// Detail description of a node with edit possibilities
+////////////////////////////////////////////////////////////////////////////////
+
+
+// -- Template helpers ---------------------------------------------------------
+
+
 Template.NodeDetail.helpers({
+
   node: function() {
     return GV.collections.Nodes.findOne({_id: Session.get('nodeInFocus')});
   }
+
 });
+
+
+// -- Template events ----------------------------------------------------------
+
 
 Template.NodeDetail.events({
 
@@ -42,6 +56,7 @@ Template.NodeDetail.events({
   }
 
 });
+
 
 Template.GeneralInfo.events({
 

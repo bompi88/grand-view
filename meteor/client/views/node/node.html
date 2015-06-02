@@ -1,30 +1,37 @@
+<!--
+A node in the tree, that recursively renders its children.
+-->
 <template name="NodeLevel">
 	<ul>
 		<li class="node" style="margin-top:0;" data-id="{{guid}}">
 
-            <div class="slot slot-top"></div>
-            <span draggable="true" class="element">
-              {{#if hasChildren}}
-                {{#if collapsed}}
-                  <span class="glyphicon glyphicon-plus-sign show-node"></span>
-                {{else}}
-                  <span class="glyphicon glyphicon-minus-sign hide-node"></span>
-                {{/if}}
-              {{/if}}
+      {{!-- Drop slot top --}}
+      <div class="slot slot-top"></div>
 
-              {{sectionLabel}} {{title}}
-            </span>
+      <span draggable="true" class="element">
+        {{#if hasChildren}}
+          {{#if collapsed}}
+            <span class="glyphicon glyphicon-plus-sign show-node"></span>
+          {{else}}
+            <span class="glyphicon glyphicon-minus-sign hide-node"></span>
+          {{/if}}
+        {{/if}}
 
-            {{#unless collapsed}}
-                {{#if hasChildren}}
-                    {{#each children}}
-                        {{> NodeLevel}}
-                	{{/each}}
-                {{/if}}
-            {{/unless}}
-        </li>
+        {{sectionLabel}} {{title}}
+      </span>
 
-        <div class="slot slot-bottom"></div>
+      {{!-- Render its children if they are visible --}}
+      {{#unless collapsed}}
+          {{#if hasChildren}}
+              {{#each children}}
+                  {{> NodeLevel}}
+          	{{/each}}
+          {{/if}}
+      {{/unless}}
+    </li>
+
+    {{!-- Drop slot bottom --}}
+    <div class="slot slot-bottom"></div>
 
     </ul>
 </template>

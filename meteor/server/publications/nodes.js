@@ -1,3 +1,11 @@
+////////////////////////////////////////////////////////////////////////////////
+// Publications for Nodes collection
+////////////////////////////////////////////////////////////////////////////////
+
+
+"use strict";
+
+
 /**
  * Publish all nodes that are being used by a document with a particular id.
  */
@@ -10,7 +18,6 @@ Meteor.publish('nodesByDoc', function(id) {
 
 	// If there is a document, return all its nodes
 	return doc && doc[0] ? GV.collections.Nodes.find({ $and: [{_id: { $in : doc[0].children || [] }}, { userId: uid }]}) : this.ready();
-
 });
 
 /**

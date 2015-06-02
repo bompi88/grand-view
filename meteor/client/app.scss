@@ -11,6 +11,7 @@ $font-family-sans-serif:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-
 
 @import ".meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap";
 
+// Always show notifications top right corner, even when container is scrolled
 ul.notifications {
 	position: fixed;
 }

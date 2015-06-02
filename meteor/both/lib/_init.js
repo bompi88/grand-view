@@ -9,4 +9,5 @@ GV = {
     subscriptions: {},
     schemas: {},
     collections: {}
+    timeout: 5000
 };

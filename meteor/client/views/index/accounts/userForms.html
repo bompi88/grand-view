@@ -11,11 +11,11 @@
 				{{#if $.Session.equals 'formState' 'login'}}
 					{{> Login}}
 				{{/if}}
-				
+
 				{{#if $.Session.equals 'formState' 'forgotton-password'}}
 					{{> ForgottonPassword}}
 				{{/if}}
-				
+
 				{{#if $.Session.equals 'formState' 'sign-up'}}
 					{{> SignUp}}
 				{{/if}}
@@ -48,7 +48,7 @@
 	<form class="form-signup">
 		<input name="email" id="email" type="email" class="form-control" placeholder="Epost" required autofocus>
 		<input name="password" id="password" type="password" class="form-control" placeholder="Passord" required>
-		
+
 		{{!-- Our container for Google Recaptcha. Bots not allowed!! --}}
     	<div id="rendered-captcha-container"> </div>
 		<button id='submit' class="btn btn-lg btn-primary btn-block" type="submit">Registrer</button>

@@ -1,4 +1,13 @@
+////////////////////////////////////////////////////////////////////////////////
+// User profile logic
+////////////////////////////////////////////////////////////////////////////////
+
+
 Session.setDefault('dropdownState', 'userButtons');
+
+
+// -- Template events ----------------------------------------------------------
+
 
 Template.UserProfile.events({
 	'click #btn-logout' :function(event, tmpl) {

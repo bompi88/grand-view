@@ -1,3 +1,6 @@
+<!--
+The dashboard should provide methods for searching/organizing the documents.
+-->
 <template name="Dashboard">
 	<div class="container">
 		<div class="row">
@@ -6,6 +9,8 @@
 			</div>
 		</div>
 		<div class="row">
+
+      {{!-- Dashboard header --}}
 			<div class="page-header">
 				<h2>
 					<span class="glyphicon glyphicon-book"></span> Dokumenter
@@ -13,8 +18,8 @@
 						<span class="glyphicon glyphicon-pencil"></span> Nytt dokument
 					</button>
 				</h2>
-
 			</div>
+
 			{{!-- The document table --}}
 			<table class="table table-hover">
 				<thead>
@@ -34,6 +39,9 @@
 	</div>
 </template>
 
+<!--
+A row in the document table.
+-->
 <template name="DocumentRow">
 	<tr class="table-row">
 		<td class="row-item">{{title}}</td>
