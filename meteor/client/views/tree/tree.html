@@ -1,20 +1,27 @@
+<!--
+The tree constructor template.
+-->
 <template name="Tree">
   <h3>{{title}}</h3>
   <p>{{> UI.contentBlock}}</p>
 
   <div id="{{id}}" class="tree {{class}}">
-	<ul>
-		<li class="node root" style="margin-top:0;" data-id="{{guid}}">
-            <div class="slot slot-top"></div>
-         	<span draggable="true" class="element">{{#if hasChildren}}{{#if tree.collapsed}}<span class="glyphicon glyphicon-plus-sign show-root"></span>{{else}}<span class="glyphicon glyphicon-minus-sign hide-root"></span>{{/if}} {{/if}}{{documentTitle}}</span>
+  	<ul>
+  		<li class="node root" style="margin-top:0;" data-id="{{guid}}">
+        <div class="slot slot-top"></div>
+         	<span draggable="true" class="element">
+            <span class="glyphicon glyphicon-book"></span> {{documentTitle}}
+          </span>
 
-      {{#unless tree.collapsed}}
-  			{{#each treeItems}}
-  				{{> NodeLevel}}
-  			{{/each}}
-      {{/unless}}
-		</li>
-        <div class="slot slot-bottom"></div>
+          {{#unless tree.collapsed}}
+      			{{#each treeItems}}
+      				{{> NodeLevel}}
+      			{{/each}}
+          {{/unless}}
+  		</li>
+
+      <div class="slot slot-bottom"></div>
+
     </ul>
   </div>
 </template>

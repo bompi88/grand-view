@@ -1,404 +1,319 @@
-Tabs = {
-    open: [],
-    dummyTab: null,
-    dep: new Tracker.Dependency(),
-    addTab: function(docId) {
-        if(docId == this.dummyTab) {
-            this.dummyTab = null;
-        }
+////////////////////////////////////////////////////////////////////////////////
+// Tree template logic
+////////////////////////////////////////////////////////////////////////////////
 
-        if (this.open.indexOf(docId)==-1)
-            this.open.push(docId);
+// The selected element to drag
+var dragElement;
 
-        this.dep.changed();
-        return this.open;
-    },
-    removeTab: function(docId) {
+// -- Tree Helpers -------------------------------------------------------------
 
-        if(docId == this.dummyTab) {
-            this.dummyTab = null;
-        }
 
-        var index = this.open.indexOf(docId.toString());
-
-        if (index > -1) {
-            this.open.splice(index, 1);
-        }
-
-        this.dep.changed();
-        return this.open;
-    },
-    getTabs: function() {
-        this.dep.depend();
-
-        Meteor.setTimeout(function() {
-            if(this.open.length) {
-                reAdjust();
-            }
-        }, 200);
-
-        var list = [];
-
-        list = list.concat(this.open);
-
-        if(this.dummyTab) {
-            list.push(this.dummyTab);
-        }
-
-        return list;
-    },
-    setDummyTab: function(docId) {
-        if (this.open.indexOf(docId)==-1) {
-            this.dummyTab = docId;
-        } else {
-            this.dummyTab = null;
-        }
-
-        this.dep.changed();
-        return this.dummyTab;
-    },
-    resetDummyTab: function() {
-        this.dummyTab = null;
-
-        this.dep.changed();
-        return this.dummyTab;
-    },
-    reset: function() {
-        this.open = [];
-        this.dep.changed();
-        return this.open;
+var toggleVisibility = function(collection, id, visible) {
+  collection.update({
+    _id: id
+  },
+  {
+    $set: {
+      collapsed: !visible
     }
-}
+  });
+};
+
+
+// -- Tree Template helpers ----------------------------------------------------
+
 
 Template.Tree.helpers({
-    treeItems: function() {
-        return this.tree && GV.collections.Nodes.find({parent: this.tree._id}) || [];
-    },
-    hasChildren: function() {
-        return this.tree && GV.collections.Nodes.find({parent: this.tree._id}).count() > 0;
-    },
-    documentTitle: function() {
-        return this.tree && this.tree.title;
-    }
+
+  treeItems: function() {
+    return this.tree && GV.collections.Nodes.find({parent: this.tree._id}) || [];
+  },
+
+  hasChildren: function() {
+    return this.tree && GV.collections.Nodes.find({parent: this.tree._id}).count() > 0;
+  },
+
+  documentTitle: function() {
+    return this.tree && this.tree.title || "Uten tittel";
+  }
+
 });
+
+
+// -- Tree On Render -----------------------------------------------------------
+
 
 Template.Tree.rendered = function () {
 
-    var self = this;
+  var self = this;
 
-    $('.tree li.node.root span').contextMenu('right-click-menu', {
-        bindings: {
-            'add-node': function(t) {
-                var elData = UI.getData(t);
+  // Create right click buttons when right clicking on root node
+  $('.tree li.node.root span').contextMenu('right-click-menu', {
+    bindings: {
 
-                if(elData) {
-                    console.log("INNAFOR")
-                    GV.collections.Nodes.insert({ parent: elData.tree._id, title: "Ingen tittel", level: 1, userId: elData.tree.userId, lastChanged: new Date() }, function(error, nodeId) {
-                        if(error) {
-                            Notifications.error(error);
-                        }
+      // Add node button
+      'add-node': function(t) {
+        var elData = UI.getData(t);
 
-                        GV.collections.Documents.update({_id: Session.get('mainDocument')}, { $addToSet: {children: nodeId} });
-                        Meteor.subscribe('nodeById', nodeId);
-
-                    });
-                }
-            },
-            'delete-node': function(t) {
-                Notifications.error('Sletting feilet', 'Kan ikke slette rotnoden.');
-            },
-            'edit-node': function(t) {
-                Session.set('nodeInFocus', Session.get('mainDocument'));
+        if(elData) {
+          // Insert a node at the given branch
+          GV.collections.Nodes.insert({
+            parent: elData.tree._id,
+            title: "Ingen tittel",
+            level: 1,
+            sectionLabel: 1,
+            userId: elData.tree.userId,
+            lastChanged: new Date()
+          },
+          function(error, nodeId) {
+            if(error) {
+              Notifications.error(error);
             }
+
+            // Add the created node into children array of main document
+            GV.collections.Documents.update({
+              _id: Session.get('mainDocument')
+            },
+            {
+              $addToSet: {
+                children: nodeId
+              }
+            });
+
+            // Subscribe on the newly created node
+            Meteor.subscribe('nodeById', nodeId);
+          });
         }
-    });
+      },
+
+      // Delete button
+      'delete-node': function(t) {
+        Notifications.error('Sletting feilet', 'Kan ikke slette rotnoden.', { timeout: GV.timeout });
+      },
+
+      // Edit button
+      'edit-node': function(t) {
+        Session.set('nodeInFocus', Session.get('mainDocument'));
+      }
+
+    }
+  });
 };
-
-var getParent = function(node) {
-    if(node && node._parent) {
-        return node._parent;
-    } else {
-        return null;
-    }
-}
-
-var isPartOfSubTree = function(root, target) {
-
-    node = target;
-
-    while (node = getParent(node)) {
-
-        if (node.guid === root.guid)
-            return true;
-    }
-    return false;
-}
-
-var dragElement;
 
 
 Template.Tree.events({
 
-    // Do NOT remove this!! This snippet necessary
-    // for the drop event to work.
-    'dragover li span.element': function(evt, tmpl) {
-        if(evt.preventDefault) { evt.preventDefault(); }
+  // -- Prevent default behaviour on dragover events ---------------------------
+
+  // Do NOT remove this!! This snippet necessary
+  // for the drop event to work.
+  'dragover li span.element': function(evt, tmpl) {
+      if(evt.preventDefault) { evt.preventDefault(); }
+  },
+
+  // Do NOT remove this!! This snippet necessary
+  // for the drop event to work.
+  'dragover div.slot.slot-top': function(evt, tmpl) {
+      if(evt.preventDefault) { evt.preventDefault(); }
+  },
+
+  // Do NOT remove this!! This snippet necessary
+  // for the drop event to work.
+  'dragover div.slot.slot-bottom': function(evt, tmpl) {
+      if(evt.preventDefault) { evt.preventDefault(); }
+  },
+
+
+  // -- Toggle drop slot visibility events -------------------------------------
+
+
+  'dragenter div.slot': function (evt, tmpl) {
+      if(evt.preventDefault) { evt.preventDefault(); }
+      if(evt.stopPropagation) { evt.stopPropagation(); }
+
+      $(evt.currentTarget).addClass("slot-visible");
+  },
+
+  'dragleave div.slot': function (evt, tmpl) {
+      if(evt.preventDefault) { evt.preventDefault(); }
+      if(evt.stopPropagation) { evt.stopPropagation(); }
+
+      $(evt.currentTarget).removeClass("slot-visible");
+  },
+
+
+  // -- Drop events ------------------------------------------------------------
+
+
+  'drop div.slot.slot-top, drop div.slot.slot-bottom': function (evt, tmpl) {
+    if(evt.preventDefault) { evt.preventDefault(); }
+    if(evt.stopPropagation) { evt.stopPropagation(); }
+
+    $(evt.currentTarget).removeClass("slot-visible");
+
+    var dataTarget = UI.getElementData(evt.currentTarget.parentNode.parentNode.parentNode);
+    var data = UI.getElementData(dragElement.parentNode);
+
+    // Update the node position
+    GV.collections.Nodes.update({
+      _id: data._id
     },
+    {
+      $set: {
+        parent: dataTarget._id,
+        level: dataTarget.level + 1,
+        sectionLabel: dataTarget.sectionLabel + "." + (dataTarget.level)
+      }
+    });
 
-    // Do NOT remove this!! This snippet necessary
-    // for the drop event to work.
-    'dragover div.slot.slot-top': function(evt, tmpl) {
-        if(evt.preventDefault) { evt.preventDefault(); }
+    return false;
+  },
+
+  'drop li span.element': function(evt, tmpl) {
+    if(evt.preventDefault) { evt.preventDefault(); }
+    if(evt.stopPropagation) { evt.stopPropagation(); }
+
+    if ($(evt.currentTarget).hasClass('hover'))
+      $(evt.currentTarget).removeClass('hover');
+
+    var dataTarget = UI.getElementData(evt.currentTarget);
+    var data = UI.getElementData(dragElement);
+
+    // Update the node position
+    GV.collections.Nodes.update({
+      _id: data._id
     },
+    {
+      $set: {
+        parent: dataTarget._id,
+        level: dataTarget.level + 1,
+        sectionLabel: dataTarget.sectionLabel + "." + (dataTarget.level)
+      }
+    });
 
-    // Do NOT remove this!! This snippet necessary
-    // for the drop event to work.
-    'dragover div.slot.slot-bottom': function(evt, tmpl) {
-        if(evt.preventDefault) { evt.preventDefault(); }
-    },
+    return false;
+  },
 
-    'dragenter div.slot': function (evt, tmpl) {
-        if(evt.preventDefault) { evt.preventDefault(); }
-        if(evt.stopPropagation) { evt.stopPropagation(); }
 
-        $(evt.currentTarget).addClass("slot-visible");
-    },
+  // -- Drag over node events --------------------------------------------------
 
-    'dragleave div.slot': function (evt, tmpl) {
-        if(evt.preventDefault) { evt.preventDefault(); }
-        if(evt.stopPropagation) { evt.stopPropagation(); }
 
-        $(evt.currentTarget).removeClass("slot-visible");
-    },
+  'dragenter li span.element, dragleave li span.element': function(evt, tmpl) {
+    if(evt.preventDefault) { evt.preventDefault(); }
+    if(evt.stopPropagation) { evt.stopPropagation(); }
 
-    'drop div.slot.slot-top': function (evt, tmpl) {
-        if(evt.preventDefault) { evt.preventDefault(); }
-        if(evt.stopPropagation) { evt.stopPropagation(); }
+    // Add class '.hover' it not already present
+    var target = $(evt.currentTarget);
 
-        $(evt.currentTarget).removeClass("slot-visible");
+    if (!target.hasClass('hover'))
+      target.addClass('hover');
+  },
 
-        var dataTarget = UI.getElementData(evt.currentTarget.parentNode.parentNode.parentNode);
-        var data = UI.getElementData(dragElement.parentNode);
-        var target = UI.getElementData(evt.currentTarget.parentNode);
-        var dataParent = UI.getElementData(dragElement.parentNode.parentNode.parentNode);
+  'dragleave li span.element': function(evt, tmpl) {
+    if(evt.preventDefault) { evt.preventDefault(); }
+    if(evt.stopPropagation) { evt.stopPropagation(); }
 
-        var inSameSubTree = false;
+    // if the element being hovered has a class '.hover'
+    // remove it.
+    var target = $(evt.currentTarget);
 
-        for (var i = 0; i < dataTarget.children.length; i++) {
-            if(dataTarget.children[i].guid === data.guid)
-                inSameSubTree = true;
-        }
+    if (target.hasClass('hover'))
+      target.removeClass('hover');
+  },
 
 
+  // -- On drag start of node --------------------------------------------------
 
-        var c = target.level.split('.');
 
-        // compute the new index position in the target array
-        var index = parseInt(c[c.length - 1] - 1);
+  'dragstart li span.element': function(evt, tmpl) {
 
-        // Tries to fetch a index in target array. If a number
-        // other than -1, then the node is already in there and
-        // we should
-        var oldIndex = dataTarget.children.indexOf(data);
+    if(evt.stopPropagation) { evt.stopPropagation(); }
 
-        if(oldIndex > -1) {
-            // Reposition the elements
-            dataTarget.children.splice(oldIndex, 1);
-            dataTarget.children.splice(index, 0, data);
-        } else {
-            dataTarget.children.splice(index, 0, data);
-            dataParent.children = _.filter(dataParent.children, function(child){ return child.guid !== data.guid; });
-        }
+    // Store the node that is being dragged for a
+    // later reference.
+    dragElement = evt.currentTarget;
 
-        // tell the listeners to this tree that the tree has changed.
-        tree.updated();
-    },
+    // Unselect all selected nodes
+    $('li span').removeClass('selected');
 
-    'drop div.slot.slot-bottom': function (evt, tmpl) {
-        if(evt.preventDefault) { evt.preventDefault(); }
-        if(evt.stopPropagation) { evt.stopPropagation(); }
+    // Select the node that is being dragged.
+    $(evt.currentTarget).addClass('selected');
+  },
 
-        $(evt.currentTarget).removeClass("slot-visible");
-    },
 
-    'drop li span.element': function(evt, tmpl) {
-        if(evt.preventDefault) { evt.preventDefault(); }
-        if(evt.stopPropagation) { evt.stopPropagation(); }
+  // -- Hide/unhide node events ------------------------------------------------
 
-        if ($(evt.currentTarget).hasClass('hover'))
-            $(evt.currentTarget).removeClass('hover');
+  'click .hide-node': function(evt, tmpl) {
+    toggleVisibility(GV.collections.Nodes, this._id, false);
+  },
 
-        var targetData = UI.getElementData(evt.currentTarget);
-        var targetGUID = targetData.guid;
+  'click .show-node': function(evt, tmpl) {
+    toggleVisibility(GV.collections.Nodes, this._id, true);
+  },
 
-        var data = UI.getElementData(dragElement);
-        var dataParent = UI.getElementData(dragElement.parentNode.parentNode.parentNode);
+  'click .hide-root': function(evt, tmpl) {
+    toggleVisibility(GV.collections.Documents, this.tree._id, false);
+  },
 
-        var guidParent = dataParent.guid;
-        var guid = data.guid;
+  'click .show-root': function(evt, tmpl) {
+    toggleVisibility(GV.collections.Documents, this.tree._id, true);
+  },
 
-        if(parseInt(targetGUID) && targetGUID >= 0) {
 
+  // -- Click on nodes ---------------------------------------------------------
 
-            var newHook;
-            var oldHook;
-            var filteredList;
 
-            _.walk.preorder(tree.getTree(), function(value, key, parent) {
-                if(parent && parseInt(key) >= 0)
-                    parent.children[key]._parent = parent;
+  // Selects a node on regular mouse click
+  'click li.root li span.element': function(evt, tmpl) {
 
-                if(value.guid === targetGUID) {
+    // "Unselect" all selected nodes
+    $('li span').removeClass('selected');
 
-                    // create a reference to the new target
-                    newHook = value;
-
-                    // if the target branch is the same as the current branch
-                    // return an empty hook.
-                    for (var i = 0; i < value.children.length; i++) {
-                        if(value.children[i].guid === guid)
-                            newHook = null;
-                    }
-                } else if (value.guid === guidParent) {
-                    // reference to old branch
-                    oldHook = value;
-
-                    // remove the selected node from the parents children list
-                    filteredList = _.filter(value.children, function(child){ return child.guid !== guid; });
-
-                }
-            }, {},
-            function(el) {
-                return el.children;
-            });
-
-
-            // if we have found our element that we want
-            // to place our selected subtree in, push the
-            // subtree onto this branch and set an updated value
-            // to the previous branch. Also check whether the target
-            // node is inside our selected subtree, if so: don't move the
-            // subtree.
-            if(newHook && oldHook && !isPartOfSubTree(data, targetData)) {
-                oldHook.children = filteredList;
-                newHook.children.push(data);
-            }
-        }
-
-        // tell the listeners to this tree that the tree has changed.
-        tree.updated();
-
-        return false;
-    },
+    // Style the current selected node.
+    $(evt.currentTarget).addClass('selected');
 
-    'dragenter li span.element': function(evt, tmpl) {
-        if(evt.preventDefault) { evt.preventDefault(); }
-        if(evt.stopPropagation) { evt.stopPropagation(); }
+    var elData = UI.getData(evt.currentTarget);
 
-        // Add class '.hover' it not already present
-        var target = $(evt.currentTarget);
-        if (!target.hasClass('hover'))
-            target.addClass('hover');
-    },
-
-    'dragleave li span.element': function(evt, tmpl) {
-        if(evt.preventDefault) { evt.preventDefault(); }
-        if(evt.stopPropagation) { evt.stopPropagation(); }
-
-        // if the element being hovered has a class '.hover'
-        // remove it.
-        var target = $(evt.currentTarget);
-        if (target.hasClass('hover'))
-            target.removeClass('hover');
-    },
-
-    'dragstart li span.element': function(evt, tmpl) {
-
-        if(evt.stopPropagation) { evt.stopPropagation(); }
-
-        // Store the node that is being dragged for a
-        // later reference.
-        dragElement = evt.currentTarget;
-
-        // Unselect all selected nodes
-        $('li span').removeClass('selected');
-
-        // Select the node that is being dragged.
-        $(evt.currentTarget).addClass('selected');
-
-    },
-
-    // Opens a tab if double click on a node
-    'dblclick li span.element': function(evt, tmpl) {
-        //if(evt.stopPropagation) { evt.stopPropagation(); }
-
-        var data = Blaze.getData(evt.currentTarget);
-
-        // Adds a tab
-        if(typeof data._id !== "undefined") {
-            Tabs.addTab(data._id);
-        }
-    },
-
-    'click .hide-node': function(evt, tmpl) {
-        GV.collections.Nodes.update({_id: this._id}, { $set: { collapsed: true } });
-    },
-
-    'click .show-node': function(evt, tmpl) {
-        GV.collections.Nodes.update({_id: this._id}, { $set: { collapsed: false } });
-    },
-
-    'click .hide-root': function(evt, tmpl) {
-        GV.collections.Documents.update({_id: this.tree._id}, { $set: { collapsed: true } });
-    },
-
-    'click .show-root': function(evt, tmpl) {
-        GV.collections.Documents.update({_id: this.tree._id}, { $set: { collapsed: false } });
-    },
-
-    // Selects a node on regular mouse click
-    'click li.root li span.element': function(evt, tmpl) {
-        //if(evt.stopPropagation) { evt.stopPropagation(); }
-
-        // "Unselect" all selected nodes
-        $('li span').removeClass('selected');
-
-        // Style the current selected node.
-        $(evt.currentTarget).addClass('selected');
-
-        var elData = UI.getData(evt.currentTarget);
-
-        if(elData && elData._id) {
-            Tabs.setDummyTab(elData._id);
-            Session.set('nodeInFocus', elData._id);
-        }
-    },
-
-    // Selects a node on regular mouse click
-    'click li.root > span.element': function(evt, tmpl) {
-        //if(evt.stopPropagation) { evt.stopPropagation(); }
-
-        // "Unselect" all selected nodes
-        $('li span').removeClass('selected');
-
-        // Style the current selected node.
-        $(evt.currentTarget).addClass('selected');
-
-        Tabs.setDummyTab(null);
-
-        Session.set('nodeInFocus', Session.get('mainDocument'));
-    },
-
-    // On right click on node
-    'mousedown li span.element': function(evt, tmpl) {
-        //if(evt.stopPropagation) { evt.stopPropagation(); }
-
-        if(evt.which == 3) {
-            // "Unselect" all selected nodes
-            $('li span').removeClass('selected');
-
-            // Style the current selected node.
-            $(evt.currentTarget).addClass('selected');
-        }
+    if(elData && elData._id) {
+      GV.tabs.setDummyTab(elData._id);
+      Session.set('nodeInFocus', elData._id);
     }
+  },
+
+  // Selects a node on regular mouse click
+  'click li.root > span.element': function(evt, tmpl) {
+
+    // "Unselect" all selected nodes
+    $('li span').removeClass('selected');
+
+    // Style the current selected node.
+    $(evt.currentTarget).addClass('selected');
+
+    GV.tabs.setDummyTab(null);
+
+    Session.set('nodeInFocus', Session.get('mainDocument'));
+  },
+
+  // Opens a tab if double click on a node
+  'dblclick li span.element': function(evt, tmpl) {
+
+    var data = Blaze.getData(evt.currentTarget);
+
+    // Adds a tab
+    if(typeof data._id !== "undefined") {
+      GV.tabs.addTab(data._id);
+    }
+  },
+
+  // On right click on node
+  'mousedown li span.element': function(evt, tmpl) {
+
+    if(evt.which == 3) {
+      // "Unselect" all selected nodes
+      $('li span').removeClass('selected');
+
+      // Style the current selected node.
+      $(evt.currentTarget).addClass('selected');
+    }
+  }
 });
