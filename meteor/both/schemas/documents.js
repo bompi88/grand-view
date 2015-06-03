@@ -110,6 +110,19 @@ GV.schemas.Documents = new SimpleSchema({
     }
   },
 
+  isRoot: {
+    type: Boolean,
+    optional: false,
+    autoValue: function() {
+      if (this.isInsert) {
+        return true;
+      }
+      else {
+        this.unset();
+      }
+    }
+  },
+
   // The document was updated on this date
   lastChanged: {
     type: Date,
