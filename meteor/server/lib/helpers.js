@@ -19,9 +19,6 @@
  */
 
 
-"use strict";
-
-
 /**
  * returns a random integer
  */
