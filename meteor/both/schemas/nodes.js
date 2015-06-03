@@ -135,9 +135,15 @@ GV.schemas.Nodes = new SimpleSchema({
   },
 
   // Which depth level the node is at
+  position: {
+    type: Number,
+    optional: true
+  },
+
+  // Which depth level the node is at
   sectionLabel: {
     type: String,
-    optional: false
+    optional: true
   },
 
   // Is this node collapsed?
