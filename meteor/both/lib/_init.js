@@ -8,6 +8,6 @@ GV = {
     helpers: {},
     subscriptions: {},
     schemas: {},
-    collections: {}
+    collections: {},
     timeout: 5000
 };
