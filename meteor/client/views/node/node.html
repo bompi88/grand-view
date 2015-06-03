@@ -24,30 +24,32 @@ A node in the tree, that recursively renders its children.
       {{!-- Drop slot top --}}
       <div class="slot slot-top"></div>
 
-      <span draggable="true" class="element">
+      <span draggable="true" class="element nodes">
         {{#if hasChildren}}
-          {{#if collapsed}}
+          {{#if isCollapsed}}
             <span class="glyphicon glyphicon-plus-sign show-node"></span>
           {{else}}
             <span class="glyphicon glyphicon-minus-sign hide-node"></span>
           {{/if}}
         {{/if}}
 
-        {{sectionLabel}} {{title}}
+        {{getSectionLabel}} {{title}}
       </span>
 
       {{!-- Render its children if they are visible --}}
-      {{#unless collapsed}}
-          {{#if hasChildren}}
-              {{#each children}}
-                  {{> NodeLevel}}
-          	{{/each}}
-          {{/if}}
+      {{#unless isCollapsed}}
+        {{#if hasChildren}}
+          {{#each children}}
+            {{> NodeLevel getContext ../node_index}}
+      	 {{/each}}
+        {{/if}}
       {{/unless}}
-    </li>
 
-    {{!-- Drop slot bottom --}}
-    <div class="slot slot-bottom"></div>
+      {{#if hasBottomSlot}}
+        {{!-- Drop slot bottom --}}
+        <div class="slot slot-bottom"></div>
+      {{/if}}
+    </li>
 
     </ul>
 </template>

@@ -25,20 +25,19 @@ The tree constructor template.
   <div id="{{id}}" class="tree {{class}}">
   	<ul>
   		<li class="node root" style="margin-top:0;" data-id="{{guid}}">
-        <div class="slot slot-top"></div>
-         	<span draggable="true" class="element">
+          <span draggable="true" class="element root">
             <span class="glyphicon glyphicon-book"></span> {{documentTitle}}
           </span>
 
-          {{!-- Render rest of the visible nodes --}}
-          {{#unless tree.collapsed}}
-      			{{#each treeItems}}
-      				{{> NodeLevel}}
-      			{{/each}}
-          {{/unless}}
-  		</li>
+          <!-- <div class="slot slot-top"></div> -->
 
-      <div class="slot slot-bottom"></div>
+          {{!-- Render rest of the visible nodes --}}
+    			{{#each treeItems}}
+    				{{> NodeLevel}}
+    			{{/each}}
+          <!-- <div class="slot slot-bottom"></div> -->
+      </li>
+
 
     </ul>
   </div>

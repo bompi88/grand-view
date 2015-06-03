@@ -25,6 +25,9 @@ var dragElement;
 // -- Tree Helpers -------------------------------------------------------------
 
 
+/**
+ * Sets a node to collapsed mode.
+ */
 var toggleVisibility = function(collection, id, visible) {
   collection.update({
     _id: id
@@ -36,23 +39,64 @@ var toggleVisibility = function(collection, id, visible) {
   });
 };
 
+/**
+ * Generates a section label for the next child
+ */
+generateSectionLabel = function(parentLabel, position) {
+  parentLabel = parentLabel ? parentLabel + "." : "";
+
+  if(position >= 0)
+    return parentLabel + (position + 1);
+  else
+    return null;
+}
+
+/**
+ * Updates the positions in the DB to reflect the current position in the client.
+ */
+updatePositions = function(node) {
+  $(node).find('> ul').each(function(index) {
+    var elData = UI.getData(this);
+
+    GV.collections.Nodes.update({ _id: elData._id }, { $set: { position: index }});
+  });
+}
+
 
 // -- Tree Template helpers ----------------------------------------------------
 
 
 Template.Tree.helpers({
 
+  /**
+   * The nodes of this tree.
+   */
   treeItems: function() {
-    return this.tree && GV.collections.Nodes.find({parent: this.tree._id}) || [];
+    return this.tree && GV.collections.Nodes.find({parent: this.tree._id}, { sort: { position: 1 }}).map(function(node, index) {
+      node.node_index = index;
+      return node;
+    });;
   },
 
+  /**
+   * Returns true if the tree contains nodes.
+   */
   hasChildren: function() {
     return this.tree && GV.collections.Nodes.find({parent: this.tree._id}).count() > 0;
   },
 
+  /**
+   * Returns the title if defined, else returns a dummy title.
+   */
   documentTitle: function() {
     return this.tree && this.tree.title || "Uten tittel";
   }
+
+  // getContext: function() {
+  //   return _.extend(this, {
+  //     prevSection: "" + (this.node_index + 1)
+  //   });
+  // }
 
 });
 
@@ -77,10 +121,11 @@ Template.Tree.rendered = function () {
           GV.collections.Nodes.insert({
             parent: elData.tree._id,
             title: "Ingen tittel",
-            level: 1,
-            sectionLabel: 1,
+            level: 0,
+            sectionLabel: null,
             userId: elData.tree.userId,
-            lastChanged: new Date()
+            lastChanged: new Date(),
+            position: -1
           },
           function(error, nodeId) {
             if(error) {
@@ -98,7 +143,14 @@ Template.Tree.rendered = function () {
             });
 
             // Subscribe on the newly created node
-            Meteor.subscribe('nodeById', nodeId);
+            Router.current().subscribe('nodeById', nodeId, {
+              onReady: function () {
+                Meteor.defer(function() {
+                  updatePositions(t.parentNode);
+                });
+              },
+              onError: function () { console.log("onError", arguments); }
+            });
           });
         }
       },
@@ -161,15 +213,58 @@ Template.Tree.events({
 
   // -- Drop events ------------------------------------------------------------
 
-
-  'drop div.slot.slot-top, drop div.slot.slot-bottom': function (event, tmpl) {
+  'drop li.node > div.slot.slot-top, drop li.node > div.slot.slot-bottom': function (event, tmpl) {
     if(event.preventDefault) { event.preventDefault(); }
     if(event.stopPropagation) { event.stopPropagation(); }
 
-    $(event.currentTarget).removeClass("slot-visible");
+    var slot = event.currentTarget;
+    var target = slot.parentNode.parentNode;
+    var dragNode = dragElement.parentNode.parentNode;
+    var prevNode = $(dragNode).parent().parent();
 
-    var dataTarget = UI.getElementData(event.currentTarget.parentNode.parentNode.parentNode);
-    var data = UI.getElementData(dragElement.parentNode);
+    $(slot).removeClass("slot-visible");
+
+    var parent = target.parentNode;
+    var dataTarget = UI.getData(parent);
+    var data = UI.getData(dragElement.parentNode);
+    var position = $(parent).find("> ul").index(target);
+
+    var l;
+    if(dataTarget.level >= 0)
+      l = dataTarget.level + 1;
+    else
+      l = 0;
+
+
+    console.log("dataTarget")
+    console.log(dataTarget)
+
+    console.log("parent of drag")
+    console.log(prevNode)
+    console.log("EVENT:");
+    console.log(event.currentTarget.className);
+    console.log("parent:");
+    console.log(parent);
+    console.log("target:");
+    console.log(target);
+    console.log("dragNode:");
+    console.log(dragNode);
+    console.log("data");
+    console.log(data);
+    console.log("position:");
+    console.log(position);
+    console.log("level:");
+    console.log(l);
+
+    if(slot.className === "slot slot-top") {
+      $(dragNode).insertBefore($(target));
+      console.log("top");
+    } else if(slot.className === "slot slot-bottom") {
+      $(dragNode).insertAfter($(target));
+      console.log("bottom");
+    }
+
+    updatePositions(parent);
 
     // Update the node position
     GV.collections.Nodes.update({
@@ -177,24 +272,40 @@ Template.Tree.events({
     },
     {
       $set: {
-        parent: dataTarget._id,
-        level: dataTarget.level + 1,
-        sectionLabel: dataTarget.sectionLabel + "." + (dataTarget.level)
+        parent: dataTarget && dataTarget._id || dataTarget.tree._id,
+        level: l,
+        sectionLabel: generateSectionLabel(dataTarget && dataTarget.sectionLabel, dataTarget && dataTarget.position)
       }
     });
+
+    updatePositions(parent);
+    updatePositions(prevNode);
+    // updatePositions(parent);
 
     return false;
   },
 
-  'drop li span.element': function(event, tmpl) {
+  /**
+   * Drop on children nodes
+   */
+  'drop li span.element.nodes': function(event, tmpl) {
     if(event.preventDefault) { event.preventDefault(); }
     if(event.stopPropagation) { event.stopPropagation(); }
 
     if ($(event.currentTarget).hasClass('hover'))
       $(event.currentTarget).removeClass('hover');
 
-    var dataTarget = UI.getElementData(event.currentTarget);
-    var data = UI.getElementData(dragElement);
+    if($(event.currentTarget)[0] == $(dragElement)[0])
+      return false;
+
+    console.log(event.currentTarget)
+    console.log(dragElement);
+
+    var dataTarget = UI.getData(event.currentTarget);
+    var data = UI.getData(dragElement);
+    var parent = event.currentTarget.parentNode;
+
+    var l = dataTarget.level + 1;
 
     // Update the node position
     GV.collections.Nodes.update({
@@ -203,9 +314,44 @@ Template.Tree.events({
     {
       $set: {
         parent: dataTarget._id,
-        level: dataTarget.level + 1,
-        sectionLabel: dataTarget.sectionLabel + "." + (dataTarget.level)
+        level: l,
+        position: -1,
+        sectionLabel: generateSectionLabel(dataTarget.sectionLabel, dataTarget.position)
       }
+    }, null, function() {
+      updatePositions(parent);
+    });
+
+    return false;
+  },
+
+/**
+ * Drop on root node
+ */
+'drop li span.element.root': function(event, tmpl) {
+    if(event.preventDefault) { event.preventDefault(); }
+    if(event.stopPropagation) { event.stopPropagation(); }
+
+    if ($(event.currentTarget).hasClass('hover'))
+      $(event.currentTarget).removeClass('hover');
+
+    var dataTarget = UI.getData(event.currentTarget);
+    var data = UI.getData(dragElement);
+    var rootNode = event.currentTarget.parentNode;
+
+    // Update the node position
+    GV.collections.Nodes.update({
+      _id: data._id
+    },
+    {
+      $set: {
+        parent: dataTarget.tree._id,
+        level: 0,
+        position: -1,
+        sectionLabel: null
+      }
+    }, null, function() {
+      updatePositions(rootNode);
     });
 
     return false;
@@ -242,7 +388,7 @@ Template.Tree.events({
   // -- On drag start of node --------------------------------------------------
 
 
-  'dragstart li span.element': function(event, tmpl) {
+  'dragstart li span.element.nodes': function(event, tmpl) {
 
     if(event.stopPropagation) { event.stopPropagation(); }
 
@@ -255,6 +401,11 @@ Template.Tree.events({
 
     // Select the node that is being dragged.
     $(event.currentTarget).addClass('selected');
+  },
+
+  'dragstart li span.element.root': function(event, tmpl) {
+    if(event.preventDefault) { event.preventDefault(); }
+    if(event.stopPropagation) { event.stopPropagation(); }
   },
 
 
@@ -297,7 +448,7 @@ Template.Tree.events({
     }
   },
 
-  // Selects a node on regular mouse click
+  // Selects root node on regular mouse click
   'click li.root > span.element': function(event, tmpl) {
 
     // "Unselect" all selected nodes
@@ -314,7 +465,7 @@ Template.Tree.events({
   // Opens a tab if double click on a node
   'dblclick li span.element': function(event, tmpl) {
 
-    var data = Blaze.getData(event.currentTarget);
+    var data = UI.getData(event.currentTarget);
 
     // Adds a tab
     if(typeof data._id !== "undefined") {

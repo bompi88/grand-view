@@ -27,7 +27,7 @@
 * description: recursively deletes all children
 * from a node in a post-order manner
 */
-deleteNode = function(_id) {
+deleteNode = function(_id, template) {
 
   var nodes = GV.collections.Nodes.find({parent: _id}).fetch();
 
@@ -53,9 +53,27 @@ deleteNode = function(_id) {
       if(error) {
         Notifications.warn('Feil', error.message);
       }
+
+      // update positions
+      if(template)
+        updatePositions(template);
     });
 
   });
+};
+
+getSection = function(node, prevNodePos) {
+  // var label = "";
+
+  // if(this.level > 0) {
+  //   if(node.prevSection) {
+  //     label = label + node.prevSection + ".";
+  //   }
+
+  // }
+  // label = label + "" + (prevNodePos + 1);
+
+  return "" + (prevNodePos + 1) + "." + (node.node_index + 1);
 };
 
 
@@ -64,12 +82,74 @@ deleteNode = function(_id) {
 
 Template.NodeLevel.helpers({
 
+  /**
+   * Returns true if the node has been collapsed, and the children should be hidden.
+   */
+  isCollapsed: function() {
+    return this.collapsed || this.collapsed;
+  },
+
+  /**
+   * Returns true if the node has children.
+   */
   hasChildren: function() {
     return GV.collections.Nodes.find({parent: this._id}).count() > 0;
   },
 
+  /**
+   * Returns the children of the current node.
+   */
   children: function() {
-    return GV.collections.Nodes.find({parent: this._id});
+    return GV.collections.Nodes.find({ parent: this._id }, { sort: { position: 1 }}).map(function(node, index) {
+      node.node_index = index;
+      return node;
+    });
+  },
+
+  getContext: function(prevNodePos) {
+    console.log("POS");
+    console.log(prevNodePos);
+    var context = _.extend(this, {
+      prevSection: getSection(this, prevNodePos)
+    });
+
+    return context;
+  },
+  /**
+   * Returns a combined section label by merging the parents label and the node
+   * position value. This is the readable structure notation.
+   */
+  // getSectionLabel: function() {
+  //   var label = "";
+
+  //   if(this.sectionLabel)
+  //     label = label + this.sectionLabel;
+
+  //   if(this.position >= 0) {
+
+  //     if(this.level == 0)
+  //       label = label + (this.position + 1);
+  //     else
+  //       label = label + "." + (this.position + 1);
+  //   }
+
+  //   return label;
+  // },
+
+  getSectionLabel: function() {
+    console.log(this)
+
+    if(this.prevSection)
+      return this.prevSection + "." + (this.node_index + 1);
+    else
+      return this.node_index + 1;
+  },
+
+  /**
+   * Returns true if this node should have a drop zone beneath itself.
+   */
+  hasBottomSlot: function() {
+    return this.node_index == (GV.collections.Nodes.find({ parent: this.parent }).count() - 1);
   }
 
 });
@@ -89,7 +169,7 @@ Template.NodeLevel.rendered = function() {
       'add-node': function(t) {
         var elData = UI.getData(t);
 
-        if(elData && (elData.level > 4)) {
+        if(elData && (elData.level > 3)) {
           Notifications.warn('For stort tre', 'Det er for mange underkategorier, prøv heller å omstrukturere litt i hierarkiet.');
           return;
         } else {
@@ -99,9 +179,10 @@ Template.NodeLevel.rendered = function() {
               parent: elData._id,
               title: "Ingen tittel",
               level: elData.level + 1,
-              sectionLabel: elData.sectionLabel + "." + (elData.level),
+              sectionLabel: generateSectionLabel(elData.sectionLabel, elData.position),
               userId: elData.userId,
-              lastChanged: new Date()
+              lastChanged: new Date(),
+              position: -1
             };
 
             GV.collections.Nodes.insert(node, function(error, nodeId) {
@@ -115,11 +196,19 @@ Template.NodeLevel.rendered = function() {
                   }
                 });
 
-                Router.current().subscribe('nodeById', nodeId);
+                Router.current().subscribe('nodeById', nodeId, {
+                  onReady: function () {
+                    Meteor.defer(function() {
+                      updatePositions(t.parentNode);
+                    });
+                  },
+                  onError: function () { console.log("onError", arguments); }
+                });
               }
             });
           }
         }
+
       },
 
       // Delete button
@@ -139,7 +228,8 @@ Template.NodeLevel.rendered = function() {
                 callback: function(result) {
                   if(result) {
 
-                    deleteNode(elData._id);
+                    deleteNode(elData._id, t.parentNode.parentNode.parentNode);
+
                     // Set the main document in focus
                     Session.set('nodeInFocus', Session.get('mainDocument'));
 
