@@ -476,6 +476,11 @@ Template.Tree.events({
       Router.current().subscribe('fileByNode', elData._id);
       Session.set("file", null);
       Session.set("uploadStopped", false);
+
+      // Reset the form because of no update on tags field on data change.
+      Meteor.defer(function() {
+        AutoForm.resetForm("update-node-form");
+      });
     }
   },
 

@@ -46,7 +46,7 @@ GV.schemas.Nodes = new SimpleSchema({
           // Can create new tags
           create: function(input) {
 
-            Tags.insert({ value: input, text: input });
+            GV.collections.Tags.insert({ value: input, text: input });
 
             return {
               value: input,
@@ -76,7 +76,7 @@ GV.schemas.Nodes = new SimpleSchema({
               GV.subscriptions['tags'].stop();
 
             GV.subscriptions['tags'] = Meteor.subscribe('tagsByQuery', { text: { $regex: query, $options: 'i' } });
-            var tags = Tags.find({ text: { $regex: query, $options: 'i' } }).fetch();
+            var tags = GV.collections.Tags.find({ text: { $regex: query, $options: 'i' } }).fetch();
 
             callback(tags);
           }

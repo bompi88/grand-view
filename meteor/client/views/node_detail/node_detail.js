@@ -21,6 +21,7 @@
 Session.set("file", null);
 Session.set("uploadStopped", false);
 
+
 // -- Template helpers ---------------------------------------------------------
 
 
@@ -36,6 +37,44 @@ Template.NodeDetail.helpers({
 
   uploadStopped: function() {
     return Session.get("uploadStopped");
+  },
+
+  getTagsOptions: function() {
+
+    var self = this;
+    var r;
+    console.log(self._af.doc.tags)
+    if(self._af.doc.tags) {
+      r = _.map(self._af.doc.tags, function(val) {
+        return {
+          label: val,
+          value: val
+        };
+      });
+    }
+
+    return r;
+  }
+
+});
+
+
+Template.GeneralInfo.helpers({
+
+  getTagsOptions: function() {
+
+    var self = this;
+    var r;
+
+    if(self._af.doc && self._af.doc.tags) {
+      r = _.map(self._af.doc.tags, function(val) {
+        return {
+          label: val,
+          value: val
+        };
+      });
+    }
+    return r;
   }
 
 });
@@ -70,7 +109,6 @@ Template.NodeDetail.events({
 
     cp.exec("open ~/GrandView/files/" + filename, function(error, result) {
       console.log(error);
-      console.log(result);
     });
   },
 

@@ -24,7 +24,7 @@ Edit information about a reference.
 		{{> afQuickField name="title" }}
 		{{> afQuickField name="status" }}
 		{{> afQuickField name="description" rows="6" }}
-		{{> afQuickField name="tags" }}
+		{{> afQuickField name="tags" options=getTagsOptions}}
 
     <div class="row" style="margin-bottom:20px;">
       <div class="col-xs-12">
@@ -86,7 +86,7 @@ Edit top level information about a document. This is basically the root node.
 		{{> afQuickField name="title" }}
 		{{> afQuickField name="status" }}
 		{{> afQuickField name="summary" rows="6" }}
-		{{> afQuickField name="tags" }}
+		{{> afQuickField name="tags" options=getTagsOptions}}
 
 		<div class="form-group">
 			<button type="button" class="btn btn-danger pull-left delete-document">Slett hele dokumentet</button>
