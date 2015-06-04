@@ -298,6 +298,8 @@ Template.Tree.events({
     if($(event.currentTarget)[0] == $(dragElement)[0])
       return false;
 
+
+
     console.log(event.currentTarget)
     console.log(dragElement);
 
@@ -306,6 +308,32 @@ Template.Tree.events({
     var parent = event.currentTarget.parentNode;
 
     var l = dataTarget.level + 1;
+
+    var sectionsDragEl = data.sectionLabel && data.sectionLabel.split(".");
+    var sectionsTargetEl = dataTarget.sectionLabel && dataTarget.sectionLabel.split('.');
+
+    console.log("OVER")
+    console.log(sectionsDragEl);
+    console.log(sectionsTargetEl);
+    console.log("UNDER")
+
+    if(sectionsTargetEl && (sectionsTargetEl.length > sectionsDragEl.length) && sectionsDragEl.length > 0) {
+      var numEquals = 0;
+
+      for(var i = 0; i < sectionsTargetEl.length; i++) {
+
+        if(sectionsDragEl[i]) {
+          if(sectionsDragEl[i] === sectionsTargetEl[i])
+            numEquals++;
+        } else {
+          break;
+        }
+
+      }
+
+      if(numEquals == sectionsDragEl.length)
+        return false;
+    }
 
     // Update the node position
     GV.collections.Nodes.update({
@@ -445,6 +473,9 @@ Template.Tree.events({
     if(elData && elData._id) {
       GV.tabs.setDummyTab(elData._id);
       Session.set('nodeInFocus', elData._id);
+      Router.current().subscribe('fileByNode', elData._id);
+      Session.set("file", null);
+      Session.set("uploadStopped", false);
     }
   },
 
@@ -460,6 +491,8 @@ Template.Tree.events({
     GV.tabs.setDummyTab(null);
 
     Session.set('nodeInFocus', Session.get('mainDocument'));
+    Session.set("uploadStopped", false);
+    Session.set("file", null);
   },
 
   // Opens a tab if double click on a node

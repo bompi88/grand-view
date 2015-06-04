@@ -20,3 +20,6 @@ comerc:autoform-selectize
 aldeed:collection2
 fourseven:scss
 aldeed:simple-schema
+cfs:standard-packages
+cfs:ui
+cfs:filesystem

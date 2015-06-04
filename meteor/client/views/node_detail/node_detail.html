@@ -26,9 +26,50 @@ Edit information about a reference.
 		{{> afQuickField name="description" rows="6" }}
 		{{> afQuickField name="tags" }}
 
-		<div class="form-group">
+    <div class="row" style="margin-bottom:20px;">
+      <div class="col-xs-12">
+        <div class="row" style="margin-bottom:20px;">
+          <div class="col-xs-12">
+            {{!-- Upload process status --}}
+            {{#with file}}
+                {{#if this.isUploaded}}
+                <b><a href="#" class="download">{{this.name}}</a></b> er opplastet og lagt ved referansen. {{#FS.DeleteButton class="btn btn-danger btn-xs"}}Slett{{/FS.DeleteButton}}
+
+                {{else}}
+
+                  Laster opp <b>{{this.name}}</b>...
+
+                  {{> FS.UploadProgressBar bootstrap=true class='progress-bar-success progress-bar-striped active' showPercent=true}}
+
+                  {{#unless uploadStopped}}
+                    <button type="button" class="btn btn-info pull-right stop-upload">Stopp opplastning</button>
+                  {{else}}
+                    <button type="button" class="btn btn-info pull-right resume-upload">Fortsett opplastning</button>
+                  {{/unless}}
+                {{/if}}
+            {{/with}}
+          </div>
+        </div>
+        {{!-- Upload field --}}
+        {{#unless file}}
+          <div class="upload-field">
+            <span>Klikk for å laste opp fil</span>
+            <input class="file-upload pull-left" type="file">
+          </div>
+        {{else}}
+          {{#if uploadStopped}}
+          <div class="upload-field">
+            <span>Klikk for å bytte fil</span>
+            <input class="file-upload pull-left" type="file">
+          </div>
+          {{/if}}
+        {{/unless}}
+
+      </div>
+    </div>
+    <div class="form-group">
 			<button type="button" class="btn btn-danger pull-left delete-reference">Slett referansen</button>
-			<button type="submit" class="btn btn-primary pull-right">Lagre</button>
+			<button type="submit" class="btn btn-primary pull-right {{#if file}}{{#unless uploadStopped}}{{#unless file.isUploaded}}disabled{{/unless}}{{/unless}}{{/if}}">Lagre</button>
 			<button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Avbryt</button>
 		</div>
 	{{/autoForm}}

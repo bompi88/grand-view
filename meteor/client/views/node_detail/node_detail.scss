@@ -1,0 +1,22 @@
+.upload-field {
+	margin-top:20px;
+	height:100px;
+	background-color: darken(white, 10%);
+	border: 2px dashed darken(white, 30%);
+	text-align: center;
+
+	span {
+		font-size: 1.5em;
+		display: inline-block;
+		vertical-align: middle;
+		line-height: 100px;
+	}
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	input[type="file"] {
+		display:none;
+	}
+}

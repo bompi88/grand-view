@@ -18,6 +18,9 @@
  * limitations under the License.
  */
 
+Session.set("file", null);
+Session.set("uploadStopped", false);
+
 // -- Template helpers ---------------------------------------------------------
 
 
@@ -25,6 +28,14 @@ Template.NodeDetail.helpers({
 
   node: function() {
     return GV.collections.Nodes.findOne({_id: Session.get('nodeInFocus')});
+  },
+
+  file: function() {
+    return GV.collections.Files.findOne({ _id: Session.get("file") || this._af.doc && this._af.doc.fileId || null });
+  },
+
+  uploadStopped: function() {
+    return Session.get("uploadStopped");
   }
 
 });
@@ -39,7 +50,58 @@ Template.NodeDetail.events({
    * Reset the form on click on cancel button
    */
   'click .cancel': function(event, tmpl) {
+    var fileObj = GV.collections.Files.findOne({ _id: Session.get("file")});
+
+    FS.HTTP.uploadQueue.pause();
+
+    FS.HTTP.uploadQueue.cancel(fileObj);
+    GV.collections.Files.remove({ _id: Session.get('file')});
+
+    Session.set('file', null);
     AutoForm.resetForm("update-node-form");
+  },
+
+  'click .download': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+
+    console.log(this)
+    //var fs = require('fs');
+    var cp = require("child_process");
+
+    var filename = this.copies.filesStore.key.replace(new RegExp(" ", 'g'), '\\ ');
+
+    cp.exec("open ~/GrandView/files/" + filename, function(error, result) {
+      console.log(error);
+      console.log(result);
+    });
+    //process.exit(0); // exit this nodejs process
+  },
+
+  /**
+   * Reset the form on click on cancel button
+   */
+  'click .upload-field': function(event, tmpl) {
+    tmpl.find('input[type="file"]').click();
+  },
+
+  /**
+   * Reset the form on click on cancel button
+   */
+  'click .stop-upload': function(event, tmpl) {
+    var fileObj = GV.collections.Files.findOne({ _id: Session.get("file")});
+
+    FS.HTTP.uploadQueue.pause();
+    Session.set("uploadStopped", true);
+  },
+
+  /**
+   * Reset the form on click on cancel button
+   */
+  'click .resume-upload': function(event, tmpl) {
+    var fileObj = GV.collections.Files.findOne({ _id: Session.get("file")});
+
+    FS.HTTP.uploadQueue.resume();
+    Session.set("uploadStopped", false);
   },
 
   'click .delete-reference': function(event, tmpl) {
@@ -68,6 +130,41 @@ Template.NodeDetail.events({
       }
     }
     bootbox.dialog(confirmationPrompt);
+  },
+
+  'change .file-upload': function(event, tmpl, args) {
+    var self = this;
+
+    // remove file if it currently is a file in the session variable
+    if(Session.get("file")) {
+
+      var fileObj = GV.collections.Files.findOne({ _id: Session.get("file")});
+
+      FS.HTTP.uploadQueue.pause();
+
+      FS.HTTP.uploadQueue.cancel(fileObj);
+      GV.collections.Files.remove({ _id: Session.get('file')});
+    }
+
+    Session.set("uploadStopped", false);
+    // upload new file
+    var file = new FS.File(event.target.files[0]);
+
+    var meta = {
+      owner: GV.helpers.userId(),
+      docId: this._id,
+      nodeId: this._af.doc._id,
+      path: file.path
+    };
+
+    FS.Utility.extend(file, meta);
+
+    GV.collections.Files.insert(file, function (err, fileObj) {
+      //Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
+      Session.set("file", fileObj._id);
+      Router.current().subscribe('fileById', fileObj._id);
+      GV.collections.Nodes.update({ _id: self._af.doc._id }, { $set: { fileId: fileObj._id }});
+    });
   }
 
 });
@@ -108,13 +205,6 @@ Template.GeneralInfo.events({
       }
     }
     bootbox.dialog(confirmationPrompt);
-  },
-
-  /**
-   * Reset the form on click on cancel button
-   */
-  'click .cancel': function(event, tmpl) {
-    AutoForm.resetForm("update-document-form");
   }
 
 });

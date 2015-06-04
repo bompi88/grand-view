@@ -150,6 +150,11 @@ GV.schemas.Nodes = new SimpleSchema({
   collapsed: {
     type: Boolean,
     optional: true
+  },
+
+  fileId: {
+    type: String,
+    optional: true
   }
 
 });
