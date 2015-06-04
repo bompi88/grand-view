@@ -135,6 +135,12 @@ GV.schemas.Documents = new SimpleSchema({
     optional: false
   },
 
+  // All file ids in the document
+  fileIds: {
+    type: [String],
+    optional: true
+  },
+
   // Is the whole document collapsed?
   collapsed: {
     type: Boolean,

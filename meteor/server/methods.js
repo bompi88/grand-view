@@ -108,7 +108,15 @@ Meteor.methods({
 	 * returns true after invokation
 	 */
 	removeNodes: function(ids, callback) {
-		GV.collections.Nodes.remove({_id: { $in: ids || []}});
+
+    GV.collections.Nodes.find({_id: { $in: ids || []}}).forEach(function(node) {
+
+      // Remove the linked files
+      GV.collections.Files.remove({ _id: node.fileId });
+
+      // last remove the nodes
+      GV.collections.Nodes.remove({ _id: node._id });
+    });
 
 		if (typeof callback !== 'undefined') {
 	    	callback();

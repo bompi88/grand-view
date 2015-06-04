@@ -27,38 +27,67 @@
 * description: recursively deletes all children
 * from a node in a post-order manner
 */
-deleteNode = function(_id, template) {
+deleteNode = function(prevNode, template) {
 
-  var nodes = GV.collections.Nodes.find({parent: _id}).fetch();
+  if(typeof prevNode === "string")
+    prevNode = GV.collections.Nodes.findOne({ _id: prevNode });
+
+  var nodeId = prevNode._id;
+  var fileId = prevNode.fileId;
+
+  var nodes = GV.collections.Nodes.find({parent: nodeId}).fetch();
 
   nodes.forEach(function(node) {
-    deleteNode(node._id);
+    deleteNode(node);
   });
 
+  // Remove the tab
+  GV.tabs.removeTab(nodeId);
+
   // Remove the node
-  GV.collections.Nodes.remove({_id: _id}, function(error) {
+  GV.collections.Nodes.remove({ _id: nodeId }, function(error) {
 
-    // Remove the tab
-    GV.tabs.removeTab(_id);
+    if(fileId) {
+      GV.collections.Files.remove({ _id: fileId }, function(error) {
 
-    // Remove the reference from the document
-    GV.collections.Documents.update({
-      _id: Session.get('mainDocument')
-    },
-    {
-      $pull: {
-        children: _id
-      }
-    }, function(error) {
-      if(error) {
-        Notifications.warn('Feil', error.message);
-      }
+        // Remove the reference from the document
+        GV.collections.Documents.update({
+          _id: Session.get('mainDocument')
+        },
+        {
+          $pull: {
+            children: nodeId,
+            fileIds: fileId
+          }
+        }, function(error) {
+          if(error) {
+            Notifications.warn('Feil', error.message);
+          }
 
-      // update positions
-      if(template)
-        updatePositions(template);
-    });
+          // update positions
+          if(template)
+            updatePositions(template);
+        });
+      });
+    } else {
+      // Remove the reference from the document
+      GV.collections.Documents.update({
+        _id: Session.get('mainDocument')
+      },
+      {
+        $pull: {
+          children: nodeId
+        }
+      }, function(error) {
+        if(error) {
+          Notifications.warn('Feil', error.message);
+        }
 
+        // update positions
+        if(template)
+          updatePositions(template);
+      });
+    }
   });
 };
 
@@ -107,8 +136,6 @@ Template.NodeLevel.helpers({
   },
 
   getContext: function(prevNodePos) {
-    console.log("POS");
-    console.log(prevNodePos);
     var context = _.extend(this, {
       prevSection: getSection(this, prevNodePos)
     });
@@ -137,7 +164,6 @@ Template.NodeLevel.helpers({
   // },
 
   getSectionLabel: function() {
-    console.log(this)
 
     if(this.prevSection)
       return this.prevSection + "." + (this.node_index + 1);
@@ -228,7 +254,7 @@ Template.NodeLevel.rendered = function() {
                 callback: function(result) {
                   if(result) {
 
-                    deleteNode(elData._id, t.parentNode.parentNode.parentNode);
+                    deleteNode(elData, t.parentNode.parentNode.parentNode);
 
                     // Set the main document in focus
                     Session.set('nodeInFocus', Session.get('mainDocument'));

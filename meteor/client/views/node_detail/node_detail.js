@@ -43,7 +43,7 @@ Template.NodeDetail.helpers({
 
     var self = this;
     var r;
-    console.log(self._af.doc.tags)
+
     if(self._af.doc.tags) {
       r = _.map(self._af.doc.tags, function(val) {
         return {
@@ -110,6 +110,58 @@ Template.NodeDetail.events({
     cp.exec("open ~/GrandView/files/" + filename, function(error, result) {
       console.log(error);
     });
+  },
+
+  'click .delete-file': function(event, tmpl) {
+    var self = this;
+    // A confirmation prompt before removing the document
+    var confirmationPrompt = {
+      title: "Bekreftelse på slettingen",
+      message: 'Er du sikker på at du vil slette filen? Det er ingen vei tilbake etter dette...',
+      buttons: {
+        cancel: {
+          label: "Nei"
+        },
+        confirm: {
+          label: "Ja",
+          callback: function(result) {
+            if(result) {
+              console.log(self)
+
+              var node = self.nodeId;
+              var doc = self.docId;
+              var file = self._id;
+
+              // Remove the file
+              GV.collections.Files.remove({_id: file}, function(error) {
+                if(error) {
+                  Notifications.warn('Feil', error.message);
+                } else {
+
+                  // Remove the reference in Node
+                  GV.collections.Nodes.update({ _id: node}, { $set: { fileId: null }}, {}, function(error) {
+                    if(error)
+                      Notifications.warn('Feil', error.message);
+                    else {
+
+                      // remove the reference in main document
+                      GV.collections.Documents.update({ _id: doc}, { $pull: { fileIds: file }}, {}, function(error) {
+                        if(error)
+                          Notifications.warn('Feil', error.message);
+                        else {
+                          Notifications.success('Sletting fullført', 'Filen er nå fjernet og referansen oppdatert.');
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          }
+        }
+      }
+    }
+    bootbox.dialog(confirmationPrompt);
   },
 
   /**
@@ -195,10 +247,14 @@ Template.NodeDetail.events({
     FS.Utility.extend(file, meta);
 
     GV.collections.Files.insert(file, function (err, fileObj) {
+
+      var fileId = fileObj._id;
+
       //Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
-      Session.set("file", fileObj._id);
+      Session.set("file", fileId);
       Router.current().subscribe('fileById', fileObj._id);
-      GV.collections.Nodes.update({ _id: self._af.doc._id }, { $set: { fileId: fileObj._id }});
+      GV.collections.Nodes.update({ _id: self._af.doc._id }, { $set: { fileId: fileId }});
+      GV.collections.Documents.update({ _id: self._id }, { $addToSet: { fileIds: fileId }});
     });
   }
 

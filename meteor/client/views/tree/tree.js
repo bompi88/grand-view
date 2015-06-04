@@ -236,25 +236,25 @@ Template.Tree.events({
       l = 0;
 
 
-    console.log("dataTarget")
-    console.log(dataTarget)
+    // console.log("dataTarget")
+    // console.log(dataTarget)
 
-    console.log("parent of drag")
-    console.log(prevNode)
-    console.log("EVENT:");
-    console.log(event.currentTarget.className);
-    console.log("parent:");
-    console.log(parent);
-    console.log("target:");
-    console.log(target);
-    console.log("dragNode:");
-    console.log(dragNode);
-    console.log("data");
-    console.log(data);
-    console.log("position:");
-    console.log(position);
-    console.log("level:");
-    console.log(l);
+    // console.log("parent of drag")
+    // console.log(prevNode)
+    // console.log("EVENT:");
+    // console.log(event.currentTarget.className);
+    // console.log("parent:");
+    // console.log(parent);
+    // console.log("target:");
+    // console.log(target);
+    // console.log("dragNode:");
+    // console.log(dragNode);
+    // console.log("data");
+    // console.log(data);
+    // console.log("position:");
+    // console.log(position);
+    // console.log("level:");
+    // console.log(l);
 
     if(slot.className === "slot slot-top") {
       $(dragNode).insertBefore($(target));
@@ -300,8 +300,8 @@ Template.Tree.events({
 
 
 
-    console.log(event.currentTarget)
-    console.log(dragElement);
+    // console.log(event.currentTarget)
+    // console.log(dragElement);
 
     var dataTarget = UI.getData(event.currentTarget);
     var data = UI.getData(dragElement);
@@ -312,10 +312,10 @@ Template.Tree.events({
     var sectionsDragEl = data.sectionLabel && data.sectionLabel.split(".");
     var sectionsTargetEl = dataTarget.sectionLabel && dataTarget.sectionLabel.split('.');
 
-    console.log("OVER")
-    console.log(sectionsDragEl);
-    console.log(sectionsTargetEl);
-    console.log("UNDER")
+    // console.log("OVER")
+    // console.log(sectionsDragEl);
+    // console.log(sectionsTargetEl);
+    // console.log("UNDER")
 
     if(sectionsTargetEl && (sectionsTargetEl.length > sectionsDragEl.length) && sectionsDragEl.length > 0) {
       var numEquals = 0;

@@ -31,7 +31,7 @@ GV.tabs = {
       this.dummyTab = null;
     }
 
-    var index = this.open.indexOf(docId.toString());
+    var index = this.open.indexOf(docId && docId.toString());
 
     if (index > -1) {
       this.open.splice(index, 1);
