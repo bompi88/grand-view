@@ -64,8 +64,6 @@ Template.NodeDetail.events({
   'click .download': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
 
-    console.log(this)
-    //var fs = require('fs');
     var cp = require("child_process");
 
     var filename = this.copies.filesStore.key.replace(new RegExp(" ", 'g'), '\\ ');
@@ -74,7 +72,6 @@ Template.NodeDetail.events({
       console.log(error);
       console.log(result);
     });
-    //process.exit(0); // exit this nodejs process
   },
 
   /**
