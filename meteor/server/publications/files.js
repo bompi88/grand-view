@@ -7,3 +7,8 @@ Meteor.publish('fileByNode', function(id) {
     // return the documents that the current user owns
     return GV.collections.Files.find({ nodeId: id });
 });
+
+Meteor.publish('filesByDocument', function(id) {
+    // return the documents that the current user owns
+    return GV.collections.Files.find({ docId: id });
+});

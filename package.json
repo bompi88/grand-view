@@ -6,9 +6,16 @@
     "adm-zip": "^0.4.7",
     "electron-rebuild": "^0.1.4",
     "shelljs": "^0.4.0",
-    "string": "^3.1.2"
+    "string": "^3.1.2",
+    "archiver": "^0.14.4",
+    "async": "^1.2.0"
   },
   "optionalDependencies": {
     "eslint": "^0.20.0"
+  },
+  "dependencies": {
+    "archiver": "^0.14.4",
+    "async": "^1.2.0",
+    "string": "^3.1.2"
   }
 }
