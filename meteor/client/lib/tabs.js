@@ -93,6 +93,8 @@ GV.tabs = {
    */
   reset: function() {
     this.open = [];
+    this.dummyTab = null;
+
     this.dep.changed();
 
     return this.open;

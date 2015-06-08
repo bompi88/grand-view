@@ -6,6 +6,7 @@ DocumentController = AuthRouteController.extend({
 		return GV.collections.Documents.findOne({ _id: this.params._id });
 	},
   onAfterAction: function() {
+    GV.tabs.reset();
     Session.set('mainDocument', this.params._id);
     Session.set('nodeInFocus', this.params._id);
     Session.set("file", null);
