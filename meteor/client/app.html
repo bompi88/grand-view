@@ -28,4 +28,13 @@
   		<li id="edit-node"><span class="glyphicon glyphicon-pencil"></span> Rediger</li>
   	</ul>
   </div>
+  {{> ExportStatus}}
 </body>
+
+<template name="ExportStatus">
+  {{#if $.Session.equals "working" true}}
+    <div class="alert alert-success text-center status-bar animated fadeIn text-center" role="alert">
+      <p>{{$.Session.get "workingText"}}</p>
+    </div>
+  {{/if}}
+</template>

@@ -93,6 +93,7 @@ function importThemStuff(doc, nodes, fileDocs, targetPath, srcPath) {
       Notifications.error("Feilmelding", err.message);
     } else {
       Notifications.success("Importering lyktes", "Rapportstrukturen ble importert i systemet og kan finnes på dashbordet.");
+      Session.set("working", false);
     }
   });
 };
@@ -135,6 +136,9 @@ Template.ImportButton.events({
       properties: [ 'openFile']
     }, function(filePathAndName) {
       if(filePathAndName) {
+        Session.set("working", true);
+        Session.set("workingText", "Importerer fil... vennligst vent...");
+
         var originalPath = filePathAndName[0];
         var newPath = path.join(basePath, "tmp", "import");
 
@@ -231,6 +235,8 @@ Template.ImportButton.events({
 Template.ExportButton.events({
 
   'click .export': function () {
+    Session.set("working", true);
+    Session.set("workingText", "Pakker fil... vennligst vent...");
 
     var basePath = process.env.HOME + "/GrandView";
 
@@ -287,6 +293,8 @@ Template.ExportButton.events({
         output.on('close', function() {
           console.log(archive.pointer() + ' total bytes');
           console.log('archiver has been finalized and the output file descriptor has closed.');
+
+          Session.set("working", false);
 
           // rewrite to a GrandView file (.gvf)
           remote.require('dialog').showSaveDialog( {

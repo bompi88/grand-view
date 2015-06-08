@@ -31,3 +31,12 @@ $font-family-sans-serif:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-
 ul.notifications {
 	position: fixed;
 }
+
+.alert.alert-success.status-bar {
+	position: fixed;
+	width: 300px;
+	top: 70px;
+	left: calc(50% - 150px);
+	z-index: 100000;
+	box-shadow: 0px 0px 30px darken(#fff, 40%);
+}
