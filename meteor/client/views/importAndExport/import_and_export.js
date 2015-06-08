@@ -134,89 +134,96 @@ Template.ImportButton.events({
       ],
       properties: [ 'openFile']
     }, function(filePathAndName) {
-      var originalPath = filePathAndName[0];
-      var newPath = path.join(basePath, "tmp", "import");
+      if(filePathAndName) {
+        var originalPath = filePathAndName[0];
+        var newPath = path.join(basePath, "tmp", "import");
 
-      // create a sandbox
-      mkdirSync(basePath);
-      mkdirSync(path.join(basePath, "tmp"));
-      mkdirSync(newPath);
+        // create a sandbox
+        mkdirSync(basePath);
+        mkdirSync(path.join(basePath, "tmp"));
+        mkdirSync(newPath);
 
-      // copy over to sandbox
-      copyFile(originalPath, newPath + "/import.gvf", function(err) {
-        if(err) {
-          console.log(err);
-
-          deleteFolderRecursive(path.join(basePath, "tmp"));
-          return;
-        }
-
-        fs.rename(newPath + '/import.gvf', newPath + '/import.tar', function (err) {
+        // copy over to sandbox
+        copyFile(originalPath, newPath + "/import.gvf", function(err) {
           if(err) {
             console.log(err);
+
             deleteFolderRecursive(path.join(basePath, "tmp"));
             return;
           }
 
-          var extract = tar.extract()
-
-          var tarball = newPath + "/import.tar";
-          var dest = path.join(basePath, "tmp", "import");
-
-          extract.on('entry', function(header, stream, callback) {
-
-            var isDir     = 'Directory' === header.type;
-            var fullpath  = path.join(dest, header.path || header.name);
-            var directory = isDir ? fullpath : path.dirname(fullpath);
-
-            mkdirSync(directory);
-
-            if ('file' === header.type) {
-              stream.pipe(fs.createWriteStream(fullpath));
-
-            } else {
-              callback();
+          fs.rename(newPath + '/import.gvf', newPath + '/import.tar', function (err) {
+            if(err) {
+              console.log(err);
+              deleteFolderRecursive(path.join(basePath, "tmp"));
+              return;
             }
 
-              stream.on('end', function() {
-                callback() // ready for next entry
-              });
+            var extract = tar.extract()
 
-              stream.on('error', function(err) {
-                callback(err);
-              });
-          })
-          .on('error', function(err) {
-            console.log(err);
-            deleteFolderRecursive(path.join(basePath, "tmp"));
-          });
+            var tarball = newPath + "/import.tar";
+            var dest = path.join(basePath, "tmp", "import");
 
+            extract.on('entry', function(header, stream, callback) {
 
-          fs.createReadStream(tarball).pipe(extract).on('finish', function() {
+              var isDir     = 'Directory' === header.type;
+              var fullpath  = path.join(dest, header.path || header.name);
+              var directory = isDir ? fullpath : path.dirname(fullpath);
 
-            // import document to db
-            var doc = JSON.parse(fs.readFileSync(dest + "/doc.json", "utf8") || null) || [];
-            var nodes = JSON.parse(fs.readFileSync(dest + "/nodes.json", "utf8") || null) || [];
-            var fileDocs = JSON.parse(fs.readFileSync(dest + "/files.json", "utf8") || null) || [];
+              mkdirSync(directory);
 
-            documentExists(doc._id, function(err, res) {
-              if(res) {
-                // Ask what to do
-                askWrite(function(err, res) {
-                  // if yes
-                  importThemStuff(doc, nodes, fileDocs, path.join(basePath, "files"), path.join(basePath, "tmp", "import", "files"));
-                },
-                function(err, res) {
-                  // if no
-                  deleteFolderRecursive(path.join(basePath, "tmp"));
-                });
+              if ('file' === header.type) {
+                stream.pipe(fs.createWriteStream(fullpath));
+
               } else {
-                importThemStuff(doc, nodes, fileDocs, path.join(basePath, "files"), path.join(basePath, "tmp", "import", "files"));
+                callback();
               }
+
+                stream.on('end', function() {
+                  callback() // ready for next entry
+                });
+
+                stream.on('error', function(err) {
+                  callback(err);
+                });
+            })
+            .on('error', function(err) {
+              console.log(err);
+              deleteFolderRecursive(path.join(basePath, "tmp"));
+            });
+
+
+            fs.createReadStream(tarball).pipe(extract).on('finish', function() {
+              Meteor.setTimeout(function() {
+                var nodeImp = fs.readFileSync(dest + "/nodes.json", "utf8");
+                var docImp = fs.readFileSync(dest + "/doc.json", "utf8");
+                var fileImp = fs.readFileSync(dest + "/files.json", "utf8");
+
+                // import document to db
+                var doc = (docImp === "") ? [] : JSON.parse(docImp);
+                var nodes = (nodeImp === "") ? [] : JSON.parse(nodeImp);
+                var fileDocs = (fileImp === "") ? [] : JSON.parse(fileImp);
+
+                documentExists(doc._id, function(err, res) {
+                  if(res) {
+                    // Ask what to do
+                    askWrite(function(err, res) {
+                      // if yes
+                      importThemStuff(doc, nodes, fileDocs, path.join(basePath, "files"), path.join(basePath, "tmp", "import", "files"));
+                    },
+                    function(err, res) {
+                      // if no
+                      deleteFolderRecursive(path.join(basePath, "tmp"));
+                    });
+                  } else {
+                    importThemStuff(doc, nodes, fileDocs, path.join(basePath, "files"), path.join(basePath, "tmp", "import", "files"));
+                  }
+                });
+              }, 1000);
             });
           });
         });
-      });
+      }
     });
   }
 });
@@ -250,9 +257,9 @@ Template.ExportButton.events({
       var files = GV.collections.Files.find({ _id: { $in: fileIds || [] } }).fetch();
 
       // write the data
-      fs.writeFileSync(basePath + "/tmp/doc.json", JSON.stringify(doc, null, 4), "utf-8");
-      fs.writeFileSync(basePath + "/tmp/nodes.json", JSON.stringify(nodes, null, 4), "utf-8");
-      fs.writeFileSync(basePath + "/tmp/files.json", JSON.stringify(files, null, 4), "utf-8");
+      fs.writeFileSync(basePath + "/tmp/doc.json", JSON.stringify(doc, null, 4), "utf8");
+      fs.writeFileSync(basePath + "/tmp/nodes.json", JSON.stringify(nodes, null, 4), "utf8");
+      fs.writeFileSync(basePath + "/tmp/files.json", JSON.stringify(files, null, 4), "utf8");
 
 
       async.forEach(files, function (file, callback){
