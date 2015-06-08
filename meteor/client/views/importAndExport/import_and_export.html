@@ -1,0 +1,14 @@
+<template name="ImportAndExportButtons">
+  <div class="pull-right" style="margin-top:25px;">
+    {{> ImportButton}}
+    {{> ExportButton}}
+  </div>
+</template>
+
+<template name="ExportButton">
+  <div class="btn btn-default export {{class}}"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> {{#unless text}}Eksporter fil{{else}}{{text}}{{/unless}}</div>
+</template>
+
+<template name="ImportButton">
+  <div class="btn btn-default import {{class}}"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> {{#unless text}}Importer fil{{else}}{{text}}{{/unless}}</div>
+</template>

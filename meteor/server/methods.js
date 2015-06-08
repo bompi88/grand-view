@@ -24,6 +24,39 @@
 
 Meteor.methods({
 
+  import: function(doc, nodes, fileDocs) {
+
+    // import main doc
+    var docId = doc._id;
+    doc = _.omit(doc, "_id");
+
+
+    GV.collections.Documents.update({ _id: docId }, { $set: doc }, { upsert: true });
+
+    // Import nodes
+    nodes.forEach(function(node) {
+      var nodeId = node._id;
+      node = _.omit(node, "_id");
+
+      GV.collections.Nodes.update({ _id: nodeId }, { $set: node }, { upsert: true });
+    });
+
+    // import files
+    fileDocs.forEach(function(fileDoc) {
+      var fileId = fileDoc._id;
+      fileDoc = _.omit(fileDoc, "_id");
+      fileDoc.copies.filesStore.updatedAt = new Date;
+
+      GV.collections.Files.update({ _id: fileId }, { $set: fileDoc }, { upsert: true });
+    });
+
+    return true;
+  },
+
+  existsDoc: function(id, callback) {
+    return GV.collections.Documents.find({_id: id }).count() > 0;
+  },
+
 	/**
 	 * Verifies a google captcha solved by a user
 	 * @data: parameter that contains the challengeid and the proposed captcha solution

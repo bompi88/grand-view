@@ -1,5 +1,11 @@
 GV.schemas.Documents = new SimpleSchema({
 
+  _id: {
+    type: String,
+    optional: true,
+    regEx: SimpleSchema.RegEx.Id
+  },
+
   // A document title
   title: {
     type: String,
@@ -115,6 +121,8 @@ GV.schemas.Documents = new SimpleSchema({
     optional: false,
     autoValue: function() {
       if (this.isInsert) {
+        return true;
+      } else if (this.isUpsert) {
         return true;
       }
       else {

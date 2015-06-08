@@ -22,18 +22,19 @@ The dashboard should provide methods for searching/organizing the documents.
 		<div class="row">
 			<div class="pull-right" style="margin-top:25px;">
 				{{> UserProfile}}
-			</div>
-		</div>
-		<div class="row">
+        {{> ImportButton}}
+      </div>
+    </div>
+    <div class="row">
 
       {{!-- Dashboard header --}}
-			<div class="page-header">
-				<h2>
-					<span class="glyphicon glyphicon-book"></span> Dokumenter
-					<button type="button" class="btn btn-success pull-right" id="btn-newDoc">
-						<span class="glyphicon glyphicon-pencil"></span> Nytt dokument
-					</button>
-				</h2>
+      <div class="page-header">
+        <h2>
+          <span class="glyphicon glyphicon-book"></span> Dokumenter
+          <button type="button" class="btn btn-success pull-right" id="btn-newDoc">
+            <span class="glyphicon glyphicon-pencil"></span> Nytt dokument
+          </button>
+        </h2>
 			</div>
 
 			{{!-- The document table --}}
@@ -64,6 +65,7 @@ A row in the document table.
 		<td class="row-item">{{formatDate lastChanged}}</td>
 		<td>
 			<div class="btn-group pull-right">
+        {{> ExportButton class="btn-sm" text="Eksporter" currDoc=this}}
 				<button type="button" id="btn-editDoc" class="btn btn-success btn-sm">
 					<span class="glyphicon glyphicon-edit"></span> Rediger
 				</button>

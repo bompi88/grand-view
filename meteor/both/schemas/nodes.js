@@ -1,5 +1,11 @@
 GV.schemas.Nodes = new SimpleSchema({
 
+  _id: {
+    type: String,
+    optional: true,
+    regEx: SimpleSchema.RegEx.Id
+  },
+
   // A document title
   title: {
     type: String,
