@@ -251,7 +251,7 @@ Template.ExportButton.events({
     var currentDoc = this.currDoc;
 
     // Subscribe to all files first
-    Router.current().subscribe('filesByDocument', currentDoc._id, function() {
+    Router.current().subscribe('allByDoc', currentDoc._id, function() {
 
       // Just in case the data is outdated in client
       var doc = GV.collections.Documents.findOne({ _id: currentDoc._id });

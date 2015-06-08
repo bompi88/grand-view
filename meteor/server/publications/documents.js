@@ -42,3 +42,23 @@ Meteor.publish('documentById', function(id) {
   var uid = GV.helpers.userId(this.userId);
 	return GV.collections.Documents.find({ $and: [ { _id: id }, { userId: uid }] });
 });
+
+/**
+ * Publish all resources linked to a doc;
+ */
+Meteor.publish('allByDoc', function(id) {
+  var uid = GV.helpers.userId(this.userId);
+
+  // get the document
+  var doc = GV.collections.Documents.find({ $and: [{ _id: id }, { userId: uid }] }).fetch();
+
+  if(doc && doc[0]) {
+    var nodes = GV.collections.Nodes.find({ $and: [{_id: { $in : doc[0].children || [] }}]});
+    var files = GV.collections.Files.find({ docId: id });
+
+    return [nodes, files];
+  } else {
+    return this.ready();
+  }
+});
+
