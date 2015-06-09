@@ -20,40 +20,85 @@ The dashboard should provide methods for searching/organizing the documents.
 <template name="Dashboard">
 	<div class="container">
 		<div class="row">
+      {{!-- GrandView header --}}
+      <div class="col-sm-12 col-md-12 outer">
+        <div class="jumbotron">
+          <h1>GrandView</h1>
+          <p class="lead">Dette er et verktøy for å strukturere store informasjonsmengder. Kom i gang ved å enten:</p>
+          <br>
+          <p class="text-center">
+            <button type="button" class="btn btn-success" id="btn-newDoc">
+              <span class="glyphicon glyphicon-plus"></span> Opprette nytt dokument
+            </button>
+            eller {{> ImportButton text="Importere fil fra disk"}}
+          </p>
+        </div>
+      </div>
+
 			<div class="pull-right" style="margin-top:25px;">
 				{{> UserProfile}}
-        {{> ImportButton}}
       </div>
     </div>
-    <div class="row">
 
-      {{!-- Dashboard header --}}
-      <div class="page-header">
-        <h2>
+    {{!-- Dashboard header --}}
+    <div class="row">
+      <div>
+        <h3>
           <span class="glyphicon glyphicon-book"></span> Dokumenter
-          <button type="button" class="btn btn-success pull-right" id="btn-newDoc">
-            <span class="glyphicon glyphicon-pencil"></span> Nytt dokument
-          </button>
-        </h2>
+        </h3>
 			</div>
 
-			{{!-- The document table --}}
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>Navn</th>
-						<th>Sist endret</th>
-						<th></th>
-					</tr>
-				</thead>
-				<tbody>
-					{{#each documents}}
-						{{> DocumentRow}}
-					{{/each}}
-				</tbody>
-			</table>
+      {{> DocumentTable documents=this.documents hasTemplate="true" editOptions="true" tableName="documents" label="dokument"}}
 		</div>
+
+    {{!-- Templates --}}
+    <div class="row">
+      <div>
+        <h3>
+          <span class="glyphicon glyphicon-tree-conifer"></span> Dokumentmaler
+        </h3>
+      </div>
+
+      {{> DocumentTable documents=this.templates editOptions="true" tableName="templates" label="mal"}}
+    </div>
+
+    {{!-- Trash can --}}
+    <div class="row">
+      <div>
+        <h3>
+          <span class="glyphicon glyphicon-trash"></span> Papirkurv
+        </h3>
+      </div>
+
+      {{> DocumentTable documents=this.trashed editOptions="true" tableName="trashed" label="mal"}}
+    </div>
 	</div>
+</template>
+
+<!--
+A document table.
+-->
+<template name="DocumentTable">
+  {{> DocumentActionsDropdown class="pull-right" tableName=this.tableName label=this.label}}
+  <table class="table table-hover" id="{{tableName}}">
+    <thead>
+      <tr>
+        <th><input type="checkbox" class="checkbox-master" aria-label="..."></th>
+        <th>Navn</th>
+        <th>Opprettet</th>
+        <th>Sist endret</th>
+        {{#if hasTemplate}}<th>Mal brukt</th>{{/if}}
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each documents}}
+        {{> DocumentRow document=this editOptions=../editOptions hasTemplate=../hasTemplate tableName=../tableName}}
+      {{else}}
+        Tabellen er tom...
+      {{/each}}
+    </tbody>
+  </table>
 </template>
 
 <!--
@@ -61,18 +106,40 @@ A row in the document table.
 -->
 <template name="DocumentRow">
 	<tr class="table-row">
-		<td class="row-item">{{title}}</td>
-		<td class="row-item">{{formatDate lastChanged}}</td>
-		<td>
-			<div class="btn-group pull-right">
-        {{> ExportButton class="btn-sm" text="Eksporter" currDoc=this}}
-				<button type="button" id="btn-editDoc" class="btn btn-success btn-sm">
-					<span class="glyphicon glyphicon-edit"></span> Rediger
-				</button>
-				<button type="button" id="btn-remove" class="btn btn-danger btn-sm">
-					<span class="glyphicon glyphicon-remove"></span> Fjern
-				</button>
-			</div>
-		</td>
+    <td class="row-item"><input type="checkbox" class="checkbox" aria-label="..."></td>
+		<td class="row-item">{{document.title}}</td>
+    <td class="row-item">{{formatDate document.createdOn}}</td>
+		<td class="row-item">{{formatDate document.lastChanged}}</td>
+    {{#if hasTemplate}}<td class="row-item">{{#if document.template}}document.template{{else}}-{{/if}}</td>{{/if}}
+    {{#if editOptions}}
+  		<td>
+  			<div class="btn-group pull-right">
+          {{> ExportButton class="btn-sm" text="Eksporter" currDoc=document}}
+  				<button type="button" id="btn-editDoc" class="btn btn-success btn-sm">
+  					<span class="glyphicon glyphicon-edit"></span> Rediger
+  				</button>
+  				<button type="button" id="btn-remove" class="btn btn-danger btn-sm">
+  					<span class="glyphicon glyphicon-trash"></span> Fjern
+  				</button>
+  			</div>
+  		</td>
+    {{/if}}
 	</tr>
+</template>
+
+<template name="DocumentActionsDropdown">
+  <div class="btn-group dropup {{class}}">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      Velg handling <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li><a href="#" class="new-doc"><span class="glyphicon glyphicon-plus"></span> Opprett {{label}}</a></li>
+      <li class="{{isDisabledOnManyAndNone}}"><a href="#" class="edit-doc"><span class="glyphicon glyphicon-edit"></span> Rediger {{label}}</a></li>
+      <li class="divider"></li>
+      <li><a href="#" class="import-doc"><span class="glyphicon glyphicon-import"></span> Importer {{label}}</a></li>
+      <li class="{{isDisabledOnManyAndNone}}"><a href="#" class="export-doc"><span class="glyphicon glyphicon-export"></span> Eksporter {{label}}</a></li>
+      <li class="divider"></li>
+      <li class="{{isDisabledOnNone}}"><a href="#" class="trash-doc"><span class="glyphicon glyphicon-trash"></span> Legg i papirkurv</a></li>
+    </ul>
+  </div>
 </template>

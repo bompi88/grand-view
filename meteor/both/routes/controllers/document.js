@@ -1,10 +1,13 @@
 DocumentController = AuthRouteController.extend({
-	subscriptions: function() {
+
+  subscriptions: function() {
 		return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('nodesByDoc', this.params._id)];
 	},
-	data: function() {
+
+  data: function() {
 		return GV.collections.Documents.findOne({ _id: this.params._id });
 	},
+
   onAfterAction: function() {
     GV.tabs.reset();
     Session.set('mainDocument', this.params._id);
@@ -12,15 +15,24 @@ DocumentController = AuthRouteController.extend({
     Session.set("file", null);
     Session.set("uploadStopped", false);
   }
+
 });
 
 DocumentsController = AuthRouteController.extend({
+
   subscriptions: function() {
     return Meteor.subscribe('documents');
   },
+
   data: function() {
     return {
-      documents: GV.collections.Documents.find({})
+      documents: GV.collections.Documents.find({ template: { $ne: true }}, { sort: _.defaults(Session.get("documentSort") || {}, { lastChanged: -1 }) }),
+      templates: GV.collections.Documents.find({ template: true }, { sort: _.defaults(Session.get("templateSort") || {}, { lastChanged: -1 }) })
     }
+  },
+
+  onAfterAction: function() {
+    GV.dashboardCtrl.resetAll();
   }
+
 });

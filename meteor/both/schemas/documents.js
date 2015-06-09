@@ -156,6 +156,12 @@ GV.schemas.Documents = new SimpleSchema({
   },
 
   // Is the whole document collapsed?
+  template: {
+    type: Boolean,
+    optional: true
+  },
+
+  // Is the whole document collapsed?
   children: {
     type: [String],
     optional: true
