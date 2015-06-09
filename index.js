@@ -203,6 +203,8 @@ app.on('ready', function () {
     var windowOptions = {
       width: 1200,
       height: 800,
+      "min-width": 1000,
+      "min-height": 600,
       resizeable: true,
       frame: true
     };
