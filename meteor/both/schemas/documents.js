@@ -13,7 +13,6 @@ GV.schemas.Documents = new SimpleSchema({
       return "Tittel";
     },
     optional: false,
-    min: 3,
     max: 100,
     autoform: {
       placeholder: "schemaLabel"

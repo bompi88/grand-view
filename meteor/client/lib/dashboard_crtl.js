@@ -41,6 +41,25 @@ GV.dashboardCtrl = {
     return this.selectedItems;
   },
 
+  removeAll: function(table, ids) {
+
+    if(!this.selectedItems[table])
+      return;
+
+    var selected = this.selectedItems;
+
+    ids.forEach(function(id) {
+
+      var index = selected[table].indexOf(id);
+
+      if(index > -1)
+        selected[table].splice(index, 1);
+    });
+
+    this.dep.changed();
+    return this.selectedItems;
+  },
+
   reset: function(table) {
     this.selectedItems[table] = [];
 

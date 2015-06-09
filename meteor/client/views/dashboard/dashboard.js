@@ -93,7 +93,7 @@ var goToTemplate = function(id) {
   Router.go(Router.path('Document', { _id: id }));
 };
 
-var softRemoveDocument = function(id) {
+var softRemoveDocument = function(id, hideNotification) {
   var doc = GV.collections.Documents.findOne({_id: id});
   var children = doc && doc.children || [];
 
@@ -105,8 +105,8 @@ var softRemoveDocument = function(id) {
       // Remove all the children nodes that rely on the document
       Meteor.call('removeNodes', children);
 
-      // Notify the user
-      Notifications.success('Dokument slettet', 'Dokumentet ble lagt i papirkurven');
+      if(!hideNotification)
+        Notifications.success('Dokument slettet', 'Dokumentet ble lagt i papirkurven');
     }
   });
 };
@@ -271,12 +271,17 @@ Template.DocumentActionsDropdown.events({
           label: "Ja",
           callback: function(result) {
             if(result) {
-              GV.dashboardCtrl.getSelected(tableName).forEach(function(id) {
-                softRemoveDocument(id);
-                $("#" + tableName).find(".checkbox-master").prop('checked', false);
-                GV.dashboardCtrl.remove(tableName, id);
+              var selected = GV.dashboardCtrl.getSelected(tableName);
+
+              selected.forEach(function(id) {
+                softRemoveDocument(id, true);
               });
 
+              GV.dashboardCtrl.removeAll(tableName, selected);
+
+              $("#" + tableName).find(".checkbox-master").prop('checked', false);
+
+              Notifications.success('Sletting fullført', 'Elementene ble lagt i papirkurven');
             }
           }
         }
