@@ -3,7 +3,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 var template_helpers = {
-  'formatDate': GV.helpers.formatDate
+  'formatDateRelative': GV.helpers.formatDateRelative,
+  'formatDateRegular': GV.helpers.formatDateRegular
 };
 
 // Register all helpers as UI helpers

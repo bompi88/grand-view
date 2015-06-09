@@ -18,42 +18,42 @@
  * limitations under the License.
  */
 
-var createNewDoc = function() {
+// var createNewDoc = function() {
 
-  // A confirmation prompt before removing the document
-  var confirmationPrompt = {
-    title: "Vennligst velg en tittel for dokumentet",
-    buttons: {
-      cancel: {
-        label: "Avbryt"
-      },
-      confirm: {
-        label: "Ok"
-      }
-    },
-    callback: function(title, test) {
-      if(title != null) {
-        var doc = {
-          title: title || "Mitt nye dokument",
-          lastChanged: new Date(),
-          userId: GV.helpers.userId(Meteor.userId())
-        };
+//   // A confirmation prompt before removing the document
+//   var confirmationPrompt = {
+//     title: "Vennligst velg en tittel for dokumentet",
+//     buttons: {
+//       cancel: {
+//         label: "Avbryt"
+//       },
+//       confirm: {
+//         label: "Ok"
+//       }
+//     },
+//     callback: function(title, test) {
+//       if(title != null) {
+//         var doc = {
+//           title: title || "Mitt nye dokument",
+//           lastChanged: new Date(),
+//           userId: GV.helpers.userId(Meteor.userId())
+//         };
 
-        // create a new document
-        var id = GV.collections.Documents.insert(doc);
+//         // create a new document
+//         var id = GV.collections.Documents.insert(doc);
 
-        goToDoc(id);
-      }
-    }
-  }
-  bootbox.prompt(confirmationPrompt);
-};
+//         goToDoc(id);
+//       }
+//     }
+//   }
+//   bootbox.prompt(confirmationPrompt);
+// };
 
-var goToDoc = function(id) {
-  GV.tabs.reset();
-  // redirect to the new document
-  Router.go(Router.path('Document', { _id: id }));
-}
+// var goToDoc = function(id) {
+//   GV.tabs.reset();
+//   // redirect to the new document
+//   Router.go(Router.path('Document', { _id: id }));
+// }
 
 var createNewTemplate = function() {
 
@@ -119,7 +119,7 @@ Template.Dashboard.events({
 	'click #btn-newDoc': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
 
-    createNewDoc();
+    //createNewDoc();
 	},
 
   'click .checkbox-master' : function(event, tmpl) {
@@ -211,9 +211,7 @@ Template.DocumentActionsDropdown.events({
   'click .new-doc': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
 
-    if(this.tableName === "documents") {
-      createNewDoc();
-    } else if(this.tableName === "templates") {
+    if(this.tableName === "templates") {
       createNewTemplate();
     }
   },
@@ -290,4 +288,21 @@ Template.DocumentActionsDropdown.events({
     bootbox.dialog(confirmationPrompt);
   }
 
+});
+
+Template.DocumentRow.helpers({
+  getTemplateTitle: function(id) {
+    var template = GV.collections.Documents.findOne({ _id: id });
+
+    return template && template.title;
+  }
+});
+
+Template.SelectTemplateModal.events({
+
+  'click .submit-doc': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+
+    $("#insert-doc").trigger("submit");
+  }
 });

@@ -90,6 +90,25 @@ GV.schemas.Documents = new SimpleSchema({
     }
   },
 
+  // Tags that adds a dimension to the description and title fields
+  templateBasis: {
+    type: String,
+    label: function() {
+      return "Dokumentmal";
+    },
+    optional: true,
+    autoform: {
+        type: "select",
+        options: function () {
+            if (Meteor.isClient) {
+               return GV.collections.Documents.find({template: true}).map(function (c) {
+                   return {label: c.title, value: c._id};
+               });
+            }
+        }
+    }
+  },
+
   status: {
     type: String,
     optional: true,
