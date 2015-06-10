@@ -1,0 +1,71 @@
+.tags {
+    // For all nodes in tags list
+    ul {
+        list-style-type:none;
+    
+        >span {
+
+            display:inline-block;
+            padding:3px 5px;
+            text-decoration:none
+        }
+
+        span {
+            cursor: pointer;
+        }
+        
+        .parent_li>span {
+            cursor:pointer
+
+            &:hover, &:hover+ul li >span {
+                background:#eee;
+                color:#000
+            }
+        }
+
+        >ul {
+            >li::before, >li::after {
+                border:0
+            }
+        }
+
+        &:last-child::before {
+            height:30px
+        }
+
+        .selected {
+            background-color: darken(#fff, 14%);
+        }
+
+        .hover {
+            background-color: darken(#fff, 30%);
+        }
+
+        > li.tag {
+            &::before {
+                bottom:50px;
+                height:100%;
+                top:0;
+                width:1px;
+            }
+
+            &::after {
+                border-top:1px solid #999;
+                height:20px;
+                top:25px;
+                width:25px
+            }
+
+            ul li.node {
+                display:inline-block;
+                margin:0;
+                padding:0px 0px 0px 0px;
+                position:relative;
+
+                span.glyphicon:hover {
+                    color: darken(orange, 10%);
+                }
+            }
+        }
+    }
+}

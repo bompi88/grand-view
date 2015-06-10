@@ -35,15 +35,17 @@
     li {
         list-style-type:none;
     
-        >span {
+        > span.element {
 
             display:inline-block;
             padding:3px 5px;
-            text-decoration:none
+            text-decoration:none;
+            border: 1px solid darken(#fff, 20%);
         }
 
         span {
             cursor: pointer;
+            background-color: darken(#fff, 3%);
         }
         
         .parent_li>span {
@@ -67,10 +69,18 @@
 
         .selected {
             background-color: darken(#fff, 14%);
+            
+            span {
+                background-color: darken(#fff, 14%);
+            }
         }
 
         .hover {
             background-color: darken(#fff, 30%);
+
+            span {
+                background-color: darken(#fff, 30%);
+            }
         }
 
         .node {

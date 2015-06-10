@@ -26,6 +26,18 @@ Template.Document.events({
 
   'click .back-to-dashboard': function () {
     Router.go('Dashboard');
+  },
+
+  'click .show-tree': function(event, tmpl) {
+    event.prevenDefault && event.prevenDefault();
+
+    Session.set("structureState", "tree");
+  },
+
+  'click .show-tags': function(event, tmpl) {
+    event.prevenDefault && event.prevenDefault();
+
+    Session.set("structureState", "tags");
   }
 
 });

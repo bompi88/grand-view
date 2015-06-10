@@ -38,15 +38,28 @@ for editing of nodes in the tree
     <div class="row">
 
       {{!-- The tree structure --}}
-      <div class="col-lg-4">
-          {{#Tree title="Struktur" tree=this}}
-          <em>Klikk og dra nodene i trestrukturen der du vil ha dem. Klikker man dobbelt på en av nodene, så åpnes
-          det en fane til høyre med den valgte informasjonen. Ved bruk av enkeltklikk på nodene, åpnes bare fanen midlertidig.</em>
+      <div class="col-xs-4 structure-container">
+
+        {{#if $.Session.equals "structureState" "tree"}}
+          {{#Tree tree=this}}
+          <!-- <em>Klikk og dra nodene i trestrukturen der du vil ha dem. Klikker man dobbelt på en av nodene, så åpnes
+          det en fane til høyre med den valgte informasjonen. Ved bruk av enkeltklikk på nodene, åpnes bare fanen midlertidig.</em> -->
           {{/Tree}}
+        {{else}}
+          {{#Tags }}
+          <!-- <em>I emneknaggstrukturen kan man se hvilke informasjonselement som er knyttet hvilke emneknagger.</em> -->
+          {{/Tags}}
+        {{/if}}
+        <div class="structure-footer">
+          <ul class="nav nav-pills nav-justified">
+            <li role="presentation" class="show-tree {{#if $.Session.equals 'structureState' 'tree'}}active{{/if}}"><a href="#">Trestruktur</a></li>
+            <li role="presentation" class="show-tags {{#if $.Session.equals 'structureState' 'tags'}}active{{/if}}"><a href="#">Emneknagger</a></li>
+          </ul>
+        </div>
       </div>
 
       {{!-- The detail view of nodes --}}
-      <div class="col-lg-8">
+      <div class="col-xs-8">
         {{> Tabs}}
         {{#if focusOnMainDoc}}
           {{> GeneralInfo}}

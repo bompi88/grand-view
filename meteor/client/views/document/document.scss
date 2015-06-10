@@ -1,0 +1,90 @@
+
+
+// -- Structure View Styles ----------------------------------------------------
+
+
+.structure {
+	height:390px;
+    overflow:scroll;
+}
+
+.structure-header {
+	display:inline-block;
+	width: 100%;
+	height: auto;
+	background-color: darken(#fff, 5%);
+	margin:0;
+	padding-top: 10px;
+	border-bottom: 1px solid darken(#fff, 2%);
+
+	h4 {
+		margin: 0 20px;
+	}
+
+	-webkit-box-shadow: 0px 10px 40px 5px rgba(0,0,0,0.10);
+	-moz-box-shadow: 0px 10px 40px 5px rgba(0,0,0,0.10);
+	box-shadow: 0px 10px 40px 5px rgba(0,0,0,0.10);
+}
+
+.structure-footer {
+	display:inline-block;
+	width: 100%;
+	height: auto;
+	background-color: darken(#fff, 5%);
+	margin:0;
+	padding-top: 10px;
+	border-top: 1px solid darken(#fff, 2%);
+
+	.nav.nav-pills {
+		height:30px;
+		
+		> li > a {
+			height:30px;
+			padding: 5px;
+			
+			background-color: darken(#fff, 10%);
+
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+			border-bottom-left-radius: 0;
+
+		}
+
+		> li.active > a{
+			color: black;
+			background-color: darken(#fff, 30%);
+
+			&:hover {
+				cursor: default;
+			}
+		}
+	}
+}
+
+div.structure-container {
+	overflow:hidden;
+	height: 470px;
+	position:relative;
+	border: 2px solid #777;
+	padding: 0;
+	margin: 0;
+}
+
+.structure-container ul.nav.nav-pills.nav-justified {
+	position: absolute;
+	bottom: 0;
+}
+
+div.structure {
+	margin: 0;
+	padding: 15px 10px;
+
+	> ul {
+		padding: 0;
+	}
+
+	&.tags {
+		padding: 20px 20px;
+	}
+}

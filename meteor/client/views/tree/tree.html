@@ -18,11 +18,13 @@
 The tree constructor template.
 -->
 <template name="Tree">
-  <h3>{{title}}</h3>
-  <p>{{> UI.contentBlock}}</p>
+  <div class="structure-header">
+    <h4><span class="glyphicon glyphicon-tree-conifer" style="font-size:15px; margin: 0 5px;"></span> Trestruktur</h4>
+    <p>{{> UI.contentBlock}}</p>
+  </div>
 
   {{!-- Start of tree / the root node --}}
-  <div id="{{id}}" class="tree {{class}}">
+  <div id="{{id}}" class="tree structure {{class}}">
   	<ul>
   		<li class="node root" style="margin-top:0;" data-id="{{guid}}">
           <span draggable="true" class="element root">

@@ -1,0 +1,64 @@
+<!--
+~ Copyright 2015 Concept
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+
+<!--
+The Tags view constructor template.
+-->
+<template name="Tags">
+  <div class="structure-header">
+    <h4><span class="glyphicon glyphicon-tags" style="font-size:15px; margin: 0 5px;"></span> Emneknaggstruktur</h4>
+    <p>{{> UI.contentBlock}}</p>
+  </div>
+  {{!-- Start of tags list --}}
+  <div id="{{id}}" class="tags structure {{class}}">
+
+    {{#each tags}}
+      {{> Tag title=this}}
+    {{/each}}
+
+  </div>
+</template>
+
+<template name="Tag">
+<ul>
+    <li class="tag" style="margin-top:0;">
+
+      <span draggable="false" class="element">
+        {{#if isCollapsed}}
+          <span class="glyphicon glyphicon-plus-sign show-node"></span>
+        {{else}}
+          <span class="glyphicon glyphicon-minus-sign hide-node"></span>
+        {{/if}}
+
+        {{title}}
+      </span>
+
+      {{!-- Render its children if they are visible --}}
+      {{#unless isCollapsed}}
+        <ul>
+          {{#each getNodes}}
+            <li class="node" style="margin-top:0;">
+              <span draggable="false" class="element">
+                {{title}}
+              </span>
+            </li>
+          {{/each}}
+        </ul>
+      {{/unless}}
+    </li>
+
+    </ul>
+</template>
