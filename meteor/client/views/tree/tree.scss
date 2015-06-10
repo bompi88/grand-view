@@ -20,95 +20,162 @@
 
 .tree {
 
-    ul {
-        margin-top: 0;
-        padding-top: 0;
-        padding-left: 20px;
+    li.node.root ul {
+        position: relative;
+        margin:0;
+        list-style: none;
+        padding-left: 32px;
 
-        // root node
-        &:first-child {
-            padding-left:10px;
+        // empty the pseudo elements
+        li::before, li::after, ul::after {
+            content: "";
+            position: absolute;
+            left: -12px;
+        }
+
+        // draw the horizontal lines
+        li::before {
+            border-top: 1px solid #000;
+            top: 30px;
+            width: 8px;
+            height: 0;
+        }
+
+        // Draw the vertical lines
+        li::after, ul::after {
+            border-left: 1px solid #000;
+            height: 100%;
+            width: 0px;
+            top: 2px;
+        }
+
+        
+        li:last-child::after {
+            height: 100%;
+        }
+
+        .node {
+            margin:0;
+            padding:0;
         }
     }
 
-    // For all nodes in tree
     li {
-        list-style-type:none;
-    
-        > span.element {
+        position: relative;
 
+        span.element {
             display:inline-block;
             padding:3px 5px;
             text-decoration:none;
-            border: 1px solid darken(#fff, 20%);
-        }
 
-        span {
-            cursor: pointer;
-            background-color: darken(#fff, 3%);
-        }
-        
-        .parent_li>span {
-            cursor:pointer
+            &:hover {
+                background-color: darken(#fff, 10%);
+                cursor: pointer;
 
-            &:hover, &:hover+ul li >span {
-                background:#eee;
-                color:#000
+                span.glyphicon {
+                    color: darken(orange, 10%);
+                }
             }
-        }
-
-        >ul {
-            >li::before, >li::after {
-                border:0
-            }
-        }
-
-        &:last-child::before {
-            height:30px
         }
 
         .selected {
             background-color: darken(#fff, 14%);
-            
-            span {
-                background-color: darken(#fff, 14%);
-            }
-        }
-
-        .hover {
-            background-color: darken(#fff, 30%);
-
-            span {
-                background-color: darken(#fff, 30%);
-            }
-        }
-
-        .node {
-            &::before {
-                bottom:50px;
-                height:100%;
-                top:0;
-                width:1px;
-            }
-
-            &::after {
-                border-top:1px solid #999;
-                height:20px;
-                top:25px;
-                width:25px
-            }
-        }
-
-        // For all nodes inside root node
-        li.node {
-            display:inline-block;
-            margin:0;
-            padding:0px 0px 0px 0px;
-            position:relative;
-
-            span.glyphicon:hover {
-                color: darken(orange, 10%);
-            }
         }
     }
 }
+
+
+// .tree {
+
+//     ul {
+//         margin-top: 0;
+//         padding-top: 0;
+//         padding-left: 20px;
+
+//         // root node
+//         &:first-child {
+//             padding-left:10px;
+//         }
+//     }
+
+//     // For all nodes in tree
+//     li {
+//         list-style-type:none;
+    
+//         > span.element {
+
+//             display:inline-block;
+//             padding:3px 5px;
+//             text-decoration:none;
+//             border: 1px solid darken(#fff, 20%);
+//         }
+
+//         span {
+//             cursor: pointer;
+//             background-color: darken(#fff, 3%);
+//         }
+        
+//         .parent_li>span {
+//             cursor:pointer
+
+//             &:hover, &:hover+ul li >span {
+//                 background:#eee;
+//                 color:#000
+//             }
+//         }
+
+//         >ul {
+//             >li::before, >li::after {
+//                 border:0
+//             }
+//         }
+
+//         &:last-child::before {
+//             height:30px
+//         }
+
+//         .selected {
+//             background-color: darken(#fff, 14%);
+            
+//             span {
+//                 background-color: darken(#fff, 14%);
+//             }
+//         }
+
+//         .hover {
+//             background-color: darken(#fff, 30%);
+
+//             span {
+//                 background-color: darken(#fff, 30%);
+//             }
+//         }
+
+//         .node {
+//             &::before {
+//                 bottom:50px;
+//                 height:100%;
+//                 top:0;
+//                 width:1px;
+//             }
+
+//             &::after {
+//                 border-top:1px solid #999;
+//                 height:20px;
+//                 top:25px;
+//                 width:25px
+//             }
+//         }
+
+//         // For all nodes inside root node
+//         li.node {
+//             display:inline-block;
+//             margin:0;
+//             padding:0px 0px 0px 0px;
+//             position:relative;
+
+//             span.glyphicon:hover {
+//                 color: darken(orange, 10%);
+//             }
+//         }
+//     }
+// }
