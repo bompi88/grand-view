@@ -36,11 +36,11 @@ The Tags view constructor template.
 <ul>
     <li class="tag" style="margin-top:0;">
 
-      <span draggable="false" class="element">
+      <span draggable="false" class="element {{#if isCollapsed}}show-node{{else}}hide-node{{/if}}">
         {{#if isCollapsed}}
-          <span class="glyphicon glyphicon-plus-sign show-node"></span>
+          <span class="glyphicon glyphicon-plus-sign"></span>
         {{else}}
-          <span class="glyphicon glyphicon-minus-sign hide-node"></span>
+          <span class="glyphicon glyphicon-minus-sign"></span>
         {{/if}}
 
         {{title}}

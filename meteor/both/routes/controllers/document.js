@@ -10,6 +10,8 @@ DocumentController = AuthRouteController.extend({
 
   onAfterAction: function() {
     GV.tabs.reset();
+    GV.tags.reset();
+
     Session.set('mainDocument', this.params._id);
     Session.set('nodeInFocus', this.params._id);
     Session.set("file", null);
