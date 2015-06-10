@@ -22,7 +22,6 @@ Edit information about a reference.
 
   {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
 		{{> afQuickField name="title" }}
-		{{> afQuickField name="status" }}
 		{{> afQuickField name="description" rows="6" }}
 		{{> afQuickField name="tags" options=getTagsOptions}}
 
@@ -84,7 +83,7 @@ Edit top level information about a document. This is basically the root node.
 
 	{{#autoForm collection="GV.collections.Documents" id="update-document-form" doc=this type="update"}}
 		{{> afQuickField name="title" }}
-		{{> afQuickField name="status" }}
+<!-- 		{{> afQuickField name="status" }} -->
 		{{> afQuickField name="summary" rows="6" }}
 		{{> afQuickField name="tags" options=getTagsOptions}}
 
