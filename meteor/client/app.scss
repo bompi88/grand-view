@@ -40,3 +40,10 @@ ul.notifications {
 	z-index: 100;
 	box-shadow: 0px 0px 30px darken(#fff, 40%);
 }
+
+.disable-select {
+  -webkit-user-select: none;  
+  -moz-user-select: none;    
+  -ms-user-select: none;      
+  user-select: none;
+}
