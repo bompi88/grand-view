@@ -28,3 +28,10 @@
 Meteor.publish('tagsByQuery', function(query, sort) {
 	return GV.collections.Tags.find(query);
 });
+
+/**
+ * Publish all tags
+ */
+Meteor.publish('tags', function() {
+  return GV.collections.Tags.find();
+});

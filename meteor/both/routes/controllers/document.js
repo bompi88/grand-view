@@ -1,7 +1,7 @@
 DocumentController = AuthRouteController.extend({
 
   subscriptions: function() {
-		return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('nodesByDoc', this.params._id)];
+		return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('nodesByDoc', this.params._id), Meteor.subscribe('tags')];
 	},
 
   data: function() {
@@ -14,6 +14,7 @@ DocumentController = AuthRouteController.extend({
     Session.set('nodeInFocus', this.params._id);
     Session.set("file", null);
     Session.set("uploadStopped", false);
+    Session.set("structureState", "tree");
   }
 
 });

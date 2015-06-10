@@ -46,12 +46,13 @@ GV.schemas.Documents = new SimpleSchema({
         multiple: true,
         selectizeOptions: {
           delimiter: ',',
-          persist: false,
+          preload: true,
+          sortField: 'value',
 
           // Can create new tags
           create: function(input) {
 
-            GV.collections.Tags.insert({ value: input, text: input });
+            GV.collections.Tags.insert({ value: input.toLowerCase(), text: input });
 
             return {
               value: input,
@@ -75,13 +76,15 @@ GV.schemas.Documents = new SimpleSchema({
 
           // How to load new tags
           load: function(query, callback) {
-            if (!query.length) return callback();
+            var tags;
 
-            if (GV.subscriptions['tags'])
-              GV.subscriptions['tags'].stop();
-
-            GV.subscriptions['tags'] = Meteor.subscribe('tagsByQuery', { text: { $regex: query, $options: 'i' } });
-            var tags = GV.collections.Tags.find({ text: { $regex: query, $options: 'i' } }).fetch();
+            if (!query.length) {
+              Router.current().subscribe('tags');
+              tags = GV.collections.Tags.find({}).fetch();
+            } else {
+              Router.current().subscribe('tagsByQuery', { text: { $regex: query, $options: 'i' } });
+              tags = GV.collections.Tags.find({ text: { $regex: query, $options: 'i' } }).fetch();
+            }
 
             callback(tags);
           }
