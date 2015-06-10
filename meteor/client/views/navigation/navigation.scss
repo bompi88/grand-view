@@ -1,0 +1,119 @@
+////////////////////////////////////////////////////////////////////////////////
+// TopNavbar Styles
+////////////////////////////////////////////////////////////////////////////////
+
+.navbar-brand {
+  img {
+    max-height:40px;
+    margin-top: -10px;
+  }
+
+  span {
+    position:relative;
+    top:-3px;
+    padding-left:10px;
+  }
+}
+
+/* Bootstrap overrides */
+
+.navbar-default {
+	box-shadow: 0px 0px 30px darken(#fff, 40%);
+}
+
+.navbar-fixed-top {
+  border-width: 0 0 3px !important;
+}
+
+$bgDefault      : #fff;
+$bgHighlight    : #ff9700;
+$colDefault     : #767676;
+$colHighlight   : #444;
+
+body .navbar-default {
+  background-color: $bgDefault;
+  border-color: $bgHighlight;
+
+  .navbar-brand {
+    color: $colDefault;
+    
+    &:hover, &:focus { 
+      color: $colHighlight;
+    }
+  }
+  
+  .navbar-text {
+    color: $colDefault;
+  }
+  
+  .navbar-nav {
+    > li {
+      > a {
+        color: $colDefault;
+        
+        &:hover,  &:focus {
+          color: $colHighlight;
+        }
+      }
+    }
+
+    > .active {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        
+        background-color: lighten($bgHighlight,10%);
+      }
+    }
+    
+    > .open {
+      > a, > a:hover, > a:focus {
+        color: $colHighlight;
+        
+        background-color: $bgHighlight;
+      }
+    }
+  }
+  
+  .navbar-toggle {
+    border-color: $bgHighlight;
+    
+    &:hover, &:focus {
+      background-color: $bgHighlight;
+    }
+    
+    .icon-bar {
+      background-color: $colDefault;
+    }
+  }
+  
+  .navbar-collapse, .navbar-form {
+    border-color: $colDefault;
+  }
+  
+  .navbar-link {
+    color: $colDefault;
+    
+    &:hover {
+      color: $colHighlight; 
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu {
+    > li > a {
+      color: $colDefault;
+      
+      &:hover, &:focus {
+        color: $colHighlight;
+      }
+    }
+    
+    > .active {
+      > a, > a:hover, > a:focus, {
+        color: $colHighlight;
+        background-color: $bgHighlight;
+      }
+    }
+  }
+}

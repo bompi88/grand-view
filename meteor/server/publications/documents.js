@@ -34,6 +34,16 @@ Meteor.publish('documents', function() {
 });
 
 /**
+ * Publish all templates
+ */
+Meteor.publish('templates', function() {
+
+  // return the documents that the current user owns
+  return GV.collections.Documents.find({ template: true });
+});
+
+
+/**
  * Publish a particular document by its id, if the user owns it or
  * has access to it.
  */

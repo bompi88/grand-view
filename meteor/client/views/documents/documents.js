@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Dashboard logic
+// Documents page logic
 ////////////////////////////////////////////////////////////////////////////////
 
 /*
@@ -114,7 +114,7 @@ var softRemoveDocument = function(id, hideNotification) {
 // -- Template events ----------------------------------------------------------
 
 
-Template.Dashboard.events({
+Template.DocumentTable.events({
 
 	'click #btn-newDoc': function(event, tmpl) {
     event.preventDefault && event.preventDefault();

@@ -1,0 +1,3 @@
+file: public/images/front-page.jpg
+Author: Astris1
+source: https://commons.wikimedia.org/wiki/File:Lorimerlite_framework.JPG

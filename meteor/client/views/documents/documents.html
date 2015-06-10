@@ -17,30 +17,8 @@
 <!--
 The dashboard should provide methods for searching/organizing the documents.
 -->
-<template name="Dashboard">
-	<div class="container">
-		<div class="row">
-      {{!-- GrandView header --}}
-      <div class="col-sm-12 col-md-12 outer">
-        <div class="jumbotron">
-          <h1>GrandView</h1>
-          <p class="lead">Dette er et verktøy for å strukturere store informasjonsmengder. Kom i gang ved å enten:</p>
-          <br>
-          <p class="text-center">
-            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#template-modal">
-              <span class="glyphicon glyphicon-plus"></span> Opprette nytt dokument
-            </button>
-            eller {{> ImportButton text="Importere fil fra disk"}}
-          </p>
-        </div>
-      </div>
-
-			<div class="pull-right" style="margin-top:25px;">
-				{{> UserProfile}}
-      </div>
-    </div>
-
-    {{!-- Dashboard header --}}
+<template name="Documents">
+	<div class="container default-container">
     <div class="row">
       <div>
         <h3>
@@ -50,28 +28,6 @@ The dashboard should provide methods for searching/organizing the documents.
 
       {{> DocumentTable documents=this.documents hasTemplate="true" editOptions="true" tableName="documents" label="dokument"}}
 		</div>
-
-    {{!-- Templates --}}
-    <div class="row">
-      <div>
-        <h3>
-          <span class="glyphicon glyphicon-tree-conifer"></span> Dokumentmaler
-        </h3>
-      </div>
-
-      {{> DocumentTable documents=this.templates editOptions="true" tableName="templates" label="mal"}}
-    </div>
-
-    {{!-- Trash can --}}
-    <div class="row">
-      <div>
-        <h3>
-          <span class="glyphicon glyphicon-trash"></span> Papirkurv
-        </h3>
-      </div>
-
-      {{> DocumentTable documents=this.trashed editOptions="true" tableName="trashed" label="mal"}}
-    </div>
 	</div>
 </template>
 
@@ -128,7 +84,7 @@ A row in the document table.
 </template>
 
 <template name="DocumentActionsDropdown">
-  <div class="btn-group dropup {{class}}">
+  <div class="btn-group dropdown {{class}}">
     <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
       Velg handling <span class="caret"></span>
     </button>

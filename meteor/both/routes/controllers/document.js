@@ -29,8 +29,43 @@ DocumentsController = AuthRouteController.extend({
 
   data: function() {
     return {
-      documents: GV.collections.Documents.find({ template: { $ne: true }}, { sort: _.defaults(Session.get("documentSort") || {}, { lastChanged: -1 }) }),
+      documents: GV.collections.Documents.find({ template: { $ne: true }}, { sort: _.defaults(Session.get("documentSort") || {}, { lastChanged: -1 }) })
+    }
+  },
+
+  onAfterAction: function() {
+    GV.dashboardCtrl.resetAll();
+  }
+
+});
+
+TemplatesController = AuthRouteController.extend({
+
+  subscriptions: function() {
+    return Meteor.subscribe('documents');
+  },
+
+  data: function() {
+    return {
       templates: GV.collections.Documents.find({ template: true }, { sort: _.defaults(Session.get("templateSort") || {}, { lastChanged: -1 }) })
+    }
+  },
+
+  onAfterAction: function() {
+    GV.dashboardCtrl.resetAll();
+  }
+
+});
+
+TrashController = AuthRouteController.extend({
+
+  subscriptions: function() {
+    return Meteor.subscribe('documents');
+  },
+
+  data: function() {
+    return {
+      trash: GV.collections.Documents.find({ removed: true }, { sort: _.defaults(Session.get("templateSort") || {}, { removedAt: -1 }) })
     }
   },
 

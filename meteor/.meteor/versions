@@ -30,6 +30,7 @@ cfs:upload-http@0.0.20
 cfs:worker@0.1.4
 check@1.0.5
 chhib:selectize-bootstrap-3@0.0.1
+coffeescript@1.0.6
 comerc:autoform-selectize@2.2.2
 cwohlman:bootboxjs@4.4.0
 ddp@1.1.0
@@ -68,6 +69,7 @@ momentjs:moment@2.10.3
 mongo@1.1.0
 mongo-livedata@1.0.8
 mrt:fake@0.3.4
+natestrauser:animate-css@3.2.6
 npm-bcrypt@0.7.8_2
 observe-sequence@1.0.6
 ordered-dict@1.0.3
@@ -94,3 +96,4 @@ underscore@1.0.3
 url@1.0.4
 webapp@1.2.0
 webapp-hashing@1.0.3
+zimme:active-route@2.0.4

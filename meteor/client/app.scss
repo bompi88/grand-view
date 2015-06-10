@@ -27,6 +27,10 @@ $text-color: #555;
 
 @import ".meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap";
 
+html, body {
+	height: 100%;
+}
+
 // Always show notifications top right corner, even when container is scrolled
 ul.notifications {
 	position: fixed;
@@ -46,4 +50,8 @@ ul.notifications {
   -moz-user-select: none;    
   -ms-user-select: none;      
   user-select: none;
+}
+
+.default-container {
+	padding-top: 60px;
 }

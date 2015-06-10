@@ -11,11 +11,27 @@ Router.route('/', {
 });
 
 /**
+ * Documents
+ */
+Router.route('/documents', {
+	name: 'Documents',
+  controller: 'DocumentsController'
+});
+
+/**
  * Dashboard
  */
-Router.route('/dashboard', {
-	name: 'Dashboard',
-  controller: 'DocumentsController'
+Router.route('/templates', {
+  name: 'Templates',
+  controller: 'TemplatesController'
+});
+
+/**
+ * Trash can
+ */
+Router.route('/trash', {
+  name: 'Trash',
+  controller: 'TrashController'
 });
 
 /**

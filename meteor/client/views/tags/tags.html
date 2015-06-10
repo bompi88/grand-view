@@ -27,6 +27,8 @@ The Tags view constructor template.
 
     {{#each tags}}
       {{> Tag title=this}}
+    {{else}}
+      <em>Ingen stikkord er bundet informasjons- elementene enda. Legg til stikkord ved å gå inn på et element i trestrukturen.</em>
     {{/each}}
 
   </div>

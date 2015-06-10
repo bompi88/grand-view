@@ -23,3 +23,5 @@ aldeed:simple-schema
 cfs:standard-packages
 cfs:ui
 cfs:filesystem
+natestrauser:animate-css
+zimme:active-route

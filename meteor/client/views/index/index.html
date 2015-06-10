@@ -15,18 +15,22 @@
 -->
 
 <template name="Index">
-	<div class="container">
-		<div class="row" style="margin-top:30px;">
-			<div class="col-sm-8 col-md-6 col-md-offset-3 outer">
-				<div class="jumbotron">
-					<h1>GrandView</h1>
-					<p class="lead">GrandView er et verktøy for å strukturere store informasjonsmengder. Ta en titt under.</p>
-					<p><a class="btn btn-lg btn-success new-account" href="#" role="button">Registrer deg</a></p>
-				</div>
-			</div>
-		</div>
-
-		{{!-- Takes care of login, forgotton password and signup --}}
-		{{> UserForms}}
+	<div class="container-fluid index animated fadeIn">
+		<div class="row animated bounceInRight">
+      <div class="col-sm-6 col-md-6 outer">
+        <div class="jumbotron">
+          <h1>GrandView</h1>
+          <p class="lead">Dette er et verktøy for å strukturere store informasjonsmengder. Kom i gang ved å enten:</p>
+          <br>
+          <p class="text-center">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#template-modal">
+              <span class="glyphicon glyphicon-plus"></span> Opprette nytt dokument
+            </button>
+            <br><span style="line-height:50px;">eller</span>
+            <br>{{> ImportButton text="Importere fil fra disk"}}
+          </p>
+        </div>
+      </div>
+    </div>
 	</div>
 </template>
