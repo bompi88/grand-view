@@ -22,7 +22,7 @@ The dashboard should provide methods for searching/organizing the documents.
     <div class="row">
       <div>
         <h3>
-          <span class="glyphicon glyphicon-book"></span> Dokumenter
+          <span class="glyphicon glyphicon-book"></span> Mine dokumenter
         </h3>
 			</div>
 
@@ -66,7 +66,7 @@ A row in the document table.
 		<td class="row-item">{{document.title}}</td>
     <td class="row-item">{{formatDateRelative document.createdOn}}</td>
 		<td class="row-item">{{formatDateRelative document.lastChanged}}</td>
-    {{#if hasTemplate}}<td class="row-item">{{#if document.templateBasis}}{{getTemplateTitle document.templateBasis}} ({{formatDateRegular document.createdOn}}){{else}}-{{/if}}</td>{{/if}}
+    {{#if hasTemplate}}<td class="row-item">{{#if document.templateBasis}}{{getTemplateTitle document.templateBasis}} (av {{formatDateRegular document.createdOn}}){{else}}-{{/if}}</td>{{/if}}
     {{#if editOptions}}
   		<td>
   			<div class="btn-group pull-right">
@@ -118,7 +118,7 @@ A row in the document table.
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <p>Her kan man velge tittel på dokumentet, samt om man skal bruke en dokumentmal eller ikke. Hvis mal ikke velges, starter man med et tomt dokument uten struktur.</p>
               {{> afQuickField name="title" placeholder="Tittel"}}
-              {{> afQuickField name="templateBasis" placeholder="Dokumentmal"}}
+              {{> afQuickField name="templateBasis" placeholder="Dokumentmal" firstOption="(Uten mal)"}}
 
             </div>
           {{/autoForm}}

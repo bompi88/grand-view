@@ -91,7 +91,7 @@ deleteNode = function(prevNode, template) {
   });
 };
 
-getSection = function(node, prevNodePos) {
+getSection = function(prevSection, prevNodePos) {
   // var label = "";
 
   // if(this.level > 0) {
@@ -101,13 +101,16 @@ getSection = function(node, prevNodePos) {
 
   // }
   // label = label + "" + (prevNodePos + 1);
+  if(prevSection)
+    return prevSection + "." + (prevNodePos + 1);
+  else
+    prevNodePos + 1;
 
-  return "" + (prevNodePos + 1) + "." + (node.node_index + 1);
 };
 
 
 insertNodeOfType = function(data, type, t) {
-  if(data && (data.level > 3)) {
+  if(type == "chapter" && data && (data.level > 2)) {
     Notifications.warn('For stort tre', 'Det er for mange underkategorier, prøv heller å omstrukturere litt i hierarkiet.');
     return;
   } else {
@@ -179,9 +182,10 @@ Template.NodeLevel.helpers({
     });
   },
 
-  getContext: function(prevNodePos) {
+  getContext: function(options) {
+
     var context = _.extend(this, {
-      prevSection: getSection(this, prevNodePos)
+      prevSection: getSection(options.hash.prevSection, this.node_index)
     });
 
     return context;
@@ -208,11 +212,11 @@ Template.NodeLevel.helpers({
   // },
 
   getSectionLabel: function() {
-
-    if(this.prevSection)
-      return this.prevSection + "." + (this.node_index + 1);
-    else
-      return this.node_index + 1;
+    return this.prevSection;
+    // if(this.prevSection)
+    //   return this.prevSection + "." + (this.node_index + 1);
+    // else
+    //   return this.node_index + 1;
   },
 
   /**

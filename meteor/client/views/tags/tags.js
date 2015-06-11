@@ -3,7 +3,7 @@ Template.Tags.helpers({
     console.log(this)
     var doc = GV.collections.Documents.findOne({ _id: this._id });
 
-    var nodes = GV.collections.Nodes.find({ _id: { $in: doc.children || [] } }).fetch();
+    var nodes = GV.collections.Nodes.find({ _id: { $in: doc.children || [] }, nodeType: "media" }).fetch();
 
     var tags = [];
 

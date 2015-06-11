@@ -33,7 +33,7 @@ The tree constructor template.
 
           {{!-- Render rest of the visible nodes --}}
     			{{#each treeItems}}
-    				{{> NodeLevel}}
+    				{{> NodeLevel getContext}}
     			{{/each}}
       </li>
     </ul>

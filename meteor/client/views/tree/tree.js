@@ -103,6 +103,35 @@ var insertNodeOfType = function(data, type, t) {
   }
 };
 
+var insideItself = function(drag, target) {
+
+  var dragSectionLabel = drag.prevSection;
+  var targetSectionLabel = target.prevSection;
+
+  if(!targetSectionLabel)
+    return false;
+
+  var dragLabels = dragSectionLabel.split(".");
+  var targetLabels = targetSectionLabel.split(".");
+
+  if(targetLabels >= dragLabels) {
+    var numEquals = 0;
+
+    for(var i = 0; i < dragLabels.length; i++) {
+
+      if(dragLabels[i] === targetLabels[i]) {
+        numEquals++;
+      }
+    }
+
+    if(numEquals == dragLabels.length)
+      return true;
+  }
+
+  return false;
+
+}
+
 
 // -- Tree Template helpers ----------------------------------------------------
 
@@ -131,13 +160,13 @@ Template.Tree.helpers({
    */
   documentTitle: function() {
     return this.tree && this.tree.title || "Uten tittel";
-  }
+  },
 
-  // getContext: function() {
-  //   return _.extend(this, {
-  //     prevSection: "" + (this.node_index + 1)
-  //   });
-  // }
+  getContext: function() {
+    return _.extend(this, {
+      prevSection: "" + (this.node_index + 1)
+    });
+  }
 
 });
 
@@ -247,52 +276,30 @@ Template.Tree.events({
     else
       l = 0;
 
-
-    // console.log("dataTarget")
-    // console.log(dataTarget)
-
-    // console.log("parent of drag")
-    // console.log(prevNode)
-    // console.log("EVENT:");
-    // console.log(event.currentTarget.className);
-    // console.log("parent:");
-    // console.log(parent);
-    // console.log("target:");
-    // console.log(target);
-    // console.log("dragNode:");
-    // console.log(dragNode);
-    // console.log("data");
-    // console.log(data);
-    // console.log("position:");
-    // console.log(position);
-    // console.log("level:");
-    // console.log(l);
-
-    if(slot.className === "slot slot-top") {
-      $(dragNode).insertBefore($(target));
-      console.log("top");
-    } else if(slot.className === "slot slot-bottom") {
-      $(dragNode).insertAfter($(target));
-      console.log("bottom");
-    }
-
-    updatePositions(parent);
-
-    // Update the node position
-    GV.collections.Nodes.update({
-      _id: data._id
-    },
-    {
-      $set: {
-        parent: dataTarget && dataTarget._id || dataTarget.tree._id,
-        level: l,
-        sectionLabel: generateSectionLabel(dataTarget && dataTarget.sectionLabel, dataTarget && dataTarget.position)
+    if(!insideItself(data, dataTarget)) {
+      if(slot.className === "slot slot-top") {
+        $(dragNode).insertBefore($(target));
+      } else if(slot.className === "slot slot-bottom") {
+        $(dragNode).insertAfter($(target));
       }
-    });
 
-    updatePositions(parent);
-    updatePositions(prevNode);
-    // updatePositions(parent);
+      updatePositions(parent);
+
+      // Update the node position
+      GV.collections.Nodes.update({
+        _id: data._id
+      },
+      {
+        $set: {
+          parent: dataTarget && dataTarget._id || dataTarget.tree._id,
+          level: l,
+          sectionLabel: generateSectionLabel(dataTarget && dataTarget.sectionLabel, dataTarget && dataTarget.position)
+        }
+      });
+
+      updatePositions(parent);
+      updatePositions(prevNode);
+    }
 
     return false;
   },
@@ -310,57 +317,28 @@ Template.Tree.events({
     if($(event.currentTarget)[0] == $(dragElement)[0])
       return false;
 
-
-
-    // console.log(event.currentTarget)
-    // console.log(dragElement);
-
     var dataTarget = UI.getData(event.currentTarget);
     var data = UI.getData(dragElement);
     var parent = event.currentTarget.parentNode;
 
     var l = dataTarget.level + 1;
 
-    var sectionsDragEl = data.sectionLabel && data.sectionLabel.split(".");
-    var sectionsTargetEl = dataTarget.sectionLabel && dataTarget.sectionLabel.split('.');
-
-    // console.log("OVER")
-    // console.log(sectionsDragEl);
-    // console.log(sectionsTargetEl);
-    // console.log("UNDER")
-
-    if(sectionsTargetEl && sectionsDragEl && (sectionsTargetEl.length > sectionsDragEl.length) && sectionsDragEl.length > 0) {
-      var numEquals = 0;
-
-      for(var i = 0; i < sectionsTargetEl.length; i++) {
-
-        if(sectionsDragEl[i]) {
-          if(sectionsDragEl[i] === sectionsTargetEl[i])
-            numEquals++;
-        } else {
-          break;
+    if(!insideItself(data, dataTarget)) {
+      // Update the node position
+      GV.collections.Nodes.update({
+        _id: data._id
+      },
+      {
+        $set: {
+          parent: dataTarget._id,
+          level: l,
+          position: -1,
+          sectionLabel: generateSectionLabel(dataTarget.sectionLabel, dataTarget.position)
         }
-
-      }
-
-      if(numEquals == sectionsDragEl.length)
-        return false;
+      }, null, function() {
+        updatePositions(parent);
+      });
     }
-
-    // Update the node position
-    GV.collections.Nodes.update({
-      _id: data._id
-    },
-    {
-      $set: {
-        parent: dataTarget._id,
-        level: l,
-        position: -1,
-        sectionLabel: generateSectionLabel(dataTarget.sectionLabel, dataTarget.position)
-      }
-    }, null, function() {
-      updatePositions(parent);
-    });
 
     return false;
   },

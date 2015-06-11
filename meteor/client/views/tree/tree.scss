@@ -37,7 +37,8 @@
         li::before {
             border-top: 1px solid #000;
             top: 30px;
-            width: 8px;
+            left:-20px;
+            width: 20px;
             height: 0;
         }
 
@@ -46,6 +47,7 @@
             border-left: 1px solid #000;
             height: 100%;
             width: 0px;
+            left:-20px;
             top: 2px;
         }
 
@@ -67,6 +69,8 @@
             display:inline-block;
             padding:3px 5px;
             text-decoration:none;
+            background-color: darken(#fff, 5%);
+            border: 1px solid darken(#fff, 30%);
 
             &:hover {
                 background-color: darken(#fff, 10%);
@@ -76,14 +80,15 @@
                     color: darken(orange, 10%);
                 }
             }
+            
+            &.selected {
+                background-color: darken(#fff, 14%);
+            }
+
+            &.hover {
+                background-color: darken(#fff, 10%);
+            }
         }
 
-        .selected {
-            background-color: darken(#fff, 14%);
-        }
-
-        .hover {
-            background-color: darken(#fff, 10%);
-        }
     }
 }

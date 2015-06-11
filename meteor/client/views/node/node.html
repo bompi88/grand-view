@@ -31,6 +31,10 @@ A node in the tree, that recursively renders its children.
           {{else}}
             <span class="glyphicon glyphicon-minus-sign hide-node"></span>
           {{/if}}
+<!--         {{else}}
+          {{#if $eq nodeType "chapter"}}
+            <span class="empty"></span>
+          {{/if}} -->
         {{/if}}
 
         {{#if $eq nodeType "chapter"}}{{getSectionLabel}}{{else}}<span class="glyphicon glyphicon-file"></span>{{/if}} {{title}}
@@ -40,7 +44,7 @@ A node in the tree, that recursively renders its children.
       {{#unless isCollapsed}}
         {{#if hasChildren}}
           {{#each children}}
-            {{> NodeLevel getContext ../node_index}}
+            {{> NodeLevel getContext index=../node_index prevSection=../prevSection }}
       	 {{/each}}
         {{/if}}
       {{/unless}}
