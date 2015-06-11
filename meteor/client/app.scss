@@ -34,6 +34,7 @@ html, body {
 // Always show notifications top right corner, even when container is scrolled
 ul.notifications {
 	position: fixed;
+	width:400px;
 }
 
 .alert.alert-success.status-bar {
