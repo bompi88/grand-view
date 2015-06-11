@@ -233,7 +233,7 @@ Template.NodeLevel.rendered = function() {
 
   var self = this;
 
-  $('.tree li.node.root li.node span').contextMenu('right-click-menu-node', {
+  $('.tree li.node.root li.node.chapter span').contextMenu('right-click-menu-chapter-node', {
     bindings: {
 
       // Add node button
@@ -249,6 +249,54 @@ Template.NodeLevel.rendered = function() {
 
         insertNodeOfType(elData, "media", t);
       },
+
+      // Delete button
+      'delete-node': function(t) {
+        var elData = UI.getData(t);
+
+        if(elData && elData._id) {
+          var confirmationPrompt = {
+            title: "Bekreftelse på slettingen",
+            message: 'Er du sikker på at du vil slette referansen? NB: Vil slette alle underkategorier til referansen!',
+            buttons: {
+              cancel: {
+                label: "Nei"
+              },
+              confirm: {
+                label: "Ja",
+                callback: function(result) {
+                  if(result) {
+
+                    deleteNode(elData, t.parentNode.parentNode.parentNode);
+
+                    // Set the main document in focus
+                    Session.set('nodeInFocus', Session.get('mainDocument'));
+
+                    Notifications.success('Sletting fullført', 'Referansen ble slettet fra systemet.');
+                  }
+                }
+              }
+            }
+          }
+          bootbox.dialog(confirmationPrompt);
+        }
+      },
+
+      // Edit button
+      'edit-node': function(t) {
+        var elData = UI.getData(t);
+
+        if(elData && elData._id) {
+          GV.tabs.addTab(elData._id);
+          Session.set('nodeInFocus', elData._id);
+        }
+      }
+
+    }
+  });
+
+$('.tree li.node.root li.node.media-node span').contextMenu('right-click-menu-media-node', {
+    bindings: {
 
       // Delete button
       'delete-node': function(t) {

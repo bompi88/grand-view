@@ -19,7 +19,7 @@ A node in the tree, that recursively renders its children.
 -->
 <template name="NodeLevel">
 	<ul>
-		<li class="node" style="margin-top:0;" data-id="{{guid}}">
+		<li class="node {{#if $eq nodeType 'chapter'}}chapter{{else}}media-node{{/if}}" style="margin-top:0;" data-id="{{guid}}">
 
       {{!-- Drop slot top --}}
       <div class="slot slot-top"></div>
