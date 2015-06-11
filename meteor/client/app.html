@@ -22,14 +22,26 @@
 
   {{> TopNavbar}}
 
-  {{!-- The menu items for right click of tree node --}}
-  <div class="contextMenu" id="right-click-menu">
+  {{!-- The menu items for right click of root node --}}
+  <div class="contextMenu" id="right-click-menu-root">
   	<ul>
-  		<li id="add-node"><span class="glyphicon glyphicon-plus"></span> Legg til</li>
+  		<li id="add-chapter-node"><span class="glyphicon glyphicon-plus"></span> Legg til kapittel</li>
+      <li id="add-media-node"><span class="glyphicon glyphicon-plus"></span> Legg til data</li>
   		<li id="delete-node"><span class="glyphicon glyphicon-remove"></span> Slett</li>
   		<li id="edit-node"><span class="glyphicon glyphicon-pencil"></span> Rediger</li>
   	</ul>
   </div>
+
+  {{!-- The menu items for right click of tree node --}}
+  <div class="contextMenu" id="right-click-menu-node">
+    <ul>
+      <li id="add-chapter-node"><span class="glyphicon glyphicon-plus"></span> Legg til underkapittel</li>
+      <li id="add-media-node"><span class="glyphicon glyphicon-plus"></span> Legg til data</li>
+      <li id="delete-node"><span class="glyphicon glyphicon-remove"></span> Slett</li>
+      <li id="edit-node"><span class="glyphicon glyphicon-pencil"></span> Rediger</li>
+    </ul>
+  </div>
+
   {{> ExportStatus}}
   {{> SelectTemplateModal}}
 </body>

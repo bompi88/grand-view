@@ -33,7 +33,7 @@ A node in the tree, that recursively renders its children.
           {{/if}}
         {{/if}}
 
-        {{getSectionLabel}} {{title}}
+        {{#if $eq nodeType "chapter"}}{{getSectionLabel}}{{else}}<span class="glyphicon glyphicon-file"></span>{{/if}} {{title}}
       </span>
 
       {{!-- Render its children if they are visible --}}

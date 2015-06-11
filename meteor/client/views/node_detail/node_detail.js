@@ -116,8 +116,8 @@ Template.NodeDetail.events({
     var self = this;
     // A confirmation prompt before removing the document
     var confirmationPrompt = {
-      title: "Bekreftelse på slettingen",
-      message: 'Er du sikker på at du vil slette filen? Det er ingen vei tilbake etter dette...',
+      title: "Bekreftelse på sletting av fil",
+      message: '<div class="well well-sm"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="font-size:35px;color:#CC3232;"></span><div class="pull-right"style="width:90%;"><b>Advarsel!</b> Filen vil permanent bli slettet fra programmet, men den kan lastes inn på nytt hvis du har den på disk.</div></div>Er du sikker på at du vil slette filen? Det er ingen gjenopprettingsmuligheter...',
       buttons: {
         cancel: {
           label: "Nei"
@@ -191,11 +191,39 @@ Template.NodeDetail.events({
     Session.set("uploadStopped", false);
   },
 
-  'click .delete-reference': function(event, tmpl) {
+  'click .delete-media-node': function(event, tmpl) {
     // A confirmation prompt before removing the document
     var confirmationPrompt = {
-      title: "Bekreftelse på slettingen",
-      message: 'Er du sikker på at du vil slette referansen? NB: Vil slette alle underkategorier til referansen!',
+      title: "Bekreftelse på sletting av informasjonselement",
+      message: '<div class="well well-sm"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="font-size:35px;color:#CC3232;"></span><div class="pull-right"style="width:90%;"><b>Advarsel!</b> Tekstlig innhold i dette elementet, samt eventuell tilknyttet fil vil permanent bli slettet fra programmet.</div></div>Er du sikker på at du vil slette informasjonselementet med alt av innhold? Det er ingen gjenopprettingsmuligheter tilgjengelige...',
+      buttons: {
+        cancel: {
+          label: "Nei"
+        },
+        confirm: {
+          label: "Ja",
+          callback: function(result) {
+            if(result) {
+
+              deleteNode(Session.get('nodeInFocus'));
+
+              // Set the main document in focus
+              Session.set('nodeInFocus', Session.get('mainDocument'));
+
+              Notifications.success('Sletting fullført', 'Referansen ble slettet fra systemet.');
+            }
+          }
+        }
+      }
+    }
+    bootbox.dialog(confirmationPrompt);
+  },
+
+  'click .delete-chapter-node': function(event, tmpl) {
+    // A confirmation prompt before removing the document
+    var confirmationPrompt = {
+      title: "Bekreftelse på sletting av kapittelelement",
+      message: '<div class="well well-sm"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="font-size:35px;color:#CC3232;"></span><div class="pull-right"style="width:90%;"><b>Advarsel!</b> Sletter man kapittelelementet, forsvinner i tillegg informasjonselementene knyttet til dette kapittelet.</div></div>Er du sikker på at du vil slette kapittelelementet med alle underliggende informasjonselement? Det er ingen gjenopprettingsmuligheter tilgjengelige...',
       buttons: {
         cancel: {
           label: "Nei"
@@ -267,8 +295,8 @@ Template.GeneralInfo.events({
   var self = this;
     // A confirmation prompt before removing the document
     var confirmationPrompt = {
-      title: "Bekreftelse på slettingen",
-      message: 'Er du sikker på at du vil slette <b><em>hele</em></b> dokumentet?',
+      title: "Bekreftelse på sletting av dokument",
+      message: '<div class="well well-sm"><span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="font-size:35px;color:#0080ff;"></span><div class="pull-right"style="width:90%;"><b>NB!</b> Hvis du sletter dokumentet vil det først havne i papirkurven, og dokumentet kan gjenopprettes der ved seinere anledning.</div></div>Er du sikker på at du vil slette <b><em>hele</em></b> dokumentet?',
       buttons: {
         cancel: {
           label: "Nei"

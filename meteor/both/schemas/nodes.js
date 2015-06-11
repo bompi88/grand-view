@@ -24,7 +24,7 @@ GV.schemas.Nodes = new SimpleSchema({
   description: {
     type: String,
     label: function() {
-      return "Beskrivelse";
+      return "Informasjonselement";
     },
     optional: true,
     max: 500,
@@ -154,6 +154,12 @@ GV.schemas.Nodes = new SimpleSchema({
   sectionLabel: {
     type: String,
     optional: true
+  },
+
+  // Kind of node
+  nodeType: {
+    type: String,
+    optional: false
   },
 
   // Is this node collapsed?

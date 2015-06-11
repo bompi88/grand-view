@@ -106,6 +106,50 @@ getSection = function(node, prevNodePos) {
 };
 
 
+insertNodeOfType = function(data, type, t) {
+  if(data && (data.level > 3)) {
+    Notifications.warn('For stort tre', 'Det er for mange underkategorier, prøv heller å omstrukturere litt i hierarkiet.');
+    return;
+  } else {
+    if(data && data._id) {
+
+      var node = {
+        parent: data._id,
+        title: "Ingen tittel",
+        level: data.level + 1,
+        sectionLabel: generateSectionLabel(data.sectionLabel, data.position),
+        userId: data.userId,
+        lastChanged: new Date(),
+        position: -1,
+        nodeType: type
+      };
+
+      GV.collections.Nodes.insert(node, function(error, nodeId) {
+        if(!error) {
+          GV.collections.Documents.update({
+            _id: Session.get('mainDocument')
+          },
+          {
+            $addToSet: {
+              children: nodeId
+            }
+          });
+
+          Router.current().subscribe('nodeById', nodeId, {
+            onReady: function () {
+              Meteor.defer(function() {
+                updatePositions(t.parentNode);
+              });
+            },
+            onError: function () { console.log("onError", arguments); }
+          });
+        }
+      });
+    }
+  }
+};
+
+
 // -- Template helpers ---------------------------------------------------------
 
 
@@ -129,7 +173,7 @@ Template.NodeLevel.helpers({
    * Returns the children of the current node.
    */
   children: function() {
-    return GV.collections.Nodes.find({ parent: this._id }, { sort: { position: 1 }}).map(function(node, index) {
+    return GV.collections.Nodes.find({ parent: this._id }, { sort: { nodeType: 1, position: 1  }}).map(function(node, index) {
       node.node_index = index;
       return node;
     });
@@ -188,53 +232,21 @@ Template.NodeLevel.rendered = function() {
 
   var self = this;
 
-  $('.tree li.node.root li.node span').contextMenu('right-click-menu', {
+  $('.tree li.node.root li.node span').contextMenu('right-click-menu-node', {
     bindings: {
 
       // Add node button
-      'add-node': function(t) {
+      'add-chapter-node': function(t) {
         var elData = UI.getData(t);
 
-        if(elData && (elData.level > 3)) {
-          Notifications.warn('For stort tre', 'Det er for mange underkategorier, prøv heller å omstrukturere litt i hierarkiet.');
-          return;
-        } else {
-          if(elData && elData._id) {
+        insertNodeOfType(elData, "chapter", t);
+      },
 
-            var node = {
-              parent: elData._id,
-              title: "Ingen tittel",
-              level: elData.level + 1,
-              sectionLabel: generateSectionLabel(elData.sectionLabel, elData.position),
-              userId: elData.userId,
-              lastChanged: new Date(),
-              position: -1
-            };
+      // Add node button
+      'add-media-node': function(t) {
+        var elData = UI.getData(t);
 
-            GV.collections.Nodes.insert(node, function(error, nodeId) {
-              if(!error) {
-                GV.collections.Documents.update({
-                  _id: Session.get('mainDocument')
-                },
-                {
-                  $addToSet: {
-                    children: nodeId
-                  }
-                });
-
-                Router.current().subscribe('nodeById', nodeId, {
-                  onReady: function () {
-                    Meteor.defer(function() {
-                      updatePositions(t.parentNode);
-                    });
-                  },
-                  onError: function () { console.log("onError", arguments); }
-                });
-              }
-            });
-          }
-        }
-
+        insertNodeOfType(elData, "media", t);
       },
 
       // Delete button

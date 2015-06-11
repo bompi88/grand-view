@@ -18,56 +18,70 @@
 Edit information about a reference.
 -->
 <template name="NodeDetail">
-	<h3>Rediger referanse</h3>
+  {{#if $eq node.nodeType "chapter"}}
+  <h3>Rediger kapittelelement</h3>
+  {{else}}
+    <h3>Rediger Informasjonselement</h3>
+  {{/if}}
 
   {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
 		{{> afQuickField name="title" }}
-		{{> afQuickField name="description" rows="6" }}
-		{{> afQuickField name="tags" options=getTagsOptions}}
 
-    <div class="row" style="margin-bottom:20px;">
-      <div class="col-xs-12">
-        <div class="row" style="margin-bottom:20px;">
-          <div class="col-xs-12">
-            {{!-- Upload process status --}}
-            {{#with file}}
-                {{#if this.isUploaded}}
-                  <b><a href="#" class="download">{{this.name}}</a></b> er opplastet og lagt ved referansen.
-                  <button type="button" class="btn btn-danger btn-xs delete-file">Slett</button>
-                {{else}}
+    {{#if $eq node.nodeType "chapter"}}
+      {{> afQuickField name="description" rows="6" placeholder="Sammendrag" label="Sammendrag"}}
+    {{else}}
+  		{{> afQuickField name="description" rows="6" }}
+  		{{> afQuickField name="tags" options=getTagsOptions}}
 
-                  Laster opp <b>{{this.name}}</b>...
-
-                  {{> FS.UploadProgressBar bootstrap=true class='progress-bar-success progress-bar-striped active' showPercent=true}}
-
-                  {{#unless uploadStopped}}
-                    <button type="button" class="btn btn-info pull-right stop-upload">Stopp opplastning</button>
+      <div class="row" style="margin-bottom:20px;">
+        <div class="col-xs-12">
+          <div class="row" style="margin-bottom:20px;">
+            <div class="col-xs-12">
+              {{!-- Upload process status --}}
+              {{#with file}}
+                  {{#if this.isUploaded}}
+                    <b><a href="#" class="download">{{this.name}}</a></b> er opplastet og lagt ved referansen.
+                    <button type="button" class="btn btn-danger btn-xs delete-file">Slett</button>
                   {{else}}
-                    <button type="button" class="btn btn-info pull-right resume-upload">Fortsett opplastning</button>
-                  {{/unless}}
-                {{/if}}
-            {{/with}}
-          </div>
-        </div>
-        {{!-- Upload field --}}
-        {{#unless file}}
-          <div class="upload-field">
-            <span>Klikk for å laste opp fil</span>
-            <input class="file-upload pull-left" type="file">
-          </div>
-        {{else}}
-          {{#if uploadStopped}}
-          <div class="upload-field">
-            <span>Klikk for å bytte fil</span>
-            <input class="file-upload pull-left" type="file">
-          </div>
-          {{/if}}
-        {{/unless}}
 
+                    Laster opp <b>{{this.name}}</b>...
+
+                    {{> FS.UploadProgressBar bootstrap=true class='progress-bar-success progress-bar-striped active' showPercent=true}}
+
+                    {{#unless uploadStopped}}
+                      <button type="button" class="btn btn-info pull-right stop-upload">Stopp opplastning</button>
+                    {{else}}
+                      <button type="button" class="btn btn-info pull-right resume-upload">Fortsett opplastning</button>
+                    {{/unless}}
+                  {{/if}}
+              {{/with}}
+            </div>
+          </div>
+          {{!-- Upload field --}}
+          {{#unless file}}
+            <div class="upload-field">
+              <span><span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Klikk for å laste opp fil</span>
+              <input class="file-upload pull-left" type="file">
+            </div>
+          {{else}}
+            {{#if uploadStopped}}
+            <div class="upload-field">
+              <span>Klikk for å bytte fil</span>
+              <input class="file-upload pull-left" type="file">
+            </div>
+            {{/if}}
+          {{/unless}}
+
+        </div>
       </div>
-    </div>
+    {{/if}}
+
     <div class="form-group">
-			<button type="button" class="btn btn-danger pull-left delete-reference">Slett referansen</button>
+      {{#if $eq node.nodeType "chapter"}}
+		    <button type="button" class="btn btn-danger pull-left delete-chapter-node">Slett kapittelelement</button>
+      {{else}}
+        <button type="button" class="btn btn-danger pull-left delete-media-node">Slett informasjonselement</button>
+      {{/if}}
 			<button type="submit" class="btn btn-primary pull-right {{#if file}}{{#unless uploadStopped}}{{#unless file.isUploaded}}disabled{{/unless}}{{/unless}}{{/if}}">Lagre</button>
 			<button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Avbryt</button>
 		</div>
@@ -83,9 +97,7 @@ Edit top level information about a document. This is basically the root node.
 
 	{{#autoForm collection="GV.collections.Documents" id="update-document-form" doc=this type="update"}}
 		{{> afQuickField name="title" }}
-<!-- 		{{> afQuickField name="status" }} -->
 		{{> afQuickField name="summary" rows="6" }}
-		{{> afQuickField name="tags" options=getTagsOptions}}
 
 		<div class="form-group">
 			<button type="button" class="btn btn-danger pull-left delete-document">Slett hele dokumentet</button>

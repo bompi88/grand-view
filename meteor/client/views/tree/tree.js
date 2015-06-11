@@ -60,7 +60,48 @@ updatePositions = function(node) {
 
     GV.collections.Nodes.update({ _id: elData._id }, { $set: { position: index }});
   });
-}
+};
+
+var insertNodeOfType = function(data, type, t) {
+  if(data) {
+    // Insert a node at the given branch
+    GV.collections.Nodes.insert({
+      parent: data.tree._id,
+      title: "Ingen tittel",
+      level: 0,
+      sectionLabel: null,
+      userId: data.tree.userId,
+      lastChanged: new Date(),
+      position: -1,
+      nodeType: type
+    },
+    function(error, nodeId) {
+      if(error) {
+        Notifications.error(error);
+      }
+
+      // Add the created node into children array of main document
+      GV.collections.Documents.update({
+        _id: Session.get('mainDocument')
+      },
+      {
+        $addToSet: {
+          children: nodeId
+        }
+      });
+
+      // Subscribe on the newly created node
+      Router.current().subscribe('nodeById', nodeId, {
+        onReady: function () {
+          Meteor.defer(function() {
+            updatePositions(t.parentNode);
+          });
+        },
+        onError: function () { console.log("onError", arguments); }
+      });
+    });
+  }
+};
 
 
 // -- Tree Template helpers ----------------------------------------------------
@@ -72,7 +113,7 @@ Template.Tree.helpers({
    * The nodes of this tree.
    */
   treeItems: function() {
-    return this.tree && GV.collections.Nodes.find({parent: this.tree._id}, { sort: { position: 1 }}).map(function(node, index) {
+    return this.tree && GV.collections.Nodes.find({parent: this.tree._id}, { sort: { nodeType: 1, position: 1  }}).map(function(node, index) {
       node.node_index = index;
       return node;
     });;
@@ -109,50 +150,21 @@ Template.Tree.rendered = function () {
   var self = this;
 
   // Create right click buttons when right clicking on root node
-  $('.tree li.node.root span').contextMenu('right-click-menu', {
+  $('.tree li.node.root span').contextMenu('right-click-menu-root', {
     bindings: {
 
       // Add node button
-      'add-node': function(t) {
+      'add-chapter-node': function(t) {
         var elData = UI.getData(t);
 
-        if(elData) {
-          // Insert a node at the given branch
-          GV.collections.Nodes.insert({
-            parent: elData.tree._id,
-            title: "Ingen tittel",
-            level: 0,
-            sectionLabel: null,
-            userId: elData.tree.userId,
-            lastChanged: new Date(),
-            position: -1
-          },
-          function(error, nodeId) {
-            if(error) {
-              Notifications.error(error);
-            }
+        insertNodeOfType(elData, "chapter", t);
+      },
 
-            // Add the created node into children array of main document
-            GV.collections.Documents.update({
-              _id: Session.get('mainDocument')
-            },
-            {
-              $addToSet: {
-                children: nodeId
-              }
-            });
+      // Add node button
+      'add-media-node': function(t) {
+        var elData = UI.getData(t);
 
-            // Subscribe on the newly created node
-            Router.current().subscribe('nodeById', nodeId, {
-              onReady: function () {
-                Meteor.defer(function() {
-                  updatePositions(t.parentNode);
-                });
-              },
-              onError: function () { console.log("onError", arguments); }
-            });
-          });
-        }
+        insertNodeOfType(elData, "media", t);
       },
 
       // Delete button
@@ -317,7 +329,7 @@ Template.Tree.events({
     // console.log(sectionsTargetEl);
     // console.log("UNDER")
 
-    if(sectionsTargetEl && (sectionsTargetEl.length > sectionsDragEl.length) && sectionsDragEl.length > 0) {
+    if(sectionsTargetEl && sectionsDragEl && (sectionsTargetEl.length > sectionsDragEl.length) && sectionsDragEl.length > 0) {
       var numEquals = 0;
 
       for(var i = 0; i < sectionsTargetEl.length; i++) {
