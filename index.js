@@ -204,7 +204,7 @@ app.on('ready', function () {
       width: 1200,
       height: 800,
       "min-width": 1000,
-      "min-height": 600,
+      "min-height": 800,
       resizeable: true,
       frame: true
     };
