@@ -75,10 +75,10 @@
             &:hover {
                 background-color: darken(#fff, 10%);
                 cursor: pointer;
+            }
 
-                span.glyphicon {
-                    color: darken(orange, 10%);
-                }
+            span.glyphicon:hover {
+                color: darken(orange, 10%);
             }
             
             &.selected {
