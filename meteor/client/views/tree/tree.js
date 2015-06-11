@@ -124,8 +124,10 @@ var insideItself = function(drag, target) {
       }
     }
 
-    if(numEquals == dragLabels.length)
+    if(numEquals == dragLabels.length) {
+      Notifications.error("Feil ved flytting av kapittelelement", "Du kan ikke flytte et kapittelelement inn i sitt eget deltre.");
       return true;
+    }
   }
 
   return false;
@@ -323,7 +325,7 @@ Template.Tree.events({
 
     var l = dataTarget.level + 1;
 
-    if(!insideItself(data, dataTarget)) {
+    if(dataTarget.nodeType !== "media" && !insideItself(data, dataTarget)) {
       // Update the node position
       GV.collections.Nodes.update({
         _id: data._id

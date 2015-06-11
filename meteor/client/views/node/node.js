@@ -110,45 +110,42 @@ getSection = function(prevSection, prevNodePos) {
 
 
 insertNodeOfType = function(data, type, t) {
-  if(type == "chapter" && data && (data.level > 2)) {
-    Notifications.warn('For stort tre', 'Det er for mange underkategorier, prøv heller å omstrukturere litt i hierarkiet.');
-    return;
-  } else {
-    if(data && data._id) {
+  if(data && data._id) {
 
-      var node = {
-        parent: data._id,
-        title: "Ingen tittel",
-        level: data.level + 1,
-        sectionLabel: generateSectionLabel(data.sectionLabel, data.position),
-        userId: data.userId,
-        lastChanged: new Date(),
-        position: -1,
-        nodeType: type
-      };
+    var node = {
+      parent: data._id,
+      title: "Ingen tittel",
+      level: data.level + 1,
+      sectionLabel: generateSectionLabel(data.sectionLabel, data.position),
+      userId: data.userId,
+      lastChanged: new Date(),
+      position: -1,
+      nodeType: type
+    };
 
-      GV.collections.Nodes.insert(node, function(error, nodeId) {
-        if(!error) {
-          GV.collections.Documents.update({
-            _id: Session.get('mainDocument')
+    GV.collections.Nodes.insert(node, function(error, nodeId) {
+      if(!error) {
+        GV.collections.Documents.update({
+          _id: Session.get('mainDocument')
+        },
+        {
+          $addToSet: {
+            children: nodeId
+          }
+        });
+
+        GV.collections.Nodes.update({ _id: data._id }, { $set: { collapsed: false } });
+
+        Router.current().subscribe('nodeById', nodeId, {
+          onReady: function () {
+            Meteor.defer(function() {
+              updatePositions(t.parentNode);
+            });
           },
-          {
-            $addToSet: {
-              children: nodeId
-            }
-          });
-
-          Router.current().subscribe('nodeById', nodeId, {
-            onReady: function () {
-              Meteor.defer(function() {
-                updatePositions(t.parentNode);
-              });
-            },
-            onError: function () { console.log("onError", arguments); }
-          });
-        }
-      });
-    }
+          onError: function () { console.log("onError", arguments); }
+        });
+      }
+    });
   }
 };
 
