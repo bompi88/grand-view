@@ -38,7 +38,10 @@ This is the navbar located at the top.
           {{> NavBarButton route='Templates' name='Mine maler'}}
           {{> NavBarButton route='Trash' name='Papirkurv'}}
           {{#if isActiveRoute 'Document'}}
-            {{> NavBarButton route='Document' name='Redigering'}}
+            {{> NavBarButton route='Document' name='Rediger dokument'}}
+          {{/if}}
+          {{#if isActiveRoute 'Template'}}
+            {{> NavBarButton route='Template' name='Rediger mal'}}
           {{/if}}
         </ul>
       </div>

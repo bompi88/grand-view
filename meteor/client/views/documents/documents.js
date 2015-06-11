@@ -90,7 +90,7 @@ var createNewTemplate = function() {
 var goToTemplate = function(id) {
   GV.tabs.reset();
   // redirect to the new document
-  Router.go(Router.path('Document', { _id: id }));
+  Router.go(Router.path('Template', { _id: id }));
 };
 
 var softRemoveDocument = function(id, hideNotification) {
@@ -161,7 +161,12 @@ Template.DocumentTable.events({
 
   'click #btn-editDoc': function(event, tmpl) {
     GV.tabs.reset();
-    Router.go(Router.path('Document', {_id: this.document._id}));
+
+    if(this.tableName === "documents") {
+      goToDoc(this.document._id);
+    } else if(this.tableName === "templates") {
+      goToTemplate(this.document._id);
+    }
   },
 
   'click #btn-remove': function(event, tmpl) {

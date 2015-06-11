@@ -21,6 +21,29 @@ DocumentController = AuthRouteController.extend({
 
 });
 
+TemplateController = AuthRouteController.extend({
+
+  subscriptions: function() {
+    return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('nodesByDoc', this.params._id), Meteor.subscribe('tags')];
+  },
+
+  data: function() {
+    return GV.collections.Documents.findOne({ _id: this.params._id });
+  },
+
+  onAfterAction: function() {
+    GV.tabs.reset();
+    GV.tags.reset();
+
+    Session.set('mainDocument', this.params._id);
+    Session.set('nodeInFocus', this.params._id);
+    Session.set("file", null);
+    Session.set("uploadStopped", false);
+    Session.set("structureState", "tree");
+  }
+
+});
+
 DocumentsController = AuthRouteController.extend({
 
   subscriptions: function() {

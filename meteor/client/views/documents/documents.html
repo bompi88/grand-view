@@ -49,7 +49,7 @@ A document table.
     </thead>
     <tbody>
       {{#each documents}}
-        {{> DocumentRow document=this editOptions=../editOptions hasTemplate=../hasTemplate tableName=../tableName}}
+        {{> DocumentRow document=this editOptions=../editOptions hasTemplate=../hasTemplate tableName=../tableName label=../label}}
       {{else}}
         Tabellen er tom...
       {{/each}}
@@ -70,7 +70,7 @@ A row in the document table.
     {{#if editOptions}}
   		<td>
   			<div class="btn-group pull-right">
-          {{> ExportButton class="btn-sm" text="Eksporter" currDoc=document}}
+          {{#ExportButton class="btn-sm" currDoc=document}}Eksporter{{/ExportButton}}
   				<button type="button" id="btn-editDoc" class="btn btn-success btn-sm">
   					<span class="glyphicon glyphicon-edit"></span> Rediger
   				</button>

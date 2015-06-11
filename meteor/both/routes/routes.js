@@ -43,6 +43,15 @@ Router.route('/document/:_id', {
 });
 
 /**
+ * Edit Template
+ */
+Router.route('/template/:_id', {
+  name: 'Template',
+  controller: 'TemplateController'
+});
+
+
+/**
  * Verify Email
  */
 Router.route('/verify-email/:token', {

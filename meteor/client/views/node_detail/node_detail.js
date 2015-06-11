@@ -44,7 +44,7 @@ Template.NodeDetail.helpers({
     var self = this;
     var r;
 
-    if(self._af.doc.tags) {
+    if(self._af && self._af.doc && self._af.doc.tags) {
       r = _.map(self._af.doc.tags, function(val) {
         return {
           label: val,
