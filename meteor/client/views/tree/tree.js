@@ -179,7 +179,7 @@ Template.Tree.rendered = function () {
   var self = this;
 
   // Create right click buttons when right clicking on root node
-  $('.tree li.node.root span').contextMenu('right-click-menu-root', {
+  $('.tree li.node.root > span').contextMenu('right-click-menu-root', {
     bindings: {
 
       // Add node button
