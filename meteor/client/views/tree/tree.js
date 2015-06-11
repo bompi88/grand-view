@@ -468,9 +468,7 @@ Template.Tree.events({
       Session.set("uploadStopped", false);
 
       // Reset the form because of no update on tags field on data change.
-      Meteor.defer(function() {
-        AutoForm.resetForm("update-node-form");
-      });
+      AutoForm.resetForm("update-node-form");
     }
   },
 

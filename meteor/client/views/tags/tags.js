@@ -1,6 +1,6 @@
 Template.Tags.helpers({
   tags: function() {
-    console.log(this)
+
     var doc = GV.collections.Documents.findOne({ _id: this._id });
 
     var nodes = GV.collections.Nodes.find({ _id: { $in: doc.children || [] }, nodeType: "media" }).fetch();
@@ -57,11 +57,7 @@ Template.Tag.events({
       Router.current().subscribe('fileByNode', elData._id);
       Session.set("file", null);
       Session.set("uploadStopped", false);
-
-      // Reset the form because of no update on tags field on data change.
-      Meteor.defer(function() {
-        AutoForm.resetForm("update-node-form");
-      });
+      AutoForm.resetForm("update-node-form");
     }
   }
 
