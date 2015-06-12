@@ -261,6 +261,18 @@ Template.Tree.events({
   'click .help-modal-button': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
 
+    var helpBox = {
+      title: "<span class='glyphicon glyphicon-question-sign'></span> Hjelp til kapittelstrukturvisningen",
+      message: UI.toHTML(Template.TreeHelp),
+      buttons: {
+        close: {
+          label: "Lukk",
+          className: "btn-default",
+        }
+      }
+    }
+
+    bootbox.dialog(helpBox);
   },
 
 

@@ -41,14 +41,15 @@ for editing of nodes in the tree
       <div class="col-xs-4 structure-container">
 
         {{#if $.Session.equals "structureState" "tree"}}
-          {{#Tree tree=this}}
-          <!-- <em>Klikk og dra nodene i trestrukturen der du vil ha dem. Klikker man dobbelt på en av nodene, så åpnes
-          det en fane til høyre med den valgte informasjonen. Ved bruk av enkeltklikk på nodene, åpnes bare fanen midlertidig.</em> -->
-          {{/Tree}}
-        {{else}}
-          {{#Tags }}
-          <!-- <em>I emneknaggstrukturen kan man se hvilke informasjonselement som er knyttet hvilke emneknagger.</em> -->
-          {{/Tags}}
+          {{>Tree tree=this}}
+        {{/if}}
+
+        {{#if $.Session.equals "structureState" "tags"}}
+          {{> Tags}}
+        {{/if}}
+
+        {{#if $.Session.equals "structureState" "references"}}
+          {{> References}}
         {{/if}}
         <div class="structure-footer">
           <ul class="nav nav-pills nav-justified">

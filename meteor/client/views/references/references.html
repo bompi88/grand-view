@@ -17,37 +17,37 @@
 <!--
 The Tags view constructor template.
 -->
-<template name="Tags">
+<template name="References">
   <div class="structure-header">
     <div class="pull-right btn-group" role="group">
       <button type="button" class="btn btn-default dropdown-toggle menu-button" data-toggle="dropdown" aria-expanded="false">
         <span class="glyphicon glyphicon-option-horizontal"></span>
       </button>
       <ul class="dropdown-menu" role="menu">
-        <li><a href="#" class="expand-tags"><span class="glyphicon glyphicon-resize-full"></span> Utvid alle nøkkelord</a></li>
-        <li><a href="#" class="collapse-tags"><span class="glyphicon glyphicon-resize-small"></span> Sammentrekk alle nøkkelord</a></li>
+        <li><a href="#" class="expand-references"><span class="glyphicon glyphicon-resize-full"></span> Utvid alle kilder</a></li>
+        <li><a href="#" class="collapse-references"><span class="glyphicon glyphicon-resize-small"></span> Sammentrekk alle kilder</a></li>
         <li role="presentation" class="divider"></li>
         <li><a href="#" class="help-modal-button"><span class="glyphicon glyphicon-question-sign"></span> Hjelp</a></li>
       </ul>
     </div>
 
-    <h4 class="header-text"><span class="glyphicon glyphicon-tags" style="font-size:15px; margin: 0 5px;"></span> Nøkkelord</h4>
+    <h4 class="header-text"><span class="glyphicon glyphicon-tags" style="font-size:15px; margin: 0 5px;"></span> Kilder</h4>
   </div>
   {{!-- Start of tags list --}}
-  <div id="{{id}}" class="tags structure {{class}}">
+  <div id="{{id}}" class="references structure {{class}}">
 
-    {{#each tags}}
-      {{> Tag title=this}}
+    {{#each references}}
+      {{> Reference title=this}}
     {{else}}
-      <em>Ingen nøkkelord er tilbundet informasjons- elementene enda. Legg til nøkkelord under redigering av informasjonselement.</em>
+      <em>Ingen kilder er tilbundet informasjons- elementene enda. Legg til kilde under redigering av informasjonselement.</em>
     {{/each}}
 
   </div>
 </template>
 
-<template name="Tag">
+<template name="Reference">
 <ul>
-    <li class="tag" style="margin-top:0;">
+    <li class="reference" style="margin-top:0;">
 
       <span draggable="false" class="element disable-select {{#if isCollapsed}}show-node{{else}}hide-node{{/if}}">
         {{#if isCollapsed}}
@@ -76,6 +76,6 @@ The Tags view constructor template.
     </ul>
 </template>
 
-<template name="TagsHelp">
-  I emneknaggstrukturen kan man se hvilke informasjonselement som er knyttet hvilke emneknagger.
+<template name="ReferencesHelp">
+  I kildevisningen kan man se hvilke informasjonselement som er knyttet hvilke kilder.
 </template>

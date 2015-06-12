@@ -1,46 +1,46 @@
-Template.Tags.helpers({
-  tags: function() {
+Template.References.helpers({
+  references: function() {
 
     var doc = GV.collections.Documents.findOne({ _id: this._id });
 
     var nodes = GV.collections.Nodes.find({ _id: { $in: doc.children || [] }, nodeType: "media" }).fetch();
 
-    var tags = [];
+    var references = [];
 
     nodes.forEach(function(node) {
-      if(node.tags)
-        tags = _.union(tags, node.tags);
+      if(node.references)
+        references = _.union(references, node.references);
     });
 
-    tags = _.unique(tags);
+    references = _.unique(references);
 
-    Template.instance().tags = tags;
+    Template.instance().references = references;
 
-    return tags;
+    return references;
   }
 });
 
 
-Template.Tags.events({
+Template.References.events({
 
-  'click .expand-tags': function(event, tmpl) {
+  'click .expand-references': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
 
-    GV.tags.reset();
+    GV.references.reset();
   },
 
-  'click .collapse-tags': function(event, tmpl) {
+  'click .collapse-references': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
 
-    GV.tags.collapseAll(Template.instance().tags);
+    GV.references.collapseAll(Template.instance().references);
   },
 
   'click .help-modal-button': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
 
     var helpBox = {
-      title: "<span class='glyphicon glyphicon-question-sign'></span> Hjelp til nøkkelordvisningen",
-      message: UI.toHTML(Template.TagsHelp),
+      title: "<span class='glyphicon glyphicon-question-sign'></span> Hjelp til kildevisningen",
+      message: UI.toHTML(Template.ReferencesHelp),
       buttons: {
         close: {
           label: "Lukk",
@@ -54,26 +54,26 @@ Template.Tags.events({
 
 });
 
-Template.Tag.helpers({
+Template.Reference.helpers({
 
   isCollapsed: function() {
-    return GV.tags.isCollapsed(this.title);
+    return GV.references.isCollapsed(this.title);
   },
 
   getNodes: function() {
-    return GV.collections.Nodes.find({ tags: this.title });
+    return GV.collections.Nodes.find({ references: this.title });
   }
 
 });
 
 
-Template.Tag.events({
+Template.Reference.events({
   'click .hide-node': function(event, tmpl) {
-    GV.tags.collapse(this.title);
+    GV.references.collapse(this.title);
   },
 
   'click .show-node': function(event, tmpl) {
-    GV.tags.uncollapse(this.title);
+    GV.references.uncollapse(this.title);
   },
 
   // Selects a node on regular mouse click

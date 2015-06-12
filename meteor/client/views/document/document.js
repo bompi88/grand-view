@@ -38,6 +38,12 @@ Template.Document.events({
     event.prevenDefault && event.prevenDefault();
 
     Session.set("structureState", "tags");
+  },
+
+  'click .show-references': function(event, tmpl) {
+    event.prevenDefault && event.prevenDefault();
+
+    Session.set("structureState", "references");
   }
 
 });

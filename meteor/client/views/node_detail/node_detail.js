@@ -54,26 +54,22 @@ Template.NodeDetail.helpers({
     }
 
     return r;
-  }
+  },
 
-});
-
-
-Template.GeneralInfo.helpers({
-
-  getTagsOptions: function() {
+  getReferencesOptions: function() {
 
     var self = this;
     var r;
 
-    if(self._af.doc && self._af.doc.tags) {
-      r = _.map(self._af.doc.tags, function(val) {
+    if(self._af && self._af.doc && self._af.doc.references) {
+      r = _.map(self._af.doc.references, function(val) {
         return {
           label: val,
           value: val
         };
       });
     }
+
     return r;
   }
 

@@ -95,6 +95,68 @@ GV.schemas.Nodes = new SimpleSchema({
     }
   },
 
+  // Tags that adds a dimension to the description and title fields
+  references: {
+    type: [String],
+    label: function() {
+      return "Kilder";
+    },
+    optional: true,
+    autoform: {
+      placeholder: "schemaLabel",
+      type: "selectize",
+      afFieldInput: {
+        multiple: true,
+        selectizeOptions: {
+          delimiter: ',',
+          preload: true,
+          sortField: 'value',
+
+          // Can create new tags
+          create: function(input) {
+
+            GV.collections.References.insert({ value: input.toLowerCase(), text: input });
+
+            return {
+              value: input,
+              text: input
+            }
+          },
+
+          // How the tags suggestions are rendered
+          render: {
+            option: function(item, escape) {
+              return '<div>' +
+                '<span class="title">' +
+                '<span class="name">' + item.text + '</span>' +
+                '</span>' +
+                '</div>';
+            },
+            option_create: function(data, escape) {
+              return '<div class="create">Legg til <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+            }
+          },
+
+          // How to load new tags
+          load: function(query, callback) {
+
+            var references;
+
+            if (!query.length) {
+              Router.current().subscribe('references');
+              references = GV.collections.References.find({}).fetch();
+            } else {
+              Router.current().subscribe('referencesByQuery', { text: { $regex: query, $options: 'i' } });
+              references = GV.collections.References.find({ text: { $regex: query, $options: 'i' } }).fetch();
+            }
+
+            callback(references);
+          }
+        }
+      }
+    }
+  },
+
   status: {
     type: String,
     optional: true,
