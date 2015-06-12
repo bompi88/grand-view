@@ -10,7 +10,7 @@ GV.schemas.Documents = new SimpleSchema({
   title: {
     type: String,
     label: function() {
-      return "Tittel";
+      return "Dokumenttittel";
     },
     optional: false,
     max: 100,
@@ -36,7 +36,7 @@ GV.schemas.Documents = new SimpleSchema({
   tags: {
     type: [String],
     label: function() {
-      return "Emneknagger";
+      return "Nøkkelord";
     },
     optional: true,
     autoform: {

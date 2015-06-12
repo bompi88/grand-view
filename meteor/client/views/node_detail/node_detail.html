@@ -25,11 +25,11 @@ Edit information about a reference.
   {{/if}}
 
   {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
-		{{> afQuickField name="title" }}
-
     {{#if $eq node.nodeType "chapter"}}
-      {{> afQuickField name="description" rows="6" placeholder="Sammendrag" label="Sammendrag"}}
+      {{> afQuickField name="title" placeholder="Kapittelnavn" label="Kapittelnavn"}}
+      {{> afQuickField name="description" rows="6" placeholder="Beskrivelse" label="Beskrivelse"}}
     {{else}}
+      {{> afQuickField name="title" }}
   		{{> afQuickField name="description" rows="6" }}
   		{{> afQuickField name="tags" options=getTagsOptions}}
       {{> afQuickField name="references" options=getReferencesOptions}}

@@ -1,7 +1,7 @@
 DocumentController = AuthRouteController.extend({
 
   subscriptions: function() {
-		return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('nodesByDoc', this.params._id), Meteor.subscribe('tags')];
+		return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('nodesByDoc', this.params._id), Meteor.subscribe('tags'), Meteor.subscribe('references')];
 	},
 
   data: function() {
@@ -25,7 +25,7 @@ DocumentController = AuthRouteController.extend({
 TemplateController = AuthRouteController.extend({
 
   subscriptions: function() {
-    return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('nodesByDoc', this.params._id), Meteor.subscribe('tags')];
+    return [ Meteor.subscribe('documentById', this.params._id), Meteor.subscribe('nodesByDoc', this.params._id), Meteor.subscribe('tags'), Meteor.subscribe('references')];
   },
 
   data: function() {

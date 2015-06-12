@@ -92,17 +92,16 @@ Template.Tabs.helpers({
     	return Session.get('nodeInFocus') == Session.get('mainDocument');
     },
 
-    getTitle: function(id) {
-    	var node = GV.collections.Nodes.findOne({
+    getDoc: function(id) {
+    	return GV.collections.Nodes.findOne({
         _id: id
       },
       {
         fields: {
-          title: 1
+          title: 1,
+          nodeType: 1
         }
       });
-
-    	return node && node.title || null;
     }
 
 });

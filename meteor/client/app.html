@@ -26,7 +26,9 @@
   <div class="contextMenu" id="right-click-menu-root">
   	<ul>
   		<li id="add-chapter-node"><span class="glyphicon glyphicon-plus"></span> Legg til kapittel</li>
-      <li id="add-media-node"><span class="glyphicon glyphicon-plus"></span> Legg til data</li>
+      {{#if $.Session.equals "showMediaNodes" true }}
+        <li id="add-media-node"><span class="glyphicon glyphicon-plus"></span> Legg til informasjonselement</li>
+      {{/if}}
       <li id="edit-node"><span class="glyphicon glyphicon-pencil"></span> Rediger</li>
   		<li id="delete-node"><span class="glyphicon glyphicon-remove"></span> Slett</li>
   	</ul>
@@ -36,7 +38,9 @@
   <div class="contextMenu" id="right-click-menu-chapter-node">
     <ul>
       <li id="add-chapter-node"><span class="glyphicon glyphicon-plus"></span> Legg til underkapittel</li>
-      <li id="add-media-node"><span class="glyphicon glyphicon-plus"></span> Legg til data</li>
+      {{#if $.Session.equals "showMediaNodes" true }}
+        <li id="add-media-node"><span class="glyphicon glyphicon-plus"></span> Legg til informasjonselement</li>
+      {{/if}}
       <li id="edit-node"><span class="glyphicon glyphicon-pencil"></span> Rediger</li>
       <li id="delete-node"><span class="glyphicon glyphicon-remove"></span> Slett</li>
     </ul>

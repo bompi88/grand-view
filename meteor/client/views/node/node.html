@@ -37,7 +37,7 @@ A node in the tree, that recursively renders its children.
           {{/if}} -->
         {{/if}}
 
-        {{#if $eq nodeType "chapter"}}<b>{{getSectionLabel}}</b>{{else}}<span class="glyphicon glyphicon-file"></span>{{/if}} {{title}}
+        {{#if $eq nodeType "chapter"}}<b>{{getSectionLabel}}</b>{{else}}<span class="glyphicon glyphicon-file"></span>{{/if}} {{#if title}}{{title}}{{else}}Ingen tittel{{/if}}
       </span>
 
       {{!-- Render its children if they are visible --}}

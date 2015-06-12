@@ -67,7 +67,6 @@ var insertNodeOfType = function(data, type, t) {
     // Insert a node at the given branch
     GV.collections.Nodes.insert({
       parent: data.tree._id,
-      title: "Ingen tittel",
       level: 0,
       sectionLabel: null,
       userId: data.tree.userId,

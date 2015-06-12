@@ -31,10 +31,12 @@ Tabs template render tabs for nodes that are opened during the session.
 
       {{!-- The actual tabs --}}
 			{{#each tabs}}
-				<li role="presentation" class="{{#if $.Session.equals 'nodeInFocus' this}}active{{/if}}">
-          <a href="#" class="tab" style="padding-right:30px;padding-left:-30px;">{{getTitle this}}</a>
-          <span class="glyphicon glyphicon-remove pull-right delete-tab" style="position:absolute; right:10px; top:13px;" aria-hidden="true"></span>
-        </li>
+        {{#with getDoc this}}
+  				<li role="presentation" class="{{#if $.Session.equals 'nodeInFocus' _id}}active{{/if}}">
+            <a href="#" class="tab" style="padding-right:30px;padding-left:-30px;">{{#if title}}{{title}}{{else}}Ingen tittel{{/if}}</a>
+            <span class="glyphicon glyphicon-remove pull-right delete-tab" style="position:absolute; right:10px; top:13px;" aria-hidden="true"></span>
+          </li>
+        {{/with}}
 			{{/each}}
 		</ul>
 	</div>

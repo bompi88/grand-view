@@ -114,7 +114,6 @@ insertNodeOfType = function(data, type, t) {
 
     var node = {
       parent: data._id,
-      title: "Ingen tittel",
       level: data.level + 1,
       sectionLabel: generateSectionLabel(data.sectionLabel, data.position),
       userId: data.userId,

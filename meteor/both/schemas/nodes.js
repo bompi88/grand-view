@@ -10,9 +10,9 @@ GV.schemas.Nodes = new SimpleSchema({
   title: {
     type: String,
     label: function() {
-      return "Tittel";
+      return "Navn på informasjonselement";
     },
-    optional: false,
+    optional: true,
     min: 3,
     max: 100,
     autoform: {
@@ -37,7 +37,7 @@ GV.schemas.Nodes = new SimpleSchema({
   tags: {
     type: [String],
     label: function() {
-      return "Emneknagger";
+      return "Nøkkelord";
     },
     optional: true,
     autoform: {
