@@ -95,6 +95,12 @@ var insertNodeOfType = function(data, type, t) {
         onReady: function () {
           Meteor.defer(function() {
             updatePositions(t.parentNode);
+
+            $('li.node span').removeClass('selected');
+            $("li.root li.node").find("[data-id='" + nodeId + "']");//.find("> span").addClass('selected');
+
+            GV.tabs.setDummyTab(nodeId);
+            Session.set('nodeInFocus', nodeId);
           });
         },
         onError: function () { console.log("onError", arguments); }
@@ -144,17 +150,28 @@ Template.Tree.helpers({
    * The nodes of this tree.
    */
   treeItems: function() {
-    return this.tree && GV.collections.Nodes.find({parent: this.tree._id}, { sort: { nodeType: 1, position: 1  }}).map(function(node, index) {
-      node.node_index = index;
-      return node;
-    });;
+    if(Session.get("showMediaNodes")) {
+      return this.tree && GV.collections.Nodes.find({parent: this.tree._id}, { sort: { nodeType: 1, position: 1  }}).map(function(node, index) {
+        node.node_index = index;
+        return node;
+      });;
+    } else {
+      return this.tree && GV.collections.Nodes.find({parent: this.tree._id, nodeType: "chapter" }, { sort: { position: 1  }}).map(function(node, index) {
+        node.node_index = index;
+        return node;
+      });;
+    }
   },
 
   /**
    * Returns true if the tree contains nodes.
    */
   hasChildren: function() {
-    return this.tree && GV.collections.Nodes.find({parent: this.tree._id}).count() > 0;
+    if(Session.get("showMediaNodes")) {
+      return this.tree && GV.collections.Nodes.find({parent: this.tree._id}).count() > 0;
+    } else {
+      return this.tree && GV.collections.Nodes.find({parent: this.tree._id, nodeType: "chapter" }).count() > 0;
+    }
   },
 
   /**
@@ -214,6 +231,38 @@ Template.Tree.rendered = function () {
 
 
 Template.Tree.events({
+
+  // -- Menu events ------------------------------------------------------------
+
+  'click .toggle-media-nodes': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+
+    Session.set("showMediaNodes", !Session.get("showMediaNodes"));
+  },
+
+  'click .expand-nodes': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+
+    this.tree.children.forEach(function(nodeId) {
+      GV.collections.Nodes.update({ _id: nodeId }, { $set: { collapsed: false } });
+    });
+  },
+
+
+  'click .collapse-nodes': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+
+    this.tree.children.forEach(function(nodeId) {
+      GV.collections.Nodes.update({ _id: nodeId }, { $set: { collapsed: true } });
+    });
+  },
+
+
+  'click .help-modal-button': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+
+  },
+
 
   // -- Prevent default behaviour on dragover events ---------------------------
 

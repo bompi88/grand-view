@@ -17,6 +17,7 @@ DocumentController = AuthRouteController.extend({
     Session.set("file", null);
     Session.set("uploadStopped", false);
     Session.set("structureState", "tree");
+    Session.set("showMediaNodes", false);
   }
 
 });

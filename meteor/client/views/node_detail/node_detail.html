@@ -92,12 +92,12 @@ Edit information about a reference.
 Edit top level information about a document. This is basically the root node.
 -->
 <template name="GeneralInfo">
-	<h3>Generelt om dokumentet</h3>
-  <p><em>Denne noden beskriver dokumentet i sin helhet. Denne informasjonen brukes for å lett kunne finne dokumentet ved en seinere anledning.</em></p>
+	<h3>Redigering av prosjektbeskrivelsen</h3>
+  <p><em>Her kan man beskrive dokumentet i sin helhet. Denne informasjonen brukes for å kunne skille mellom de ulike dokumentene.</em></p>
 
 	{{#autoForm collection="GV.collections.Documents" id="update-document-form" doc=this type="update"}}
 		{{> afQuickField name="title" }}
-		{{> afQuickField name="summary" rows="6" }}
+		{{> afQuickField name="summary" rows="6" placeholder="Skriv inn en kortfattet beskrivelse av prosjektet" label="Prosjektbeskrivelse"}}
 
 		<div class="form-group">
 			<button type="button" class="btn btn-danger pull-left delete-document">Slett hele dokumentet</button>

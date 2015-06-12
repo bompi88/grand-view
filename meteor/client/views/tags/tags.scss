@@ -15,7 +15,7 @@
 
         // draw the horizontal lines
         li::before {
-            border-top: 1px solid #000;
+            border-top: 1px solid darken(#fff, 30%);
             top: 9px;
             width: 8px;
             height: 0;
@@ -23,7 +23,7 @@
 
         // Draw the vertical lines
         li::after {
-            border-left: 1px solid #000;
+            border-left: 1px solid darken(#fff, 30%);
             height: 100%;
             width: 0px;
             top: 2px;

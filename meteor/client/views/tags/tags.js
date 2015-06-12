@@ -14,10 +14,28 @@ Template.Tags.helpers({
 
     tags = _.unique(tags);
 
+    Template.instance().tags = tags;
+
     return tags;
   }
 });
 
+
+Template.Tags.events({
+
+  'click .expand-tags': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+
+    GV.tags.reset();
+  },
+
+  'click .collapse-tags': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+
+    GV.tags.collapseAll(Template.instance().tags);
+  }
+
+});
 
 Template.Tag.helpers({
 

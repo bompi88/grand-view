@@ -27,6 +27,8 @@ $text-color: #555;
 
 @import ".meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap";
 
+$blue-base: darken(#428bca, 6.5%);
+
 html, body {
 	height: 100%;
 }
@@ -56,3 +58,13 @@ ul.notifications {
 .default-container {
 	padding-top: 60px;
 }
+@import "client/views/index/accounts/userForms.scss";
+@import "client/views/document/document.scss";
+@import "client/views/documents/documents.scss";
+@import "client/views/index/index.scss";
+@import "client/views/navigation/navigation.scss";
+@import "client/views/node/node.scss";
+@import "client/views/node_detail/node_detail.scss";
+@import "client/views/tabs/tabs.scss";
+@import "client/views/tags/tags.scss";
+@import "client/views/tree/tree.scss";

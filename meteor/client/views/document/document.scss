@@ -4,7 +4,7 @@
 
 
 .structure {
-	height:400px;
+	height:510px;
     overflow:scroll;
     
     &::-webkit-scrollbar {
@@ -22,10 +22,9 @@
 .structure-header {
 	display:inline-block;
 	width: 100%;
-	height: auto;
+	height: 40px;
 	background-color: darken(#fff, 5%);
 	margin:0;
-	padding-top: 10px;
 	border-bottom: 1px solid darken(#fff, 2%);
 
 	h4 {
@@ -73,9 +72,34 @@
 	}
 }
 
+.structure-header h4.header-text {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+    margin-right: 0;
+    width: auto;
+}
+
+.structure-header .dropdown-menu span {
+	margin-right: 5px;
+}
+
+.menu-button {
+    width: 40px;
+    margin: 5px;
+    height: 30px;
+    border: none;
+    line-height: auto;
+    background-color: darken(#fff, 15%);
+
+    &:hover {
+        background-color: darken(#fff, 20%);
+    }
+}
+
 div.structure-container {
 	overflow:hidden;
-	height: 470px;
+	height: 570px;
 	position:relative;
 	border: 2px solid #777;
 	padding: 0;
@@ -92,6 +116,7 @@ div.structure-container {
 div.structure {
 	margin: 0;
 	padding: 15px 10px;
+    padding-bottom: 0;
 
 	> ul {
 		padding: 0;

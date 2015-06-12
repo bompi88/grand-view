@@ -140,6 +140,12 @@ insertNodeOfType = function(data, type, t) {
           onReady: function () {
             Meteor.defer(function() {
               updatePositions(t.parentNode);
+
+              $('li.node span').removeClass('selected');
+              $("li.root li.node").find("[data-id='" + nodeId + "']").find("> span").addClass('selected');
+
+              GV.tabs.setDummyTab(nodeId);
+              Session.set('nodeInFocus', nodeId);
             });
           },
           onError: function () { console.log("onError", arguments); }
@@ -166,17 +172,28 @@ Template.NodeLevel.helpers({
    * Returns true if the node has children.
    */
   hasChildren: function() {
-    return GV.collections.Nodes.find({parent: this._id}).count() > 0;
+    if(Session.get("showMediaNodes")) {
+      return GV.collections.Nodes.find({ parent: this._id }).count() > 0;
+    } else {
+      return GV.collections.Nodes.find({ parent: this._id, nodeType: "chapter" }).count() > 0;
+    }
   },
 
   /**
    * Returns the children of the current node.
    */
   children: function() {
-    return GV.collections.Nodes.find({ parent: this._id }, { sort: { nodeType: 1, position: 1  }}).map(function(node, index) {
-      node.node_index = index;
-      return node;
-    });
+    if(Session.get("showMediaNodes")) {
+      return GV.collections.Nodes.find({ parent: this._id }, { sort: { nodeType: 1, position: 1  }}).map(function(node, index) {
+        node.node_index = index;
+        return node;
+      });
+    } else {
+      return GV.collections.Nodes.find({ parent: this._id, nodeType: "chapter" }, { sort: { position: 1  }}).map(function(node, index) {
+        node.node_index = index;
+        return node;
+      });
+    }
   },
 
   getContext: function(options) {

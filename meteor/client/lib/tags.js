@@ -34,6 +34,14 @@ GV.tags = {
     return this.collapsed;
   },
 
+  collapseAll: function(tags) {
+
+    this.collapsed = _.unique(_.union(this.collapsed, tags));
+
+    this.dep.changed();
+    return this.collapsed;
+  },
+
   reset: function(table) {
     this.collapsed = [];
 
