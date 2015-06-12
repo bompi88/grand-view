@@ -45,15 +45,19 @@
             &:hover {
                 background-color: darken(#fff, 10%);
                 cursor: pointer;
+                color: lighten($blue-base, 10%)!important;
+            }
+        }   
 
-                span.glyphicon {
-                    color: darken(orange, 10%);
-                }
+        &.tag {
+            > span.element span.glyphicon:hover {
+                color: darken(orange, 10%);
             }
         }
 
         .selected {
             background-color: darken(#fff, 14%);
+            color: $blue-base;
         }
     }
 }

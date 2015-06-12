@@ -24,7 +24,7 @@ A node in the tree, that recursively renders its children.
       {{!-- Drop slot top --}}
       <div class="slot slot-top"></div>
 
-      <span draggable="true" class="element nodes">
+      <span draggable="true" class="element nodes {{#if $eq nodeType 'chapter'}}chapter{{/if}}">
         {{#if hasChildren}}
           {{#if isCollapsed}}
             <span class="glyphicon glyphicon-plus-sign show-node"></span>
