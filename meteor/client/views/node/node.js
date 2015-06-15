@@ -114,7 +114,7 @@ insertNodeOfType = function(data, type, t) {
 
     var node = {
       parent: data._id,
-      level: data.level + 1,
+      level: data.level + 1 || 0,
       sectionLabel: generateSectionLabel(data.sectionLabel, data.position),
       userId: data.userId,
       lastChanged: new Date(),
@@ -138,13 +138,19 @@ insertNodeOfType = function(data, type, t) {
         Router.current().subscribe('nodeById', nodeId, {
           onReady: function () {
             Meteor.defer(function() {
-              updatePositions(t.parentNode);
+              if(t)
+                updatePositions(t.parentNode);
 
               $('li.node span').removeClass('selected');
-              $("li.root li.node").find("[data-id='" + nodeId + "']").find("> span").addClass('selected');
+              var el  = $("li.root li.node").find("[data-id='" + nodeId + "']").find("> span");
+
+              if(el & el.length)
+                el.addClass('selected');
 
               GV.tabs.setDummyTab(nodeId);
               Session.set('nodeInFocus', nodeId);
+
+
             });
           },
           onError: function () { console.log("onError", arguments); }
