@@ -28,7 +28,20 @@ for editing of nodes in the tree
           <div class="btn btn-warning back-to-dashboard"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span> Tilbake til Mine dokumenter</div>
         </div>
         <div class="pull-right" style="margin-top:25px;">
-          {{#ExportButton currDoc=getDoc}}Eksporter dokument{{/ExportButton}}
+
+          <div class="dropdown">
+            <button class="btn btn-success dropdown-toggle" type="button" id="document-menu" data-toggle="dropdown" aria-expanded="true">
+              Meny
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="document-menu">
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="add-media-node"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Opprett informasjonselement</a></li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="add-chapter-node"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Opprett kapittelelement</a></li>
+              <!-- <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Kilde</a></li> -->
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="generate-pdf"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Generer utskriftsdokument</a></li>
+              <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="export-to-file"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Eksporter til fil</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
