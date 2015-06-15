@@ -492,18 +492,26 @@ Template.Tree.events({
   // -- Hide/unhide node events ------------------------------------------------
 
   'click .hide-node': function(event, tmpl) {
+    event.stopPropagation && event.stopPropagation();
+
     toggleVisibility(GV.collections.Nodes, this._id, false);
   },
 
   'click .show-node': function(event, tmpl) {
+    event.stopPropagation && event.stopPropagation();
+
     toggleVisibility(GV.collections.Nodes, this._id, true);
   },
 
   'click .hide-root': function(event, tmpl) {
+    event.stopPropagation && event.stopPropagation();
+
     toggleVisibility(GV.collections.Documents, this.tree._id, false);
   },
 
   'click .show-root': function(event, tmpl) {
+    event.stopPropagation && event.stopPropagation();
+
     toggleVisibility(GV.collections.Documents, this.tree._id, true);
   },
 
