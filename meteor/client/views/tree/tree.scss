@@ -82,8 +82,8 @@
                 color: lighten($blue-base, 10%)!important;
             }
 
-            &.chapter span.glyphicon:hover {
-                color: darken(orange, 10%);
+            &.chapter span.icon:hover {
+                background-color: darken(orange, 10%);
             }
             
             &.selected {

@@ -25,11 +25,23 @@ A node in the tree, that recursively renders its children.
       <div class="slot slot-top"></div>
 
       <span draggable="true" class="element nodes {{#if $eq nodeType 'chapter'}}chapter{{/if}}">
+        <span class="node-text">
+          {{#if $eq nodeType "chapter"}}
+            <b>{{getSectionLabel}}</b>
+          {{else}}
+            <span class="glyphicon glyphicon-file"></span>
+          {{/if}}
+          {{#if title}}
+            {{title}}
+          {{else}}
+            Ingen tittel
+          {{/if}}
+        </span>
         {{#if hasChildren}}
           {{#if isCollapsed}}
-            <span class="glyphicon glyphicon-plus-sign show-node"></span>
+            <span class="icon icon-plus show-node"></span>
           {{else}}
-            <span class="glyphicon glyphicon-minus-sign hide-node"></span>
+            <span class="icon icon-minus hide-node"></span>
           {{/if}}
 <!--         {{else}}
           {{#if $eq nodeType "chapter"}}
@@ -37,7 +49,6 @@ A node in the tree, that recursively renders its children.
           {{/if}} -->
         {{/if}}
 
-        {{#if $eq nodeType "chapter"}}<b>{{getSectionLabel}}</b>{{else}}<span class="glyphicon glyphicon-file"></span>{{/if}} {{#if title}}{{title}}{{else}}Ingen tittel{{/if}}
       </span>
 
       {{!-- Render its children if they are visible --}}
