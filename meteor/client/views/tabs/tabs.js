@@ -115,7 +115,7 @@ Template.Tabs.events({
 	'click .tab': function(event, tmpl) {
 		event.preventDefault && event.preventDefault();
 
-		Session.set('nodeInFocus', this.toString());
+		Session.set('nodeInFocus', this._id.toString());
 	},
 
 	'click .general-info': function(event, tmpl) {
@@ -131,7 +131,7 @@ Template.Tabs.events({
 		// If tab removed, go to the general tab.
     // This should be changed to be the nearest tab.
 		Session.set('nodeInFocus', Session.get('mainDocument'));
-		GV.tabs.removeTab(this);
+		GV.tabs.removeTab(this._id);
 	},
 
 	'click .scroller-right': function() {
