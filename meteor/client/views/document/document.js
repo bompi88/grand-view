@@ -44,36 +44,6 @@ Template.Document.events({
     event.prevenDefault && event.prevenDefault();
 
     Session.set("structureState", "references");
-  },
-
-  'click .add-media-node': function(event, tmpl) {
-    event.prevenDefault && event.prevenDefault();
-
-    Session.set('showNodeForm', true);
-    Session.set('showMediaNodesView', false);
-
-    insertNodeOfType(this, "media", tmpl);
-  },
-
-  'click .add-chapter-node': function(event, tmpl) {
-    event.prevenDefault && event.prevenDefault();
-
-    Session.set('showNodeForm', true);
-    Session.set('showMediaNodesView', true);
-
-    insertNodeOfType(this, "chapter", tmpl);
-  },
-
-  'click .generate-pdf': function(event, tmpl) {
-    event.prevenDefault && event.prevenDefault();
-
-    // TODO: do some magic here
-  },
-
-  'click .export-to-file': function(event, tmpl) {
-    event.prevenDefault && event.prevenDefault();
-
-    exportDocument(this._id);
   }
 
 });

@@ -116,52 +116,58 @@ updatePositions = function(node) {
   });
 };
 
-var insertNodeOfType = function(data, type, t) {
-  if(data) {
+insertNodeOfType = function(data, type, t) {
+
+  if(data.tree)
+    data = data.tree;
+
+  if(data && data._id) {
     // Insert a node at the given branch
     GV.collections.Nodes.insert({
-      parent: data.tree._id,
-      level: 0,
-      sectionLabel: null,
-      userId: data.tree.userId,
+      parent: data._id,
+      level: data.level + 1 || 0,
+      sectionLabel: data.sectionLabel ? generateSectionLabel(data.sectionLabel, data.position) : null,
+      userId: data.userId,
       lastChanged: new Date(),
       position: -1,
       nodeType: type
     },
     function(error, nodeId) {
-      if(error) {
-        Notifications.error(error);
-      }
+      if(!error) {
 
-      // Add the created node into children array of main document
-      GV.collections.Documents.update({
-        _id: Session.get('mainDocument')
-      },
-      {
-        $addToSet: {
-          children: nodeId
-        }
-      });
-
-      // Subscribe on the newly created node
-      Router.current().subscribe('nodeById', nodeId, {
-        onReady: function () {
-          Meteor.defer(function() {
-            updatePositions(t.parentNode);
-
-            $('li.node span').removeClass('selected');
-
-            var el  = $("li.root li.node[data-id='" + nodeId + "']").find("> span");
-
-            if(el && el.length)
-              el.addClass('selected');
-
-            GV.tabs.setDummyTab(nodeId);
-            Session.set('nodeInFocus', nodeId);
-          });
+        // Add the created node into children array of main document
+        GV.collections.Documents.update({
+          _id: Session.get('mainDocument')
         },
-        onError: function () { console.log("onError", arguments); }
-      });
+        {
+          $addToSet: {
+            children: nodeId
+          }
+        });
+
+        if(Session.get('mainDocument') !== data._id.toString() && Session.get('showMediaNodes'))
+          GV.collections.Nodes.update({ _id: data._id }, { $set: { collapsed: false } });
+
+        // Subscribe on the newly created node
+        Router.current().subscribe('nodeById', nodeId, {
+          onReady: function () {
+            Meteor.defer(function() {
+              if(t)
+                updatePositions(t.parentNode);
+
+              $('li.node span').removeClass('selected');
+              var el  = $("li.root li.node[data-id='" + nodeId + "']").find("> span");
+
+              if(el && el.length)
+                el.addClass('selected');
+
+              GV.tabs.setDummyTab(nodeId);
+              Session.set('nodeInFocus', nodeId);
+            });
+          },
+          onError: function () { console.log("onError", arguments); }
+        });
+      }
     });
   }
 };
@@ -330,6 +336,35 @@ Template.Tree.events({
     }
 
     bootbox.dialog(helpBox);
+  },
+
+  'click .add-media-node': function(event, tmpl) {
+    event.prevenDefault && event.prevenDefault();
+
+    Session.set('showNodeForm', true);
+    Session.set('showMediaNodesView', false);
+
+    insertNodeOfType(this, "media", tmpl);
+  },
+
+  'click .add-chapter-node': function(event, tmpl) {
+    event.prevenDefault && event.prevenDefault();
+
+    Session.set('showNodeForm', true);
+    Session.set('showMediaNodesView', true);
+
+    insertNodeOfType(this, "chapter", tmpl);
+  },
+
+  'click .generate-pdf': function(event, tmpl) {
+    event.prevenDefault && event.prevenDefault();
+
+    // TODO: do some magic here
+  },
+
+  'click .export-to-file': function(event, tmpl) {
+    event.prevenDefault && event.prevenDefault();
+    exportDocument(this.tree._id);
   },
 
 

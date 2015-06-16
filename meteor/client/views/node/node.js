@@ -109,58 +109,6 @@ getSection = function(prevSection, prevNodePos) {
 };
 
 
-insertNodeOfType = function(data, type, t) {
-  if(data && data._id) {
-
-    var node = {
-      parent: data._id,
-      level: data.level + 1 || 0,
-      sectionLabel: generateSectionLabel(data.sectionLabel, data.position),
-      userId: data.userId,
-      lastChanged: new Date(),
-      position: -1,
-      nodeType: type
-    };
-
-    GV.collections.Nodes.insert(node, function(error, nodeId) {
-      if(!error) {
-        GV.collections.Documents.update({
-          _id: Session.get('mainDocument')
-        },
-        {
-          $addToSet: {
-            children: nodeId
-          }
-        });
-
-        GV.collections.Nodes.update({ _id: data._id }, { $set: { collapsed: false } });
-
-        Router.current().subscribe('nodeById', nodeId, {
-          onReady: function () {
-            Meteor.defer(function() {
-              if(t)
-                updatePositions(t.parentNode);
-
-              $('li.node span').removeClass('selected');
-              var el  = $("li.root li.node[data-id='" + nodeId + "']").find("> span");
-
-              if(el && el.length)
-                el.addClass('selected');
-
-              GV.tabs.setDummyTab(nodeId);
-              Session.set('nodeInFocus', nodeId);
-
-
-            });
-          },
-          onError: function () { console.log("onError", arguments); }
-        });
-      }
-    });
-  }
-};
-
-
 // -- Template helpers ---------------------------------------------------------
 
 
