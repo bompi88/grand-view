@@ -18,44 +18,68 @@
  * limitations under the License.
  */
 
-.list {
-  position:absolute;
-  left:0px;
-  top:0px;
-  min-width:3000px;
-  margin-left:0px;
-  margin-top:0px;
+.tab-wrapper {
+  position:relative;
+  margin:0 auto;
+  overflow:hidden;
+  padding:0px;
+  height:40px;
 
-  li {
-    display:table-cell;
-    position:relative;
-    text-align:center;
-    cursor:grab;
-    cursor:-webkit-grab;
-    color:#efefef;
-    vertical-align:middle;
+  .list {
+    position:absolute;
+    left:0px;
+    top:0px;
+    min-width:3000px;
+    margin-left:0px;
+    margin-top:0px;
 
-    a.general-info {
-      background-color: darken(#ffffff, 5%);
+    .tab {
+      color: #555;
 
       &:hover {
-        background-color: darken(#ffffff, 15%);
+        color:$blue-base;
+      }
+
+      
+    }
+
+    .active {
+      .tab:hover {
+        color: #555;
       }
     }
-  }
 
-  li.hovered a, li.active.hovered a {
-    background-color: lighten(red, 40%);
-  }
+    li {
+      display:table-cell;
+      position:relative;
+      text-align:center;
+      cursor:grab;
+      cursor:-webkit-grab;
+      color:#efefef;
+      vertical-align:middle;
 
-  li.active a.general-info {
-    background-color: darken(#ffffff, 10%);
-    
-    &:hover {
-      background-color: darken(#ffffff, 10%);
+      a.general-info {
+        background-color: darken(#ffffff, 5%);
+
+        &:hover {
+          background-color: darken(#ffffff, 15%);
+        }
+      }
     }
-  }
 
+    li.hovered a, li.active.hovered a {
+      background-color: lighten(red, 40%);
+    }
+
+    li.active a.general-info {
+      background-color: darken(#ffffff, 10%);
+      
+      &:hover {
+        background-color: darken(#ffffff, 10%);
+      }
+    }
+
+  }
 }
 
 .delete-tab {
@@ -65,14 +89,6 @@
   &:hover {
     color: darken(red, 20%);
   }
-}
-
-.tab-wrapper {
-  position:relative;
-  margin:0 auto;
-  overflow:hidden;
-  padding:0px;
-  height:50px;
 }
 
 .scroller {

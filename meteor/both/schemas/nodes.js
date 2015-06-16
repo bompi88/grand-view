@@ -13,7 +13,6 @@ GV.schemas.Nodes = new SimpleSchema({
       return "Navn på informasjonselement";
     },
     optional: true,
-    min: 3,
     max: 100,
     autoform: {
       placeholder: "schemaLabel"
@@ -27,7 +26,6 @@ GV.schemas.Nodes = new SimpleSchema({
       return "Informasjonselement";
     },
     optional: true,
-    max: 500,
     autoform: {
       placeholder: "schemaLabel"
     }

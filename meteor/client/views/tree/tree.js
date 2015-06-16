@@ -51,6 +51,60 @@ generateSectionLabel = function(parentLabel, position) {
     return null;
 }
 
+openNode = function(elData) {
+  if(elData && elData._id) {
+    GV.tabs.setDummyTab(elData._id);
+    Session.set('nodeInFocus', elData._id);
+    Router.current().subscribe('fileByNode', elData._id);
+    Session.set("file", null);
+    Session.set("uploadStopped", false);
+
+    if(elData.nodeType === "chapter") {
+
+      if(elData.title || elData.description) {
+        Session.set('showNodeForm', false);
+      } else {
+        Session.set('showNodeForm', true);
+
+        Meteor.defer(function() {
+          $("input[name='title']").tooltip({
+            'placement':'top',
+            'title':'Navn på kapittel mangler og trengs for å få god oversikt i kapittelstrukturen.'
+          }).tooltip('show');
+        });
+      }
+
+      Session.set('showMediaNodesView', true);
+    } else {
+      Session.set('showNodeForm', true);
+
+      if(!elData.description) {
+        Meteor.defer(function() {
+          $("textarea[name='description']").tooltip({
+            'placement':'bottom',
+            'title':'Informasjonselement mangler'
+          }).tooltip('show');
+        });
+      }
+
+      if(!elData.title) {
+        Meteor.defer(function() {
+          $("input[name='title']").tooltip({
+            'placement':'top',
+            'title':'Navn på informasjonselement mangler og bør fylles ut for å kunne få fullt utbytte av nøkkelord- og kildevisningen.'
+          }).tooltip('show');
+        });
+      }
+    }
+
+    // Reset the form because of no update on tags field on data change.
+    AutoForm.resetForm("update-node-form");
+    Meteor.defer(function() {
+      $('.node-detail-view').scrollTop(0);
+    });
+  }
+}
+
 /**
  * Updates the positions in the DB to reflect the current position in the client.
  */
@@ -96,7 +150,11 @@ var insertNodeOfType = function(data, type, t) {
             updatePositions(t.parentNode);
 
             $('li.node span').removeClass('selected');
-            $("li.root li.node").find("[data-id='" + nodeId + "']");//.find("> span").addClass('selected');
+
+            var el  = $("li.root li.node[data-id='" + nodeId + "']").find("> span");
+
+            if(el && el.length)
+              el.addClass('selected');
 
             GV.tabs.setDummyTab(nodeId);
             Session.set('nodeInFocus', nodeId);
@@ -491,25 +549,34 @@ Template.Tree.events({
 
   // -- Hide/unhide node events ------------------------------------------------
 
-  'click .hide-node': function(event, tmpl) {
+  'click .hide-node, dblclick .hide-node': function(event, tmpl) {
     event.stopPropagation && event.stopPropagation();
 
     toggleVisibility(GV.collections.Nodes, this._id, false);
   },
 
-  'click .show-node': function(event, tmpl) {
+  'click .show-node, dblclick .show-node': function(event, tmpl) {
     event.stopPropagation && event.stopPropagation();
 
     toggleVisibility(GV.collections.Nodes, this._id, true);
+
+    Meteor.defer(function() {
+      $('li.node span').removeClass('selected');
+
+      var el  = $("li.root li.node[data-id='" + Session.get('nodeInFocus') + "']").find("> span");
+
+      if(el && el.length)
+        el.addClass('selected');
+    });
   },
 
-  'click .hide-root': function(event, tmpl) {
+  'click .hide-root, dblclick .hide-root': function(event, tmpl) {
     event.stopPropagation && event.stopPropagation();
 
     toggleVisibility(GV.collections.Documents, this.tree._id, false);
   },
 
-  'click .show-root': function(event, tmpl) {
+  'click .show-root, dblclick .show-root': function(event, tmpl) {
     event.stopPropagation && event.stopPropagation();
 
     toggleVisibility(GV.collections.Documents, this.tree._id, true);
@@ -530,16 +597,7 @@ Template.Tree.events({
 
     var elData = UI.getData(event.currentTarget);
 
-    if(elData && elData._id) {
-      GV.tabs.setDummyTab(elData._id);
-      Session.set('nodeInFocus', elData._id);
-      Router.current().subscribe('fileByNode', elData._id);
-      Session.set("file", null);
-      Session.set("uploadStopped", false);
-
-      // Reset the form because of no update on tags field on data change.
-      AutoForm.resetForm("update-node-form");
-    }
+    openNode(elData);
   },
 
   // Selects root node on regular mouse click
@@ -556,6 +614,8 @@ Template.Tree.events({
     Session.set('nodeInFocus', Session.get('mainDocument'));
     Session.set("uploadStopped", false);
     Session.set("file", null);
+    Session.set('showNodeForm', false);
+    Session.set('showMediaNodesView', true);
   },
 
   // Opens a tab if double click on a node

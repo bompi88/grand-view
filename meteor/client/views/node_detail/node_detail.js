@@ -76,6 +76,25 @@ Template.NodeDetail.helpers({
 });
 
 
+Template.MediaNodesTable.helpers({
+
+  getChildren: function() {
+    var children = GV.collections.Nodes.find({ parent: Session.get('nodeInFocus'), nodeType: "media" });
+    Template.instance().currentChildren = children.fetch();
+    return children;
+  }
+
+});
+
+Template.ViewMediaNode.helpers({
+
+  file: function() {
+    return GV.collections.Files.findOne({ _id: this.fileId });
+  }
+
+});
+
+
 // -- Template events ----------------------------------------------------------
 
 
@@ -98,13 +117,15 @@ Template.NodeDetail.events({
 
   'click .download': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
 
     var cp = require("child_process");
 
     var filename = this.copies.filesStore.key.replace(new RegExp(" ", 'g'), '\\ ');
 
     cp.exec("open ~/GrandView/files/" + filename, function(error, result) {
-      console.log(error);
+      if(error)
+        console.log(error);
     });
   },
 
@@ -145,7 +166,7 @@ Template.NodeDetail.events({
                         if(error)
                           Notifications.warn('Feil', error.message);
                         else {
-                          Notifications.success('Sletting fullført', 'Filen er nå fjernet og referansen oppdatert.');
+                          Notifications.success('Sletting fullført', 'Filen er nå fjernet og informasjonselementet oppdatert.');
                         }
                       });
                     }
@@ -206,7 +227,7 @@ Template.NodeDetail.events({
               // Set the main document in focus
               Session.set('nodeInFocus', Session.get('mainDocument'));
 
-              Notifications.success('Sletting fullført', 'Referansen ble slettet fra systemet.');
+              Notifications.success('Sletting fullført', 'Informasjonselementet ble slettet fra systemet.');
             }
           }
         }
@@ -234,7 +255,7 @@ Template.NodeDetail.events({
               // Set the main document in focus
               Session.set('nodeInFocus', Session.get('mainDocument'));
 
-              Notifications.success('Sletting fullført', 'Referansen ble slettet fra systemet.');
+              Notifications.success('Sletting fullført', 'Kapittelelementet ble slettet fra systemet.');
             }
           }
         }
@@ -280,10 +301,95 @@ Template.NodeDetail.events({
       GV.collections.Nodes.update({ _id: self._af.doc._id }, { $set: { fileId: fileId }});
       GV.collections.Documents.update({ _id: self._id }, { $addToSet: { fileIds: fileId }});
     });
+  },
+
+  'click .toggle-media-nodes-view': function(event, tmpl) {
+    var s = Session.get("showMediaNodesView");
+
+    Session.set("showMediaNodesView", !s);
+
+    if(!s) {
+      var container = $(".node-detail-view");
+
+      container.animate({
+          scrollTop: $(".toggle-media-nodes-view").offset().top - container.offset().top + container.scrollTop() - 25
+      }, 300);
+    }
+  },
+
+  'click .toggle-node-form': function(event, tmpl) {
+    var s = Session.get("showNodeForm");
+
+    Session.set("showNodeForm", !s);
+
+    if(!s) {
+      var container = $(".node-detail-view");
+
+      container.animate({
+          scrollTop: $(".toggle-node-form").offset().top - container.offset().top + container.scrollTop() - 25
+      }, 300);
+    }
   }
 
 });
 
+
+Template.MediaNodesTable.events({
+  'click .media-nodes-view .checkbox-master' : function(event, tmpl) {
+    event.stopPropagation && event.stopPropagation();
+    var checked = $(event.target).is(":checked");
+
+    if(checked) {
+      var docIds = _.pluck(Template.instance().currentChildren, "_id");
+      GV.selectedCtrl.addAll("mediaNodeView", docIds);
+
+      $(".media-nodes-view.nodes-table").find(".checkbox").prop('checked', true);
+    } else {
+      GV.selectedCtrl.reset(this.tableName);
+      $(".media-nodes-view.nodes-table").find(".checkbox").prop('checked', false);
+    }
+
+  },
+
+  'click .media-nodes-view .checkbox' : function(event, tmpl) {
+    event.stopPropagation && event.stopPropagation();
+    var checked = $(event.target).is(":checked");
+
+    if(checked)
+      GV.selectedCtrl.add("mediaNodeView", this._id);
+    else
+      GV.selectedCtrl.remove("mediaNodeView", this._id);
+
+  },
+
+  'click .row-item' : function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+
+    GV.tabs.addTab(this._id);
+    Session.set('nodeInFocus', this._id);
+    Session.set('showMediaNodesView', false);
+    Session.set('showNodeForm', true);
+  },
+
+  'click .add-media-node': function(event, tmpl) {
+    event.prevenDefault && event.prevenDefault();
+    event.stopPropagation && event.stopPropagation();
+
+    Session.set('showNodeForm', true);
+    Session.set('showMediaNodesView', false);
+    insertNodeOfType(this.doc, "media", tmpl);
+  }
+
+});
+
+
+Template.GeneralInfo.helpers({
+
+  getChildren: function() {
+    return GV.collections.Nodes.find({ parent: Session.get('nodeInFocus'), nodeType: "media" });
+  }
+
+});
 
 Template.GeneralInfo.events({
 
@@ -320,6 +426,20 @@ Template.GeneralInfo.events({
       }
     }
     bootbox.dialog(confirmationPrompt);
+  }
+
+});
+
+Template.ViewMediaNode.events({
+
+  'click .edit-media-node': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
+
+    GV.tabs.addTab(this._id);
+    Session.set('nodeInFocus', this._id);
+    Session.set('showMediaNodesView', false);
+    Session.set('showNodeForm', true);
   }
 
 });

@@ -23,3 +23,36 @@
 		display:none;
 	}
 }
+
+.block-hider {
+	padding: 10px 15px;
+
+	&:hover {
+		color: $blue-base;
+		background-color: darken(#fff, 10%);
+		cursor: pointer;
+	}
+}
+
+.node-list {
+	margin-left:0;
+	padding:0;
+}
+
+.node-list-item {
+	list-style-type: none;
+}
+
+hr {
+	border: 0;
+	margin: 10px 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+}
+
+.media-nodes-view {
+	.table tbody tr:hover td, .table tbody tr:hover th {
+		color: #555;
+	}
+}

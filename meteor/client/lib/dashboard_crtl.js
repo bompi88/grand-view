@@ -1,4 +1,4 @@
-GV.dashboardCtrl = {
+GV.selectedCtrl = {
   selectedItems: {},
   dep: new Tracker.Dependency(),
 

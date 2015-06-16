@@ -86,14 +86,7 @@ Template.Tag.events({
 
     var elData = UI.getData(event.currentTarget);
 
-    if(elData && elData._id) {
-      GV.tabs.setDummyTab(elData._id);
-      Session.set('nodeInFocus', elData._id);
-      Router.current().subscribe('fileByNode', elData._id);
-      Session.set("file", null);
-      Session.set("uploadStopped", false);
-      AutoForm.resetForm("update-node-form");
-    }
+    openNode(elData);
   }
 
 });

@@ -16,7 +16,7 @@ AutoForm.hooks({
     },
 
     onError: function(operation, error, template) {
-      Notifications.error('Feil', 'Referansen ble ikke lagret');
+      Notifications.error('Feil', 'Elementet ble ikke lagret');
       console.log(error);
     },
 
@@ -35,7 +35,7 @@ AutoForm.hooks({
         });
       });
 
-      Notifications.success('Suksess', 'Referansen ble oppdatert!');
+      Notifications.success('Suksess', 'Elementet ble oppdatert!');
     }
 
   }

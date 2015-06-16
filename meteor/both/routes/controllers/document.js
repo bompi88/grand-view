@@ -18,6 +18,12 @@ DocumentController = AuthRouteController.extend({
     Session.set("uploadStopped", false);
     Session.set("structureState", "tree");
     Session.set("showMediaNodes", false);
+
+    Meteor.defer(function() {
+      $('li.node span').removeClass('selected');
+      $("li.root > span").addClass('selected');
+    });
+
   }
 
 });
@@ -58,7 +64,7 @@ DocumentsController = AuthRouteController.extend({
   },
 
   onAfterAction: function() {
-    GV.dashboardCtrl.resetAll();
+    GV.selectedCtrl.resetAll();
   }
 
 });
@@ -76,7 +82,7 @@ TemplatesController = AuthRouteController.extend({
   },
 
   onAfterAction: function() {
-    GV.dashboardCtrl.resetAll();
+    GV.selectedCtrl.resetAll();
   }
 
 });
@@ -94,7 +100,7 @@ TrashController = AuthRouteController.extend({
   },
 
   onAfterAction: function() {
-    GV.dashboardCtrl.resetAll();
+    GV.selectedCtrl.resetAll();
   }
 
 });

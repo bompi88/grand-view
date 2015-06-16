@@ -116,12 +116,35 @@ Template.Tabs.events({
 		event.preventDefault && event.preventDefault();
 
 		Session.set('nodeInFocus', this._id.toString());
+
+    if(this.nodeType === "chapter") {
+      Session.set('showNodeForm', false);
+      Session.set('showMediaNodesView', true);
+    } else {
+      Session.set('showNodeForm', true);
+      Session.set('showMediaNodesView', false);
+    }
+
+    $('li.node span').removeClass('selected');
+
+    var el  = $("li.root li.node[data-id='" + this._id + "']").find("> span");
+
+    if(el && el.length)
+      el.addClass('selected');
+
 	},
 
 	'click .general-info': function(event, tmpl) {
 		event.preventDefault && event.preventDefault();
 
 		Session.set('nodeInFocus', Session.get('mainDocument'));
+
+    $('li.node span').removeClass('selected');
+
+    var el  = $("li.root > span");
+
+    if(el && el.length)
+      el.addClass('selected');
 	},
 
 	'click .delete-tab': function(event, tmpl) {

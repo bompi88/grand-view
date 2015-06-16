@@ -142,9 +142,9 @@ insertNodeOfType = function(data, type, t) {
                 updatePositions(t.parentNode);
 
               $('li.node span').removeClass('selected');
-              var el  = $("li.root li.node").find("[data-id='" + nodeId + "']").find("> span");
+              var el  = $("li.root li.node[data-id='" + nodeId + "']").find("> span");
 
-              if(el & el.length)
+              if(el && el.length)
                 el.addClass('selected');
 
               GV.tabs.setDummyTab(nodeId);
@@ -279,7 +279,7 @@ Template.NodeLevel.rendered = function() {
         if(elData && elData._id) {
           var confirmationPrompt = {
             title: "Bekreftelse på slettingen",
-            message: 'Er du sikker på at du vil slette referansen? NB: Vil slette alle underkategorier til referansen!',
+            message: 'Er du sikker på at du vil slette kapittelelementet? NB: Vil slette alle underkapitler of informasjonselementer til dette kapittelet!',
             buttons: {
               cancel: {
                 label: "Nei"
@@ -294,7 +294,7 @@ Template.NodeLevel.rendered = function() {
                     // Set the main document in focus
                     Session.set('nodeInFocus', Session.get('mainDocument'));
 
-                    Notifications.success('Sletting fullført', 'Referansen ble slettet fra systemet.');
+                    Notifications.success('Sletting fullført', 'Kapittelelementet ble slettet fra systemet.');
                   }
                 }
               }
@@ -327,7 +327,7 @@ $('.tree li.node.root li.node.media-node span').contextMenu('right-click-menu-me
         if(elData && elData._id) {
           var confirmationPrompt = {
             title: "Bekreftelse på slettingen",
-            message: 'Er du sikker på at du vil slette referansen? NB: Vil slette alle underkategorier til referansen!',
+            message: 'Er du sikker på at du vil slette informasjonselementet? NB: Dette vil også slette filen knyttet til dette informasjonselementet!',
             buttons: {
               cancel: {
                 label: "Nei"
@@ -342,7 +342,7 @@ $('.tree li.node.root li.node.media-node span').contextMenu('right-click-menu-me
                     // Set the main document in focus
                     Session.set('nodeInFocus', Session.get('mainDocument'));
 
-                    Notifications.success('Sletting fullført', 'Referansen ble slettet fra systemet.');
+                    Notifications.success('Sletting fullført', 'Informajonselementet ble slettet fra systemet.');
                   }
                 }
               }

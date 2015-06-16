@@ -65,7 +65,7 @@ The Tags view constructor template.
           {{#each getNodes}}
             <li class="node" style="margin-top:0;">
               <span draggable="false" class="element disable-select">
-                <span class="glyphicon glyphicon-file"></span> {{title}}
+                <span class="glyphicon glyphicon-file"></span> {{#if title}}{{title}}{{else}}Uten navn{{/if}}
               </span>
             </li>
           {{/each}}

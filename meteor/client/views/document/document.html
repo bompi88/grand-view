@@ -19,7 +19,7 @@ This template should render a view that contains a tree structure and a system
 for editing of nodes in the tree
 -->
 <template name="Document">
-  <div class="container default-container">
+  <div class="container default-container" style="overflow:hidden;height:100%;">
 
     {{!-- Header --}}
     <div class="row">
@@ -48,7 +48,7 @@ for editing of nodes in the tree
 
     <hr>
 
-    <div class="row">
+    <div class="row" style="overflow:hidden;height:100%;margin:0;">
 
       {{!-- The tree structure --}}
       <div class="col-xs-4 structure-container">
@@ -74,15 +74,22 @@ for editing of nodes in the tree
       </div>
 
       {{!-- The detail view of nodes --}}
-      <div class="col-xs-8">
-        {{> Tabs}}
-        {{#if focusOnMainDoc}}
-          {{> GeneralInfo}}
-        {{else}}
-          {{> NodeDetail}}
-        {{/if}}
+      <div class="col-xs-8" style="padding-right:0">
+        <div class="row">
+          <div class="col-xs-12">
+            {{> Tabs}}
+          </div>
+        </div>
+        <!-- <div class="row"> -->
+          <div class="col-xs-12 node-detail-view">
+            {{#if focusOnMainDoc}}
+              {{> GeneralInfo}}
+            {{else}}
+              {{> NodeDetail}}
+            {{/if}}
+          </div>
+        <!-- </div> -->
       </div>
-
     </div>
   </div>
 </template>

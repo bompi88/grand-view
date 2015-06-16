@@ -49,11 +49,17 @@ Template.Document.events({
   'click .add-media-node': function(event, tmpl) {
     event.prevenDefault && event.prevenDefault();
 
-    insertNodeOfType(this, "media", $(tmpl));
+    Session.set('showNodeForm', true);
+    Session.set('showMediaNodesView', false);
+
+    insertNodeOfType(this, "media", tmpl);
   },
 
   'click .add-chapter-node': function(event, tmpl) {
     event.prevenDefault && event.prevenDefault();
+
+    Session.set('showNodeForm', true);
+    Session.set('showMediaNodesView', true);
 
     insertNodeOfType(this, "chapter", tmpl);
   },

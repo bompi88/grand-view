@@ -128,15 +128,14 @@ Template.DocumentTable.events({
 
     if(checked) {
       var docIds = _.pluck(this.documents.fetch(), "_id");
-      GV.dashboardCtrl.addAll(this.tableName, docIds);
+      GV.selectedCtrl.addAll(this.tableName, docIds);
 
       $("#" + this.tableName).find(".checkbox").prop('checked', true);
     } else {
-      GV.dashboardCtrl.reset(this.tableName);
+      GV.selectedCtrl.reset(this.tableName);
       $("#" + this.tableName).find(".checkbox").prop('checked', false);
     }
 
-    console.log(GV.dashboardCtrl.getSelected(this.tableName));
   },
 
   'click .checkbox' : function(event, tmpl) {
@@ -145,11 +144,10 @@ Template.DocumentTable.events({
     var checked = $(event.target).is(":checked");
 
     if(checked)
-      GV.dashboardCtrl.add(this.tableName, this.document._id);
+      GV.selectedCtrl.add(this.tableName, this.document._id);
     else
-      GV.dashboardCtrl.remove(this.tableName, this.document._id);
+      GV.selectedCtrl.remove(this.tableName, this.document._id);
 
-    console.log(GV.dashboardCtrl.getSelected(this.tableName));
   },
 
 	'click .row-item' : function(event, tmpl) {
@@ -186,7 +184,7 @@ Template.DocumentTable.events({
           callback: function(result) {
             if(result) {
               softRemoveDocument(docId);
-              GV.dashboardCtrl.remove(tableName, docId);
+              GV.selectedCtrl.remove(tableName, docId);
             }
           }
         }
@@ -201,11 +199,11 @@ Template.DocumentTable.events({
 Template.DocumentActionsDropdown.helpers({
 
   isDisabledOnManyAndNone: function() {
-    return GV.dashboardCtrl.getSelected(this.tableName).length !== 1 ? "disabled" : "";
+    return GV.selectedCtrl.getSelected(this.tableName).length !== 1 ? "disabled" : "";
   },
 
   isDisabledOnNone: function() {
-    return GV.dashboardCtrl.getSelected(this.tableName).length == 0 ? "disabled" : "";
+    return GV.selectedCtrl.getSelected(this.tableName).length == 0 ? "disabled" : "";
   }
 
 });
@@ -225,9 +223,9 @@ Template.DocumentActionsDropdown.events({
     event.preventDefault && event.preventDefault();
 
     if(this.tableName === "documents") {
-      goToDoc(GV.dashboardCtrl.getSelected(this.tableName)[0]);
+      goToDoc(GV.selectedCtrl.getSelected(this.tableName)[0]);
     } else if(this.tableName === "templates") {
-      goToTemplate(GV.dashboardCtrl.getSelected(this.tableName)[0]);
+      goToTemplate(GV.selectedCtrl.getSelected(this.tableName)[0]);
     }
   },
 
@@ -245,9 +243,9 @@ Template.DocumentActionsDropdown.events({
     event.preventDefault && event.preventDefault();
 
     if(this.tableName === "documents") {
-      exportDocument(GV.dashboardCtrl.getSelected(this.tableName)[0]);
+      exportDocument(GV.selectedCtrl.getSelected(this.tableName)[0]);
     } else if(this.tableName === "templates") {
-      exportDocument(GV.dashboardCtrl.getSelected(this.tableName)[0], { template: true });
+      exportDocument(GV.selectedCtrl.getSelected(this.tableName)[0], { template: true });
     }
   },
 
@@ -274,13 +272,13 @@ Template.DocumentActionsDropdown.events({
           label: "Ja",
           callback: function(result) {
             if(result) {
-              var selected = GV.dashboardCtrl.getSelected(tableName);
+              var selected = GV.selectedCtrl.getSelected(tableName);
 
               selected.forEach(function(id) {
                 softRemoveDocument(id, true);
               });
 
-              GV.dashboardCtrl.removeAll(tableName, selected);
+              GV.selectedCtrl.removeAll(tableName, selected);
 
               $("#" + tableName).find(".checkbox-master").prop('checked', false);
 

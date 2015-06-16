@@ -26,7 +26,6 @@ GV.schemas.Documents = new SimpleSchema({
       return "Sammendrag";
     },
     optional: true,
-    max: 500,
     autoform: {
       placeholder: "schemaLabel"
     }
