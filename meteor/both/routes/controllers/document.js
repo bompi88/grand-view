@@ -1,3 +1,14 @@
+WorkAreaController = AuthRouteController.extend({
+
+  onAfterAction: function() {
+    var docId = Session.get('mainDocument');
+
+    if(docId) {
+      Router.go('Document', { _id: docId });
+    }
+  }
+});
+
 DocumentController = AuthRouteController.extend({
 
   subscriptions: function() {

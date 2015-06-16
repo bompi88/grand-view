@@ -27,6 +27,14 @@ Router.route('/templates', {
 });
 
 /**
+ * WorkArea
+ */
+Router.route('/workarea', {
+  name: 'WorkArea',
+  controller: 'WorkAreaController'
+});
+
+/**
  * Trash can
  */
 Router.route('/trash', {

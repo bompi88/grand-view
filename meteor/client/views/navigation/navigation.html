@@ -13,12 +13,12 @@
 ~ See the License for the specific language governing permissions and
 ~ limitations under the License.
 -->
+
 <!--
 This is the navbar located at the top.
 -->
-
 <template name="TopNavbar">
-	<div class="navbar navbar-default navbar-fixed-top animated fadeInDown" role="navigation" style="z-index:1000;">
+	<div class="navbar navbar-default navbar-fixed-top animated fadeInDown" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" aria-expanded="false" aria-controls="navbar">
@@ -27,21 +27,25 @@ This is the navbar located at the top.
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <!-- <a class="navbar-brand" rel="home" href="/" title="Til forside">
-          <img src="/images/logo.png" alt="Logoen til GrandView">
-        </a> -->
-        <a class="navbar-brand" rel="home" href="/" title="Til forside">GrandView</a>
+
+        <a class="navbar-brand" rel="home" href="/" title="Til forsiden">GrandView</a>
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           {{> NavBarButton route='Documents' name='Mine dokumenter'}}
           {{> NavBarButton route='Templates' name='Mine maler'}}
           {{> NavBarButton route='Trash' name='Papirkurv'}}
+
+          {{!-- Add a nav button for the work area --}}
+
           {{#if isActiveRoute 'Document'}}
-            {{> NavBarButton route='Document' name='Rediger dokument'}}
-          {{/if}}
-          {{#if isActiveRoute 'Template'}}
-            {{> NavBarButton route='Template' name='Rediger mal'}}
+            {{> NavBarButton route='Document' name='Arbeidsområde'}}
+          {{else}}
+            {{#if isActiveRoute 'Template'}}
+              {{> NavBarButton route='Template' name='Arbeidsområde'}}
+            {{else}}
+              {{> NavBarButton route='WorkArea' name='Arbeidsområde'}}
+            {{/if}}
           {{/if}}
         </ul>
       </div>
