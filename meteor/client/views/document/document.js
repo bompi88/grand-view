@@ -18,6 +18,37 @@
  * limitations under the License.
  */
 
+Template.Document.rendered = function() {
+  $('body').on('paste', function(event) {
+    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+
+    // if it is a file upload it, else do the regular paste routine decided by browser
+    if(items && items[1] && items[1].type && (items[1].type.split("/")[0] !== "text")) {
+      var mediaNodeInFocus = GV.collections.Nodes.findOne({ _id: { $in: [Session.get("editNode"), Session.get("nodeInFocus")] }, nodeType: "media" });
+
+      if(mediaNodeInFocus) {
+        var blob = items[1].getAsFile();
+        var file = new FS.File(blob);
+
+        GV.collections.Files.insert(file, function (err, fileObj) {
+          if(err) {
+            console.log(err);
+          }
+
+          fileObj.name("fil-" + moment().format('MM-DD-YYYY'));
+
+          Router.current().subscribe("fileById", fileObj._id);
+
+          GV.collections.Nodes.update({_id: mediaNodeInFocus._id }, { $set: { fileId: fileObj._id } });
+          Notifications.success("Fil limt inn", "Filen ble limt inn og lastet inn i programmet.");
+        });
+      } else {
+        Notifications.warn("Kunne ikke lime inn fil", "Man kan bare lime inn fil når man er i redigeringsmodus for et bestemt informasjonselement");
+      }
+    }
+  });
+};
+
 
 // -- Template event -----------------------------------------------------------
 
