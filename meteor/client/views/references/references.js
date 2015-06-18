@@ -1,3 +1,7 @@
+Template.References.rendered = function() {
+  GV.references.collapseAll(Template.instance().references);
+};
+
 Template.References.helpers({
   references: function() {
 

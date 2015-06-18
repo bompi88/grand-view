@@ -1,3 +1,7 @@
+Template.Tags.rendered = function() {
+  GV.tags.collapseAll(Template.instance().tags);
+};
+
 Template.Tags.helpers({
   tags: function() {
 
