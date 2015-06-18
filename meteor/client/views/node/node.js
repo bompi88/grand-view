@@ -149,6 +149,10 @@ Template.NodeLevel.helpers({
     }
   },
 
+  childrenCount: function() {
+    return GV.collections.Nodes.find({ parent: this._id, nodeType: "media" }).count();
+  },
+
   getContext: function(options) {
 
     var context = _.extend(this, {

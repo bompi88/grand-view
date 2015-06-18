@@ -237,6 +237,10 @@ Template.Tree.helpers({
     }
   },
 
+  childrenCount: function() {
+    return this.tree && GV.collections.Nodes.find({ parent: this.tree._id, nodeType: "media" }).count();
+  },
+
   /**
    * Returns the title if defined, else returns a dummy title.
    */
