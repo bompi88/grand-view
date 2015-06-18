@@ -11,7 +11,11 @@ var keywordText = { color: '000000', font_face: 'Arial', font_size: 12, italic: 
 
 var renderMediaNode = function(node, par, posLabel) {
 
-  par.addLineBreak();
+  if(node.title || (node.tags && node.tags.length) || (node.references && node.references.length) || node.fileId || node.description) {
+    par.addLineBreak();
+    par.addText("_______________________________________________________________");
+    par.addLineBreak();
+  }
 
   if(node.title) {
     par.addText(node.title || "", header3Text);
@@ -32,7 +36,6 @@ var renderMediaNode = function(node, par, posLabel) {
 
   if(node.fileId) {
     var file = GV.collections.Files.findOne({ _id: node.fileId });
-    console.log(file);
 
     if(file && (file.copies.filesStore.type.split("/")[0] === "image")) {
       par.addImage(process.env.HOME + "/GrandView/files/" + file.copies.filesStore.key);
@@ -43,14 +46,17 @@ var renderMediaNode = function(node, par, posLabel) {
     par.addLineBreak();
     par.addLineBreak();
   } else {
-    par.addLineBreak();
+    if(node.title || node.tags || node.references)
+      par.addLineBreak();
   }
 
   var paragraphs = node.description ? node.description.split("\n") : [];
 
   paragraphs.forEach(function(paragraph) {
-    par.addText(paragraph, descText);
-    par.addLineBreak();
+    if(paragraph.length) {
+      par.addText(paragraph, descText);
+      par.addLineBreak();
+    }
   });
 };
 
