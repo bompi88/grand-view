@@ -16,34 +16,34 @@ var renderMediaNode = function(node, par, posLabel) {
   if(node.title) {
     par.addText(node.title || "", header3Text);
     par.addLineBreak();
+  }
 
-    if(node.tags) {
-      par.addText("Nøkkelord:", keywordHeaderText);
-      par.addText(" " + node.tags.join(", "), keywordText);
-      par.addLineBreak();
+  if(node.tags) {
+    par.addText("Nøkkelord:", keywordHeaderText);
+    par.addText(" " + node.tags.join(", "), keywordText);
+    par.addLineBreak();
+  }
+
+  if(node.references) {
+    par.addText("Kilder:", keywordHeaderText);
+    par.addText(" " + node.references.join(", "), keywordText);
+    par.addLineBreak();
+  }
+
+  if(node.fileId) {
+    var file = GV.collections.Files.findOne({ _id: node.fileId });
+    console.log(file);
+
+    if(file && (file.copies.filesStore.type.split("/")[0] === "image")) {
+      par.addImage(process.env.HOME + "/GrandView/files/" + file.copies.filesStore.key);
+    } else if(file){
+      par.addText("Filbane:", keywordHeaderText);
+      par.addText(" \"" + process.env.HOME + "/GrandView/files/" + file.copies.filesStore.key + "\"", keywordText);
     }
-
-    if(node.references) {
-      par.addText("Kilder:", keywordHeaderText);
-      par.addText(" " + node.references.join(", "), keywordText);
-      par.addLineBreak();
-    }
-
-    if(node.fileId) {
-      var file = GV.collections.Files.findOne({ _id: node.fileId });
-      console.log(file);
-
-      if(file && (file.copies.filesStore.type.split("/")[0] === "image")) {
-        par.addImage(process.env.HOME + "/GrandView/files/" + file.copies.filesStore.key);
-      } else if(file){
-        par.addText("Filbane:", keywordHeaderText);
-        par.addText(" \"" + process.env.HOME + "/GrandView/files/" + file.copies.filesStore.key + "\"", keywordText);
-      }
-      par.addLineBreak();
-      par.addLineBreak();
-    } else {
-      par.addLineBreak();
-    }
+    par.addLineBreak();
+    par.addLineBreak();
+  } else {
+    par.addLineBreak();
   }
 
   var paragraphs = node.description ? node.description.split("\n") : [];
