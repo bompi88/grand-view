@@ -21,6 +21,44 @@
 Session.set("file", null);
 Session.set("uploadStopped", false);
 
+var uploadFile = function(currentFile, self) {
+
+  // remove file if it currently is a file in the session variable
+  if(Session.get("file")) {
+
+    var fileObj = GV.collections.Files.findOne({ _id: Session.get("file")});
+
+    FS.HTTP.uploadQueue.pause();
+
+    FS.HTTP.uploadQueue.cancel(fileObj);
+    GV.collections.Files.remove({ _id: Session.get('file')});
+  }
+
+  Session.set("uploadStopped", false);
+  // upload new file
+  var file = new FS.File(currentFile);
+
+  var meta = {
+    owner: GV.helpers.userId(),
+    docId: self._id,
+    nodeId: self._af.doc._id,
+    path: file.path
+  };
+
+  FS.Utility.extend(file, meta);
+
+  GV.collections.Files.insert(file, function (err, fileObj) {
+
+    var fileId = fileObj._id;
+
+    //Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
+    Session.set("file", fileId);
+    Router.current().subscribe('fileById', fileObj._id);
+    GV.collections.Nodes.update({ _id: self._af.doc._id }, { $set: { fileId: fileId }});
+    GV.collections.Documents.update({ _id: self._id }, { $addToSet: { fileIds: fileId }});
+  });
+};
+
 
 // -- Template helpers ---------------------------------------------------------
 
@@ -191,6 +229,11 @@ Template.NodeDetail.events({
     tmpl.find('input[type="file"]').click();
   },
 
+  // When dropping a file into upload area
+  'drop .dropzone': function(event, tmpl) {
+    uploadFile(event.originalEvent.dataTransfer.files[0], this);
+  },
+
   /**
    * Reset the form on click on cancel button
    */
@@ -274,42 +317,7 @@ Template.NodeDetail.events({
   },
 
   'change .file-upload': function(event, tmpl, args) {
-    var self = this;
-
-    // remove file if it currently is a file in the session variable
-    if(Session.get("file")) {
-
-      var fileObj = GV.collections.Files.findOne({ _id: Session.get("file")});
-
-      FS.HTTP.uploadQueue.pause();
-
-      FS.HTTP.uploadQueue.cancel(fileObj);
-      GV.collections.Files.remove({ _id: Session.get('file')});
-    }
-
-    Session.set("uploadStopped", false);
-    // upload new file
-    var file = new FS.File(event.target.files[0]);
-
-    var meta = {
-      owner: GV.helpers.userId(),
-      docId: this._id,
-      nodeId: this._af.doc._id,
-      path: file.path
-    };
-
-    FS.Utility.extend(file, meta);
-
-    GV.collections.Files.insert(file, function (err, fileObj) {
-
-      var fileId = fileObj._id;
-
-      //Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
-      Session.set("file", fileId);
-      Router.current().subscribe('fileById', fileObj._id);
-      GV.collections.Nodes.update({ _id: self._af.doc._id }, { $set: { fileId: fileId }});
-      GV.collections.Documents.update({ _id: self._id }, { $addToSet: { fileIds: fileId }});
-    });
+    uploadFile(event.target.files[0], this);
   },
 
   'click .toggle-media-nodes-view': function(event, tmpl) {
