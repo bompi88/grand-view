@@ -29,6 +29,8 @@
 */
 deleteNode = function(prevNode, template) {
 
+  console.log(template)
+
   if(typeof prevNode === "string")
     prevNode = GV.collections.Nodes.findOne({ _id: prevNode });
 
@@ -243,7 +245,7 @@ Template.NodeLevel.rendered = function() {
                 callback: function(result) {
                   if(result) {
 
-                    deleteNode(elData, t.parentNode.parentNode.parentNode);
+                    deleteNode(elData, t.parentNode.parentNode.parentNode.parentNode);
 
                     // Set the main document in focus
                     Session.set('nodeInFocus', Session.get('mainDocument'));
@@ -293,7 +295,7 @@ $('.tree li.node.root li.node.media-node span').contextMenu('right-click-menu-me
                 callback: function(result) {
                   if(result) {
 
-                    deleteNode(elData, t.parentNode.parentNode.parentNode);
+                    deleteNode(elData, t.parentNode.parentNode.parentNode.parentNode);
 
                     // Set the main document in focus
                     Session.set('nodeInFocus', Session.get('mainDocument'));
