@@ -342,6 +342,38 @@ Template.NodeDetail.events({
 
 });
 
+Template.GeneralInfo.events({
+
+  'click .toggle-media-nodes-view': function(event, tmpl) {
+    var s = Session.get("showMediaNodesView");
+
+    Session.set("showMediaNodesView", !s);
+
+    if(!s) {
+      var container = $(".node-detail-view");
+
+      container.animate({
+          scrollTop: $(".toggle-media-nodes-view").offset().top - container.offset().top + container.scrollTop() - 25
+      }, 300);
+    }
+  },
+
+  'click .toggle-node-form': function(event, tmpl) {
+    var s = Session.get("showNodeForm");
+
+    Session.set("showNodeForm", !s);
+
+    if(!s) {
+      var container = $(".node-detail-view");
+
+      container.animate({
+          scrollTop: $(".toggle-node-form").offset().top - container.offset().top + container.scrollTop() - 25
+      }, 300);
+    }
+  }
+
+});
+
 
 Template.MediaNodesTable.events({
   'click .media-nodes-view .checkbox-master' : function(event, tmpl) {
