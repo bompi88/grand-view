@@ -38,6 +38,8 @@ Template.Tags.events({
   'click .help-modal-button': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
 
+    $("div.tooltip").hide();
+
     var helpBox = {
       title: "<span class='glyphicon glyphicon-question-sign'></span> Hjelp til nøkkelordvisningen",
       message: UI.toHTML(Template.TagsHelp),

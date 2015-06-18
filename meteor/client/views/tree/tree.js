@@ -145,7 +145,7 @@ insertNodeOfType = function(data, type, t) {
           }
         });
 
-        if(Session.get('mainDocument') !== data._id.toString() && Session.get('showMediaNodes'))
+        if(type === "chapter" || Session.get('mainDocument') !== data._id.toString() && (type === "media" && Session.get("showMediaNodes")))
           GV.collections.Nodes.update({ _id: data._id }, { $set: { collapsed: false } });
 
         // Subscribe on the newly created node
@@ -328,6 +328,8 @@ Template.Tree.events({
   'click .help-modal-button': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
 
+    $("div.tooltip").hide();
+
     var helpBox = {
       title: "<span class='glyphicon glyphicon-question-sign'></span> Hjelp til kapittelstrukturvisningen",
       message: UI.toHTML(Template.TreeHelp),
@@ -362,6 +364,8 @@ Template.Tree.events({
 
   'click .generate-pdf': function(event, tmpl) {
     event.prevenDefault && event.prevenDefault();
+
+    generateDOCX(this.tree._id);
 
     // TODO: do some magic here
   },

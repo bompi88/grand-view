@@ -38,6 +38,8 @@ Template.References.events({
   'click .help-modal-button': function(event, tmpl) {
     event.preventDefault && event.preventDefault();
 
+    $("div.tooltip").hide();
+
     var helpBox = {
       title: "<span class='glyphicon glyphicon-question-sign'></span> Hjelp til kildevisningen",
       message: UI.toHTML(Template.ReferencesHelp),

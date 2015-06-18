@@ -99,6 +99,9 @@ function importThemStuff(doc, nodes, fileDocs, targetPath, srcPath) {
 };
 
 function askWrite(yes, no) {
+
+  $("div.tooltip").hide();
+
   // A confirmation prompt before removing the document
   var confirmationPrompt = {
     title: "Overskriving av dokument",

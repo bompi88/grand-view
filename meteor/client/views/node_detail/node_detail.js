@@ -131,6 +131,9 @@ Template.NodeDetail.events({
 
   'click .delete-file': function(event, tmpl) {
     var self = this;
+
+    $("div.tooltip").hide();
+
     // A confirmation prompt before removing the document
     var confirmationPrompt = {
       title: "Bekreftelse på sletting av fil",
@@ -209,6 +212,9 @@ Template.NodeDetail.events({
   },
 
   'click .delete-media-node': function(event, tmpl) {
+
+    $("div.tooltip").hide();
+
     // A confirmation prompt before removing the document
     var confirmationPrompt = {
       title: "Bekreftelse på sletting av informasjonselement",
@@ -237,6 +243,9 @@ Template.NodeDetail.events({
   },
 
   'click .delete-chapter-node': function(event, tmpl) {
+
+    $("div.tooltip").hide();
+
     // A confirmation prompt before removing the document
     var confirmationPrompt = {
       title: "Bekreftelse på sletting av kapittelelement",
@@ -395,6 +404,9 @@ Template.GeneralInfo.events({
 
 'click .delete-document': function(event, tmpl) {
   var self = this;
+
+  $("div.tooltip").hide();
+
     // A confirmation prompt before removing the document
     var confirmationPrompt = {
       title: "Bekreftelse på sletting av dokument",

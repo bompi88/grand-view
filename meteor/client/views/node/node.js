@@ -214,19 +214,21 @@ Template.NodeLevel.rendered = function() {
       'add-chapter-node': function(t) {
         var elData = UI.getData(t);
 
-        insertNodeOfType(elData, "chapter", t);
+        insertNodeOfType(elData, "chapter", t.parentNode);
       },
 
       // Add node button
       'add-media-node': function(t) {
         var elData = UI.getData(t);
 
-        insertNodeOfType(elData, "media", t);
+        insertNodeOfType(elData, "media", t.parentNode);
       },
 
       // Delete button
       'delete-node': function(t) {
         var elData = UI.getData(t);
+
+        $("div.tooltip").hide();
 
         if(elData && elData._id) {
           var confirmationPrompt = {
@@ -275,6 +277,8 @@ $('.tree li.node.root li.node.media-node span').contextMenu('right-click-menu-me
       // Delete button
       'delete-node': function(t) {
         var elData = UI.getData(t);
+
+        $("div.tooltip").hide();
 
         if(elData && elData._id) {
           var confirmationPrompt = {

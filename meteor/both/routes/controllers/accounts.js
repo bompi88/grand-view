@@ -1,10 +1,13 @@
 AccountsController = RouteController.extend({
-  
+
   /**
    * Creates a modal for resetting the password, and redirects based on the result
    */
   resetThePassword: function () {
     var token = this.params.token;
+
+    $("div.tooltip").hide();
+
     var passwordPrompt = {
       title: "Nytt passord",
       message: '<input name="password" id="passwordID" class="form-control" type="password" placeholder="Passord" required>',

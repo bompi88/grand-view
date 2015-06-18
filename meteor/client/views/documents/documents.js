@@ -19,7 +19,7 @@
  */
 
 // var createNewDoc = function() {
-
+// $("div.tooltip").hide();
 //   // A confirmation prompt before removing the document
 //   var confirmationPrompt = {
 //     title: "Vennligst velg en tittel for dokumentet",
@@ -56,6 +56,8 @@
 // }
 
 var createNewTemplate = function() {
+
+  $("div.tooltip").hide();
 
   // A confirmation prompt before removing the document
   var confirmationPrompt = {
@@ -171,6 +173,8 @@ Template.DocumentTable.events({
     var docId = this.document._id;
     var tableName = this.tableName;
 
+    $("div.tooltip").hide();
+
     // A confirmation prompt before removing the document
     var confirmationPrompt = {
       title: "Bekreftelse på slettingen",
@@ -259,6 +263,8 @@ Template.DocumentActionsDropdown.events({
     } else if(tableName === "templates") {
       msg = 'Er du sikker på at du vil legge de valgte malene i papirkurven?';
     }
+
+    $("div.tooltip").hide();
 
     // A confirmation prompt before removing the document
     var confirmationPrompt = {

@@ -37,6 +37,7 @@ html, body {
 ul.notifications {
 	position: fixed;
 	width:400px;
+	z-index:1045;
 }
 
 .alert.alert-success.status-bar {
@@ -58,6 +59,24 @@ ul.notifications {
 .default-container {
 	padding-top: 60px;
 }
+
+.modal {
+  text-align: center;
+}
+
+.modal:before {
+  display: inline-block;
+  vertical-align: middle;
+  content: " ";
+  height: 100%;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
 @import "client/views/index/accounts/userForms.scss";
 @import "client/views/document/document.scss";
 @import "client/views/documents/documents.scss";
