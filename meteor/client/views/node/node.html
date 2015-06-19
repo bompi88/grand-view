@@ -36,7 +36,9 @@ A node in the tree, that recursively renders its children.
           {{else}}
             Uten navn
           {{/if}}
-          ({{childrenCount}})
+          {{#if $eq nodeType "chapter"}}
+            ({{childrenCount}})
+          {{/if}}
         </span>
         {{#if hasChildren}}
           {{#if isCollapsed}}
