@@ -192,6 +192,7 @@ Edit top level information about a document. This is basically the root node.
   <tr class="table-row">
     <td class="row-item" style="width:20px;"><input type="checkbox" class="checkbox" aria-label="..."></td>
     <td class="row-item">
+      {{#if title}}<b>{{title}}</b><br>{{/if}}
       {{#if description}}{{{convertLineBreaks description}}}{{else}}-{{/if}}
       <hr>
       <ul class="node-list">
