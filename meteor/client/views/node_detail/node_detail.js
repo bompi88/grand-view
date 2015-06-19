@@ -442,9 +442,7 @@ Template.MediaNodesTable.events({
     event.prevenDefault && event.prevenDefault();
     event.stopPropagation && event.stopPropagation();
 
-    Session.set('showNodeForm', true);
-    Session.set('showMediaNodesView', false);
-    insertNodeOfType(this.doc, "media", tmpl);
+    insertNodeOfType(this.doc, "media", null, true);
   }
 
 });

@@ -171,11 +171,11 @@ Edit top level information about a document. This is basically the root node.
           <th></th>
           <th>
             <div class="dropup">
-              <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="media-nodew-dropdown" data-toggle="dropdown" aria-expanded="true">
+              <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="media-node-dropdown" data-toggle="dropdown" aria-expanded="true">
                 Handling
                 <span class="caret"></span>
               </button>
-              <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="media-nodew-dropdown">
+              <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="media-node-dropdown">
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-move"></span> Flytt markerte</a></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="#"><span class="glyphicon glyphicon-remove"></span> Slett markerte</a></li>
               </ul>
@@ -199,7 +199,7 @@ Edit top level information about a document. This is basically the root node.
 </template>
 
 <template name="ViewMediaNode">
-  <tr class="table-row">
+  <tr class="table-row" data-id="{{_id}}">
     <td class="row-item" style="width:20px;"><input type="checkbox" class="checkbox" aria-label="..."></td>
     <td class="row-item">
       {{#if isEditing}}

@@ -116,7 +116,7 @@ updatePositions = function(node) {
   });
 };
 
-insertNodeOfType = function(data, type, t) {
+insertNodeOfType = function(data, type, t, noRedirect) {
 
   if(data.tree)
     data = data.tree;
@@ -161,8 +161,20 @@ insertNodeOfType = function(data, type, t) {
               if(el && el.length)
                 el.addClass('selected');
 
-              GV.tabs.setDummyTab(nodeId);
-              Session.set('nodeInFocus', nodeId);
+              if(!noRedirect) {
+                GV.tabs.setDummyTab(nodeId);
+                Session.set('nodeInFocus', nodeId);
+              } else {
+                Session.set("inlineEditNode", nodeId);
+
+                Meteor.defer(function() {
+                  var container = $(".node-detail-view");
+
+                  container.animate({
+                      scrollTop: $('.table-row[data-id="' + nodeId + '"]').offset().top - container.offset().top + container.scrollTop() - 25
+                  }, 300);
+                });
+              }
             });
           },
           onError: function () { console.log("onError", arguments); }
