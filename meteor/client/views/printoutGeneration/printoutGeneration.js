@@ -56,6 +56,7 @@ var renderMediaNode = function(node, par, posLabel) {
     if(paragraph.length) {
       par.addText(paragraph, descText);
       par.addLineBreak();
+      par.addLineBreak();
     }
   });
 };
