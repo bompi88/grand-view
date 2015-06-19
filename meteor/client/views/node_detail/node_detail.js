@@ -413,11 +413,6 @@ Template.MediaNodesTable.events({
 
   'click .row-item' : function(event, tmpl) {
     event.preventDefault && event.preventDefault();
-
-    GV.tabs.addTab(this._id);
-    Session.set('nodeInFocus', this._id);
-    Session.set('showMediaNodesView', false);
-    Session.set('showNodeForm', true);
   },
 
   'click .add-media-node': function(event, tmpl) {
@@ -494,4 +489,36 @@ Template.ViewMediaNode.events({
     Session.set('showNodeForm', true);
   }
 
+});
+
+Template.ViewMediaNode.helpers({
+  hasShowMore: function() {
+    return this.description && (this.description.split("\n").length > 1);
+  },
+
+  showMore: function() {
+    return !!GV.showMoreCtrl.get(this._id);
+  },
+
+  shortDescription: function() {
+    return this.description && this.description.split("\n")[0];
+  }
+});
+
+
+Template.ShowMoreOrLess.events({
+
+  'click .toggle-visibility': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+
+    GV.showMoreCtrl.get(this.node._id) ? GV.showMoreCtrl.hide(this.node._id) : GV.showMoreCtrl.show(this.node._id);
+  }
+
+});
+
+
+Template.ShowMoreOrLess.helpers({
+  hasShowMore: function() {
+    return !GV.showMoreCtrl.get(this.node._id);
+  }
 });

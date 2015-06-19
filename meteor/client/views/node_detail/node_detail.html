@@ -193,8 +193,19 @@ Edit top level information about a document. This is basically the root node.
     <td class="row-item" style="width:20px;"><input type="checkbox" class="checkbox" aria-label="..."></td>
     <td class="row-item">
       {{#if title}}<b>{{title}}</b><br>{{/if}}
-      {{#if description}}{{{convertLineBreaks description}}}{{else}}-{{/if}}
-      <hr>
+      {{#if description}}
+        {{#if showMore}}
+          {{{convertLineBreaks description}}}
+        {{else}}
+          {{shortDescription}}
+        {{/if}}
+      {{else}}-{{/if}}
+
+      {{#if hasShowMore}}
+        {{> ShowMoreOrLess node=this}}
+      {{else}}
+        {{> HorizontalLine}}
+      {{/if}}
       <ul class="node-list">
         <li class="node-list-item"><b>Kilder:</b> {{commaSeparated references}}</li>
         <li class="node-list-item"><b>Nøkkelord:</b> {{commaSeparated tags}}</li>
@@ -208,4 +219,25 @@ Edit top level information about a document. This is basically the root node.
 </template>
 
 <template name="ViewChapterNode">
+</template>
+
+<template name="HorizontalLine">
+  <div class="row">
+    <div class="col-xs-12" style="margin: 30px 0 20px 0;">
+      <div class="divider-with-text">
+      </div>
+    </div>
+  </div>
+</template>
+
+<template name="ShowMoreOrLess">
+  <div class="row">
+    <div class="col-xs-12" style="margin: 30px 0 20px 0;">
+      <div class="divider-with-text">
+        <span class="divider-text divider-text-normal">
+        <a href="#" class="toggle-visibility">{{#if hasShowMore}}Vis mer{{else}}Skjul{{/if}}</a>
+        </span>
+      </div>
+    </div>
+  </div>
 </template>
