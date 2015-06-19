@@ -34,7 +34,7 @@ AutoForm.hooks({
           }
         });
       });
-
+      Session.set("inlineEditNode", null);
       Notifications.success('Suksess', 'Elementet ble oppdatert!');
     }
 

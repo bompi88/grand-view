@@ -27,69 +27,7 @@ Edit information about a reference.
         <div class="panel-body">
           <p><em>Her kan man redigere verdiene for det valgte {{#if $eq node.nodeType "chapter"}}kapittelelementet{{else}}informasjonselementet{{/if}}. Det valgte elementet er markert i kapittelstrukturen.</em></p>
 
-          {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
-            {{#if $eq node.nodeType "chapter"}}
-              {{> afQuickField name="title" placeholder="Kapittelnavn" label="Kapittelnavn"}}
-              {{> afQuickField name="description" rows="6" placeholder="Beskrivelse" label="Beskrivelse"}}
-            {{else}}
-              {{> afQuickField name="title" }}
-              {{> afQuickField name="description" rows="6" }}
-              {{> afQuickField name="tags" options=getTagsOptions}}
-              {{> afQuickField name="references" options=getReferencesOptions}}
-
-              <div class="row" style="margin-bottom:20px;">
-                <div class="col-xs-12">
-                  <div class="row" style="margin-bottom:20px;">
-                    <div class="col-xs-12">
-                      {{!-- Upload process status --}}
-                      {{#with file}}
-                          {{#if this.isUploaded}}
-                            <b><a href="#" class="download">{{this.name}}</a></b> er nå lagt som vedlegg til informasjonselementet.
-                            <button type="button" class="btn btn-danger btn-xs delete-file">Slett</button>
-                          {{else}}
-
-                            Laster opp <b>{{this.name}}</b>...
-
-                            {{> FS.UploadProgressBar bootstrap=true class='progress-bar-success progress-bar-striped active' showPercent=true}}
-
-                            {{#unless uploadStopped}}
-                              <button type="button" class="btn btn-info pull-right stop-upload">Stopp opplastning</button>
-                            {{else}}
-                              <button type="button" class="btn btn-info pull-right resume-upload">Fortsett opplastning</button>
-                            {{/unless}}
-                          {{/if}}
-                      {{/with}}
-                    </div>
-                  </div>
-                  {{!-- Upload field --}}
-                  {{#unless file}}
-                    <div class="upload-field dropzone">
-                      <span><span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Klikk her eller slipp fil her</span>
-                      <input class="file-upload pull-left" type="file">
-                    </div>
-                  {{else}}
-                    {{#if uploadStopped}}
-                    <div class="upload-field">
-                      <span>Klikk for å bytte fil</span>
-                      <input class="file-upload pull-left" type="file">
-                    </div>
-                    {{/if}}
-                  {{/unless}}
-
-                </div>
-              </div>
-            {{/if}}
-
-            <div class="form-group">
-              {{#if $eq node.nodeType "chapter"}}
-                <button type="button" class="btn btn-danger pull-left delete-chapter-node"><span class="glyphicon glyphicon-remove"></span> Slett kapittelelement</button>
-              {{else}}
-                <button type="button" class="btn btn-danger pull-left delete-media-node"><span class="glyphicon glyphicon-remove"></span> Slett informasjonselement</button>
-              {{/if}}
-              <button type="submit" class="btn btn-primary pull-right {{#if file}}{{#unless uploadStopped}}{{#unless file.isUploaded}}disabled{{/unless}}{{/unless}}{{/if}}">Lagre</button>
-              <button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Nullstill</button>
-            </div>
-          {{/autoForm}}
+          {{> UpdateNodeForm node=node}}
         </div>
       </div>
     {{else}}
@@ -105,6 +43,78 @@ Edit information about a reference.
   {{/if}}
 
 </template>
+
+<template name="UpdateNodeForm">
+  {{#if showEditWarning}}
+    <div class="alert alert-info" role="alert"><b>NB!</b> Du er nå i redigeringsmodus og kan enten lagre eller gå ut av modusen ved bruk av knappene til høyre.</div>
+  {{/if}}
+  {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
+    {{#if $eq node.nodeType "chapter"}}
+      {{> afQuickField name="title" placeholder="Kapittelnavn" label="Kapittelnavn"}}
+      {{> afQuickField name="description" rows="6" placeholder="Beskrivelse" label="Beskrivelse"}}
+    {{else}}
+      {{> afQuickField name="title" }}
+      {{> afQuickField name="description" rows="6" }}
+      {{> afQuickField name="tags" options=getTagsOptions}}
+      {{> afQuickField name="references" options=getReferencesOptions}}
+
+      <div class="row" style="margin-bottom:20px;">
+        <div class="col-xs-12">
+          <div class="row" style="margin-bottom:20px;">
+            <div class="col-xs-12">
+              {{!-- Upload process status --}}
+              {{#with file}}
+                  {{#if this.isUploaded}}
+                    <b><a href="#" class="download">{{this.name}}</a></b> er nå lagt som vedlegg til informasjonselementet.
+                    <button type="button" class="btn btn-danger btn-xs delete-file">Slett</button>
+                  {{else}}
+
+                    Laster opp <b>{{this.name}}</b>...
+
+                    {{> FS.UploadProgressBar bootstrap=true class='progress-bar-success progress-bar-striped active' showPercent=true}}
+
+                    {{#unless uploadStopped}}
+                      <button type="button" class="btn btn-info pull-right stop-upload">Stopp opplastning</button>
+                    {{else}}
+                      <button type="button" class="btn btn-info pull-right resume-upload">Fortsett opplastning</button>
+                    {{/unless}}
+                  {{/if}}
+              {{/with}}
+            </div>
+          </div>
+          {{!-- Upload field --}}
+          {{#unless file}}
+            <div class="upload-field dropzone">
+              <span><span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Klikk her eller slipp fil her</span>
+              <input class="file-upload pull-left" type="file">
+            </div>
+          {{else}}
+            {{#if uploadStopped}}
+            <div class="upload-field">
+              <span>Klikk for å bytte fil</span>
+              <input class="file-upload pull-left" type="file">
+            </div>
+            {{/if}}
+          {{/unless}}
+
+        </div>
+      </div>
+    {{/if}}
+
+    {{#unless hideButtons}}
+      <div class="form-group">
+        {{#if $eq node.nodeType "chapter"}}
+          <button type="button" class="btn btn-danger pull-left delete-chapter-node"><span class="glyphicon glyphicon-remove"></span> Slett kapittelelement</button>
+        {{else}}
+          <button type="button" class="btn btn-danger pull-left delete-media-node"><span class="glyphicon glyphicon-remove"></span> Slett informasjonselement</button>
+        {{/if}}
+        <button type="submit" class="btn btn-primary pull-right {{#if file}}{{#unless uploadStopped}}{{#unless file.isUploaded}}disabled{{/unless}}{{/unless}}{{/if}}">Lagre</button>
+        <button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Nullstill</button>
+      </div>
+    {{/unless}}
+  {{/autoForm}}
+</template>
+
 
 <!--
 Edit top level information about a document. This is basically the root node.
@@ -192,29 +202,40 @@ Edit top level information about a document. This is basically the root node.
   <tr class="table-row">
     <td class="row-item" style="width:20px;"><input type="checkbox" class="checkbox" aria-label="..."></td>
     <td class="row-item">
-      {{#if title}}<b>{{title}}</b><br>{{/if}}
-      {{#if description}}
-        {{#if showMore}}
-          {{{convertLineBreaks description}}}
-        {{else}}
-          {{shortDescription}}
-        {{/if}}
-      {{else}}-{{/if}}
-
-      {{#if hasShowMore}}
-        {{> ShowMoreOrLess node=this}}
+      {{#if isEditing}}
+       {{> UpdateNodeForm node=this hideButtons=true showEditWarning=true}}
       {{else}}
-        {{> HorizontalLine}}
+        {{#if title}}<b>{{title}}</b><br>{{/if}}
+        {{#if description}}
+          {{#if showMore}}
+            {{{convertLineBreaks description}}}
+          {{else}}
+            {{shortDescription}}
+          {{/if}}
+        {{else}}-{{/if}}
+
+        {{#if hasShowMore}}
+          {{> ShowMoreOrLess node=this}}
+        {{else}}
+          {{> HorizontalLine}}
+        {{/if}}
+        <ul class="node-list">
+          <li class="node-list-item"><b>Kilder:</b> {{commaSeparated references}}</li>
+          <li class="node-list-item"><b>Nøkkelord:</b> {{commaSeparated tags}}</li>
+          {{#with file}}
+            <li class="node-list-item"><b>Fil:</b> <a href="#" class="download">{{this.name}}</a></li>
+          {{/with}}
+        </ul>
       {{/if}}
-      <ul class="node-list">
-        <li class="node-list-item"><b>Kilder:</b> {{commaSeparated references}}</li>
-        <li class="node-list-item"><b>Nøkkelord:</b> {{commaSeparated tags}}</li>
-        {{#with file}}
-          <li class="node-list-item"><b>Fil:</b> <a href="#" class="download">{{this.name}}</a></li>
-        {{/with}}
-      </ul>
     </td>
-    <td class="row-item text-right" style="width:60px;"><button type="button" class="btn btn-success btn-xs edit-media-node"><span class="glyphicon glyphicon-edit"></span> Rediger</button></td>
+    <td class="row-item text-right" style="width:60px;">
+      {{#if isEditing}}
+        <button type="button" class="btn btn-default btn-xs dismiss-edit-media-node" style="display: block; width: 100%;">Avbryt</button>
+        <button type="button" class="btn btn-primary btn-xs save-media-node" style="display: block; width: 100%;">Lagre</button>
+      {{else}}
+        <button type="button" class="btn btn-success btn-xs edit-media-node" style="display: block; width: 100%;"><span class="glyphicon glyphicon-edit"></span> Rediger</button>
+      {{/if}}
+    </td>
   </tr>
 </template>
 

@@ -64,10 +64,12 @@ var uploadFile = function(currentFile, self) {
 
 
 Template.NodeDetail.helpers({
-
   node: function() {
     return GV.collections.Nodes.findOne({_id: Session.get('nodeInFocus')});
   },
+});
+
+Template.UpdateNodeForm.helpers({
 
   file: function() {
     return GV.collections.Files.findOne({ _id: Session.get("file") || this._af.doc && this._af.doc.fileId || null });
@@ -136,7 +138,7 @@ Template.ViewMediaNode.helpers({
 // -- Template events ----------------------------------------------------------
 
 
-Template.NodeDetail.events({
+Template.UpdateNodeForm.events({
 
   /**
    * Reset the form on click on cancel button
@@ -226,7 +228,9 @@ Template.NodeDetail.events({
    * Reset the form on click on cancel button
    */
   'click .upload-field': function(event, tmpl) {
-    tmpl.find('input[type="file"]').click();
+    event.stopPropagation && event.stopPropagation();
+
+    tmpl.find('input.file-upload[type="file"]').click();
   },
 
   // When dropping a file into upload area
@@ -238,6 +242,9 @@ Template.NodeDetail.events({
    * Reset the form on click on cancel button
    */
   'click .stop-upload': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
+
     var fileObj = GV.collections.Files.findOne({ _id: Session.get("file")});
 
     FS.HTTP.uploadQueue.pause();
@@ -248,6 +255,9 @@ Template.NodeDetail.events({
    * Reset the form on click on cancel button
    */
   'click .resume-upload': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
+
     var fileObj = GV.collections.Files.findOne({ _id: Session.get("file")});
 
     FS.HTTP.uploadQueue.resume();
@@ -255,6 +265,8 @@ Template.NodeDetail.events({
   },
 
   'click .delete-media-node': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
 
     $("div.tooltip").hide();
 
@@ -286,6 +298,8 @@ Template.NodeDetail.events({
   },
 
   'click .delete-chapter-node': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
 
     $("div.tooltip").hide();
 
@@ -317,10 +331,16 @@ Template.NodeDetail.events({
   },
 
   'change .file-upload': function(event, tmpl, args) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
+
     uploadFile(event.target.files[0], this);
   },
 
   'click .toggle-media-nodes-view': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
+
     var s = Session.get("showMediaNodesView");
 
     Session.set("showMediaNodesView", !s);
@@ -335,6 +355,9 @@ Template.NodeDetail.events({
   },
 
   'click .toggle-node-form': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
+
     var s = Session.get("showNodeForm");
 
     Session.set("showNodeForm", !s);
@@ -483,10 +506,21 @@ Template.ViewMediaNode.events({
     event.preventDefault && event.preventDefault();
     event.stopPropagation && event.stopPropagation();
 
-    GV.tabs.addTab(this._id);
-    Session.set('nodeInFocus', this._id);
-    Session.set('showMediaNodesView', false);
-    Session.set('showNodeForm', true);
+    Session.set("inlineEditNode", this._id);
+  },
+
+  'click .dismiss-edit-media-node': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
+
+    Session.set("inlineEditNode", null);
+  },
+
+  'click .save-media-node': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
+
+    $("#update-node-form").trigger('submit');
   }
 
 });
@@ -502,6 +536,10 @@ Template.ViewMediaNode.helpers({
 
   shortDescription: function() {
     return this.description && this.description.split("\n")[0];
+  },
+
+  isEditing: function() {
+    return Session.get("inlineEditNode") === this._id;
   }
 });
 
