@@ -155,6 +155,10 @@ Template.Tabs.events({
     // This should be changed to be the nearest tab.
 		Session.set('nodeInFocus', Session.get('mainDocument'));
 		GV.tabs.removeTab(this._id);
+
+    $('li.node span').removeClass('selected');
+
+    $("li.node.root > span.element.root").addClass('selected');
 	},
 
 	'click .scroller-right': function() {
