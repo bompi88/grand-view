@@ -219,7 +219,7 @@ GV.schemas.Nodes = new SimpleSchema({
   // Kind of node
   nodeType: {
     type: String,
-    optional: false
+    optional: true
   },
 
   // Is this node collapsed?
