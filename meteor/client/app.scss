@@ -77,6 +77,11 @@ ul.notifications {
   vertical-align: middle;
 }
 
+.selectize-input div.item {
+  max-width: 400px;
+  word-break: break-all;
+}
+
 @import "client/views/index/accounts/userForms.scss";
 @import "client/views/document/document.scss";
 @import "client/views/documents/documents.scss";

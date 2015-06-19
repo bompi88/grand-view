@@ -51,6 +51,12 @@ GV.schemas.Nodes = new SimpleSchema({
           // Can create new tags
           create: function(input) {
 
+            if(input && (input.length > 100)) {
+              Notifications.error("Feil ved innsetting av nøkkelord", "Nøkkelordet er for langt, og derfor over 80 tegn.");
+
+              return false;
+            }
+
             GV.collections.Tags.insert({ value: input.toLowerCase(), text: input });
 
             return {
@@ -112,6 +118,12 @@ GV.schemas.Nodes = new SimpleSchema({
 
           // Can create new tags
           create: function(input) {
+
+            if(input && (input.length > 150)) {
+              Notifications.error("Feil ved innsetting av kilde", "Kilden er for lang, og derfor over 150 tegn.");
+
+              return false;
+            }
 
             GV.collections.References.insert({ value: input.toLowerCase(), text: input });
 

@@ -1,0 +1,101 @@
+<template name="UpdateNodeForm">
+  {{#if showEditWarning}}
+    <div class="alert alert-info" role="alert"><b>NB!</b> Du er nå i redigeringsmodus og kan enten lagre eller gå ut av modusen ved bruk av knappene til høyre.</div>
+  {{/if}}
+  {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
+    {{#if $eq node.nodeType "chapter"}}
+      {{> afQuickField name="title" placeholder="Kapittelnavn" label="Kapittelnavn"}}
+      {{> afQuickField name="description" rows="6" placeholder="Beskrivelse" label="Beskrivelse"}}
+    {{else}}
+      {{> afQuickField name="title" }}
+      {{> afQuickField name="description" rows="6" }}
+      {{> afQuickField name="tags" options=getTagsOptions}}
+      {{> afQuickField name="references" options=getReferencesOptions}}
+
+      <div class="row" style="margin-bottom:20px;">
+        <div class="col-xs-12">
+          <div class="row" style="margin-bottom:20px;">
+            <div class="col-xs-12">
+              {{!-- Upload process status --}}
+              {{#with file}}
+                  {{#if this.isUploaded}}
+                    <b><a href="#" class="download">{{this.name}}</a></b> er nå lagt som vedlegg til informasjonselementet.
+                    <button type="button" class="btn btn-danger btn-xs delete-file">Slett</button>
+                  {{else}}
+
+                    Laster opp <b>{{this.name}}</b>...
+
+                    {{> FS.UploadProgressBar bootstrap=true class='progress-bar-success progress-bar-striped active' showPercent=true}}
+
+                    {{#unless uploadStopped}}
+                      <button type="button" class="btn btn-info pull-right stop-upload">Stopp opplastning</button>
+                    {{else}}
+                      <button type="button" class="btn btn-info pull-right resume-upload">Fortsett opplastning</button>
+                    {{/unless}}
+                  {{/if}}
+              {{/with}}
+            </div>
+          </div>
+          {{!-- Upload field --}}
+          {{#unless file}}
+            <div class="upload-field dropzone">
+              <span><span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span> Klikk her eller slipp fil her</span>
+              <input class="file-upload pull-left" type="file">
+            </div>
+          {{else}}
+            {{#if uploadStopped}}
+            <div class="upload-field">
+              <span>Klikk for å bytte fil</span>
+              <input class="file-upload pull-left" type="file">
+            </div>
+            {{/if}}
+          {{/unless}}
+
+        </div>
+      </div>
+    {{/if}}
+
+    {{#unless hideButtons}}
+      <div class="form-group">
+        {{#if $eq node.nodeType "chapter"}}
+          <button type="button" class="btn btn-danger pull-left delete-chapter-node"><span class="glyphicon glyphicon-remove"></span> Slett kapittelelement</button>
+        {{else}}
+          <button type="button" class="btn btn-danger pull-left delete-media-node"><span class="glyphicon glyphicon-remove"></span> Slett informasjonselement</button>
+        {{/if}}
+        <button type="submit" class="btn btn-primary pull-right {{#if file}}{{#unless uploadStopped}}{{#unless file.isUploaded}}disabled{{/unless}}{{/unless}}{{/if}}">Lagre</button>
+        <button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Nullstill</button>
+      </div>
+    {{/unless}}
+  {{/autoForm}}
+</template>
+
+<template name="WellSmall">
+ <div class="well well-sm">
+    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="font-size:35px;color:#CC3232;"></span>
+    <div class="pull-right" style="width:90%;">{{> UI.contentBlock}}</div>
+  </div>
+</template>
+
+<template name="RemoveChapterNodeModal">
+  {{#WellSmall}}
+    <b>Advarsel!</b> Sletter man kapittelelementet, forsvinner i tillegg informasjonselementene knyttet til dette kapittelet.
+  {{/WellSmall}}
+
+  Er du sikker på at du vil slette kapittelelementet med alle underliggende informasjonselement? Det er ingen gjenopprettingsmuligheter tilgjengelige...
+</template>
+
+<template name="RemoveMediaNodeModal">
+  {{#WellSmall}}
+    <b>Advarsel!</b> Tekstlig innhold i dette elementet, samt eventuell tilknyttet fil vil permanent bli slettet fra programmet.
+  {{/WellSmall}}
+
+  Er du sikker på at du vil slette informasjonselementet med alt av innhold? Det er ingen gjenopprettingsmuligheter tilgjengelige...
+</template>
+
+<template name="RemoveFileModal">
+  {{#WellSmall}}
+    <b>Advarsel!</b> Filen vil permanent bli slettet fra programmet, men den kan lastes inn på nytt hvis du har den på disk.
+  {{/WellSmall}}
+
+  Er du sikker på at du vil slette filen? Det er ingen gjenopprettingsmuligheter...
+</template>

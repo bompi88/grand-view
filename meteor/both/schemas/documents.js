@@ -32,67 +32,6 @@ GV.schemas.Documents = new SimpleSchema({
   },
 
   // Tags that adds a dimension to the description and title fields
-  tags: {
-    type: [String],
-    label: function() {
-      return "Nøkkelord";
-    },
-    optional: true,
-    autoform: {
-      type: "selectize",
-      placeholder: "schemaLabel",
-      afFieldInput: {
-        multiple: true,
-        selectizeOptions: {
-          delimiter: ',',
-          preload: true,
-          sortField: 'value',
-
-          // Can create new tags
-          create: function(input) {
-
-            GV.collections.Tags.insert({ value: input.toLowerCase(), text: input });
-
-            return {
-              value: input,
-              text: input
-            }
-          },
-
-          // How the tags suggestions are rendered
-          render: {
-            option: function(item, escape) {
-              return '<div>' +
-                '<span class="title">' +
-                '<span class="name">' + item.text + '</span>' +
-                '</span>' +
-                '</div>';
-            },
-            option_create: function(data, escape) {
-              return '<div class="create">Legg til <strong>' + escape(data.input) + '</strong>&hellip;</div>';
-            }
-          },
-
-          // How to load new tags
-          load: function(query, callback) {
-            var tags;
-
-            if (!query.length) {
-              Router.current().subscribe('tags');
-              tags = GV.collections.Tags.find({}).fetch();
-            } else {
-              Router.current().subscribe('tagsByQuery', { text: { $regex: query, $options: 'i' } });
-              tags = GV.collections.Tags.find({ text: { $regex: query, $options: 'i' } }).fetch();
-            }
-
-            callback(tags);
-          }
-        }
-      }
-    }
-  },
-
-  // Tags that adds a dimension to the description and title fields
   templateBasis: {
     type: String,
     label: function() {
@@ -108,14 +47,6 @@ GV.schemas.Documents = new SimpleSchema({
                });
             }
         }
-    }
-  },
-
-  status: {
-    type: String,
-    optional: true,
-    autoform: {
-      placeholder: "schemaLabel"
     }
   },
 

@@ -57,6 +57,14 @@ hr {
 }
 
 .media-nodes-view {
+
+	.table {
+		td {
+		  word-wrap:break-word;
+		  word-break:break-word;
+		}
+	}
+
 	.table tbody tr:hover td, .table tbody tr:hover th {
 		color: #555;
 	}
@@ -83,6 +91,10 @@ hr {
 .divider-text-normal {
     background-color: $background-table-color;
     top: -0.6em;
+}
+
+.row-item span {
+	break-word: break-all;
 }
 
 .table-row:nth-child(odd) {
