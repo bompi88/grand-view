@@ -16,7 +16,7 @@ Template.Tags.helpers({
         tags = _.union(tags, node.tags);
     });
 
-    tags = _.unique(tags);
+    tags = _.unique(tags).sort(function(a,b) { return a.localeCompare(b, "nb-NO"); });
 
     Template.instance().tags = tags;
 

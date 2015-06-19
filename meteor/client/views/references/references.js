@@ -16,7 +16,7 @@ Template.References.helpers({
         references = _.union(references, node.references);
     });
 
-    references = _.unique(references);
+    references = _.unique(references).sort(function(a,b) { return a.localeCompare(b, "nb-NO"); });
 
     Template.instance().references = references;
 
