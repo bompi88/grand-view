@@ -8,7 +8,11 @@ if (Meteor.isServer) {
   S = Npm.require("string");
 }
 if (Meteor.isClient) {
-  S = window.S;
+  if(window && window.require) {
+    S = window.require("string");
+  } else {
+    S = window.S;
+  }
 }
 
 var schemaDefinition = {
