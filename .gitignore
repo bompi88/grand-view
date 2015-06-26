@@ -7,3 +7,4 @@ dist
 .DS_Store
 .idea/
 *.iml
+meteor/scss_index.scss

@@ -1,6 +1,6 @@
 {
 	"useIndex" : true,
-	"indexFilePath" : "app.scss",
+	"indexFilePath" : "scss_index.scss",
 	"includePaths": [
     	".meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass"
 	]

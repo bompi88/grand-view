@@ -98,15 +98,3 @@ ul.notifications {
   -moz-box-shadow: 0px 0px 30px darken(#fff, 40%);
   box-shadow: 0px 0px 30px darken(#fff, 40%);
 }
-
-@import "client/views/index/accounts/userForms.scss";
-@import "client/views/document/document.scss";
-@import "client/views/documents/documents.scss";
-@import "client/views/index/index.scss";
-@import "client/views/navigation/navigation.scss";
-@import "client/views/node/node.scss";
-@import "client/views/node_detail/node_detail.scss";
-@import "client/views/tabs/tabs.scss";
-@import "client/views/tags/tags.scss";
-@import "client/views/tree/tree.scss";
-@import "client/views/references/references.scss";
