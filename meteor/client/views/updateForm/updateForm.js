@@ -61,19 +61,50 @@ var uploadFile = function(currentFile, self) {
   });
 };
 
-var removeNodeCallback = function(result, options) {
+moveNodes = function(parentId, ids, table, options) {
+
+  ids.forEach(function(id) {
+    GV.collections.Nodes.update({ _id: id }, { $set: { parent: parentId }});
+  });
+
+  if(table)
+    GV.selectedCtrl.reset(table);
+
+  if(options)
+    Notifications.success(options.title, options.text);
+}
+
+removeNodeCallback = function(result, options, id) {
   if(result) {
 
-    deleteNode(Session.get('nodeInFocus'));
+    if(id) {
+      deleteNode(id);
+    } else {
+      deleteNode(Session.get('nodeInFocus'));
 
-    // Set the main document in focus
-    Session.set('nodeInFocus', Session.get('mainDocument'));
+      // Set the main document in focus
+      Session.set('nodeInFocus', Session.get('mainDocument'));
+    }
 
     Notifications.success(options.title, options.text);
   }
 };
 
-var removeFileCallback = function(result, fileObj, options) {
+removeNodesCallback = function(result, options, ids, table) {
+  if(result) {
+
+    ids.forEach(function(id) {
+      deleteNode(id);
+    });
+
+    if(table)
+      GV.selectedCtrl.reset(table);
+
+    Notifications.success(options.title, options.text);
+  }
+};
+
+removeFileCallback = function(result, fileObj, options) {
   if(result) {
 
     var node = fileObj.nodeId;
@@ -230,6 +261,10 @@ Template.UpdateNodeForm.events({
     event.stopPropagation && event.stopPropagation();
 
     uploadFile(event.target.files[0], this);
+  },
+
+  'change input[type="text"], change input[type="textarea"]': function(event, tmpl) {
+    Session.set("formDirty", true);
   }
 
 });

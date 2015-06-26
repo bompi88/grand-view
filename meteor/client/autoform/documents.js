@@ -50,6 +50,7 @@ AutoForm.hooks({
     },
 
     onSuccess: function() {
+      Session.set("formDirty", false);
       Notifications.success('Suksess', 'Dokumentet ble oppdatert!');
     }
 

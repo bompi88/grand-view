@@ -22,6 +22,8 @@
 // The selected element to drag
 var dragElement;
 
+Session.set("showMovePopover", false);
+
 // -- Tree Helpers -------------------------------------------------------------
 
 
@@ -378,8 +380,6 @@ Template.Tree.events({
     event.prevenDefault && event.prevenDefault();
 
     generateDOCX(this.tree._id);
-
-    // TODO: do some magic here
   },
 
   'click .export-to-file': function(event, tmpl) {
@@ -643,34 +643,52 @@ Template.Tree.events({
 
   // Selects a node on regular mouse click
   'click li.root li span.element': function(event, tmpl) {
-
-    // "Unselect" all selected nodes
-    $('li span').removeClass('selected');
-
-    // Style the current selected node.
-    $(event.currentTarget).addClass('selected');
+    event.preventDefault && event.preventDefault();
 
     var elData = UI.getData(event.currentTarget);
 
-    openNode(elData);
+    if(Session.get('isMoveMode') == true) {
+      var offset = $(event.currentTarget).offset();
+      Session.set('movePopoverX', event.pageX  - 80 + "px");
+      Session.set('movePopoverY', event.pageY  - 90 + "px");
+      Session.set('showMovePopover', elData._id);
+    } else {
+      // "Unselect" all selected nodes
+      $('li span').removeClass('selected');
+
+      // Style the current selected node.
+      $(event.currentTarget).addClass('selected');
+
+      openNode(elData);
+    }
   },
 
   // Selects root node on regular mouse click
   'click li.root > span.element': function(event, tmpl) {
 
-    // "Unselect" all selected nodes
-    $('li span').removeClass('selected');
+    var id = Session.get('mainDocument');
 
-    // Style the current selected node.
-    $(event.currentTarget).addClass('selected');
+    if(Session.get('isMoveMode') == true) {
+      var offset = $(event.currentTarget).offset();
+      Session.set('movePopoverX', event.pageX - 53 + "px");
+      Session.set('movePopoverY', event.pageY - 74 + "px");
+      Session.set('showMovePopover', id);
+    } else {
 
-    GV.tabs.setDummyTab(null);
+      // "Unselect" all selected nodes
+      $('li span').removeClass('selected');
 
-    Session.set('nodeInFocus', Session.get('mainDocument'));
-    Session.set("uploadStopped", false);
-    Session.set("file", null);
-    Session.set('showNodeForm', false);
-    Session.set('showMediaNodesView', true);
+      // Style the current selected node.
+      $(event.currentTarget).addClass('selected');
+
+      GV.tabs.setDummyTab(null);
+
+      Session.set('nodeInFocus', Session.get('mainDocument'));
+      Session.set("uploadStopped", false);
+      Session.set("file", null);
+      Session.set('showNodeForm', false);
+      Session.set('showMediaNodesView', true);
+    }
   },
 
   // Opens a tab if double click on a node
@@ -695,4 +713,31 @@ Template.Tree.events({
       $(event.currentTarget).addClass('selected');
     }
   }
+});
+
+Template.MovePopover.events({
+
+  'click .apply-move': function(event, tmpl) {
+
+    var selected = GV.selectedCtrl.getSelected("mediaNodeView");
+    var nodeElement = $("[data-id='" + Session.get('showMovePopover') + "']");
+
+    var elData = UI.getData(nodeElement[0]);
+
+    if(selected.length) {
+      moveNodes(elData._id, selected, "mediaNodeView", {
+        title: "Flytting vellykket",
+        text: "Informasjonselementene er nå flyttet til <b>" + elData.prevSection + " " + (elData.title || "Uten navn") + "</b>"
+      });
+    }
+
+    Session.set('isMoveMode', false);
+    Session.set('showMovePopover', false);
+  },
+
+  'click .dismiss-move': function() {
+    Session.set('isMoveMode', false);
+    Session.set('showMovePopover', false);
+  }
+
 });

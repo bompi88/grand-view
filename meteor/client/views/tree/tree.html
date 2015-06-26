@@ -81,3 +81,14 @@ The tree constructor template.
 <template name="TreeHelp">
   Klikk og dra nodene i trestrukturen der du vil ha dem. Klikker man dobbelt på en av nodene, så åpnes det en fane til høyre med den valgte informasjonen. Ved bruk av enkeltklikk på nodene, åpnes bare fanen midlertidig.
 </template>
+
+<template name="MovePopover">
+<div class="popover confirmation fade top in" style="display: block; top: {{$.Session.get 'movePopoverY'}}; left: {{$.Session.get 'movePopoverX'}};">
+  <div class="arrow"></div>
+  <h3 class="popover-title">Flytte elementene hit?</h3>
+  <div class="popover-content text-center">
+    <div class="btn-group"><a class="btn btn-xs btn-primary apply-move" ><i class="glyphicon glyphicon-ok"></i> Ok</a><a class="btn btn-xs btn-default dismiss-move"><i class="glyphicon glyphicon-remove"></i> Avbryt</a>
+    </div>
+  </div>
+</div>
+</template>

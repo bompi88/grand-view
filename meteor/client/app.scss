@@ -38,6 +38,10 @@ ul.notifications {
 	position: fixed;
 	width:400px;
 	z-index:1045;
+
+  div.message, div.title, div.close {
+    color: #fff;
+  }
 }
 
 .alert.alert-success.status-bar {
@@ -80,6 +84,19 @@ ul.notifications {
 .selectize-input div.item {
   max-width: 400px;
   word-break: break-all;
+}
+
+.move-panel {
+  max-width: 400px;
+  z-index:99999;
+  display:block;
+  position:fixed;
+  top:20px;
+  right:50px;
+
+  -webkit-box-shadow: 0px 0px 30px darken(#fff, 40%);
+  -moz-box-shadow: 0px 0px 30px darken(#fff, 40%);
+  box-shadow: 0px 0px 30px darken(#fff, 40%);
 }
 
 @import "client/views/index/accounts/userForms.scss";

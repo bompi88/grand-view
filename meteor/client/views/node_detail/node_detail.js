@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+Session.set('isMoveMode', false);
 
 // -- Helper methods -----------------------------------------------------------
 
@@ -35,6 +36,20 @@ var toggleVisibilityOfView = function(view, scrollToClass) {
     }
 };
 
+showEditWarning = function(callback) {
+  var dirty = Session.get("formDirty");
+
+    if(dirty) {
+      showConfirmationPrompt({
+        title: "Lukking av tidligere redigering",
+        message: UI.toHTML(Template.CloseEditViewModal)
+      },
+        callback
+      );
+    } else {
+      callback();
+    }
+};
 
 // -- Template helpers ---------------------------------------------------------
 
@@ -63,6 +78,18 @@ Template.MediaNodesTable.helpers({
     var children = GV.collections.Nodes.find({ parent: Session.get('nodeInFocus'), nodeType: "media" });
     Template.instance().currentChildren = children.fetch();
     return children;
+  },
+
+  hasMarkedNodes: function() {
+    var selected = GV.selectedCtrl.getSelected("mediaNodeView");
+
+    return selected.length ? "" : "disabled";
+  },
+
+  allIsMarked: function() {
+    var children = Template.instance().currentChildren;
+
+    return GV.selectedCtrl.allSelected("mediaNodeView", _.pluck(children, "_id")) ? "checked" : "";
   }
 
 });
@@ -88,6 +115,10 @@ Template.ViewMediaNode.helpers({
 
   isEditing: function() {
     return Session.get("inlineEditNode") === this._id;
+  },
+
+  isMarked: function() {
+    return GV.selectedCtrl.isSelected("mediaNodeView", this._id) ? "checked" : "";
   }
 
 });
@@ -204,11 +235,8 @@ Template.MediaNodesTable.events({
     if(checked) {
       var docIds = _.pluck(Template.instance().currentChildren, "_id");
       GV.selectedCtrl.addAll("mediaNodeView", docIds);
-
-      $(".media-nodes-view.nodes-table").find(".checkbox").prop('checked', true);
     } else {
-      GV.selectedCtrl.reset(this.tableName);
-      $(".media-nodes-view.nodes-table").find(".checkbox").prop('checked', false);
+      GV.selectedCtrl.reset("mediaNodeView");
     }
 
   },
@@ -233,6 +261,76 @@ Template.MediaNodesTable.events({
     event.stopPropagation && event.stopPropagation();
 
     insertNodeOfType(this.doc, "media", null, true);
+  },
+
+  'click .move-multiple': function(event, tmpl) {
+    event.prevenDefault && event.prevenDefault();
+
+    var selected = GV.selectedCtrl.getSelected("mediaNodeView");
+
+    if(selected.length) {
+
+      Session.set('isMoveMode', true);
+
+      // var els = $(".tree li > span.element").confirmation({
+      //   title: "Flytte elementer hit?",
+      //   btnOkLabel: "Ok",
+      //   trigger: "manual",
+      //   btnCancelLabel: "Avbryt",
+      //   btnOkClass: "btn btn-xs btn-primary",
+      //   btnCancelClass: "btn btn-xs btn-default",
+      //   singelton: true,
+      //   placement: "top",
+      //   onConfirm: function(event) {
+      //     var data = UI.getData(event.target);
+
+      //     console.log(data)
+      //     moveNodes(data._id, selected, "mediaNodeView", { title: "Flytting vellykket", text: "Informasjonselementene er nå flyttet til <b>" + data.prevSection + " " + (data.title || "Uten navn") + "</b>"});
+
+      //     Session.set('isMoveMode', false);
+      //   },
+      //   onCancel: function(event) {
+      //     Session.set('isMoveMode', false);
+      //   }
+      // });
+
+
+      // var els =
+    }
+    // if(selected.length) {
+    //   showConfirmationPrompt({
+    //     title: "Bekreftelse på flytting av informasjonselementer",
+    //     message: UI.toHTML(Template.MoveMediaNodesModal)
+    //   }, function(result) {
+
+    //     });
+
+    //     // $(".tree li > span.element").unbind('click.move').bind('click.move', function() {
+    //     //   var data = UI.getData(this);
+
+    //     //   console.log(data)
+    //     //   moveNodes(data._id, selected, "mediaNodeView", { title: "Flytting vellykket", text: "Informasjonselementene er nå flyttet til <b>" + data.prevSection + " " + (data.title || "Uten navn") + "</b>"});
+
+    //     //   $(".tree li > span.element").unbind('click.move');
+    //     // });
+    //   });
+    // }
+  },
+
+  'click .delete-multiple': function(event, tmpl) {
+    var selected = GV.selectedCtrl.getSelected("mediaNodeView");
+
+    if(selected.length) {
+      showConfirmationPrompt({
+        title: "Bekreftelse på sletting av informasjonselementer",
+        message: UI.toHTML(Template.RemoveMediaNodesModal)
+      },
+        _.partial(removeNodesCallback, _, {
+          title: 'Sletting fullført',
+          text: 'De valgte informasjonselementene ble slettet fra systemet.'
+        }, selected, "mediaNodeView")
+      );
+    }
   }
 
 });
@@ -244,7 +342,12 @@ Template.ViewMediaNode.events({
     event.preventDefault && event.preventDefault();
     event.stopPropagation && event.stopPropagation();
 
-    Session.set("inlineEditNode", this._id);
+    var it = this;
+
+    showEditWarning(function() {
+      Session.set("inlineEditNode", it._id);
+      Session.set("formDirty", false);
+    });
   },
 
   'click .dismiss-edit-media-node': function(event, tmpl) {
@@ -259,7 +362,22 @@ Template.ViewMediaNode.events({
     event.stopPropagation && event.stopPropagation();
 
     $("#update-node-form").trigger('submit');
-  }
+  },
+
+  'click .delete-media-node': function(event, tmpl) {
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
+
+    showConfirmationPrompt({
+      title: "Bekreftelse på sletting av informasjonselement",
+      message: UI.toHTML(Template.RemoveMediaNodeModal)
+    },
+      _.partial(removeNodeCallback, _, {
+        title: 'Sletting fullført',
+        text: 'Informasjonselementet ble slettet fra systemet.'
+      }, this._id)
+    );
+  },
 
 });
 

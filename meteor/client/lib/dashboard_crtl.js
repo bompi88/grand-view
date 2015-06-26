@@ -8,6 +8,23 @@ GV.selectedCtrl = {
     return this.selectedItems[table] || [];
   },
 
+  isSelected: function(table, id) {
+    this.dep.depend();
+
+    return _.contains(this.selectedItems[table], id);
+  },
+
+  allSelected: function(table, ids) {
+    this.dep.depend();
+
+    if(this.selectedItems[table]) {
+      var diff = _.difference(ids, this.selectedItems[table]);
+      return ids && ids.length && diff.length == 0;
+    } else {
+      return false;
+    }
+  },
+
   addAll: function(table, ids) {
     this.selectedItems[table] = ids;
 

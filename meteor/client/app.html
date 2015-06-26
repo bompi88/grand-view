@@ -55,6 +55,12 @@
   </div>
 
   {{> ExportStatus}}
+  {{#if $.Session.get "isMoveMode" }}
+    {{> MoveStatus}}
+  {{/if}}
+  {{#if $.Session.get "showMovePopover" }}
+    {{> MovePopover}}
+  {{/if}}
   {{> SelectTemplateModal}}
 </body>
 
@@ -64,4 +70,17 @@
       <p>{{$.Session.get "workingText"}}</p>
     </div>
   {{/if}}
+</template>
+
+<template name="MoveStatus">
+<div class="panel panel-default move-panel">
+  <div class="panel-heading">
+    <h3 class="panel-title"><span class="glyphicon glyphicon-move"></span> Flyttemodus</h3>
+  </div>
+  <div class="panel-body">
+    <p>Du er nå i flyttemodus. For å flytte elementene må du klikke på kapittelet du vil flytte elementene til i kapittelstrukturen.</p>
+    <hr>
+    <button type="button" class="btn btn-default btn-xs close-move-mode pull-right">Avslutt flyttemodus</button>
+  </div>
+</div>
 </template>

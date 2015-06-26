@@ -2,6 +2,7 @@
   {{#if showEditWarning}}
     <div class="alert alert-info" role="alert"><b>NB!</b> Du er nå i redigeringsmodus og kan enten lagre eller gå ut av modusen ved bruk av knappene til høyre.</div>
   {{/if}}
+
   {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
     {{#if $eq node.nodeType "chapter"}}
       {{> afQuickField name="title" placeholder="Kapittelnavn" label="Kapittelnavn"}}
@@ -84,6 +85,15 @@
   Er du sikker på at du vil slette kapittelelementet med alle underliggende informasjonselement? Det er ingen gjenopprettingsmuligheter tilgjengelige...
 </template>
 
+
+<template name="RemoveChapterNodesModal">
+  {{#WellSmall}}
+    <b>Advarsel!</b> Sletter man kapittelelementetene, forsvinner i tillegg informasjonselementene knyttet til disse kapittelene.
+  {{/WellSmall}}
+
+  Er du sikker på at du vil slette kapittelelementene med alle underliggende informasjonselementer? Det er ingen gjenopprettingsmuligheter tilgjengelige...
+</template>
+
 <template name="RemoveMediaNodeModal">
   {{#WellSmall}}
     <b>Advarsel!</b> Tekstlig innhold i dette elementet, samt eventuell tilknyttet fil vil permanent bli slettet fra programmet.
@@ -91,6 +101,23 @@
 
   Er du sikker på at du vil slette informasjonselementet med alt av innhold? Det er ingen gjenopprettingsmuligheter tilgjengelige...
 </template>
+
+<template name="RemoveMediaNodesModal">
+  {{#WellSmall}}
+    <b>Advarsel!</b> Tekstlig innhold i disse elementetene, samt eventuelle tilknyttede filer vil permanent bli slettet fra programmet.
+  {{/WellSmall}}
+
+  Er du sikker på at du vil slette informasjonselementetene med alt av innhold? Det er ingen gjenopprettingsmuligheter tilgjengelige...
+</template>
+
+<template name="MoveMediaNodesModal">
+  {{#WellSmall}}
+    Du har valgt å flytte informasjonselementer
+  {{/WellSmall}}
+
+  For å flytte elementene trykker du på ok.
+</template>
+
 
 <template name="RemoveFileModal">
   {{#WellSmall}}
