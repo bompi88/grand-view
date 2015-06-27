@@ -5,5 +5,5 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 AuthRouteController = RouteController.extend({
-  onBeforeAction: _.partial(GV.helpers.redirectIfNotLoggedIn, 'Index')
+  // onBeforeAction: _.partial(GV.helpers.redirectIfNotLoggedIn, 'Index')
 });
