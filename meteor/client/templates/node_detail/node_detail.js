@@ -379,6 +379,20 @@ Template.ViewMediaNode.events({
     );
   },
 
+  'click .download': function(event, tmpl) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var cp = require("child_process");
+
+    var filename = this.copies.filesStore.key.replace(new RegExp(" ", 'g'), '\\ ');
+
+    cp.exec("open ~/GrandView/files/" + filename, function(error, result) {
+      if (error)
+        console.log(error);
+    });
+  }
+  
 });
 
 
