@@ -1,3 +1,24 @@
+////////////////////////////////////////////////////////////////////////////////
+// Node Schema
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright 2015 Concept
+//
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+////////////////////////////////////////////////////////////////////////////////
+
+"use strict";
+
 GV.schemas.Nodes = new SimpleSchema({
 
   _id: {
@@ -42,6 +63,7 @@ GV.schemas.Nodes = new SimpleSchema({
       placeholder: "schemaLabel",
       type: "selectize",
       afFieldInput: {
+        maxCount: 20,
         multiple: true,
         selectizeOptions: {
           delimiter: ',',
@@ -51,18 +73,24 @@ GV.schemas.Nodes = new SimpleSchema({
           // Can create new tags
           create: function(input) {
 
-            if(input && (input.length > 100)) {
-              Notifications.error("Feil ved innsetting av nøkkelord", "Nøkkelordet er for langt, og derfor over 80 tegn.");
+            if (input && (input.length > 100)) {
+              Notifications.error(
+                "Feil ved innsetting av nøkkelord",
+                "Nøkkelordet er for langt, og derfor over 80 tegn."
+              );
 
               return false;
             }
 
-            GV.collections.Tags.insert({ value: input.toLowerCase(), text: input });
+            GV.collections.Tags.insert({
+              value: input.toLowerCase(),
+              text: input
+            });
 
             return {
               value: input,
               text: input
-            }
+            };
           },
 
           // How the tags suggestions are rendered
@@ -75,7 +103,8 @@ GV.schemas.Nodes = new SimpleSchema({
                 '</div>';
             },
             option_create: function(data, escape) {
-              return '<div class="create">Legg til <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+              return '<div class="create">Legg til <strong>' + escape(data.input) +
+                '</strong>&hellip;</div>';
             }
           },
 
@@ -85,11 +114,25 @@ GV.schemas.Nodes = new SimpleSchema({
             var tags;
 
             if (!query.length) {
-              Router.current().subscribe('tags');
-              tags = GV.collections.Tags.find({}).fetch();
+              Router.current()
+                .subscribe('tags');
+              tags = GV.collections.Tags.find({})
+                .fetch();
             } else {
-              Router.current().subscribe('tagsByQuery', { text: { $regex: query, $options: 'i' } });
-              tags = GV.collections.Tags.find({ text: { $regex: query, $options: 'i' } }).fetch();
+              Router.current()
+                .subscribe('tagsByQuery', {
+                  text: {
+                    $regex: query,
+                    $options: 'i'
+                  }
+                });
+              tags = GV.collections.Tags.find({
+                  text: {
+                    $regex: query,
+                    $options: 'i'
+                  }
+                })
+                .fetch();
             }
 
             callback(tags);
@@ -110,6 +153,7 @@ GV.schemas.Nodes = new SimpleSchema({
       placeholder: "schemaLabel",
       type: "selectize",
       afFieldInput: {
+        maxCount: 20,
         multiple: true,
         selectizeOptions: {
           delimiter: ',',
@@ -119,18 +163,24 @@ GV.schemas.Nodes = new SimpleSchema({
           // Can create new tags
           create: function(input) {
 
-            if(input && (input.length > 150)) {
-              Notifications.error("Feil ved innsetting av kilde", "Kilden er for lang, og derfor over 150 tegn.");
+            if (input && (input.length > 150)) {
+              Notifications.error(
+                "Feil ved innsetting av kilde",
+                "Kilden er for lang, og derfor over 150 tegn."
+              );
 
               return false;
             }
 
-            GV.collections.References.insert({ value: input.toLowerCase(), text: input });
+            GV.collections.References.insert({
+              value: input.toLowerCase(),
+              text: input
+            });
 
             return {
               value: input,
               text: input
-            }
+            };
           },
 
           // How the tags suggestions are rendered
@@ -143,7 +193,8 @@ GV.schemas.Nodes = new SimpleSchema({
                 '</div>';
             },
             option_create: function(data, escape) {
-              return '<div class="create">Legg til <strong>' + escape(data.input) + '</strong>&hellip;</div>';
+              return '<div class="create">Legg til <strong>' + escape(data.input) +
+                '</strong>&hellip;</div>';
             }
           },
 
@@ -153,11 +204,25 @@ GV.schemas.Nodes = new SimpleSchema({
             var references;
 
             if (!query.length) {
-              Router.current().subscribe('references');
-              references = GV.collections.References.find({}).fetch();
+              Router.current()
+                .subscribe('references');
+              references = GV.collections.References.find({})
+                .fetch();
             } else {
-              Router.current().subscribe('referencesByQuery', { text: { $regex: query, $options: 'i' } });
-              references = GV.collections.References.find({ text: { $regex: query, $options: 'i' } }).fetch();
+              Router.current()
+                .subscribe('referencesByQuery', {
+                  text: {
+                    $regex: query,
+                    $options: 'i'
+                  }
+                });
+              references = GV.collections.References.find({
+                  text: {
+                    $regex: query,
+                    $options: 'i'
+                  }
+                })
+                .fetch();
             }
 
             callback(references);
@@ -181,12 +246,12 @@ GV.schemas.Nodes = new SimpleSchema({
     optional: false,
     autoValue: function() {
       if (this.isInsert) {
-        return new Date;
-      }
-      else if (this.isUpsert) {
-        return {$setOnInsert: new Date};
-      }
-      else {
+        return new Date();
+      } else if (this.isUpsert) {
+        return {
+          $setOnInsert: new Date()
+        };
+      } else {
         this.unset();
       }
     }
@@ -195,12 +260,6 @@ GV.schemas.Nodes = new SimpleSchema({
   // The document was updated on this date
   lastChanged: {
     type: Date,
-    optional: false
-  },
-
-  // The document was shared by this user
-  userId: {
-    type: String,
     optional: false
   },
 

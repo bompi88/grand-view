@@ -1,0 +1,65 @@
+<!--
+~ Copyright 2015 Concept
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+
+<!--
+This template should render a view that contains a tree structure and a system
+for editing of nodes in the tree.
+-->
+<template name="Document">
+  <div class="container default-container" style="overflow:hidden;height:100%; padding-top:80px;">
+    <div class="row" style="overflow:hidden;height:100%;margin:0;">
+
+      {{!-- The tree structure --}}
+      <div class="col-xs-4 structure-container">
+
+        {{#if $.Session.equals "structureState" "tree"}}
+          {{>Tree tree=this}}
+        {{/if}}
+
+        {{#if $.Session.equals "structureState" "tags"}}
+          {{> Tags}}
+        {{/if}}
+
+        {{#if $.Session.equals "structureState" "references"}}
+          {{> References}}
+        {{/if}}
+        <div class="structure-footer">
+          <ul class="nav nav-pills nav-justified">
+            <li role="presentation" class="show-tree {{#if $.Session.equals 'structureState' 'tree'}}active{{/if}}"><a href="#">Kapitler</a></li>
+            <li role="presentation" class="show-tags {{#if $.Session.equals 'structureState' 'tags'}}active{{/if}}"><a href="#">Nøkkelord</a></li>
+            <li role="presentation" class="show-references {{#if $.Session.equals 'structureState' 'references'}}active{{/if}}"><a href="#">Kilder</a></li>
+          </ul>
+        </div>
+      </div>
+
+      {{!-- The detail view of nodes --}}
+      <div class="col-xs-8" style="padding-right:0">
+        <div class="row">
+          <div class="col-xs-12">
+            {{> Tabs}}
+          </div>
+        </div>
+        <div class="col-xs-12 node-detail-view">
+          {{#if focusOnMainDoc}}
+            {{> GeneralInfo}}
+          {{else}}
+            {{> NodeDetail}}
+          {{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

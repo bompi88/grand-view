@@ -1,0 +1,140 @@
+<!--
+~ Copyright 2015 Concept
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+
+<!--
+The main template for the documents view.
+-->
+<template name="Documents">
+	<div class="container default-container">
+    <div class="row">
+      <div>
+        <h3>
+          <span class="glyphicon glyphicon-book"></span> Mine dokumenter
+        </h3>
+			</div>
+
+      {{> DocumentTable documents=this.documents hasTemplate="true" editOptions="true" tableName="documents" label="dokument"}}
+		</div>
+	</div>
+</template>
+
+<!--
+The documents table.
+-->
+<template name="DocumentTable">
+  {{> DocumentActionsDropdown class="pull-right" tableName=this.tableName label=this.label}}
+  <table class="table table-hover" id="{{tableName}}">
+    <thead>
+      <tr>
+        <th><input type="checkbox" class="checkbox-master" aria-label="..."></th>
+        <th>Navn</th>
+        <th>Opprettet</th>
+        <th>Sist endret</th>
+        {{#if hasTemplate}}<th>Mal brukt</th>{{/if}}
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each documents}}
+        {{> DocumentRow document=this editOptions=../editOptions hasTemplate=../hasTemplate tableName=../tableName label=../label}}
+      {{else}}
+        Tabellen er tom...
+      {{/each}}
+    </tbody>
+  </table>
+</template>
+
+<!--
+A row in the documents table.
+-->
+<template name="DocumentRow">
+	<tr class="table-row">
+    <td class="row-item"><input type="checkbox" class="checkbox" aria-label="..."></td>
+		<td class="row-item">{{document.title}}</td>
+    <td class="row-item">{{formatDateRelative document.createdOn}}</td>
+		<td class="row-item">{{formatDateRelative document.lastChanged}}</td>
+    {{#if hasTemplate}}<td class="row-item">{{#if document.templateBasis}}{{getTemplateTitle document.templateBasis}} (av {{formatDateRegular document.createdOn}}){{else}}-{{/if}}</td>{{/if}}
+    {{#if editOptions}}
+  		<td>
+  			<div class="btn-group pull-right">
+          {{#ExportButton class="btn-sm" currDoc=document}}Eksporter{{/ExportButton}}
+  				<button type="button" id="btn-editDoc" class="btn btn-success btn-sm">
+  					<span class="glyphicon glyphicon-edit"></span> Rediger
+  				</button>
+  				<button type="button" id="btn-remove" class="btn btn-danger btn-sm">
+  					<span class="glyphicon glyphicon-trash"></span> Fjern
+  				</button>
+  			</div>
+  		</td>
+    {{/if}}
+	</tr>
+</template>
+
+<!--
+The actions that can be applied to the elements in the document table
+-->
+<template name="DocumentActionsDropdown">
+  <div class="btn-group dropdown {{class}}">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      Velg handling <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      {{#if $eq tableName "documents"}}
+        <li><a href="#" data-toggle="modal" data-target="#template-modal"><span class="glyphicon glyphicon-plus"></span> Opprett {{label}}</a></li>
+      {{else}}
+        <li><a href="#" class="new-doc"><span class="glyphicon glyphicon-plus"></span> Opprett {{label}}</a></li>
+      {{/if}}
+      <li class="{{isDisabledOnManyAndNone}}"><a href="#" class="edit-doc"><span class="glyphicon glyphicon-edit"></span> Rediger {{label}}</a></li>
+      <li class="divider"></li>
+      <li><a href="#" class="import-doc"><span class="glyphicon glyphicon-import"></span> Importer {{label}}</a></li>
+      <li class="{{isDisabledOnManyAndNone}}"><a href="#" class="export-doc"><span class="glyphicon glyphicon-export"></span> Eksporter {{label}}</a></li>
+      <li class="divider"></li>
+      <li class="{{isDisabledOnNone}}"><a href="#" class="trash-doc"><span class="glyphicon glyphicon-trash"></span> Legg i papirkurv</a></li>
+    </ul>
+  </div>
+</template>
+
+<!--
+This modal lets the user chose a title for the document and which template to produce it from.
+-->
+<template name="SelectTemplateModal">
+<div class="modal fade" id="template-modal" tabindex="-1" role="dialog" aria-labelledby="template-modal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Valg av tittel og dokumentmal</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row" >
+          {{#autoForm collection="GV.collections.Documents" id="insert-doc" type="insert"}}
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <p>Her kan man velge tittel på dokumentet, samt om man skal bruke en dokumentmal eller ikke. Hvis mal ikke velges, starter man med et tomt dokument uten struktur.</p>
+              {{> afQuickField name="title" placeholder="Tittel"}}
+              {{> afQuickField name="templateBasis" placeholder="Dokumentmal" firstOption="(Uten mal)"}}
+
+            </div>
+          {{/autoForm}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+        <button type="button" class="btn btn-primary submit-doc">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>
+</template>

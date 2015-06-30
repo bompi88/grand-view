@@ -86,7 +86,7 @@ meteor.stderr.on('data', function (data) {
 // Electron
 // =========================
 electron.stdout.on('data', function(data) {
-  if (!data === 'Cleaning up children.') {
+  if (!(data === 'Cleaning up children.')) {
     console.log(data);
   }
 });

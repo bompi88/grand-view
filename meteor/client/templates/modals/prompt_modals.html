@@ -1,0 +1,89 @@
+<!--
+~ Copyright 2015 Concept
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+
+<!--
+A Bootstrap Well Template.
+-->
+<template name="WellSmall">
+ <div class="well well-sm">
+    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="font-size:35px;color:#CC3232;"></span>
+    <div class="pull-right" style="width:90%;">{{> UI.contentBlock}}</div>
+  </div>
+</template>
+
+<!--
+Modal on removal of chapter node.
+-->
+<template name="RemoveChapterNodeModal">
+  {{#WellSmall}}
+    <b>Advarsel!</b> Sletter man kapittelelementet, forsvinner i tillegg informasjonselementene knyttet til dette kapittelet.
+  {{/WellSmall}}
+
+  Er du sikker på at du vil slette kapittelelementet med alle underliggende informasjonselement? Det er ingen gjenopprettingsmuligheter tilgjengelige...
+</template>
+
+<!--
+Modal on removal of multiple chapter nodes.
+-->
+<template name="RemoveChapterNodesModal">
+  {{#WellSmall}}
+    <b>Advarsel!</b> Sletter man kapittelelementetene, forsvinner i tillegg informasjonselementene knyttet til disse kapittelene.
+  {{/WellSmall}}
+
+  Er du sikker på at du vil slette kapittelelementene med alle underliggende informasjonselementer? Det er ingen gjenopprettingsmuligheter tilgjengelige...
+</template>
+
+<!--
+Modal on removal of media node.
+-->
+<template name="RemoveMediaNodeModal">
+  {{#WellSmall}}
+    <b>Advarsel!</b> Tekstlig innhold i dette elementet, samt eventuell tilknyttet fil vil permanent bli slettet fra programmet.
+  {{/WellSmall}}
+
+  Er du sikker på at du vil slette informasjonselementet med alt av innhold? Det er ingen gjenopprettingsmuligheter tilgjengelige...
+</template>
+
+<!--
+Modal on removal of multiple media nodes.
+-->
+<template name="RemoveMediaNodesModal">
+  {{#WellSmall}}
+    <b>Advarsel!</b> Tekstlig innhold i disse elementetene, samt eventuelle tilknyttede filer vil permanent bli slettet fra programmet.
+  {{/WellSmall}}
+
+  Er du sikker på at du vil slette informasjonselementetene med alt av innhold? Det er ingen gjenopprettingsmuligheter tilgjengelige...
+</template>
+
+<!--
+Modal on removal of file.
+-->
+<template name="RemoveFileModal">
+  {{#WellSmall}}
+    <b>Advarsel!</b> Filen vil permanent bli slettet fra programmet, men den kan lastes inn på nytt hvis du har den på disk.
+  {{/WellSmall}}
+
+  Er du sikker på at du vil slette filen? Det er ingen gjenopprettingsmuligheter tilgjengelige...
+</template>
+
+<!--
+Modal when trying to leave the edit mode of a Node.
+-->
+<template name="CloseEditViewModal">
+  Det er allerede et informasjonselement åpent til redigering, og dette må lukkes før man kan åpne nytt. Vil du lukke det?
+  <br><br>
+  <b>NB!</b> Alle endringer gjort på dette elementet vil gå tapt, hvis du ikke allerede har lagret det.
+</template>

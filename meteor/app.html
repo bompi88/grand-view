@@ -13,6 +13,11 @@
 ~ See the License for the specific language governing permissions and
 ~ limitations under the License.
 -->
+
+<!--
+This is the base template, which defines the HTML body and head tags.
+-->
+
 <head>
   <title>Grand View</title>
 </head>
@@ -64,6 +69,9 @@
   {{> SelectTemplateModal}}
 </body>
 
+<!--
+Export of File Status.
+-->
 <template name="ExportStatus">
   {{#if $.Session.equals "working" true}}
     <div class="alert alert-success text-center status-bar animated fadeIn text-center" role="alert">
@@ -72,6 +80,9 @@
   {{/if}}
 </template>
 
+<!--
+Shows the user that the move mode is active.
+-->
 <template name="MoveStatus">
 <div class="panel panel-default move-panel">
   <div class="panel-heading">

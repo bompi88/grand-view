@@ -1,0 +1,203 @@
+<!--
+~ Copyright 2015 Concept
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+
+<!--
+Edit information about a Node.
+-->
+<template name="NodeDetail">
+  {{!-- A presentation of the current selected node --}}
+  {{#if node.title}}<h3 style="margin-top:0;">{{node.title}}</h3>{{/if}}
+  {{#if node.description}}<p style="margin-bottom:20px;"><em>{{{convertLineBreaks node.description}}}</em></p>{{/if}}
+
+  {{!-- An edit form for editing the selected node --}}
+  {{#if $.Session.equals "showNodeForm" true}}
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading block-hider toggle-node-form disable-select"><span class="glyphicon glyphicon-menu-up" style="margin-right:5px;"></span> <b>Rediger {{#if $eq node.nodeType "chapter"}}kapittelelement{{else}}informasjonselement{{/if}}</b></div>
+      <div class="panel-body">
+        <p><em>Her kan man redigere verdiene for det valgte {{#if $eq node.nodeType "chapter"}}kapittelelementet{{else}}informasjonselementet{{/if}}. Det valgte elementet er markert i kapittelstrukturen.</em></p>
+
+        {{> UpdateNodeForm node=node}}
+      </div>
+    </div>
+  {{else}}
+    <div class="well well-sm block-hider toggle-node-form"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Rediger {{#if $eq node.nodeType "chapter"}}kapittelelement{{else}}informasjonselement{{/if}}</b></div>
+  {{/if}}
+
+  {{!-- A list of the media nodes linked to this chapter node --}}
+  {{#if $eq node.nodeType "chapter"}}
+    {{#if $.Session.equals "showMediaNodesView" true}}
+      {{> MediaNodesTable class="media-nodes-view" doc=node headerText="Informasjonselementer i dette kapittelelementet"}}
+    {{else}}
+      <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Informasjonselementer i dette kapittelelementet</b></div>
+    {{/if}}
+  {{/if}}
+</template>
+
+
+<!--
+Edit top level information about a document. This is basically the root node.
+-->
+<template name="GeneralInfo">
+  {{#if title}}<h3 style="margin-top:0;">{{title}}</h3>{{/if}}
+  {{#if summary}}<p style="margin-bottom:20px;"><em>{{{convertLineBreaks summary}}}</em></p>{{/if}}
+
+  {{#if $.Session.equals "showNodeForm" true}}
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading block-hider toggle-node-form disable-select"><span class="glyphicon glyphicon-menu-up" style="margin-right:5px;"></span> <b>Rediger prosjektbeskrivelsen</b></div>
+      <div class="panel-body">
+        <p><em>Her kan man beskrive dokumentet i sin helhet. Denne informasjonen brukes for å kunne skille mellom de ulike dokumentene.</em></p>
+
+      	{{#autoForm collection="GV.collections.Documents" id="update-document-form" doc=this type="update"}}
+      		{{> afQuickField name="title" }}
+      		{{> afQuickField name="summary" rows="6" placeholder="Skriv inn en kortfattet beskrivelse av prosjektet" label="Prosjektbeskrivelse"}}
+
+      		<div class="form-group">
+      			<button type="button" class="btn btn-danger pull-left delete-document">Slett hele dokumentet</button>
+      			<button type="submit" class="btn btn-primary pull-right">Lagre</button>
+      			<button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Nullstill</button>
+      		</div>
+      	{{/autoForm}}
+      </div>
+    </div>
+  {{else}}
+    <div class="well well-sm block-hider toggle-node-form">
+      <span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Rediger prosjektbeskrivelsen</b>
+    </div>
+  {{/if}}
+
+  {{#if $.Session.equals "showMediaNodesView" true}}
+    {{> MediaNodesTable class="media-nodes-view" doc=this headerText="Informasjonselementer uten kapittelreferanse"}}
+  {{else}}
+    <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Informasjonselementer uten kapittelreferanse</b></div>
+  {{/if}}
+</template>
+
+<!--
+A Table that renders the Media Nodes available in a particular Chapter Node.
+-->
+<template name="MediaNodesTable">
+  <div class="panel panel-default nodes-table {{class}}">
+    <!-- Default panel contents -->
+    <div class="panel-heading block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-up" style="margin-right:5px;"></span> <b>{{headerText}}</b> <button type="button" class="btn btn-success btn-xs pull-right add-media-node"><span class="glyphicon glyphicon-plus"></span> informasjonselement</button></div>
+
+    <!-- Table -->
+    <table class="table table-striped table-hover table-condensed">
+      <thead>
+        <tr>
+          <th><input type="checkbox" class="checkbox-master" {{allIsMarked}} aria-label="..."></th>
+          <th></th>
+          <th>
+            <div class="dropup">
+              <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="media-node-dropdown" data-toggle="dropdown" aria-expanded="true">
+                Handling
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="media-node-dropdown">
+                <li role="presentation" class="{{hasMarkedNodes}}"><a role="menuitem" tabindex="-1" href="#" class="move-multiple"><span class="glyphicon glyphicon-move"></span> Flytt markerte</a></li>
+                <li role="presentation" class="{{hasMarkedNodes}}"><a role="menuitem" tabindex="-1" href="#" class="delete-multiple"><span class="glyphicon glyphicon-remove"></span> Slett markerte</a></li>
+              </ul>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each getChildren}}
+          {{> ViewMediaNode}}
+        {{else}}
+          <tr>
+            <td></td>
+            <td><em>Ingen informasjonselementer knyttet til det valgte kapittelelementet.</em></td>
+            <td></td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<!--
+A Row element in the Media Nodes Table.
+-->
+<template name="ViewMediaNode">
+  <tr class="table-row" data-id="{{_id}}">
+    <td class="row-item" style="width:20px;"><input type="checkbox" class="checkbox" {{isMarked}} aria-label="..."></td>
+    <td class="row-item">
+      {{#if isEditing}}
+       {{> UpdateNodeForm node=this hideButtons=true showEditWarning=true}}
+      {{else}}
+        {{#if title}}<b>{{title}}</b><br>{{/if}}
+        {{#if description}}
+          {{#if showMore}}
+            {{{convertLineBreaks description}}}
+          {{else}}
+            {{shortDescription}}
+          {{/if}}
+        {{else}}-{{/if}}
+
+        {{#if hasShowMore}}
+          {{> ShowMoreOrLess node=this}}
+        {{else}}
+          {{> HorizontalLine}}
+        {{/if}}
+        <ul class="node-list">
+          <li class="node-list-item"><b>Kilder:</b> {{commaSeparated references}}</li>
+          <li class="node-list-item"><b>Nøkkelord:</b> {{commaSeparated tags}}</li>
+          {{#with file}}
+            <li class="node-list-item"><b>Fil:</b> <a href="#" class="download">{{this.name}}</a></li>
+          {{/with}}
+        </ul>
+      {{/if}}
+    </td>
+    <td class="row-item text-right" style="width:60px;">
+      {{#if isEditing}}
+        <button type="button" class="btn btn-primary btn-xs save-media-node" style="display: block; width: 100%;">Lagre</button>
+        <button type="button" class="btn btn-default btn-xs dismiss-edit-media-node" style="display: block; width: 100%;">Avbryt</button>
+        <button type="button" class="btn btn-danger btn-xs delete-media-node" style="display: block; width: 100%;">Slett</button>
+      {{else}}
+        <button type="button" class="btn btn-success btn-xs edit-media-node" style="display: block; width: 100%;"><span class="glyphicon glyphicon-edit"></span> Rediger</button>
+      {{/if}}
+    </td>
+  </tr>
+</template>
+
+<!--
+A Horizontal line Template.
+-->
+<template name="HorizontalLine">
+  <div class="row">
+    <div class="col-xs-12" style="margin: 30px 0 20px 0;">
+      <div class="divider-with-text">
+      </div>
+    </div>
+  </div>
+</template>
+
+<!--
+Renders more or less button with line.
+-->
+<template name="ShowMoreOrLess">
+  <div class="row">
+    <div class="col-xs-12" style="margin: 30px 0 20px 0;">
+      <div class="divider-with-text">
+        <span class="divider-text divider-text-normal">
+        <a href="#" class="toggle-visibility">{{#if hasShowMore}}Vis mer{{else}}Skjul{{/if}}</a>
+        </span>
+      </div>
+    </div>
+  </div>
+</template>

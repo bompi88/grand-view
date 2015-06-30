@@ -1,67 +1,85 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Global SCSS Styles 
+// Global SCSS Styles
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright 2015 Concept
+//
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-/*
- * Copyright 2015 Concept
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// -- Standard colors ----------------------------------------------------------
 
-/**
- * Bootstrap configuration variables
- */
-@import url("http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600"); 
-$font-family-sans-serif:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
+$white: #fff;
+$blue: #428bca;
+$black: #222;
+// -- Bootstrap configuration variables ----------------------------------------
+
+@import url('http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600');
+
+$font-family-sans-serif: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
 $text-color: #555;
 
-@import "bootstrap";
+@import 'bootstrap';
+@import 'bourbon/bourbon';
 
-$blue-base: darken(#428bca, 6.5%);
+$blue-base: darken($blue, 6.5%);
 
-html, body {
-	height: 100%;
+// -- Variables ----------------------------------------------------------------
+
+$notifications-text-color: #fff;
+$box-shadow-color: darken($white, 40%);
+$scroll-bar-color: rgba(0, 0, 0, .5);
+$tree-line-color: darken($white, 30%);
+
+// -- SCSS rules ---------------------------------------------------------------
+
+html,
+body {
+  height: 100%;
 }
 
 // Always show notifications top right corner, even when container is scrolled
-ul.notifications {
-	position: fixed;
-	width:400px;
-	z-index:1045;
+.notifications {
+  position: fixed;
+  z-index: 1045;
 
-  div.message, div.title, div.close {
-    color: #fff;
+  .notification {
+    margin-right: 0;
+    width: 400px;
+
+    .message,
+    .title,
+    .close {
+      color: $notifications-text-color;
+    }
   }
 }
 
 .alert.alert-success.status-bar {
-	position: fixed;
-	width: 300px;
-	top: 70px;
-	left: calc(50% - 150px);
-	z-index: 100;
-	box-shadow: 0px 0px 30px darken(#fff, 40%);
+  box-shadow: 0 0 30px $box-shadow-color;
+  left: calc(50% - 150px);
+  position: fixed;
+  top: 70px;
+  width: 300px;
+  z-index: 100;
 }
 
 .disable-select {
-  -webkit-user-select: none;  
-  -moz-user-select: none;    
-  -ms-user-select: none;      
-  user-select: none;
+  @include user-select(none);
 }
 
 .default-container {
-	padding-top: 60px;
+  padding-top: 60px;
 }
 
 .modal {
@@ -69,10 +87,10 @@ ul.notifications {
 }
 
 .modal:before {
+  content: ' ';
   display: inline-block;
-  vertical-align: middle;
-  content: " ";
   height: 100%;
+  vertical-align: middle;
 }
 
 .modal-dialog {
@@ -81,20 +99,30 @@ ul.notifications {
   vertical-align: middle;
 }
 
-.selectize-input div.item {
+.selectize-input .item {
   max-width: 400px;
   word-break: break-all;
 }
 
 .move-panel {
+  box-shadow: 0 0 30px $box-shadow-color;
+  display: block;
   max-width: 400px;
-  z-index:99999;
-  display:block;
-  position:fixed;
-  top:20px;
-  right:50px;
+  position: fixed;
+  right: 50px;
+  top: 20px;
+  z-index: 99999;
+}
 
-  -webkit-box-shadow: 0px 0px 30px darken(#fff, 40%);
-  -moz-box-shadow: 0px 0px 30px darken(#fff, 40%);
-  box-shadow: 0px 0px 30px darken(#fff, 40%);
+@mixin scroll-bar() {
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 9px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $scroll-bar-color;
+    border-radius: 4px;
+    box-shadow: 0 0 1px rgba(255, 255, 255, .4);
+  }
 }

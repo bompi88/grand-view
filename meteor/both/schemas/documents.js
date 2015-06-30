@@ -1,3 +1,24 @@
+////////////////////////////////////////////////////////////////////////////////
+// Document Schema
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright 2015 Concept
+//
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+////////////////////////////////////////////////////////////////////////////////
+
+"use strict";
+
 GV.schemas.Documents = new SimpleSchema({
 
   _id: {
@@ -39,14 +60,19 @@ GV.schemas.Documents = new SimpleSchema({
     },
     optional: true,
     autoform: {
-        type: "select",
-        options: function () {
-            if (Meteor.isClient) {
-               return GV.collections.Documents.find({template: true}).map(function (c) {
-                   return {label: c.title, value: c._id};
-               });
-            }
+      type: "select",
+      options: function() {
+        if (Meteor.isClient) {
+          return GV.collections.Documents.find({
+            template: true
+          }).map(function(c) {
+            return {
+              label: c.title,
+              value: c._id
+            };
+          });
         }
+      }
     }
   },
 
@@ -56,12 +82,12 @@ GV.schemas.Documents = new SimpleSchema({
     optional: false,
     autoValue: function() {
       if (this.isInsert) {
-        return new Date;
-      }
-      else if (this.isUpsert) {
-        return {$setOnInsert: new Date};
-      }
-      else {
+        return new Date();
+      } else if (this.isUpsert) {
+        return {
+          $setOnInsert: new Date()
+        };
+      } else {
         this.unset();
       }
     }
@@ -75,8 +101,7 @@ GV.schemas.Documents = new SimpleSchema({
         return true;
       } else if (this.isUpsert) {
         return true;
-      }
-      else {
+      } else {
         this.unset();
       }
     }
@@ -85,12 +110,6 @@ GV.schemas.Documents = new SimpleSchema({
   // The document was updated on this date
   lastChanged: {
     type: Date,
-    optional: false
-  },
-
-  // The document was shared by this user
-  userId: {
-    type: String,
     optional: false
   },
 

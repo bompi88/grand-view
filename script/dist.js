@@ -21,12 +21,18 @@ config.fatal = true;
 var dir = __dirname;
 var base = path.normalize(path.join(dir, '..'));
 var onWindows = false;
-var osName = exec('echo %OS% | tr "[:upper:]" "[:lower:]" | xargs echo -n', {silent: true}).output;
+var osName = exec('echo %OS% | tr "[:upper:]" "[:lower:]" | xargs echo -n', {
+  silent: true
+}).output;
+
 if (osName.indexOf('windows') !== -1) {
   osName = 'windows';
   onWindows = true;
 } else if (osName === '%os%') {
-  osName = exec('uname -s | tr "[:upper:]" "[:lower:]" | xargs echo -n', {silent: true}).output;
+  osName = exec('uname -s | tr "[:upper:]" "[:lower:]" | xargs echo -n', {
+    silent: true
+  }).output;
+
   osName = osName === 'darwin' ? 'osx' : osName;
   onWindows = false;
 }
@@ -62,9 +68,9 @@ cd(base);
 exec('rm -rf ./dist');
 mkdir('./dist');
 
-function buildDist (os, name) {
+function buildDist(os, name) {
   var app = '';
-  switch(os) {
+  switch (os) {
 
     case 'windows':
       console.log('Windows build');
@@ -92,7 +98,8 @@ function buildDist (os, name) {
       app = name + '.app';
       cp('-R', './cache/electron/Electron.app', './dist/' + osName);
       mv('./dist/osx/Electron.app', './dist/osx/' + app);
-      mv('./dist/osx/' + app + '/Contents/MacOS/Electron', './dist/osx/' + app + '/Contents/MacOS/' + name);
+      mv('./dist/osx/' + app + '/Contents/MacOS/Electron',
+          './dist/osx/' + app + '/Contents/MacOS/' + name);
       mkdir('dist/osx/' + app + '/Contents/Resources/app');
       break;
 
@@ -101,8 +108,8 @@ function buildDist (os, name) {
   }
 }
 
-function copyMeteorBundle (os, name) {
-  switch(os) {
+function copyMeteorBundle(os, name) {
+  switch (os) {
 
     case 'windows':
     case 'linux':
@@ -118,8 +125,8 @@ function copyMeteorBundle (os, name) {
   }
 }
 
-function copyStartupFiles (os, name) {
-  switch(os) {
+function copyStartupFiles(os, name) {
+  switch (os) {
 
     case 'windows':
     case 'linux':
@@ -139,8 +146,8 @@ function copyStartupFiles (os, name) {
   }
 }
 
-function copyBinaryFiles (os, name) {
-  switch(os) {
+function copyBinaryFiles(os, name) {
+  switch (os) {
 
     case 'windows':
     case 'linux':
@@ -158,8 +165,8 @@ function copyBinaryFiles (os, name) {
   }
 }
 
-function copyIcon (os, name) {
-  switch(os) {
+function copyIcon(os, name) {
+  switch (os) {
 
     case 'windows':
     case 'linux':
@@ -177,19 +184,25 @@ function copyIcon (os, name) {
   }
 }
 
-function updatePlist (name) {
+function updatePlist(name) {
   echo('-----> Updating Info.plist version to ' + projectVersion);
-  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ' + projectVersion + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
-  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
-  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleName ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
-  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier ' + 'com.electrometeor.electrometeor' + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
-  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleExecutable ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
+  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ' + projectVersion +
+        '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
+  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName ' + distName +
+        '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
+  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleName ' + distName +
+        '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
+  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier ' +
+        'com.electrometeor.electrometeor' + '" ' + base + '/dist/osx/' +
+        name + '.app/Contents/Info.plist');
+  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleExecutable ' + distName +
+        '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
 }
 
-function createZipFile (os, name) {
+function createZipFile(os, name) {
   var app = '';
   var zippedApp = '';
-  switch(os) {
+  switch (os) {
 
     case 'windows':
     case 'linux':

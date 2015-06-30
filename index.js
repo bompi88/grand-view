@@ -1,10 +1,11 @@
 /*eslint strict:0*/
+/*jshint strict:false */
+
 var childProcess = require('child_process');
 var os = require('os');
 var fs = require('fs');
 var net = require('net');
 var path = require('path');
-var exec = childProcess.exec;
 
 /* App Name */
 /* -------- */
@@ -94,9 +95,28 @@ function start (callback) {
           var mongodPath = path.join(dirname, 'resources', 'mongod');
 
           // Arguments passed to mongod command.
-          var mongodArgs = ['--bind_ip', '127.0.0.1', '--dbpath', dataPath, '--port', mongoPort, '--unixSocketPrefix', dataPath, '--smallfiles'];
+          var mongodArgs = [
+            '--bind_ip',
+            '127.0.0.1',
+            '--dbpath',
+            dataPath,
+            '--port',
+            mongoPort,
+            '--unixSocketPrefix',
+            dataPath,
+            '--smallfiles'
+          ];
+
           if (os.platform() === 'win32') {
-            mongodArgs = ['--bind_ip', '127.0.0.1', '--dbpath', dataPath, '--port', mongoPort, '--smallfiles'];
+            mongodArgs = [
+              '--bind_ip',
+              '127.0.0.1',
+              '--dbpath',
+              dataPath,
+              '--port',
+              mongoPort,
+              '--smallfiles'
+            ];
           }
 
           // Start the Mongo process.
@@ -131,7 +151,6 @@ function start (callback) {
               userEnv.BIND_IP = '127.0.0.1';
               userEnv.DB_PATH = dataPath;
               userEnv.MONGO_URL = 'mongodb://localhost:' + mongoPort + '/meteor';
-              // user_env.METEOR_SETTINGS = fs.readFileSync(path.join(dirname, 'resources', 'settings.json'), 'utf8');
               userEnv.DIR = dirname;
               userEnv.NODE_ENV = 'production';
               userEnv.NODE_PATH = path.join(dirname, 'node_modules');
@@ -154,7 +173,7 @@ function start (callback) {
               nodeChild.stdout.on('data', function (nodeData) {
                 console.log(nodeData);
 
-                if (data.indexOf(!'Meteor app started.' === -1)) {
+                if (data.indexOf('Meteor app started.') !== -1) {
                   if (!opened) {
                     opened = true;
                   } else {
@@ -178,7 +197,8 @@ function start (callback) {
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 
-/*global mainWindow:true*/ // <-- This is to let ESLint know that it's ok to have a global and 'true' allows it to be read/write
+// This is to let ESLint know that it's ok to have a global and 'true' allows it to be read/write
+/*global mainWindow:true*/
 mainWindow = null;
 
 // Emitted when the application is activated while there is no opened windows.

@@ -5,6 +5,9 @@
 //
 // var shell = require('shelljs');
 // shell.echo('hello world');
+
+/* global echo, config, exec, cd, mv, cp, mkdir, test */
+
 'use strict';
 
 require('shelljs/global');
@@ -115,10 +118,10 @@ cd('cache');
 
 if (!test('-f', electronFile)) {
   echo('-----> Downloading Electron... (version: ' + electronVersion + ')');
-  var electronCurl = 'curl --insecure -L -o '
-                   + electronFile
-                   + ' http://github.com/atom/electron/releases/download/v'
-                   + electronVersion + '/' + electronFile;
+  var electronCurl =  'curl --insecure -L -o ' +
+                      electronFile +
+                      ' http://github.com/atom/electron/releases/download/v' +
+                      electronVersion + '/' + electronFile;
   exec(electronCurl);
   if (onWindows) {
     var electronZip = new AdmZip(electronFile);
@@ -132,11 +135,11 @@ if (!test('-f', electronFile)) {
 if (!test('-f', mongoFile)) {
   echo('-----> Downloading MongoDB... (version: ' + mongoVersion + ')');
   var os = osName === 'darwin' ? 'osx' : osName;
-  var mongoCurl = 'curl -L -o '
-                + mongoFile
-                + ' https://fastdl.mongodb.org/'
-                + os + '/'
-                + mongoFile;
+  var mongoCurl =   'curl -L -o ' +
+                    mongoFile +
+                    ' https://fastdl.mongodb.org/' +
+                    os + '/' +
+                    mongoFile;
   exec(mongoCurl);
   if (onWindows) {
     console.log('Unzipping MongoDB');
@@ -153,11 +156,11 @@ if (!test('-f', mongoFile)) {
 
 if (!test('-f', nodeFile)) {
   echo('-----> Downloading Node... (version: ' + nodeVersion + ')');
-  var nodeCurl = 'curl -L -o '
-               + nodeFile
-               + ' http://nodejs.org/dist/'
-               + 'v' + nodeVersion
-               + '/' + nodeFile;
+  var nodeCurl =  'curl -L -o ' +
+                  nodeFile +
+                  ' http://nodejs.org/dist/' +
+                  'v' + nodeVersion +
+                  '/' + nodeFile;
   exec(nodeCurl);
   if (onWindows) {
     mkdir('nodejs');
@@ -175,11 +178,11 @@ if (!test('-f', nodeFile)) {
 if (onWindows) {
   if (!test('-f', npmFile)) {
     echo('-----> Downloading NPM... (version: ' + npmVersion + ')');
-    var npmCurl = 'curl -L -o '
-                 + npmFile
-                 + ' https://github.com/npm/npm/archive/'
-                 + 'v' + npmVersion
-                 + '.zip';
+    var npmCurl = 'curl -L -o ' +
+                  npmFile +
+                  ' https://github.com/npm/npm/archive/' +
+                  'v' + npmVersion +
+                  '.zip';
     exec(npmCurl);
     var npmZip = new AdmZip(npmFile);
     npmZip.extractAllTo('./nodejs/node_modules/', true);

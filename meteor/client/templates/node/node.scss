@@ -1,0 +1,144 @@
+////////////////////////////////////////////////////////////////////////////////
+// Node SCSS Styles
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright 2015 Concept
+//
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+////////////////////////////////////////////////////////////////////////////////
+
+$drop-slot-bg-color: darken($white, 5%);
+$drop-slot-border-color: darken($white, 40%);
+$expand-collapse-icon-color: #555;
+$plus-minus-color: $white;
+
+.slot-top {
+  display: inline-block;
+  height: 10px;
+  width: 100%;
+  z-index: 1000;
+}
+
+.slot-bottom {
+  height: 10px;
+  width: 100%;
+  z-index: 1000;
+}
+
+.slot-visible {
+  background-color: $drop-slot-bg-color;
+  border: 1px dashed $drop-slot-border-color;
+  border-radius: 2px;
+  height: 30px;
+  margin-bottom: 0;
+  margin-top: -4px;
+  padding: 10px;
+  position: relative;
+
+  &.slot-top {
+    top: 0;
+  }
+
+  &.slot-bottom {
+    top: 0;
+  }
+}
+
+.node-text {
+  display: block;
+  position: relative;
+}
+
+.icon {
+  display: block;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 16px;
+  z-index: 300;
+}
+
+.icon-minus {
+  @include border-top-radius(8px);
+  @include border-right-radius(8px);
+  @include border-bottom-radius(8px);
+  @include border-left-radius(8px);
+
+  background-color: $expand-collapse-icon-color;
+  height: 16px;
+  left: -33px;
+  position: relative;
+  top: -16px;
+  width: 16px;
+}
+
+.icon-minus:after {
+  @include border-top-radius(1px);
+  @include border-right-radius(1px);
+  @include border-bottom-radius(1px);
+  @include border-left-radius(1px);
+
+  background-color: $plus-minus-color;
+  content: '';
+  height: 2px;
+  left: 3.5px;
+  position: absolute;
+  top: 7px;
+  width: 8px;
+  z-index: 4;
+}
+
+.icon-plus {
+  @include border-top-radius(8px);
+  @include border-right-radius(8px);
+  @include border-bottom-radius(8px);
+  @include border-left-radius(8px);
+
+  background-color: $expand-collapse-icon-color;
+  height: 16px;
+  left: -33px;
+  position: relative;
+  top: -16px;
+  width: 16px;
+}
+
+.icon-plus:after {
+  @include border-top-radius(1px);
+  @include border-right-radius(1px);
+  @include border-bottom-radius(1px);
+  @include border-left-radius(1px);
+
+  background-color: $plus-minus-color;
+  content: '';
+  height: 2px;
+  left: 4px;
+  position: absolute;
+  top: 7px;
+  width: 8px;
+}
+
+.icon-plus:before {
+  @include border-top-radius(1px);
+  @include border-right-radius(1px);
+  @include border-bottom-radius(1px);
+  @include border-left-radius(1px);
+
+  background-color: $plus-minus-color;
+  content: '';
+  height: 8px;
+  left: 7px;
+  position: absolute;
+  top: 4px;
+  width: 2px;
+}

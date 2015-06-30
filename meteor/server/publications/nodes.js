@@ -1,39 +1,40 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Publications for Nodes collection
 ////////////////////////////////////////////////////////////////////////////////
-
-/*
- * Copyright 2015 Concept
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
+//
+// Copyright 2015 Concept
+//
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+////////////////////////////////////////////////////////////////////////////////
 
 "use strict";
-
 
 /**
  * Publish all nodes that are being used by a document with a particular id.
  */
 Meteor.publish('nodesByDoc', function(id) {
 
-  var uid = GV.helpers.userId(this.userId);
+  // get the document
+  var doc = GV.collections.Documents.find({
+    _id: id
+  }).fetch();
 
-	// get the document
-	var doc = GV.collections.Documents.find({ $and: [{ _id: id }, { userId: uid }] }).fetch();
-
-	// If there is a document, return all its nodes
-	return doc && doc[0] ? GV.collections.Nodes.find({ $and: [{_id: { $in : doc[0].children || [] }}, { userId: uid }]}) : this.ready();
+  // If there is a document, return all its nodes
+  return doc && doc[0] ? GV.collections.Nodes.find({
+    _id: {
+      $in: doc[0].children || []
+    }
+  }) : this.ready();
 });
 
 /**
@@ -41,7 +42,7 @@ Meteor.publish('nodesByDoc', function(id) {
  */
 Meteor.publish('nodeById', function(id) {
 
-  var uid = GV.helpers.userId(this.userId);
-
-  return GV.collections.Nodes.find({ $and: [{ _id: id }, { userId: uid }] });
+  return GV.collections.Nodes.find({
+    _id: id
+  });
 });
