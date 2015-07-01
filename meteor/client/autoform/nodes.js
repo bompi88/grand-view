@@ -50,9 +50,12 @@ AutoForm.hooks({
           }
         });
       });
-      Session.set("inlineEditNode", null);
-      Session.set("formDirty", false);
-      Notifications.success('Suksess', 'Elementet ble oppdatert!');
+
+      Meteor.defer(function() {
+        Session.set("inlineEditNode", null);
+        Session.set("formDirty", false);
+        Notifications.success('Suksess', 'Elementet ble oppdatert!');
+      });
     }
 
   }
