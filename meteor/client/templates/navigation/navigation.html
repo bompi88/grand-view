@@ -35,6 +35,24 @@ This is the navbar located at the top.
         <a class="navbar-brand" rel="home" href="/" title="Til forsiden">GrandView</a>
       </div>
       <div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav navbar-right toggle-advanced-mode">
+					<li class="dropdown">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bytt modus <span class="caret"></span></a>
+	          <ul class="dropdown-menu">
+							{{#if $.Session.equals 'mode' 'easy'}}
+								<li class="disabled"><a href="#" class="easy-mode"><span class="glyphicon glyphicon-ok green"></span> Forenklet modus</a></li>
+							{{else}}
+								<li><a href="#" class="easy-mode no-icon">Forenklet modus</a></li>
+							{{/if}}
+
+							{{#if $.Session.equals 'mode' 'advanced'}}
+								<li class="disabled"><a href="#" class="advanced-mode"><span class="glyphicon glyphicon-ok green"></span> Avansert modus</a></li>
+							{{else}}
+								<li><a href="#" class="advanced-mode no-icon">Avansert modus</a></li>
+							{{/if}}
+	          </ul>
+	        </li>
+				</ul>
         <ul class="nav navbar-nav">
           {{> NavBarButton route='Documents' name='Mine dokumenter'}}
           {{> NavBarButton route='Templates' name='Mine maler'}}

@@ -35,6 +35,22 @@ $nav-col-highlight: #444;
   }
 }
 
+.navbar-right.toggle-advanced-mode {
+  margin-right: 15px;
+
+  .dropdown {
+    background-color: darken(#fff, 5%);
+
+    .no-icon {
+      margin-left: 23px;
+    }
+  }
+
+  .glyphicon.green {
+    color: #008000;
+  }
+}
+
 // -- Bootstrap overrides ------------------------------------------------------
 
 .navbar-default {
