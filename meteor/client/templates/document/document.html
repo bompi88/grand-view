@@ -21,7 +21,6 @@ for editing of nodes in the tree.
 <template name="Document">
   <div class="container default-container" style="overflow:hidden;height:100%; padding-top:80px;">
     <div class="row" style="overflow:hidden;height:100%;margin:0;">
-
       {{!-- The tree structure --}}
       <div class="col-xs-4 structure-container">
 
@@ -49,6 +48,7 @@ for editing of nodes in the tree.
       <div class="col-xs-8" style="padding-right:0">
         <div class="row">
           <div class="col-xs-12">
+      {{env}}
             {{> Tabs}}
           </div>
         </div>
