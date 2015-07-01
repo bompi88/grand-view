@@ -31,6 +31,6 @@ GV = {
   routeCtrls: {},
   timeout: 5000,
   basePath: (process.platform === 'win32') ?
-    process.env.HOMEPATH + 'AppData/Local/GrandView/' :
+    process.env.USERPROFILE + '/GrandView/' :
     process.env.HOME + '/GrandView/'
 };
