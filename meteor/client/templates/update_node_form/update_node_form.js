@@ -217,7 +217,7 @@ Template.UpdateNodeForm.helpers({
 
   file: function() {
     return GV.collections.Files.findOne({
-      _id: Session.get("file") || this._af.doc && this._af.doc.fileId || null
+      _id: Session.get("file") || this._af && this._af.doc && this._af.doc.fileId || null
     });
   },
 
