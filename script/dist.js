@@ -10,8 +10,10 @@
 console.log('Starting Distribution Script...');
 require('shelljs/global');
 var path = require('path');
+var fs = require('fs');
 // var zipFolder = require('zip-folder');
 var AdmZip = require('adm-zip');
+var rmdir = require('rimraf');
 
 // Auto-exit on errors
 config.fatal = true;
@@ -59,191 +61,194 @@ echo('Bundle created\n');
 
 cd(base);
 
-exec('rm -rf ./dist');
-mkdir('./dist');
+rmdir(base + '/dist', function(error){
+  
+  mkdir('./dist');
 
-function buildDist (os, name) {
-  var app = '';
-  switch(os) {
+  function buildDist (os, name) {
+    var app = '';
+    switch(os) {
 
-    case 'windows':
-      console.log('Windows build');
+      case 'windows':
+        console.log('Windows build');
 
-      app = name + '.exe';
-      cp('-R', './cache/electron', './dist/windows');
-      mv('./dist/windows/electron', './dist/windows/' + name);
-      mv('./dist/windows/' + name + '/electron.exe', './dist/windows/' + name + '/' + app);
-      mkdir('./dist/windows/' + name + '/resources/app');
-      break;
+        app = name + '.exe';
+        cp('-R', './cache/electron', './dist/windows');
+        mv('./dist/windows/electron', './dist/windows/' + name);
+        mv('./dist/windows/' + name + '/electron.exe', './dist/windows/' + name + '/' + app);
+        mkdir('./dist/windows/' + name + '/resources/app');
+        break;
 
-    case 'linux':
-      console.log('Linux build');
+      case 'linux':
+        console.log('Linux build');
 
-      app = name;
-      cp('-R', './cache/electron', './dist/linux');
-      mv('./dist/linux/electron', './dist/linux/' + name);
-      mv('./dist/linux/' + name + '/electron', './dist/linux/' + name + '/' + app);
-      mkdir('dist/linux/' + name + '/resources/app');
-      break;
+        app = name;
+        cp('-R', './cache/electron', './dist/linux');
+        mv('./dist/linux/electron', './dist/linux/' + name);
+        mv('./dist/linux/' + name + '/electron', './dist/linux/' + name + '/' + app);
+        mkdir('dist/linux/' + name + '/resources/app');
+        break;
 
-    case 'osx':
-      console.log('Mac build');
+      case 'osx':
+        console.log('Mac build');
 
-      app = name + '.app';
-      cp('-R', './cache/electron/Electron.app', './dist/' + osName);
-      mv('./dist/osx/Electron.app', './dist/osx/' + app);
-      mv('./dist/osx/' + app + '/Contents/MacOS/Electron', './dist/osx/' + app + '/Contents/MacOS/' + name);
-      mkdir('dist/osx/' + app + '/Contents/Resources/app');
-      break;
+        app = name + '.app';
+        cp('-R', './cache/electron/Electron.app', './dist/' + osName);
+        mv('./dist/osx/Electron.app', './dist/osx/' + app);
+        mv('./dist/osx/' + app + '/Contents/MacOS/Electron', './dist/osx/' + app + '/Contents/MacOS/' + name);
+        mkdir('dist/osx/' + app + '/Contents/Resources/app');
+        break;
 
-    default:
-      throw new Error('Unrecognized Operating System. Exiting...');
+      default:
+        throw new Error('Unrecognized Operating System. Exiting...');
+    }
   }
-}
 
-function copyMeteorBundle (os, name) {
-  switch(os) {
+  function copyMeteorBundle (os, name) {
+    switch(os) {
 
-    case 'windows':
-    case 'linux':
-      mv('bundle', './dist/' + os + '/' + name + '/resources/app');
-      break;
+      case 'windows':
+      case 'linux':
+        mv('bundle', './dist/' + os + '/' + name + '/resources/app');
+        break;
 
-    case 'osx':
-      mv('bundle', './dist/osx/' + name + '.app/Contents/Resources/app');
-      break;
+      case 'osx':
+        mv('bundle', './dist/osx/' + name + '.app/Contents/Resources/app');
+        break;
 
-    default:
-      throw new Error('Unrecognized Operating System. Exiting...');
+      default:
+        throw new Error('Unrecognized Operating System. Exiting...');
+    }
   }
-}
 
-function copyStartupFiles (os, name) {
-  switch(os) {
+  function copyStartupFiles (os, name) {
+    switch(os) {
 
-    case 'windows':
-    case 'linux':
-      cp('./index.js', './dist/' + os + '/' + name + '/resources/app/');
-      cp('./package.json', './dist/' + os + '/' + name + '/resources/app/');
-      cp('-R', './node_modules', './dist/' + os + '/' + name + '/resources/app/');
-      break;
+      case 'windows':
+      case 'linux':
+        cp('./index.js', './dist/' + os + '/' + name + '/resources/app/');
+        cp('./package.json', './dist/' + os + '/' + name + '/resources/app/');
+        cp('-R', './node_modules', './dist/' + os + '/' + name + '/resources/app/');
+        break;
 
-    case 'osx':
-      cp('./index.js', './dist/osx/' + name + '.app/Contents/Resources/app/');
-      cp('./package.json', './dist/osx/' + name + '.app/Contents/Resources/app/');
-      cp('-R', './node_modules', './dist/osx/' + name + '.app/Contents/Resources/app/');
-      break;
+      case 'osx':
+        cp('./index.js', './dist/osx/' + name + '.app/Contents/Resources/app/');
+        cp('./package.json', './dist/osx/' + name + '.app/Contents/Resources/app/');
+        cp('-R', './node_modules', './dist/osx/' + name + '.app/Contents/Resources/app/');
+        break;
 
-    default:
-      throw new Error('Unrecognized Operating System. Exiting...');
+      default:
+        throw new Error('Unrecognized Operating System. Exiting...');
+    }
   }
-}
 
-function copyBinaryFiles (os, name) {
-  switch(os) {
+  function copyBinaryFiles (os, name) {
+    switch(os) {
 
-    case 'windows':
-    case 'linux':
-      mkdir('./dist/' + os + '/' + name + '/resources/app/resources');
-      cp('./resources/*', './dist/' + os + '/' + name + '/resources/app/resources/');
-      break;
+      case 'windows':
+      case 'linux':
+        mkdir('./dist/' + os + '/' + name + '/resources/app/resources');
+        cp('./resources/*', './dist/' + os + '/' + name + '/resources/app/resources/');
+        break;
 
-    case 'osx':
-      mkdir('./dist/osx/' + name + '.app/Contents/Resources/app/resources');
-      cp('./resources/*', './dist/osx/' + name + '.app/Contents/Resources/app/resources/');
-      break;
+      case 'osx':
+        mkdir('./dist/osx/' + name + '.app/Contents/Resources/app/resources');
+        cp('./resources/*', './dist/osx/' + name + '.app/Contents/Resources/app/resources/');
+        break;
 
-    default:
-      throw new Error('Unrecognized Operating System. Exiting...');
+      default:
+        throw new Error('Unrecognized Operating System. Exiting...');
+    }
   }
-}
 
-function copyIcon (os, name) {
-  switch(os) {
+  function copyIcon (os, name) {
+    switch(os) {
 
-    case 'windows':
-    case 'linux':
-      // Not sure if this is the right place to put the .icns file
-      // May need to have a different extension.
-      cp('electrometeor.icns', './dist/' + os + '/' + name + '/resources/electron.icns');
-      break;
+      case 'windows':
+      case 'linux':
+        // Not sure if this is the right place to put the .icns file
+        // May need to have a different extension.
+        cp('electrometeor.icns', './dist/' + os + '/' + name + '/resources/electron.icns');
+        break;
 
-    case 'osx':
-      cp('electrometeor.icns', './dist/osx/' + name + '.app/Contents/Resources/electron.icns');
-      break;
+      case 'osx':
+        cp('electrometeor.icns', './dist/osx/' + name + '.app/Contents/Resources/electron.icns');
+        break;
 
-    default:
-      throw new Error('Unrecognized Operating System. Exiting...');
+      default:
+        throw new Error('Unrecognized Operating System. Exiting...');
+    }
   }
-}
 
-function updatePlist (name) {
-  echo('-----> Updating Info.plist version to ' + projectVersion);
-  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ' + projectVersion + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
-  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
-  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleName ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
-  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier ' + 'com.electrometeor.electrometeor' + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
-  exec('/usr/libexec/PlistBuddy -c "Set :CFBundleExecutable ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
-}
-
-function createZipFile (os, name) {
-  var app = '';
-  var zippedApp = '';
-  switch(os) {
-
-    case 'windows':
-    case 'linux':
-      app = base + '/dist/' + os + '/' + name;
-      zippedApp = base + '/dist/' + os + '/' + name + '-' + projectVersion + '.zip';
-      var zip = new AdmZip();
-
-      zip.addLocalFolder(app);
-      zip.writeZip(app, zippedApp);
-      break;
-
-    case 'osx':
-      app = base + '/dist/' + os + '/' + name + '.app';
-      zippedApp = base + '/dist/' + os + '/' + name + '-' + projectVersion + '.zip';
-      exec('ditto -c -k --sequesterRsrc --keepParent ' + app + ' ' + zippedApp);
-      break;
-
-    default:
-      throw new Error('Unrecognized Operating System. Exiting...');
+  function updatePlist (name) {
+    echo('-----> Updating Info.plist version to ' + projectVersion);
+    exec('/usr/libexec/PlistBuddy -c "Set :CFBundleVersion ' + projectVersion + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
+    exec('/usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
+    exec('/usr/libexec/PlistBuddy -c "Set :CFBundleName ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
+    exec('/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier ' + 'com.electrometeor.electrometeor' + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
+    exec('/usr/libexec/PlistBuddy -c "Set :CFBundleExecutable ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
   }
-}
+
+  function createZipFile (os, name) {
+    var app = '';
+    var zippedApp = '';
+    switch(os) {
+
+      case 'windows':
+      case 'linux':
+        app = base + '/dist/' + os + '/' + name;
+        zippedApp = base + '/dist/' + os + '/' + name + '-' + projectVersion + '.zip';
+        var zip = new AdmZip();
+
+        zip.addLocalFolder(app);
+        zip.writeZip(app, zippedApp);
+        break;
+
+      case 'osx':
+        app = base + '/dist/' + os + '/' + name + '.app';
+        zippedApp = base + '/dist/' + os + '/' + name + '-' + projectVersion + '.zip';
+        exec('ditto -c -k --sequesterRsrc --keepParent ' + app + ' ' + zippedApp);
+        break;
+
+      default:
+        throw new Error('Unrecognized Operating System. Exiting...');
+    }
+  }
 
 
 
 
-// Start creation process
-// ======================
+  // Start creation process
+  // ======================
 
-echo('-----> Creating ' + distName + ' app...');
-buildDist(osName, distName);
+  echo('-----> Creating ' + distName + ' app...');
+  buildDist(osName, distName);
 
-echo('-----> Copying Meteor bundle into ' + distName);
-copyMeteorBundle(osName, distName);
+  echo('-----> Copying Meteor bundle into ' + distName);
+  copyMeteorBundle(osName, distName);
 
-echo('-----> Copying startup files into ' + distName);
-copyStartupFiles(osName, distName);
+  echo('-----> Copying startup files into ' + distName);
+  copyStartupFiles(osName, distName);
 
-echo('-----> Copying binary files into ' + distName);
-copyBinaryFiles(osName, distName);
+  echo('-----> Copying binary files into ' + distName);
+  copyBinaryFiles(osName, distName);
 
-echo('-----> Copying icon to ' + distName);
-// copyIcon(osName, distName);
+  echo('-----> Copying icon to ' + distName);
+  // copyIcon(osName, distName);
 
-if (osName === 'osx') {
-  updatePlist(distName);
-}
+  if (osName === 'osx') {
+    updatePlist(distName);
+  }
 
-echo('-----> Creating distributable zip file...\n');
-// createZipFile(osName, distName);
+  echo('-----> Creating distributable zip file...\n');
+  // createZipFile(osName, distName);
 
-echo('Done.');
-if (osName === 'osx') {
-  echo(distName + ' app available at dist/' + osName + '/' + distName + '.app');
-} else {
-  echo(distName + ' app available at dist/' + osName + '/' + distName);
-}
-// echo(distName + ' zip distribution available at dist/' + osName + '/' + distName + '-' + projectVersion + '.zip');
+  echo('Done.');
+  if (osName === 'osx') {
+    echo(distName + ' app available at dist/' + osName + '/' + distName + '.app');
+  } else {
+    echo(distName + ' app available at dist/' + osName + '/' + distName);
+  }
+  // echo(distName + ' zip distribution available at dist/' + osName + '/' + distName + '-' + projectVersion + '.zip');
+
+});
