@@ -81,14 +81,8 @@ function start (callback) {
         console.log('WebPort: ', webPort);
 
         // Be sure to change the PURPOSE to be the name of your app
-        var command = '';
-        if (os.platform() === 'darwin' || os.platform === 'linux') {
-          command = 'rm -rf ' + path.join(dataPath, 'mongod.lock');
-        } else if (os.platform() === 'win32') {
-          childProcess.exec('rm -rf ' + path.join(dataPath, 'mongod.lock'));
-        }
 
-        childProcess.exec(command, function (err, stdout, stderr) {
+        fs.unlink(path.join(dataPath, 'mongod.lock'), function () {
 
           // Path to mongod command bundled with app.
           var mongodPath = path.join(dirname, 'resources', 'mongod');
