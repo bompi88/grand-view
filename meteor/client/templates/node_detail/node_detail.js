@@ -362,7 +362,7 @@ Template.ViewMediaNode.events({
   },
 
   'click .save-media-node': function(event, tmpl) {
-    //event.preventDefault();
+    event.preventDefault();
 
     $("#update-node-form").trigger('submit');
   },
