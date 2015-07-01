@@ -362,7 +362,7 @@ Template.ViewMediaNode.events({
   },
 
   'click .save-media-node': function(event, tmpl) {
-    event.preventDefault();
+    //event.preventDefault();
 
     $("#update-node-form").trigger('submit');
   },
@@ -387,7 +387,7 @@ Template.ViewMediaNode.events({
 
     var fileName = this.copies.filesStore.key.replace(new RegExp(" ", 'g'), '\\ ');
     var filePath = path.join(process.env.HOME, "/GrandView/files", fileName);
-    
+
     GV.helpers.openFile(filePath, function(error, result) {
         if(error)
           console.log(error);
