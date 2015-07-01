@@ -129,8 +129,6 @@ GV.helpers = _.extend(GV.helpers, {
 
   importDocument: function() {
 
-    var basePath = process.env.HOME + "/GrandView";
-
     // show open dialog for GrandView files (.gvf)
     remote.require('dialog').showOpenDialog({
       title: 'Importer rapportstruktur',
@@ -145,11 +143,11 @@ GV.helpers = _.extend(GV.helpers, {
         Session.set("workingText", "Importerer fil... vennligst vent...");
 
         var originalPath = filePathAndName[0];
-        var newPath = path.join(basePath, "tmp", "import");
+        var newPath = path.join(GV.basePath, "tmp", "import");
 
         // create a sandbox
-        mkdirSync(basePath);
-        mkdirSync(path.join(basePath, "tmp"));
+        mkdirSync(GV.basePath);
+        mkdirSync(path.join(GV.basePath, "tmp"));
         mkdirSync(newPath);
 
         // copy over to sandbox
@@ -157,21 +155,21 @@ GV.helpers = _.extend(GV.helpers, {
           if (err) {
             console.log(err);
 
-            deleteFolderRecursive(path.join(basePath, "tmp"));
+            deleteFolderRecursive(path.join(GV.basePath, "tmp"));
             return;
           }
 
           fs.rename(newPath + '/import.gvf', newPath + '/import.tar', function(err) {
             if (err) {
               console.log(err);
-              deleteFolderRecursive(path.join(basePath, "tmp"));
+              deleteFolderRecursive(path.join(GV.basePath, "tmp"));
               return;
             }
 
             var extract = tar.extract();
 
             var tarball = newPath + "/import.tar";
-            var dest = path.join(basePath, "tmp", "import");
+            var dest = path.join(GV.basePath, "tmp", "import");
 
             extract.on('entry', function(header, stream, callback) {
 
@@ -198,7 +196,7 @@ GV.helpers = _.extend(GV.helpers, {
               })
               .on('error', function(err) {
                 console.log(err);
-                deleteFolderRecursive(path.join(basePath, "tmp"));
+                deleteFolderRecursive(path.join(GV.basePath, "tmp"));
               });
 
 
@@ -222,22 +220,22 @@ GV.helpers = _.extend(GV.helpers, {
                           doc,
                           nodes,
                           fileDocs,
-                          path.join(basePath, "files"),
-                          path.join(basePath, "tmp", "import", "files")
+                          path.join(GV.basePath, "files"),
+                          path.join(GV.basePath, "tmp", "import", "files")
                         );
                       },
                       function(err, res) {
                         Session.set("working", false);
                         // if no
-                        deleteFolderRecursive(path.join(basePath, "tmp"));
+                        deleteFolderRecursive(path.join(GV.basePath, "tmp"));
                       });
                   } else {
                     importThemStuff(
                       doc,
                       nodes,
                       fileDocs,
-                      path.join(basePath, "files"),
-                      path.join(basePath, "tmp", "import", "files")
+                      path.join(GV.basePath, "files"),
+                      path.join(GV.basePath, "tmp", "import", "files")
                     );
                   }
                 });
@@ -254,12 +252,10 @@ GV.helpers = _.extend(GV.helpers, {
     Session.set("working", true);
     Session.set("workingText", "Pakker fil... vennligst vent...");
 
-    var basePath = process.env.HOME + "/GrandView";
-
     // create all directories
-    mkdirSync(basePath);
-    mkdirSync(path.join(basePath, "tmp"));
-    mkdirSync(path.join(basePath, "tmp", "files"));
+    mkdirSync(GV.basePath);
+    mkdirSync(path.join(GV.basePath, "tmp"));
+    mkdirSync(path.join(GV.basePath, "tmp", "files"));
 
     // Gather document in one file, and nodes in another and put the them inside
     // the new folder
@@ -289,17 +285,17 @@ GV.helpers = _.extend(GV.helpers, {
       }).fetch();
 
       // write the data
-      fs.writeFileSync(basePath + "/tmp/doc.json", JSON.stringify(doc, null, 4), "utf8");
-      fs.writeFileSync(basePath + "/tmp/nodes.json", JSON.stringify(nodes, null, 4), "utf8");
-      fs.writeFileSync(basePath + "/tmp/files.json", JSON.stringify(files, null, 4), "utf8");
+      fs.writeFileSync(GV.basePath + "tmp/doc.json", JSON.stringify(doc, null, 4), "utf8");
+      fs.writeFileSync(GV.basePath + "tmp/nodes.json", JSON.stringify(nodes, null, 4), "utf8");
+      fs.writeFileSync(GV.basePath + "tmp/files.json", JSON.stringify(files, null, 4), "utf8");
 
 
       async.forEach(files, function(file, callback) {
 
         var fileName = file && file.copies && file.copies.filesStore && file.copies.filesStore.key;
 
-        var from = basePath + "/files/" + fileName;
-        var to = basePath + '/tmp/files/' + fileName;
+        var from = GV.basePath + "files/" + fileName;
+        var to = GV.basePath + 'tmp/files/' + fileName;
 
         copyFile(from, to, callback);
 
@@ -307,12 +303,12 @@ GV.helpers = _.extend(GV.helpers, {
 
         if (err) {
           console.log(err);
-          deleteFolderRecursive(basePath + "/tmp");
+          deleteFolderRecursive(GV.basePath + "tmp");
           return;
         }
 
         // zip all contents inside this folder and retrieve the path of the zip file
-        var output = fs.createWriteStream(basePath + '/output.tar');
+        var output = fs.createWriteStream(GV.basePath + 'output.tar');
         var archive = archiver('tar');
 
         // Set up a write stream
@@ -331,7 +327,7 @@ GV.helpers = _.extend(GV.helpers, {
             }, ]
           }, function(filePathAndName) {
             if (filePathAndName) {
-              fs.rename(basePath + '/output.tar', filePathAndName, function(err) {
+              fs.rename(GV.basePath + 'output.tar', filePathAndName, function(err) {
                 if (err) {
                   console.log(err);
                 } else {
@@ -341,16 +337,16 @@ GV.helpers = _.extend(GV.helpers, {
                   );
                 }
 
-                deleteFolderRecursive(basePath + "/tmp");
+                deleteFolderRecursive(GV.basePath + "tmp");
               });
             } else {
-              deleteFolderRecursive(basePath + "/tmp");
+              deleteFolderRecursive(GV.basePath + "tmp");
             }
           });
         });
 
         archive.on('error', function(err) {
-          deleteFolderRecursive(basePath + "/tmp");
+          deleteFolderRecursive(GV.basePath + "tmp");
 
           throw err;
         });
@@ -359,11 +355,11 @@ GV.helpers = _.extend(GV.helpers, {
 
         archive.bulk([{
           expand: true,
-          cwd: basePath + '/tmp',
+          cwd: GV.basePath + 'tmp',
           src: ['*.json']
         }, {
           expand: true,
-          cwd: basePath + '/tmp/files',
+          cwd: GV.basePath + 'tmp/files',
           src: ['**'],
           dest: 'files'
         }]);

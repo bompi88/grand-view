@@ -386,7 +386,7 @@ Template.ViewMediaNode.events({
     event.stopPropagation();
 
     var fileName = this.copies.filesStore.key.replace(new RegExp(" ", 'g'), '\\ ');
-    var filePath = path.join(process.env.HOME, "/GrandView/files", fileName);
+    var filePath = path.join(GV.basePath, "files", fileName);
 
     GV.helpers.openFile(filePath, function(error, result) {
         if(error)

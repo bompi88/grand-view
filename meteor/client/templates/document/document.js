@@ -107,10 +107,6 @@ Template.Document.helpers({
 
   getDoc: function() {
     return Router.current && Router.current() && Router.current().data && Router.current().data();
-  },
-
-  env: function() {
-    return process.env.HOME;
   }
 
 });

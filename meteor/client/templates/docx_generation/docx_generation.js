@@ -88,11 +88,11 @@ var renderMediaNode = function(node, par, posLabel) {
     });
 
     if (file && (file.copies.filesStore.type.split("/")[0] === "image")) {
-      par.addImage(process.env.HOME + "/GrandView/files/" + file.copies.filesStore.key);
+      par.addImage(GV.basePath + "files/" + file.copies.filesStore.key);
     } else if (file) {
       par.addText("Filbane:", keywordHeaderText);
-      par.addText(" \"" + process.env.HOME +
-        "/GrandView/files/" + file.copies.filesStore.key +
+      par.addText(" \"" + GV.basePath +
+        "files/" + file.copies.filesStore.key +
         "\"", keywordText);
     }
 
@@ -165,7 +165,6 @@ GV.helpers = _.extend(GV.helpers, {
 
   generateDOCX: function(docId) {
 
-    var basePath = process.env.HOME + "/GrandView";
     var fileName = docId + ".docx";
 
     var docx = officegen('docx');
@@ -185,13 +184,13 @@ GV.helpers = _.extend(GV.helpers, {
 
       renderDocument(doc, docx, mainParagraph);
 
-      var out = fs.createWriteStream(basePath + "/" + fileName);
+      var out = fs.createWriteStream(GV.basePath + fileName);
 
       docx.generate(out, {
         'finalize': function(written) {
           console.log('Ferdig å skrive Word-fil.\nBytes skrevet: ' + written + '\n');
 
-          var filePath = path.join(basePath + "/", fileName);
+          var filePath = path.join(GV.basePath, fileName);
 
           GV.helpers.openFile(filePath, function(error, result) {
             if(error)
