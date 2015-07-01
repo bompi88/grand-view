@@ -19,6 +19,8 @@
 
 "use strict";
 
+var path = require('path');
+
 Session.set("file", null);
 Session.set("uploadStopped", false);
 
@@ -105,13 +107,13 @@ Template.UpdateNodeForm.events({
     event.preventDefault();
     event.stopPropagation();
 
-    var cp = require("child_process");
+    var fileName = this.copies.filesStore.key.replace(new RegExp(" ", 'g'), '\\ ');
 
-    var filename = this.copies.filesStore.key.replace(new RegExp(" ", 'g'), '\\ ');
+    var filePath = path.join(process.env.HOME, "/GrandView/files", fileName);
 
-    cp.exec("open ~/GrandView/files/" + filename, function(error, result) {
-      if (error)
-        console.log(error);
+    GV.helpers.openFile(filePath, function(error, result) {
+        if(error)
+          console.log(error);
     });
   },
 

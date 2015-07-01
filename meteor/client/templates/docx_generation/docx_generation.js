@@ -19,12 +19,8 @@
 
 "use strict";
 
-var os = require('os');
-var osName = os.platform();
-
 var path = require('path');
 var officegen = require('officegen');
-var cp = require("child_process");
 var fs = require('fs');
 
 var header1Text = {
@@ -194,20 +190,11 @@ GV.helpers = _.extend(GV.helpers, {
       docx.generate(out, {
         'finalize': function(written) {
           console.log('Ferdig å skrive Word-fil.\nBytes skrevet: ' + written + '\n');
-          var openCMD;
 
-          var filePath = path.resolve(basePath + "/", fileName);
+          var filePath = path.join(basePath + "/", fileName);
 
-          if(osName === "win32") {
-            openCMD = '"' + filePath + '"';
-          } else if(osName === "darwin"){
-            openCMD = "open " + filePath;
-          } else {
-            openCMD = "xdg-open " + filePath;
-          }
-
-          cp.exec(openCMD, function(error, result) {
-            if (error)
+          GV.helpers.openFile(filePath, function(error, result) {
+            if(error)
               console.log(error);
           });
         },

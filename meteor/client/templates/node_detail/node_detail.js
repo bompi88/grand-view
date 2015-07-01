@@ -19,6 +19,8 @@
 
 "use strict";
 
+var path = require('path');
+
 Session.set('isMoveMode', false);
 
 // -- Helper methods -----------------------------------------------------------
@@ -383,16 +385,15 @@ Template.ViewMediaNode.events({
     event.preventDefault();
     event.stopPropagation();
 
-    var cp = require("child_process");
-
-    var filename = this.copies.filesStore.key.replace(new RegExp(" ", 'g'), '\\ ');
-
-    cp.exec("open ~/GrandView/files/" + filename, function(error, result) {
-      if (error)
-        console.log(error);
+    var fileName = this.copies.filesStore.key.replace(new RegExp(" ", 'g'), '\\ ');
+    var filePath = path.join(process.env.HOME, "/GrandView/files", fileName);
+    
+    GV.helpers.openFile(filePath, function(error, result) {
+        if(error)
+          console.log(error);
     });
   }
-  
+
 });
 
 
