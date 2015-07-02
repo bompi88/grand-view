@@ -30,6 +30,7 @@ if (osName.indexOf('windows') !== -1) {
 
 console.log('On Windows: ', onWindows);
 console.log(osName);
+console.log(dir);
 
 cd(base + '/meteor');
 
