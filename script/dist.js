@@ -247,12 +247,15 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
     updatePlist(distName);
   }
 
-  echo('-----> Creating distributable zip file...\n');
-  // createZipFile(osName, distName);
-  echo('-----> Creating distributable zip file...\n');
 
-  if(onWindows)
-    cp('./dist/windows/' + name, '/tmp/' + name);
+
+  if(onWindows) {
+    cp('./dist/windows/' + distName, '/tmp/' + distName);
+    exec('grunt create-windows-installer');
+  } else {
+    echo('-----> Creating distributable zip file...\n');
+    createZipFile(osName, distName);
+  }
 
   echo('Done.');
   if (osName === 'osx') {
@@ -260,6 +263,11 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
   } else {
     echo(distName + ' app available at dist/' + osName + '/' + distName);
   }
-  // echo(distName + ' zip distribution available at dist/' + osName + '/' + distName + '-' + projectVersion + '.zip');
+
+  if(onWindows) {
+    echo(distName + ' zip distribution available at dist/' + osName + '/' + distName + '-' + projectVersion + '.zip');
+  } else {
+    echo(distName + ' installer available at /tmp/' + distName + '/installer/' + distName + '.exe');
+  }
 
 });
