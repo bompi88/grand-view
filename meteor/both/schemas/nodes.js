@@ -97,11 +97,11 @@ GV.schemas.Nodes = new SimpleSchema({
           // How the tags suggestions are rendered
           render: {
             option: function(item, escape) {
-              return '<div style="display:inline-block;">' +
-                '<span class="title" style="width:70%;">' +
+              return '<div>' +
+                '<span class="title">' +
                 '<span class="name">' + item.text + '</span>' +
                 '</span>' +
-                '<button type="button" id="btn-editDoc" class="btn btn-success btn-sm pull-right">Slett</button>'
+                //'<button type="button" id="btn-editDoc" class="btn btn-success btn-sm pull-right">Slett</button>'
                 '</div>';
             },
             option_create: function(data, escape) {
