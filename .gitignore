@@ -8,3 +8,4 @@ dist
 .idea/
 *.iml
 meteor/scss_index.scss
+bundle/
