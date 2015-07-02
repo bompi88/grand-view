@@ -65,7 +65,6 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
 
   if(error) {
     console.log(error);
-    return;
   }
 
   mkdir('./dist');
@@ -250,8 +249,17 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
   var installerPath = path.resolve('/tmp/' + distName + '/');
 
   if(onWindows) {
-    cp('-R', './dist/windows/' + distName + "/*", installerPath);
-    exec('grunt create-windows-installer');
+    rmdir(installerPath, { maxBusyTries: 10 }, function(error){
+
+      if(error) {
+        console.log(error);
+      }
+
+      mkdir('-p', installerPath);
+
+      cp('-R', './dist/windows/' + distName + "/*", installerPath);
+      exec('grunt create-windows-installer');
+    });
   } else {
     echo('-----> Creating distributable zip file...\n');
     createZipFile(osName, distName);
