@@ -265,9 +265,9 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
   }
 
   if(onWindows) {
-    echo(distName + ' zip distribution available at dist/' + osName + '/' + distName + '-' + projectVersion + '.zip');
-  } else {
     echo(distName + ' installer available at /tmp/' + distName + '/installer/' + distName + '.exe');
+  } else {
+    echo(distName + ' zip distribution available at dist/' + osName + '/' + distName + '-' + projectVersion + '.zip');
   }
 
 });
