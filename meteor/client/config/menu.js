@@ -26,9 +26,6 @@ var template = [
         type: 'separator'
       },
       {
-        type: 'separator'
-      },
-      {
         label: 'Skjul GrandView',
         accelerator: 'Command+H',
         selector: 'hide:'
@@ -50,7 +47,7 @@ var template = [
         label: 'Nytt dokument',
         accelerator: 'Command+N',
         click: function() {
-          
+
         }
       },
       {
