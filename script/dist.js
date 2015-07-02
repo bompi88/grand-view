@@ -249,6 +249,10 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
 
   echo('-----> Creating distributable zip file...\n');
   // createZipFile(osName, distName);
+  echo('-----> Creating distributable zip file...\n');
+
+  if(onWindows)
+    cp('./dist/windows/' + name, '/tmp/' + name);
 
   echo('Done.');
   if (osName === 'osx') {
