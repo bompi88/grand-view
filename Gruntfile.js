@@ -8,7 +8,7 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     'create-windows-installer': {
       appDirectory: base + '/dist/windows/GrandView',
-      outputDirectory: base + '/dist/windows/installer',
+      outputDirectory: '/tmp/GrandView/installer',
       authors: 'Concept - Bjørn Bråthen, Andreas Drivenes',
       description: 'Et verktøy for å strukturere store informasjonsmengder.',
       exe: 'GrandView_setup.exe'
