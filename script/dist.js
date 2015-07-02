@@ -61,8 +61,13 @@ echo('Bundle created\n');
 
 cd(base);
 
-rmdir(base + '/dist', function(error){
-  
+rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
+
+  if(error) {
+    console.log(error);
+    return;
+  }
+
   mkdir('./dist');
 
   function buildDist (os, name) {
@@ -127,12 +132,14 @@ rmdir(base + '/dist', function(error){
       case 'windows':
       case 'linux':
         cp('./index.js', './dist/' + os + '/' + name + '/resources/app/');
+        cp('./about.html', './dist/' + os + '/' + name + '/resources/app/');
         cp('./package.json', './dist/' + os + '/' + name + '/resources/app/');
         cp('-R', './node_modules', './dist/' + os + '/' + name + '/resources/app/');
         break;
 
       case 'osx':
         cp('./index.js', './dist/osx/' + name + '.app/Contents/Resources/app/');
+        cp('./about.html', './dist/osx/' + name + '.app/Contents/Resources/app/');
         cp('./package.json', './dist/osx/' + name + '.app/Contents/Resources/app/');
         cp('-R', './node_modules', './dist/osx/' + name + '.app/Contents/Resources/app/');
         break;
