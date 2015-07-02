@@ -7,6 +7,14 @@ var Menu = remote.require('menu');
 // var aboutWin = new BrowserWindow({ width: 300, height: 200, frame: false });
 var resources_root = require('fs').realpathSync( process.env.DIR || process.cwd() + '/../' );
 
+var isWindows = function() {
+  return process.platform === 'win32';
+};
+
+var CommandOrCtrl = function() {
+  return (process.platform === 'darwin') ? 'Command' : 'Ctrl';
+};
+
 var template = [
   {
     label: 'GrandView',
@@ -27,7 +35,7 @@ var template = [
       },
       {
         label: 'Skjul GrandView',
-        accelerator: 'Command+H',
+        accelerator: CommandOrCtrl() + '+H',
         selector: 'hide:'
       },
       {
@@ -35,7 +43,7 @@ var template = [
       },
       {
         label: 'Lukk GrandView',
-        accelerator: 'Command+Q',
+        accelerator: CommandOrCtrl() + '+Q',
         selector: 'terminate:'
       },
     ]
@@ -45,14 +53,14 @@ var template = [
     submenu: [
       {
         label: 'Nytt dokument',
-        accelerator: 'Command+N',
+        accelerator: CommandOrCtrl() + '+N',
         click: function() {
-
+          $('#template-modal').modal('show');
         }
       },
       {
         label: 'Ny mal',
-        accelerator: 'Command+M',
+        accelerator: CommandOrCtrl() + '+T',
         click: function() {
 
         }
@@ -62,16 +70,47 @@ var template = [
       },
       {
         label: 'Importer dokument',
-        accelerator: 'Command+I',
+        accelerator: CommandOrCtrl() + '+I',
         click: function() {
-
+          GV.helpers.importDocument();
         }
       },
       {
         label: 'Eksporter dokument',
-        accelerator: 'Command+E',
+        accelerator: CommandOrCtrl() + '+E',
         click: function() {
-
+          var doc = Session.get('mainDocument');
+          if(doc) {
+            GV.helpers.exportDocument(doc);
+          } else {
+            Notifications.error('Eksportering mislyktes', 'Du må ha åpnet et dokument for å kunne eksportere det.');
+          }
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Importer mal',
+        accelerator: CommandOrCtrl() + '+I',
+        click: function() {
+          GV.helpers.importDocument({
+            template: true
+          });
+        }
+      },
+      {
+        label: 'Eksporter mal',
+        accelerator: CommandOrCtrl() + '+E',
+        click: function() {
+          var doc = Session.get('mainDocument');
+          if(doc) {
+            GV.helpers.exportDocument(doc, {
+              template: true
+            });
+          } else {
+            Notifications.error('Eksportering mislyktes', 'Du må ha åpnet en mal for å kunne eksportere den.');
+          }
         }
       }
     ]
@@ -81,12 +120,12 @@ var template = [
     submenu: [
       {
         label: 'Angre',
-        accelerator: 'Command+Z',
+        accelerator: CommandOrCtrl() + '+Z',
         selector: 'undo:'
       },
       {
         label: 'Gjenta',
-        accelerator: 'Shift+Command+Z',
+        accelerator: 'Shift+'+ CommandOrCtrl() + '+Z',
         selector: 'redo:'
       },
       {
@@ -94,22 +133,22 @@ var template = [
       },
       {
         label: 'Klipp ut',
-        accelerator: 'Command+X',
+        accelerator: CommandOrCtrl() + '+X',
         selector: 'cut:'
       },
       {
         label: 'Kopier',
-        accelerator: 'Command+C',
+        accelerator: CommandOrCtrl() + '+C',
         selector: 'copy:'
       },
       {
         label: 'Lim inn',
-        accelerator: 'Command+V',
+        accelerator: CommandOrCtrl() + '+V',
         selector: 'paste:'
       },
       {
         label: 'Merk Alt',
-        accelerator: 'Command+A',
+        accelerator: CommandOrCtrl() + '+A',
         selector: 'selectAll:'
       }
     ]
@@ -119,12 +158,12 @@ var template = [
     submenu: [
       {
         label: 'Oppfrisk',
-        accelerator: 'Command+R',
+        accelerator: CommandOrCtrl() + '+R',
         click: function() { remote.getCurrentWindow().reload(); }
       },
       {
         label: 'Slå på utviklerverktøy',
-        accelerator: 'Alt+Command+I',
+        accelerator: 'Alt+' + CommandOrCtrl() + '+I',
         click: function() { remote.getCurrentWindow().toggleDevTools(); }
       },
     ]
@@ -134,12 +173,12 @@ var template = [
     submenu: [
       {
         label: 'Minimèr',
-        accelerator: 'Command+M',
+        accelerator: CommandOrCtrl() + '+M',
         selector: 'performMiniaturize:'
       },
       {
         label: 'Lukk',
-        accelerator: 'Command+W',
+        accelerator: CommandOrCtrl() + '+W',
         selector: 'performClose:'
       },
       {
@@ -150,12 +189,15 @@ var template = [
         selector: 'arrangeInFront:'
       }
     ]
-  },
-  {
-    label: 'Help',
-    submenu: []
   }
 ];
+
+if(!isWindows()) {
+  template.push({
+    label: 'Help',
+    submenu: []
+  });
+}
 
 var menu = Menu.buildFromTemplate(template);
 
