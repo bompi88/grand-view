@@ -247,10 +247,10 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
     updatePlist(distName);
   }
 
-
+  var installerPath = path.resolve('/tmp/' + distName + '/');
 
   if(onWindows) {
-    cp('./dist/windows/' + distName, path.resolve('/tmp/' + distName));
+    cp('./dist/windows/' + distName + "/*", installerPath);
     exec('grunt create-windows-installer');
   } else {
     echo('-----> Creating distributable zip file...\n');
@@ -265,7 +265,7 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
   }
 
   if(onWindows) {
-    echo(distName + ' installer available at /tmp/' + distName + '/installer/' + distName + '.exe');
+    echo(distName + ' installer available at ' + installerPath + 'installer/' + distName + '.exe');
   } else {
     echo(distName + ' zip distribution available at dist/' + osName + '/' + distName + '-' + projectVersion + '.zip');
   }
