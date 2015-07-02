@@ -11,7 +11,7 @@ module.exports = function(grunt) {
       outputDirectory: '/tmp/GrandView/installer',
       authors: 'Concept - Bjørn Bråthen, Andreas Drivenes',
       description: 'Et verktøy for å strukturere store informasjonsmengder.',
-      exe: 'GrandView_setup.exe'
+      exe: 'GrandView.exe'
     }
   });
 
