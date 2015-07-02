@@ -250,7 +250,7 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
 
 
   if(onWindows) {
-    cp('./dist/windows/' + distName, '/tmp/' + distName);
+    cp('./dist/windows/' + distName, paht.resolve('/tmp/' + distName));
     exec('grunt create-windows-installer');
   } else {
     echo('-----> Creating distributable zip file...\n');
