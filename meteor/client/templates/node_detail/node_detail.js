@@ -202,7 +202,6 @@ Template.GeneralInfo.events({
             if (result) {
               // Remove the document
               GV.documentsCtrl.softRemoveDocument(self._id, false, function() {
-                Session.set('mainDocument', null);
                 Router.go('WorkArea');
               });
             }

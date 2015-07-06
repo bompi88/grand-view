@@ -111,6 +111,8 @@ GV.documentsCtrl = {
         if (!hideNotification)
           Notifications.success('Dokument slettet', 'Dokumentet ble lagt i papirkurven');
 
+        Session.set('mainDocument', null);
+        
         if(callback)
           callback();
       }

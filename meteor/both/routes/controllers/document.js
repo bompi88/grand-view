@@ -39,29 +39,24 @@ GV.routeCtrls.Document = RouteController.extend({
   },
 
   onAfterAction: function() {
-    GV.tabs.reset();
-    GV.tags.reset();
-
     if(this.ready()) {
-      if(!this.data() || this.data().removed) {
-        Session.set('mainDocument', null);
-        this.redirect('WorkArea');
-      } else {
 
-        Session.set('mainDocument', this.params._id);
-        Session.set('nodeInFocus', this.params._id);
-        Session.set("file", null);
-        Session.set("uploadStopped", false);
-        Session.set("structureState", "tree");
-        Session.set("showMediaNodes", false);
+      GV.tabs.reset();
+      GV.tags.reset();
 
-        Meteor.defer(function() {
-          $('li.node span')
-            .removeClass('selected');
-          $("li.root > span")
-            .addClass('selected');
-        });
-      }
+      Session.set('mainDocument', this.params._id);
+      Session.set('nodeInFocus', this.params._id);
+      Session.set("file", null);
+      Session.set("uploadStopped", false);
+      Session.set("structureState", "tree");
+      Session.set("showMediaNodes", false);
+
+      Meteor.defer(function() {
+        $('li.node span')
+          .removeClass('selected');
+        $("li.root > span")
+          .addClass('selected');
+      });
     }
   }
 

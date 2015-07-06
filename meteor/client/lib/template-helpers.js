@@ -52,7 +52,7 @@ var template_helpers = {
     }
     return null;
   }
-
+  
 };
 
 // Register all helpers as UI helpers
