@@ -26,7 +26,7 @@ The main template for the documents view.
         </h3>
 			</div>
 
-      {{> DocumentTable documents=this.documents hasTemplate="true" editOptions="true" tableName="documents" label="dokument"}}
+      {{> DocumentTable documents=this.documents hasTemplate="true" editOptions="true" tableName="documents" label="dokument" emptyText="Ingen dokumenter funnet"}}
 		</div>
 	</div>
 </template>
@@ -35,26 +35,35 @@ The main template for the documents view.
 The documents table.
 -->
 <template name="DocumentTable">
-  {{> DocumentActionsDropdown class="pull-right" tableName=this.tableName label=this.label}}
-  <table class="table table-hover" id="{{tableName}}">
-    <thead>
-      <tr>
-        <th><input type="checkbox" class="checkbox-master" aria-label="..."></th>
-        <th>Navn</th>
-        <th>Opprettet</th>
-        <th>Sist endret</th>
-        {{#if hasTemplate}}<th>Mal brukt</th>{{/if}}
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      {{#each documents}}
-        {{> DocumentRow document=this editOptions=../editOptions hasTemplate=../hasTemplate tableName=../tableName label=../label}}
-      {{else}}
-        Tabellen er tom...
-      {{/each}}
-    </tbody>
-  </table>
+	{{> DocumentActionsDropdown class="pull-right" tableName=this.tableName label=this.label}}
+
+	<div class="row default-table table-wrapper">
+		<div class="col-xs-12">
+			<div class="panel panel-default">
+			  <table class="table table-hover" id="{{tableName}}">
+			    <thead>
+			      <tr>
+			        <th><input type="checkbox" class="checkbox-master" aria-label="..."></th>
+			        <th>Navn</th>
+			        <th>Opprettet</th>
+			        <th>Sist endret</th>
+			        {{#if hasTemplate}}<th>Mal brukt</th>{{/if}}
+			        <th></th>
+			      </tr>
+			    </thead>
+			    <tbody>
+			      {{#each documents}}
+			        {{> DocumentRow document=this editOptions=../editOptions hasTemplate=../hasTemplate tableName=../tableName label=../label}}
+			      {{else}}
+							<div class="no-results-row">
+								{{emptyText}}...
+							</div>
+			      {{/each}}
+			    </tbody>
+			  </table>
+			</div>
+		</div>
+	</div>
 </template>
 
 <!--

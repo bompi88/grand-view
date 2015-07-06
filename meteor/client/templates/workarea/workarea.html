@@ -21,7 +21,24 @@ This gets rendered if no document is selected as the document to edit.
   <div class="container default-container animated fadeIn">
     <div class="row">
       <div class="col-lg-12">
-        Velkommen til arbeidsområdet. Ingen dokument er valgt, så gå enten inn i Mine Dokumenter og velg et dokument for redigering eller opprett et nytt.
+        <div class="jumbotron">
+          <h2>Velkommen til arbeidsområdet</h2>
+          <p class="lead">Dette er stedet man redigerer dokumenter eller maler. Ingen dokument eller mal er valgt til redigering enda, derfor er denne siden tom. For å komme i gang kan du enten:</p>
+          <br>
+          <p class="text-center">
+            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#template-modal">
+              <span class="glyphicon glyphicon-plus"></span> Opprette et nytt dokument
+            </button>
+            <br><span style="line-height:50px;">eller</span><br>
+            <button type="button" class="btn btn-default goto-documents">
+              Gå til Mine dokumenter
+            </button>
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-12 ball">
+        <div class="ball-loader">
+        </div>
       </div>
     </div>
   </div>

@@ -80,7 +80,7 @@ ul.notifications {
 }
 
 .default-container {
-  padding-top: 60px;
+  padding-top: 80px;
 }
 
 .no-results-row {
@@ -90,6 +90,22 @@ ul.notifications {
 
 .table-wrapper {
   padding-top: 50px;
+}
+
+thead {
+  background-color: darken(#fff, 2%);
+}
+
+.default-table {
+  tbody tr.table-row td {
+    line-height: 35px;
+    vertical-align: middle;
+  }
+}
+
+.ball {
+  padding-top: 40px;
+  text-align: center;
 }
 
 .modal {
