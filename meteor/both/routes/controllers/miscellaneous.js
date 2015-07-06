@@ -41,18 +41,29 @@ GV.routeCtrls.WorkArea = RouteController.extend({
 GV.routeCtrls.Trash = RouteController.extend({
 
   subscriptions: function() {
-    return Meteor.subscribe('documents');
+    return [ Meteor.subscribe('removedDocuments'), Meteor.subscribe('removedTemplates')];
   },
 
   data: function() {
     return {
-      trash: GV.collections.Documents.find({
-        removed: true
-      }, {
-        sort: _.defaults(Session.get("templateSort") || {}, {
-          removedAt: -1
+      trash: {
+        documents: GV.collections.Documents.find({
+          template: null,
+          removed: true
+        }, {
+          sort: _.defaults(Session.get("templateSort") || {}, {
+            removedAt: -1
+          })
+        }),
+        templates: GV.collections.Documents.find({
+          template: true,
+          removed: true
+        }, {
+          sort: _.defaults(Session.get("templateSort") || {}, {
+            removedAt: -1
+          })
         })
-      })
+      }
     };
   },
 

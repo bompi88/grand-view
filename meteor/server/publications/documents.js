@@ -29,6 +29,18 @@ Meteor.publish('documents', function() {
 });
 
 /**
+ * Publish all removed documents that a user owns or has access to
+ */
+Meteor.publish('removedDocuments', function() {
+
+  // return the documents that the current user owns
+  return GV.collections.Documents.find({
+    removed: true
+  });
+});
+
+
+/**
  * Publish all templates
  */
 Meteor.publish('templates', function() {
@@ -39,6 +51,17 @@ Meteor.publish('templates', function() {
   });
 });
 
+/**
+ * Publish all removed documents that a user owns or has access to
+ */
+Meteor.publish('removedTemplates', function() {
+
+  // return the documents that the current user owns
+  return GV.collections.Documents.find({
+    template: true,
+    removed: true
+  });
+});
 
 /**
  * Publish a particular document by its id, if the user owns it or
@@ -58,7 +81,7 @@ Meteor.publish('allByDoc', function(id) {
 
   // get the document
   var doc = GV.collections.Documents.find({
-      _id: id
+    _id: id
   }).fetch();
 
   if (doc && doc[0]) {
@@ -67,7 +90,7 @@ Meteor.publish('allByDoc', function(id) {
         $in: doc[0].children || []
       }
     });
-    
+
     var files = GV.collections.Files.find({
       docId: id
     });

@@ -28,6 +28,8 @@ GV.collections = {
   References: new Mongo.Collection('references')
 };
 
+GV.collections.Documents.attachBehaviour('softRemovable');
+
 // -- File storage -------------------------------------------------------------
 
 GV.collections.Files = new FS.Collection("files", {

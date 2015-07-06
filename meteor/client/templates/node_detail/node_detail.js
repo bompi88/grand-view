@@ -201,23 +201,9 @@ Template.GeneralInfo.events({
           callback: function(result) {
             if (result) {
               // Remove the document
-              GV.collections.Documents.remove({
-                _id: self._id
-              }, function(error) {
-                if (error) {
-                  Notifications.warn('Feil', error.message);
-                } else {
-                  // Remove all the children nodes that rely on the document
-                  Meteor.call('removeNodes', self.children);
-
-                  // Notify the user
-                  Notifications.success(
-                    'Sletting fullført',
-                    'Dokument sammen med alle referanser er nå slettet.'
-                  );
-
-                  Router.go('Dashboard');
-                }
+              GV.documentsCtrl.softRemoveDocument(self._id, false, function() {
+                Session.set('mainDocument', null);
+                Router.go('WorkArea');
               });
             }
           }

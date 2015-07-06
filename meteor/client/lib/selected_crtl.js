@@ -47,7 +47,12 @@ GV.selectedCtrl = {
   },
 
   addAll: function(table, ids) {
-    this.selectedItems[table] = ids;
+    var tmp = this.selectedItems[table];
+    if(tmp && tmp.length) {
+      this.selectedItems[table] = _.union(tmp, ids);
+    } else {
+      this.selectedItems[table] = ids;
+    }
 
     this.dep.changed();
     return this.selectedItems[table] || [];

@@ -98,24 +98,21 @@ GV.documentsCtrl = {
     }));
   },
 
-  softRemoveDocument: function(id, hideNotification) {
-    var doc = GV.collections.Documents.findOne({
-      _id: id
-    });
-    var children = doc && doc.children || [];
+  softRemoveDocument: function(id, hideNotification, callback) {
 
     // Remove the document
-    GV.collections.Documents.remove({
+    GV.collections.Documents.softRemove({
       _id: id
     }, function(error) {
       if (error) {
         Notifications.warn('Feil', error.message);
       } else {
-        // Remove all the children nodes that rely on the document
-        Meteor.call('removeNodes', children);
 
         if (!hideNotification)
           Notifications.success('Dokument slettet', 'Dokumentet ble lagt i papirkurven');
+
+        if(callback)
+          callback();
       }
     });
   }

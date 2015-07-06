@@ -26,7 +26,89 @@ This is the trash can which contain all softly removed documents and templates.
         </h3>
       </div>
 
-      {{> DocumentTable documents=this.trash editOptions="true" tableName="templates" label="mal"}}
+      {{> TrashTableContainer data=this.trash tableName='trash'}}
     </div>
 	</div>
+</template>
+
+
+<!--
+The documents table.
+-->
+<template name="TrashTableContainer">
+  {{> TrashActionsDropdown class="pull-right" tableName=this.tableName}}
+
+	<div class="row table-wrapper">
+		<div class="col-xs-12">
+		{{> TrashTable heading="Dokumenter" documents=data.documents tableName=this.tableName id="documents" emptyText="Ingen dokumenter i papirkurven"}}
+		{{> TrashTable heading="Maler" documents=data.templates tableName=this.tableName id="templates" emptyText="Ingen maler i papirkurven"}}
+		</div>
+	</div>
+</template>
+
+<template name="TrashTable">
+	<div class="panel panel-default">
+		<div class="panel-heading"><b>{{heading}}</b></div>
+
+		<!-- Table -->
+		<table class="table table-hover {{tableName}}" id="{{id}}">
+			<thead>
+				<tr>
+					<th><input type="checkbox" class="checkbox-master" aria-label="..."></th>
+					<th style="min-width:200px;">Navn</th>
+					<th>Opprettet</th>
+					<th>Sist endret</th>
+					<th>Slettet</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each documents}}
+					{{> TrashRow document=this tableName=../tableName}}
+				{{else}}
+					<div class="no-results-row">
+						{{emptyText}}...
+					</div>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</template>
+
+<!--
+A row in the documents table.
+-->
+<template name="TrashRow">
+	<tr class="table-row">
+    <td class="row-item"><input type="checkbox" class="checkbox" aria-label="..."></td>
+		<td class="row-item">{{document.title}}</td>
+    <td class="row-item">{{formatDateRelative document.createdOn}}</td>
+		<td class="row-item">{{formatDateRelative document.lastChanged}}</td>
+    <td class="row-item">{{formatDateRelative document.removedAt}}</td>
+		<td>
+			<div class="btn-group pull-right">
+				<button type="button" class="btn btn-default btn-sm recover">
+					<span class="glyphicon glyphicon-repeat"></span> Gjenopprett
+				</button>
+				<button type="button" class="btn btn-danger btn-sm remove">
+					<span class="glyphicon glyphicon-trash"></span> Slett
+				</button>
+			</div>
+		</td>
+	</tr>
+</template>
+
+<!--
+The actions that can be applied to the elements in the document table
+-->
+<template name="TrashActionsDropdown">
+  <div class="btn-group dropdown {{class}}">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+      Velg handling <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+      <li class="{{isDisabledOnNone}}"><a href="#" class="recover"><span class="glyphicon glyphicon-repeat"></span> Gjenopprett</a></li>
+      <li class="{{isDisabledOnNone}}"><a href="#" class="remove"><span class="glyphicon glyphicon-trash"></span> Slett</a></li>
+    </ul>
+  </div>
 </template>
