@@ -1,0 +1,69 @@
+# Test against this version of Node.js
+environment:
+  nodejs_version: "0.10.36"
+
+# clone directory
+clone_folder: C:\gv
+
+branches:
+  only:
+    - prod
+
+# Install scripts. (runs after repo cloning)
+install:
+  # Get the latest stable version of Node.js or io.js
+  - ps: Install-Product node $env:nodejs_version
+  # install modules
+  - npm install
+  # setup elctrometeor
+  - node script/setup
+  # install grunt
+  - npm install -g grunt-cli
+  # install rimraf
+  - npm install -g rimraf
+  # download Meteor
+  - ps: Start-FileDownload 'https://s3.amazonaws.com/meteor-windows/InstallMeteor.exe'
+  # install meteor
+  - .\installMeteor.exe /passive
+  # Restart
+  - ps: Start-Sleep -s 5
+  - ps: Restart-Computer -Force
+
+build_script:
+  # run tests
+  - ps: Start-Sleep -s 5
+  - node script/dist
+  # mount dist dir as drive
+  - subst "Y:" "C:\gv\dist\windows\GrandView"
+  # flatten the node_modules
+  - cd Y:\
+  - npm dedupe
+  - cd C:\gv
+  - ps: Start-Sleep -s 2
+  # Create the installer
+  #- ps: Start-Sleep -s 30
+  #- grunt create-windows-installer
+
+after_build:
+  # unmount drive
+  - subst "Y:" /d
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: 4DLKG48sJhZ2Xbr/ulNR4MUEaVVc/ps6WhTD5OvxgGE5TErcKYH/uuCD3ogw7cfL
+  #artifact: "grandview-v$(APPVEYOR_REPO_TAG_NAME)-win32-ia32,grandview-v$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer"
+  artifact: "grandview-v$(APPVEYOR_REPO_TAG_NAME)-win32-ia32"
+  draft: false
+  prerelease: false
+  on:
+    appveyor_repo_tag: true
+
+artifacts:
+
+  # pushing a single file with environment variable in path and "Deployment name" specified
+  - path: dist\windows\GrandView
+    name: grandview-v$(APPVEYOR_REPO_TAG_NAME)-win32-ia32
+
+  # - path: dist\windows\installer
+  #   name: grandview-v$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer

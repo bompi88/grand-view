@@ -1,10 +1,4 @@
-// Electrometeor uses the convenience script shelljs/global to reduce verbosity.
-// If polluting your global namespace is not desirable, simply require shelljs.
-//
-// Example:
-//
-// var shell = require('shelljs');
-// shell.echo('hello world');
+
 'use strict';
 
 console.log('Starting Distribution Script...');
@@ -14,6 +8,7 @@ var fs = require('fs');
 // var zipFolder = require('zip-folder');
 var AdmZip = require('adm-zip');
 var rmdir = require('rimraf');
+var asar = require('asar');
 
 // Auto-exit on errors
 config.fatal = true;
@@ -23,12 +18,11 @@ config.fatal = true;
 var dir = __dirname;
 var base = path.normalize(path.join(dir, '..'));
 var onWindows = false;
-var osName = exec('echo %OS% | tr "[:upper:]" "[:lower:]" | xargs echo -n', {silent: true}).output;
-if (osName.indexOf('windows') !== -1) {
+var osName = process.platform;
+if (osName === 'win32') {
   osName = 'windows';
   onWindows = true;
-} else if (osName === '%os%') {
-  osName = exec('uname -s | tr "[:upper:]" "[:lower:]" | xargs echo -n', {silent: true}).output;
+} else {
   osName = osName === 'darwin' ? 'osx' : osName;
   onWindows = false;
 }
@@ -153,13 +147,13 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
 
       case 'windows':
       case 'linux':
-        mkdir('./dist/' + os + '/' + name + '/resources/app/resources');
-        cp('./resources/*', './dist/' + os + '/' + name + '/resources/app/resources/');
+        mkdir('./dist/' + os + '/' + name + '/resources/resources');
+        cp('./resources/*', './dist/' + os + '/' + name + '/resources/resources/');
         break;
 
       case 'osx':
-        mkdir('./dist/osx/' + name + '.app/Contents/Resources/app/resources');
-        cp('./resources/*', './dist/osx/' + name + '.app/Contents/Resources/app/resources/');
+        mkdir('./dist/osx/' + name + '.app/Contents/Resources/resources');
+        cp('./resources/*', './dist/osx/' + name + '.app/Contents/Resources/resources/');
         break;
 
       default:
@@ -246,20 +240,37 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
     updatePlist(distName);
   }
 
-  var installerPath = path.resolve('/tmp/' + distName + '/');
+  // var installerPath = path.resolve('./dist/windows/installer');
+
 
   if(onWindows) {
-    rmdir(installerPath, { maxBusyTries: 10 }, function(error){
-
-      if(error) {
-        console.log(error);
-      }
-
-      mkdir('-p', installerPath);
-
-      cp('-R', './dist/windows/' + distName + "/*", installerPath);
-      exec('grunt create-windows-installer');
-    });
+    //
+    // var asarSrc = path.resolve('./dist/' + osName + '/GrandView/resources/app');
+    // var asarDest = path.resolve('./dist/' + osName + '/GrandView/resources/app.asar');
+    //
+    // if (osName === 'osx') {
+    //   asarSrc = path.resolve('./dist/' + osName + '/GrandView.app/Contents/Resources/app');
+    //   asarDest = path.resolve('./dist/' + osName + '/GrandView.app/Contents/Resources/app.asar');
+    // }
+    //
+    // asar.createPackage(asarSrc, asarDest, function() {
+    //   console.log('done creating asar archive.');
+    //
+    //   rmdir(asarSrc, { maxBusyTries: 10 }, function(error){
+    //
+    //     if(error) {
+    //       console.log(error);
+    //     }
+    //   });
+    // });
+    //     console.log(error);
+    //   }
+    //
+    //   mkdir('-p', installerPath);
+    //
+    //   cp('-R', './dist/windows/' + distName + "/*", installerPath);
+    //   exec('grunt create-windows-installer');
+    // });
   } else {
     echo('-----> Creating distributable zip file...\n');
     createZipFile(osName, distName);
@@ -273,7 +284,7 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
   }
 
   if(onWindows) {
-    echo(distName + ' installer available at ' + installerPath + 'installer/' + distName + '.exe');
+    //echo(distName + ' installer available at ' + installerPath + 'i/' + distName + '.exe');
   } else {
     echo(distName + ' zip distribution available at dist/' + osName + '/' + distName + '-' + projectVersion + '.zip');
   }

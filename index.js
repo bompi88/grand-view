@@ -19,6 +19,51 @@ var BrowserWindow = require('browser-window'); // Module to create native browse
 var dirname = __dirname;
 console.log(dirname); // The name of the directory that the currently executing script resides in.
 
+
+var handleStartupEvent = function() {
+  if (process.platform !== 'win32') {
+    return false;
+  }
+
+  var squirrelCommand = process.argv[1];
+  switch (squirrelCommand) {
+    case '--squirrel-install':
+    case '--squirrel-updated':
+
+      // Optionally do things such as:
+      //
+      // - Install desktop and start menu shortcuts
+      // - Add your .exe to the PATH
+      // - Write to the registry for things like file associations and
+      //   explorer context menus
+
+      // Always quit when done
+      app.quit();
+
+      return true;
+    case '--squirrel-uninstall':
+      // Undo anything you did in the --squirrel-install and
+      // --squirrel-updated handlers
+
+      // Always quit when done
+      app.quit();
+
+      return true;
+    case '--squirrel-obsolete':
+      // This is called on the outgoing version of your app before
+      // we update to the new version - it's the opposite of
+      // --squirrel-updated
+      app.quit();
+      return true;
+  }
+};
+
+if (handleStartupEvent()) {
+  return;
+}
+
+
+
 // Before starting a local server, freePort will find an available port by letting
 // the OS find it.
 function freePort (callback) {
@@ -85,7 +130,7 @@ function start (callback) {
         fs.unlink(path.join(dataPath, 'mongod.lock'), function () {
 
           // Path to mongod command bundled with app.
-          var mongodPath = path.join(dirname, 'resources', 'mongod');
+          var mongodPath = path.join(dirname, '/../', 'resources', 'mongod');
 
           // Arguments passed to mongod command.
           var mongodArgs = ['--bind_ip', '127.0.0.1', '--dbpath', dataPath, '--port', mongoPort, '--unixSocketPrefix', dataPath, '--smallfiles'];
@@ -96,7 +141,7 @@ function start (callback) {
           // Start the Mongo process.
           var mongoChild = childProcess.spawn(mongodPath, mongodArgs, {
             env: {
-              PURPOSE: 'MY_ELECTROMETEOR_APP'
+              PURPOSE: 'GrandView'
             }
           });
 
@@ -130,9 +175,9 @@ function start (callback) {
               userEnv.NODE_ENV = 'production';
               userEnv.NODE_PATH = path.join(dirname, 'node_modules');
 
-              var nodePath = path.join(dirname, 'resources', 'node');
+              var nodePath = path.join(dirname, '/../', 'resources', 'node');
               var nodeArgs = path.join(dirname, 'bundle', 'main.js');
-              var nodeChild = childProcess.spawn(nodePath, [nodeArgs], {
+              var nodeChild = childProcess.execFile(nodePath, [nodeArgs], {
                 env: userEnv
               });
 

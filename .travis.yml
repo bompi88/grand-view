@@ -1,0 +1,46 @@
+# Test against this version of Node.js
+language: node_js
+node_js:
+  - "0.10.36"
+
+sudo: required
+
+# multiple oses
+os:
+  - linux
+  - osx
+
+branches:
+  only:
+    - prod
+
+before_install:
+  - export ARCH=$(uname -m)
+
+# Install scripts.
+install:
+  # Install meteor
+  - curl https://install.meteor.com/ | /bin/sh
+  # install modules
+  - npm install
+  # setup electrometeor
+  - node script/setup
+
+script:
+  # Run dist script
+  - node script/dist
+  # zip it up
+  - tar -zcf grandview-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/GrandView
+
+deploy:
+  provider: releases
+  api_key: "c84e543eaa4e8315483285da7e40f8a18c7330df"
+  file: "grandview-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
+  skip_cleanup: true
+  on:
+    tags: true
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
