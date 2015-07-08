@@ -23,12 +23,12 @@ install:
   - curl https://install.meteor.com/ | /bin/sh
   # install modules
   - npm install
-  # Run first to build the bootstrap file
-  - node script/run
   # setup electrometeor
   - node script/setup
 
 script:
+  # Run first to build the bootstrap file
+  - node script/run
   # Run dist script
   - node script/dist
   # zip it up
