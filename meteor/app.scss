@@ -152,3 +152,15 @@ thead {
     box-shadow: 0 0 1px rgba(255, 255, 255, .4);
   }
 }
+
+@import "client/templates/document/document.scss";
+@import "client/templates/documents/documents.scss";
+@import "client/templates/index/index.scss";
+@import "client/templates/navigation/navigation.scss";
+@import "client/templates/node/node.scss";
+@import "client/templates/node_detail/node_detail.scss";
+@import "client/templates/references/references.scss";
+@import "client/templates/tabs/tabs.scss";
+@import "client/templates/tags/tags.scss";
+@import "client/templates/tree/tree.scss";
+@import "client/ball.scss";
