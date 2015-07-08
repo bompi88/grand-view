@@ -28,7 +28,9 @@ install:
 
 script:
   # Run first to build the bootstrap file
-  - node script/run
+  - cd meteor
+  - timeout 30 meteor
+  - cd ..
   # Run dist script
   - node script/dist
   # zip it up
