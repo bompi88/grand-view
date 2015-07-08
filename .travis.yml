@@ -6,9 +6,9 @@ node_js:
 sudo: required
 
 # multiple oses
-os:
-  - linux
-  - osx
+#os:
+#  - linux
+#  - osx
 
 branches:
   only:
