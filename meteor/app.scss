@@ -29,8 +29,8 @@ $black: #222;
 $font-family-sans-serif: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
 $text-color: #555;
 
-@import 'bootstrap';
-@import 'bourbon/bourbon';
+@import '.meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap';
+@import '.meteor/local/build/programs/server/assets/packages/wolves_bourbon/bourbon/bourbon';
 
 $blue-base: darken($blue, 6.5%);
 
@@ -153,14 +153,14 @@ thead {
   }
 }
 
-@import "client/templates/document/document.scss";
-@import "client/templates/documents/documents.scss";
-@import "client/templates/index/index.scss";
-@import "client/templates/navigation/navigation.scss";
-@import "client/templates/node/node.scss";
-@import "client/templates/node_detail/node_detail.scss";
-@import "client/templates/references/references.scss";
-@import "client/templates/tabs/tabs.scss";
-@import "client/templates/tags/tags.scss";
-@import "client/templates/tree/tree.scss";
-@import "client/ball.scss";
+@import "client/templates/document/document";
+@import "client/templates/documents/documents";
+@import "client/templates/index/index";
+@import "client/templates/navigation/navigation";
+@import "client/templates/node/node";
+@import "client/templates/node_detail/node_detail";
+@import "client/templates/references/references";
+@import "client/templates/tabs/tabs";
+@import "client/templates/tags/tags";
+@import "client/templates/tree/tree";
+@import "client/ball";
