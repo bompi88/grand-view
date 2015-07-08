@@ -1,4 +1,4 @@
-
+// Builds the scss dependencies hack
 'use strict';
 
 require('shelljs/global');
