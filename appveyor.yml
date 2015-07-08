@@ -32,9 +32,7 @@ install:
 build_script:
   # run tests
   - ps: Start-Sleep -s 5
-  - cd meteor
-  - meteor.bat 2> nul
-  - cd ..
+  - node script/scss
   - node script/dist
   # mount dist dir as drive
   - subst "Y:" "C:\gv\dist\windows\GrandView"
