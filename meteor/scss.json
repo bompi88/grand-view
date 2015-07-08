@@ -1,9 +1,8 @@
 {
-	"useIndex" : true,
+	"useIndex" : false,
 	"indexFilePath" : "app.scss",
 	"includePaths": [
     	".meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass",
-			".meteor/local/build/programs/server/assets/packages/wolves_bourbon",
-			"client/templates/*"
+			".meteor/local/build/programs/server/assets/packages/wolves_bourbon"
 	]
 }

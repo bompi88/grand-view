@@ -19,7 +19,6 @@ var BrowserWindow = require('browser-window'); // Module to create native browse
 var dirname = __dirname;
 console.log(dirname); // The name of the directory that the currently executing script resides in.
 
-
 var handleStartupEvent = function() {
   if (process.platform !== 'win32') {
     return false;
