@@ -22,4 +22,5 @@ if(platform === "win32") {
 
 setTimeout(function() {
   child.kill("SIGINT");
+  process.exit(0);
 }, 100000);
