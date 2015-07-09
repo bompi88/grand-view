@@ -127,14 +127,16 @@ function askWrite(yes, no) {
 
 GV.helpers = _.extend(GV.helpers, {
 
-  importDocument: function() {
+  importDocument: function(isTemplate) {
+
+    var extension = isTemplate ? 'gvt' : 'gvd';
 
     // show open dialog for GrandView files (.gvf)
     remote.require('dialog').showOpenDialog({
       title: 'Importer rapportstruktur',
       filters: [{
         name: 'GrandViewFile',
-        extensions: ['gvf']
+        extensions: [extension]
       }],
       properties: ['openFile']
     }, function(filePathAndName) {
@@ -151,7 +153,7 @@ GV.helpers = _.extend(GV.helpers, {
         mkdirSync(newPath);
 
         // copy over to sandbox
-        copyFile(originalPath, newPath + "/import.gvf", function(err) {
+        copyFile(originalPath, newPath + "/import." + extension, function(err) {
           if (err) {
             console.log(err);
 
@@ -159,7 +161,7 @@ GV.helpers = _.extend(GV.helpers, {
             return;
           }
 
-          fs.rename(newPath + '/import.gvf', newPath + '/import.tar', function(err) {
+          fs.rename(newPath + '/import.' + extension, newPath + '/import.tar', function(err) {
             if (err) {
               console.log(err);
               deleteFolderRecursive(path.join(GV.basePath, "tmp"));
@@ -247,7 +249,9 @@ GV.helpers = _.extend(GV.helpers, {
     });
   },
 
-  exportDocument: function(id) {
+  exportDocument: function(id, isTemplate) {
+
+    var extension = isTemplate ? 'gvt' : 'gvd';
 
     Session.set("working", true);
     Session.set("workingText", "Pakker fil... vennligst vent...");
@@ -323,7 +327,7 @@ GV.helpers = _.extend(GV.helpers, {
             title: 'Eksporter rapportstrukturen',
             filters: [{
               name: 'GrandViewFile',
-              extensions: ['gvf']
+              extensions: [extension]
             }, ]
           }, function(filePathAndName) {
             if (filePathAndName) {
@@ -378,6 +382,7 @@ GV.helpers = _.extend(GV.helpers, {
 Template.ImportButton.events({
 
   'click .import': function() {
+    console.log(this)
     GV.helpers.importDocument();
   }
 });
@@ -387,7 +392,7 @@ Template.ExportButton.events({
   'click .export': function() {
     var currentDoc = this.currDoc;
 
-    GV.helpers.exportDocument(currentDoc._id);
+    GV.helpers.exportDocument(currentDoc._id, currentDoc.template);
   }
 
 });

@@ -148,9 +148,7 @@ Template.DocumentActionsDropdown.events({
     if (this.tableName === "documents") {
       GV.helpers.importDocument();
     } else if (this.tableName === "templates") {
-      GV.helpers.importDocument({
-        template: true
-      });
+      GV.helpers.importDocument(true);
     }
   },
 
@@ -160,9 +158,7 @@ Template.DocumentActionsDropdown.events({
     if (this.tableName === "documents") {
       GV.helpers.exportDocument(GV.selectedCtrl.getSelected(this.tableName)[0]);
     } else if (this.tableName === "templates") {
-      GV.helpers.exportDocument(GV.selectedCtrl.getSelected(this.tableName)[0], {
-        template: true
-      });
+      GV.helpers.exportDocument(GV.selectedCtrl.getSelected(this.tableName)[0], true);
     }
   },
 

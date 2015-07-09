@@ -224,7 +224,7 @@ Template.Tree.events({
 
   'click .export-to-file': function(event, tmpl) {
     event.preventDefault();
-    GV.helpers.exportDocument(this.tree._id);
+    GV.helpers.exportDocument(this.tree._id, this.tree.template);
   },
 
 

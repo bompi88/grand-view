@@ -94,9 +94,7 @@ Meteor.startup(function() {
           label: 'Importer mal',
           accelerator: CommandOrCtrl() + '+I',
           click: function() {
-            GV.helpers.importDocument({
-              template: true
-            });
+            GV.helpers.importDocument(true);
           }
         },
         {
@@ -105,9 +103,7 @@ Meteor.startup(function() {
           click: function() {
             var doc = Session.get('mainDocument');
             if(doc) {
-              GV.helpers.exportDocument(doc, {
-                template: true
-              });
+              GV.helpers.exportDocument(doc, true);
             } else {
               Notifications.error('Eksportering mislyktes', 'Du må ha åpnet en mal for å kunne eksportere den.');
             }
