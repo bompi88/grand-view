@@ -112,6 +112,7 @@
         "sitemaps",
         "bootbox",
         "moment",
+        "clippy",
         "UserVoice",
         "Accounts",
         "Session",

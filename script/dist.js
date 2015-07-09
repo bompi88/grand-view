@@ -273,7 +273,7 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
     // });
   } else {
     echo('-----> Creating distributable zip file...\n');
-    createZipFile(osName, distName);
+    //createZipFile(osName, distName);
   }
 
   echo('Done.');
