@@ -38,7 +38,9 @@ if (Meteor.isClient) {
         GV.clippy = agent;
         //console.log(agent.animations());
         agent.show();
+        Session.set("clippyVisible", true);
         agent.speak("Hei og velkommen! Du kan velge språk ved å klikke på meg.");
+        agent.speak("Du kan skru meg av og på ved å trykke Ctrl+Shift+H.", true);
         Session.set('clippyState', 'languageSelection');
 
         var left = 0,
