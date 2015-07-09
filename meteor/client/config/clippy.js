@@ -24,7 +24,7 @@ Session.set("clippyInAction", false);
 Meteor.startup(function() {
 
   $(document).on("keydown", function(e) {
-    if (e.shiftKey && (e.which === 72)) {
+    if (e.shiftKey && e.ctrlKey && (e.which === 72)) {
       if (!Session.get("clippyInAction")) {
         Session.set("clippyInAction", true);
 
