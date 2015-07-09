@@ -6,9 +6,9 @@ node_js:
 sudo: required
 
 # multiple oses
-os:
-  - linux
-  - osx
+#os:
+#  - linux
+#  - osx
 
 branches:
   only:
@@ -27,6 +27,8 @@ install:
   - node script/setup
 
 script:
+  # Run first to build the bootstrap file
+  - node script/scss
   # Run dist script
   - node script/dist
   # zip it up
