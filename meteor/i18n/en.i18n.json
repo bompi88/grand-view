@@ -1,0 +1,19 @@
+{
+  "languages": {
+    "en": "English",
+    "no-NB": "Norwegian (Bokmål)",
+    "no-NN": "Norwegian (Nynorsk)"
+  },
+  "modals": {
+    "select_language_form": {
+
+    }
+  },
+  "schemas": {
+    "settings": {
+      "language": {
+        "label": "Language"
+      }
+    }
+  }
+}

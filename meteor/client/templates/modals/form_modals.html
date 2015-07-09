@@ -1,0 +1,78 @@
+<!--
+~ Copyright 2015 Concept
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing, software
+~ distributed under the License is distributed on an "AS IS" BASIS,
+~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+~ See the License for the specific language governing permissions and
+~ limitations under the License.
+-->
+
+<!--
+This modal lets the user chose a title for the document and which template to produce it from.
+-->
+<template name="SelectTemplateModal">
+  <div class="modal fade" id="template-modal" tabindex="-1" role="dialog" aria-labelledby="template-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Valg av tittel og dokumentmal</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row" >
+            {{#autoForm collection="GV.collections.Documents" id="insert-doc" type="insert"}}
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <p>Her kan man velge tittel på dokumentet, samt om man skal bruke en dokumentmal eller ikke. Hvis mal ikke velges, starter man med et tomt dokument uten struktur.</p>
+                {{> afQuickField name="title" placeholder="Tittel"}}
+                {{> afQuickField name="templateBasis" placeholder="Dokumentmal" firstOption="(Uten mal)"}}
+
+              </div>
+            {{/autoForm}}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+          <button type="button" class="btn btn-primary submit-doc">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!--
+Select language modal
+-->
+<template name="LanguageSelectModal">
+  <div class="modal fade" id="language-select" tabindex="-1" role="dialog" aria-labelledby="template-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Valg av språk</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row" >
+            {{#autoForm collection="GV.collections.Settings" doc=getSettings id="language-select-form" type="update"}}
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <p>Velg hvilket språk programmet skal vises i.</p>
+                {{> afQuickField name='language' options=languageOptions}}
+
+              </div>
+            {{/autoForm}}
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+          <button type="button" class="btn btn-primary save-settings">Lagre</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

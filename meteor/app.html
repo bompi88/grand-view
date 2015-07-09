@@ -67,7 +67,13 @@ This is the base template, which defines the HTML body and head tags.
     {{> MovePopover}}
   {{/if}}
   {{> SelectTemplateModal}}
+  {{> LanguageSelectModal}}
+  {{> Clippy}}
 </body>
+
+<template name="Clippy">
+  <div class="clippy"></div>
+</template>
 
 <!--
 Export of File Status.

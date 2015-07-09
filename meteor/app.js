@@ -20,6 +20,7 @@
 "use strict";
 
 if (Meteor.isClient) {
+
   Template.MoveStatus.events({
 
     'click .close-move-mode': function() {
@@ -27,6 +28,43 @@ if (Meteor.isClient) {
       Session.set('showMovePopover', false);
     }
 
+  });
+
+  Template.Clippy.onRendered(function() {
+    Meteor.defer(function() {
+
+      clippy.load('Peedy', function(agent) {
+
+        GV.clippy = agent;
+        //console.log(agent.animations());
+        agent.show();
+        agent.speak("Hei og velkommen! Du kan velge språk ved å klikke på meg.");
+        Session.set('clippyState', 'languageSelection');
+
+        var left = 0,
+          top = 0;
+
+        $('.clippy').on({
+          mousedown: function(event) {
+            left = event.pageX;
+            top = event.pageY;
+          },
+          mouseup: function(event) {
+            var deltaX = event.pageX - left;
+            var deltaY = event.pageY - top;
+            var euclidean = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            if (euclidean < 5) {
+              agent.stopCurrent();
+              agent.play('DoMagic1');
+              agent.play('DoMagic2', 850, function() {
+                $('#language-select').modal('show');
+              });
+            }
+          }
+        });
+      });
+    });
   });
 }
 
