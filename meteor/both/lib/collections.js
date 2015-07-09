@@ -25,7 +25,8 @@ GV.collections = {
   Documents: new Meteor.Collection('documents'),
   Nodes: new Meteor.Collection('nodes'),
   Tags: new Mongo.Collection('tags'),
-  References: new Mongo.Collection('references')
+  References: new Mongo.Collection('references'),
+  Settings: new Mongo.Collection('settings')
 };
 
 GV.collections.Documents.attachBehaviour('softRemovable');

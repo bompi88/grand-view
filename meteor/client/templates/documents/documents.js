@@ -221,12 +221,3 @@ Template.DocumentRow.helpers({
     return template && template.title;
   }
 });
-
-Template.SelectTemplateModal.events({
-
-  'click .submit-doc': function(event, tmpl) {
-    event.preventDefault();
-
-    $("#insert-doc").trigger("submit");
-  }
-});

@@ -115,35 +115,3 @@ The actions that can be applied to the elements in the document table
     </ul>
   </div>
 </template>
-
-<!--
-This modal lets the user chose a title for the document and which template to produce it from.
--->
-<template name="SelectTemplateModal">
-<div class="modal fade" id="template-modal" tabindex="-1" role="dialog" aria-labelledby="template-modal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Valg av tittel og dokumentmal</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row" >
-          {{#autoForm collection="GV.collections.Documents" id="insert-doc" type="insert"}}
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <p>Her kan man velge tittel på dokumentet, samt om man skal bruke en dokumentmal eller ikke. Hvis mal ikke velges, starter man med et tomt dokument uten struktur.</p>
-              {{> afQuickField name="title" placeholder="Tittel"}}
-              {{> afQuickField name="templateBasis" placeholder="Dokumentmal" firstOption="(Uten mal)"}}
-
-            </div>
-          {{/autoForm}}
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
-        <button type="button" class="btn btn-primary submit-doc">Ok</button>
-      </div>
-    </div>
-  </div>
-</div>
-</template>
