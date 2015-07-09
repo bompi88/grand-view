@@ -378,6 +378,14 @@ GV.helpers = _.extend(GV.helpers, {
 
 // -- Template event -----------------------------------------------------------
 
+
+Template.ImportButton.events({
+
+  'click .import': function() {
+    GV.helpers.importDocument();
+  }
+});
+
 Template.ExportButton.events({
 
   'click .export': function() {
