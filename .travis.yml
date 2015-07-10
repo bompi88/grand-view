@@ -13,6 +13,7 @@ sudo: required
 branches:
   only:
     - prod
+    - /\d+\.\d+\.\d+/
 
 before_install:
   - export ARCH=$(uname -m)
