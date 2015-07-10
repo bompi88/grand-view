@@ -107,7 +107,7 @@ GV.helpers = _.extend(GV.helpers, {
     remote.require('dialog').showOpenDialog({
       title: 'Importer rapportstruktur',
       filters: [{
-        name: 'GrandViewFile',
+        name: isTemplate ? 'Grand View Template' : 'Grand View Document',
         extensions: [extension]
       }],
       properties: ['openFile']
@@ -286,7 +286,7 @@ GV.helpers = _.extend(GV.helpers, {
           remote.require('dialog').showSaveDialog({
             title: 'Eksporter rapportstrukturen',
             filters: [{
-              name: 'GrandViewFile',
+              name: isTemplate ? 'Grand View Template' : 'Grand View Document',
               extensions: [extension]
             }, ]
           }, function(filePathAndName) {
