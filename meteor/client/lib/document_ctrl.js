@@ -100,6 +100,8 @@ GV.documentsCtrl = {
 
   softRemoveDocument: function(id, hideNotification, callback) {
 
+    var isTemplate = GV.helpers.isTemplate(id);
+
     // Remove the document
     GV.collections.Documents.softRemove({
       _id: id
@@ -108,14 +110,28 @@ GV.documentsCtrl = {
         Notifications.warn('Feil', error.message);
       } else {
 
-        if (!hideNotification)
-          Notifications.success('Dokument slettet', 'Dokumentet ble lagt i papirkurven');
+        if (!hideNotification) {
+
+          if (isTemplate) {
+            Notifications.success('Sletting fullført', 'Malen ble lagt i papirkurven');
+          } else {
+            Notifications.success('Sletting fullført', 'Dokumentet ble lagt i papirkurven');
+          }
+        }
 
         Session.set('mainDocument', null);
-        
+
         if(callback)
           callback();
       }
     });
+  },
+
+  removeDocumentCallback: function(result, options, id) {
+    // Remove the document
+    GV.documentsCtrl.softRemoveDocument(id, false, function() {
+      Router.go('WorkArea');
+    });
   }
+
 };

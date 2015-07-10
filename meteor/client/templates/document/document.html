@@ -38,8 +38,10 @@ for editing of nodes in the tree.
         <div class="structure-footer">
           <ul class="nav nav-pills nav-justified">
             <li role="presentation" class="show-tree {{#if $.Session.equals 'structureState' 'tree'}}active{{/if}}"><a href="#">Kapitler</a></li>
-            <li role="presentation" class="show-tags {{#if $.Session.equals 'structureState' 'tags'}}active{{/if}}"><a href="#">Nøkkelord</a></li>
-            <li role="presentation" class="show-references {{#if $.Session.equals 'structureState' 'references'}}active{{/if}}"><a href="#">Kilder</a></li>
+            {{#unless isTemplate}}
+              <li role="presentation" class="show-tags {{#if $.Session.equals 'structureState' 'tags'}}active{{/if}}"><a href="#">Nøkkelord</a></li>
+              <li role="presentation" class="show-references {{#if $.Session.equals 'structureState' 'references'}}active{{/if}}"><a href="#">Kilder</a></li>
+            {{/unless}}
           </ul>
         </div>
       </div>

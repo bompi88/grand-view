@@ -31,7 +31,11 @@ GV.schemas.Documents = new SimpleSchema({
   title: {
     type: String,
     label: function() {
-      return "Dokumenttittel";
+      if(GV.helpers.isTemplate()) {
+        return "Navn på mal";
+      } else {
+        return "Dokumenttittel";
+      }
     },
     optional: false,
     max: 100,
@@ -44,11 +48,22 @@ GV.schemas.Documents = new SimpleSchema({
   summary: {
     type: String,
     label: function() {
-      return "Sammendrag";
+      if(GV.helpers.isTemplate()) {
+        return "Beskrivelse av mal";
+      } else {
+        return "Prosjektbeskrivelse";
+      }
     },
     optional: true,
     autoform: {
-      placeholder: "schemaLabel"
+      rows: 6,
+      placeholder: function() {
+        if(GV.helpers.isTemplate()) {
+          return "Skriv inn en kortfattet beskrivelse av malen";
+        } else {
+          return "Skriv inn en kortfattet beskrivelse av prosjektet";
+        }
+      }
     }
   },
 

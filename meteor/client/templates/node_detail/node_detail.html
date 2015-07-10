@@ -37,14 +37,16 @@ Edit information about a Node.
     <div class="well well-sm block-hider toggle-node-form"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Rediger {{#if $eq node.nodeType "chapter"}}kapittelelement{{else}}informasjonselement{{/if}}</b></div>
   {{/if}}
 
-  {{!-- A list of the media nodes linked to this chapter node --}}
-  {{#if $eq node.nodeType "chapter"}}
-    {{#if $.Session.equals "showMediaNodesView" true}}
-      {{> MediaNodesTable class="media-nodes-view" doc=node headerText="Informasjonselementer i dette kapittelelementet"}}
-    {{else}}
-      <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Informasjonselementer i dette kapittelelementet</b></div>
+  {{#unless isTemplate}}
+    {{!-- A list of the media nodes linked to this chapter node --}}
+    {{#if $eq node.nodeType "chapter"}}
+      {{#if $.Session.equals "showMediaNodesView" true}}
+        {{> MediaNodesTable class="media-nodes-view" doc=node headerText="Informasjonselementer i dette kapittelelementet"}}
+      {{else}}
+        <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Informasjonselementer i dette kapittelelementet</b></div>
+      {{/if}}
     {{/if}}
-  {{/if}}
+  {{/unless}}
 </template>
 
 
@@ -58,16 +60,22 @@ Edit top level information about a document. This is basically the root node.
   {{#if $.Session.equals "showNodeForm" true}}
     <div class="panel panel-default">
       <!-- Default panel contents -->
-      <div class="panel-heading block-hider toggle-node-form disable-select"><span class="glyphicon glyphicon-menu-up" style="margin-right:5px;"></span> <b>Rediger prosjektbeskrivelsen</b></div>
+      <div class="panel-heading block-hider toggle-node-form disable-select"><span class="glyphicon glyphicon-menu-up" style="margin-right:5px;"></span> <b>{{#if isTemplate}}Rediger malbeskrivelsen{{else}}Rediger prosjektbeskrivelsen{{/if}}</b></div>
       <div class="panel-body">
-        <p><em>Her kan man beskrive dokumentet i sin helhet. Denne informasjonen brukes for å kunne skille mellom de ulike dokumentene.</em></p>
+        <p><em>
+          {{#if isTemplate}}
+          Her kan man beskrive malen. Denne informasjonen kan brukes av deg som hjelp til å skille mellom de ulike malene.
+          {{else}}
+          Her kan man beskrive dokumentet i sin helhet. Denne informasjonen kan brukes av deg som hjelp til å skille mellom de ulike dokumentene.
+          {{/if}}
+        </em></p>
 
       	{{#autoForm collection="GV.collections.Documents" id="update-document-form" doc=this type="update"}}
       		{{> afQuickField name="title" }}
-      		{{> afQuickField name="summary" rows="6" placeholder="Skriv inn en kortfattet beskrivelse av prosjektet" label="Prosjektbeskrivelse"}}
+      		{{> afQuickField name="summary"}}
 
       		<div class="form-group">
-      			<button type="button" class="btn btn-danger pull-left delete-document">Slett hele dokumentet</button>
+      			<button type="button" class="btn btn-danger pull-left delete-document">{{#if isTemplate}}Slett malen{{else}}Slett hele dokumentet{{/if}}</button>
       			<button type="submit" class="btn btn-primary pull-right">Lagre</button>
       			<button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Nullstill</button>
       		</div>
@@ -76,15 +84,17 @@ Edit top level information about a document. This is basically the root node.
     </div>
   {{else}}
     <div class="well well-sm block-hider toggle-node-form">
-      <span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Rediger prosjektbeskrivelsen</b>
+      <span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>{{#if isTemplate}}Rediger malbeskrivelsen{{else}}Rediger prosjektbeskrivelsen{{/if}}</b>
     </div>
   {{/if}}
 
-  {{#if $.Session.equals "showMediaNodesView" true}}
-    {{> MediaNodesTable class="media-nodes-view" doc=this headerText="Informasjonselementer uten kapittelreferanse"}}
-  {{else}}
-    <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Informasjonselementer uten kapittelreferanse</b></div>
-  {{/if}}
+  {{#unless isTemplate}}
+    {{#if $.Session.equals "showMediaNodesView" true}}
+      {{> MediaNodesTable class="media-nodes-view" doc=this headerText="Informasjonselementer uten kapittelreferanse"}}
+    {{else}}
+      <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Informasjonselementer uten kapittelreferanse</b></div>
+    {{/if}}
+  {{/unless}}
 </template>
 
 <!--

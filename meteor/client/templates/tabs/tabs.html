@@ -26,7 +26,7 @@ Tabs Template render tabs for nodes that are opened during the session.
 	<div class="tab-wrapper">
 		<ul class="nav nav-tabs list">
 			<li role="presentation" class="{{#if isMainDocument}}active{{/if}}">
-        <a href="#" class="general-info">Prosjektbeskrivelse</a>
+        <a href="#" class="general-info">{{#if isTemplate}}Malbeskrivelse{{else}}Prosjektbeskrivelse{{/if}}</a>
       </li>
 
       {{!-- The actual tabs --}}

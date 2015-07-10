@@ -23,20 +23,23 @@ The tree constructor template.
     <div class="pull-right btn-group" role="group">
       <button aria-expanded="false" class="btn btn-default dropdown-toggle menu-button" data-toggle="dropdown" type="button">
       <span class="glyphicon glyphicon-option-horizontal"></span></button>
+
       <ul class="dropdown-menu" role="menu">
-        <li>
-          <a class="toggle-media-nodes" href="#">
-            {{#if $.Session.equals "showMediaNodes" true}}
-              <span class="glyphicon glyphicon-eye-close"></span> Skjul informasjonselementer
-            {{else}}
-              <span class="glyphicon glyphicon-eye-open"></span> Vis informasjonselementer
-            {{/if}}
-          </a>
-        </li>
+        {{#unless isTemplate}}
+          <li>
+            <a class="toggle-media-nodes" href="#">
+              {{#if $.Session.equals "showMediaNodes" true}}
+                <span class="glyphicon glyphicon-eye-close"></span> Skjul informasjonselementer
+              {{else}}
+                <span class="glyphicon glyphicon-eye-open"></span> Vis informasjonselementer
+              {{/if}}
+            </a>
+          </li>
+          <li role="presentation" class="divider"></li>
 
-        <li role="presentation" class="divider"></li>
+          <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="add-media-node"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Opprett informasjonselement</a></li>
+        {{/unless}}
 
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="add-media-node"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Opprett informasjonselement</a></li>
         <li role="presentation"><a role="menuitem" tabindex="-1" href="#" class="add-chapter-node"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Opprett kapittelelement</a></li>
 
         <li role="presentation" class="divider"></li>

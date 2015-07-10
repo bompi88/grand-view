@@ -69,6 +69,25 @@ Modal on removal of multiple media nodes.
 </template>
 
 <!--
+Modal on removal of document of template
+-->
+<template name="RemoveDocumentModal">
+  {{#WellSmall}}
+    {{#if isTemplate}}
+      <b>NB!</b> Hvis du sletter malen vil den først havne i papirkurven, og malen vil da kunne gjenopprettes der ved seinere anledning.
+    {{else}}
+      <b>NB!</b> Hvis du sletter dokumentet vil den først havne i papirkurven, og dokumentet vil da kunne gjenopprettes der ved seinere anledning.
+    {{/if}}
+  {{/WellSmall}}
+  
+  {{#if isTemplate}}
+    Er du sikker på at du vil legge malen i papirkurven?
+  {{else}}
+    Er du sikker på at du vil legge dokumentet i papirkurven?
+  {{/if}}
+</template>
+
+<!--
 Modal on removal of file.
 -->
 <template name="RemoveFileModal">

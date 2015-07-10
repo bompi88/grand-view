@@ -51,8 +51,10 @@ var template_helpers = {
       return text.trim();
     }
     return null;
-  }
-  
+  },
+
+  'isTemplate': GV.helpers.isTemplate
+
 };
 
 // Register all helpers as UI helpers

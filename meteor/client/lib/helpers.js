@@ -84,6 +84,17 @@ GV.helpers = _.extend(GV.helpers, {
     }
 
     cp.exec(openCMD, callback);
+  },
+
+  isTemplate: function(id) {
+    if (id) {
+      var doc = GV.collections.Documents.findOne({ _id: id });
+      return doc && doc.template;
+    } else {
+      var routeController = Router.current();
+      var currentDoc = routeController && routeController.data && routeController.data();
+      return currentDoc && currentDoc.template;
+    }
   }
 
 });

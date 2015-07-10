@@ -184,32 +184,20 @@ Template.GeneralInfo.events({
   },
 
   'click .delete-document': function(event, tmpl) {
-    var self = this;
 
-    $("div.tooltip").hide();
-
-    // A confirmation prompt before removing the document
-    var confirmationPrompt = {
-      title: "Bekreftelse på sletting av dokument",
-      message: '<div class="well well-sm"><span class="glyphicon glyphicon-info-sign" aria-hidden="true" style="font-size:35px;color:#0080ff;"></span><div class="pull-right"style="width:90%;"><b>NB!</b> Hvis du sletter dokumentet vil det først havne i papirkurven, og dokumentet kan gjenopprettes der ved seinere anledning.</div></div>Er du sikker på at du vil slette <b><em>hele</em></b> dokumentet?',
-      buttons: {
-        cancel: {
-          label: "Nei"
-        },
-        confirm: {
-          label: "Ja",
-          callback: function(result) {
-            if (result) {
-              // Remove the document
-              GV.documentsCtrl.softRemoveDocument(self._id, false, function() {
-                Router.go('WorkArea');
-              });
-            }
-          }
-        }
-      }
-    };
-    bootbox.dialog(confirmationPrompt);
+    GV.helpers.showConfirmationPrompt({
+        title:  GV.helpers.isTemplate() ?
+                "Bekreftelse på sletting av mal" :
+                "Bekreftelse på sletting av dokument",
+        message: Blaze.toHTML(Template.RemoveDocumentModal)
+      },
+      _.partial(GV.documentsCtrl.removeDocumentCallback, _, {
+        title: 'Sletting fullført',
+        text: GV.helpers.isTemplate() ?
+              "Malen ble lagt i papirkurven." :
+              "Dokumentet ble lagt i papirkurven."
+      }, this._id)
+    );
   }
 
 });
