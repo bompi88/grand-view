@@ -8,6 +8,7 @@ clone_folder: C:\gv
 branches:
   only:
     - prod
+    - /\d+\.\d+\.\d+/
 
 # Install scripts. (runs after repo cloning)
 install:
