@@ -199,7 +199,7 @@ GV.helpers = _.extend(GV.helpers, {
     });
   },
 
-  exportDocument: function(id, isTemplate) {
+  exportDocument: function(ids, isTemplate) {
 
     var extension = isTemplate ? 'gvt' : 'gvd';
 
@@ -215,15 +215,25 @@ GV.helpers = _.extend(GV.helpers, {
     // the new folder
 
     // Subscribe to all files first
-    Router.current().subscribe('allByDoc', id, function() {
+    Router.current().subscribe('allByDocs', ids, function() {
+
+      ids = _.isArray(ids) ? ids : [ids];
 
       // Just in case the data is outdated in client
-      var doc = GV.collections.Documents.findOne({
-        _id: id
+      var docs = GV.collections.Documents.find({
+        _id: { $in: ids }
+      }).fetch();
+
+      var children = [];
+
+      docs.forEach(function(doc) {
+        if(doc.children)
+          children = children.concat(doc.children);
       });
+
       var nodes = GV.collections.Nodes.find({
         _id: {
-          $in: doc.children || []
+          $in: children
         }
       }).fetch();
 
@@ -239,7 +249,7 @@ GV.helpers = _.extend(GV.helpers, {
       }).fetch();
 
       // write the data
-      fs.writeFileSync(GV.basePath + "tmp/docs.json", JSON.stringify(doc, null, 4), "utf8");
+      fs.writeFileSync(GV.basePath + "tmp/docs.json", JSON.stringify(docs, null, 4), "utf8");
       fs.writeFileSync(GV.basePath + "tmp/nodes.json", JSON.stringify(nodes, null, 4), "utf8");
       fs.writeFileSync(GV.basePath + "tmp/files.json", JSON.stringify(files, null, 4), "utf8");
 

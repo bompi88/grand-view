@@ -68,7 +68,8 @@ Meteor.methods({
           _id: idTableFiles[fileId]._id
         }, {
           $set: {
-            nodeId: idTableNodes[fileDoc.nodeId]
+            nodeId: idTableNodes[fileDoc.nodeId],
+            docId: idTableNodes[fileDoc.docId]
           }
         });
 

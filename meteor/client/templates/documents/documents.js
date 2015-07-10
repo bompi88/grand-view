@@ -156,9 +156,9 @@ Template.DocumentActionsDropdown.events({
     event.preventDefault();
 
     if (this.tableName === "documents") {
-      GV.helpers.exportDocument(GV.selectedCtrl.getSelected(this.tableName)[0]);
+      GV.helpers.exportDocument(GV.selectedCtrl.getSelected(this.tableName));
     } else if (this.tableName === "templates") {
-      GV.helpers.exportDocument(GV.selectedCtrl.getSelected(this.tableName)[0], true);
+      GV.helpers.exportDocument(GV.selectedCtrl.getSelected(this.tableName), true);
     }
   },
 

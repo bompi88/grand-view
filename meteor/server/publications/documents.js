@@ -77,26 +77,35 @@ Meteor.publish('documentById', function(id) {
 /**
  * Publish all resources linked to a doc;
  */
-Meteor.publish('allByDoc', function(id) {
+Meteor.publish('allByDocs', function(ids) {
+
+  ids = _.isArray(ids) ? ids : [ids];
 
   // get the document
-  var doc = GV.collections.Documents.find({
-    _id: id
-  }).fetch();
+  var docs = GV.collections.Documents.find({
+    _id: { $in: ids }
+  });
 
-  if (doc && doc[0]) {
-    var nodes = GV.collections.Nodes.find({
-      _id: {
-        $in: doc[0].children || []
-      }
-    });
+  var fetchedDocs = docs.fetch();
 
-    var files = GV.collections.Files.find({
-      docId: id
-    });
+  var children = [];
 
-    return [nodes, files];
-  } else {
-    return this.ready();
-  }
+  fetchedDocs.forEach(function(doc) {
+    if(doc.children)
+      children = children.concat(doc.children);
+  });
+
+  var nodes = GV.collections.Nodes.find({
+    _id: {
+      $in: children
+    }
+  });
+
+  var docIds = _.pluck(fetchedDocs, "_id");
+
+  var files = GV.collections.Files.find({
+    docId: { $in: docIds }
+  });
+
+  return [nodes, files, docs];
 });
