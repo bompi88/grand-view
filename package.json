@@ -8,7 +8,7 @@
     "electron-rebuild": "^0.1.4",
     "shelljs": "^0.4.0",
     "asar": "^0.7.2",
-    "grunt-electron-installer": "^0.33.0"
+    "electron-builder": "^2.0.0"
   },
   "optionalDependencies": {
     "eslint": "^0.20.0"
@@ -16,9 +16,13 @@
   "dependencies": {
     "archiver": "^0.14.4",
     "async": "^1.2.0",
-    "string": "^3.1.2",
-    "tar-stream": "^1.1.5",
     "officegen": "^0.2.9",
-    "rimraf": "^2.4.1"
+    "rimraf": "^2.4.1",
+    "string": "^3.1.2",
+    "tar-stream": "^1.1.5"
+  },
+  "scripts" : {
+    "pack:osx": "electron-builder \"dist/osx/GrandView.app\" --platform=osx --out=\"dist/osx\" --config=packager.json",
+    "pack:win32": "electron-builder \"dist/windows/GrandView\" --platform=osx --out=\"dist/windows\" --config=packager.json"
   }
 }

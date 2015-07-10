@@ -168,11 +168,11 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
       case 'linux':
         // Not sure if this is the right place to put the .icns file
         // May need to have a different extension.
-        cp('electrometeor.icns', './dist/' + os + '/' + name + '/resources/electron.icns');
+        cp('assets/icon/mount.icns', './dist/' + os + '/' + name + '/resources/grandview.icns');
         break;
 
       case 'osx':
-        cp('electrometeor.icns', './dist/osx/' + name + '.app/Contents/Resources/electron.icns');
+        cp('assets/icon/mount.icns', './dist/osx/' + name + '.app/Contents/Resources/grandview.icns');
         break;
 
       default:
@@ -187,6 +187,7 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
     exec('/usr/libexec/PlistBuddy -c "Set :CFBundleName ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
     exec('/usr/libexec/PlistBuddy -c "Set :CFBundleIdentifier ' + 'com.electrometeor.electrometeor' + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
     exec('/usr/libexec/PlistBuddy -c "Set :CFBundleExecutable ' + distName + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
+    exec('/usr/libexec/PlistBuddy -c "Set :CFBundleIconFile ' + 'grandview.icns' + '" ' + base + '/dist/osx/' + name + '.app/Contents/Info.plist');
   }
 
   function createZipFile (os, name) {
@@ -234,7 +235,7 @@ rmdir(base + '/dist', { maxBusyTries: 10 }, function(error){
   copyBinaryFiles(osName, distName);
 
   echo('-----> Copying icon to ' + distName);
-  // copyIcon(osName, distName);
+  copyIcon(osName, distName);
 
   if (osName === 'osx') {
     updatePlist(distName);
