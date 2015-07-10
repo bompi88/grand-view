@@ -32,12 +32,12 @@ script:
   # Run dist script
   - node script/dist
   # zip it up
-  - tar -zcf grandview-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/GrandView
+  - tar -zcf grandview-v${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/GrandView
 
 deploy:
   provider: releases
   api_key: "c84e543eaa4e8315483285da7e40f8a18c7330df"
-  file: "grandview-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
+  file: "grandview-v${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
   skip_cleanup: true
   on:
     tags: true
