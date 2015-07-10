@@ -17,61 +17,115 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
+
 "use strict";
+
+var path = Npm.require('path');
 
 Meteor.methods({
 
-  import: function(doc, nodes, fileDocs) {
+  import: function(docs, nodes, fileDocs, srcPath) {
 
-    // import main doc
-    var docId = doc._id;
-    doc = _.omit(doc, "_id");
+    var idTableNodes = {};
+    var idTableFiles = {};
+
+    if (!_.isArray(docs))
+      docs = [docs];
+
+    if (!_.isArray(nodes))
+      nodes = [nodes];
+
+    if (!_.isArray(fileDocs))
+      fileDocs = [fileDocs];
 
 
-    GV.collections.Documents.update({
-      _id: docId
-    }, {
-      $set: doc
-    }, {
-      upsert: true
+    _.each(docs, function(doc, key, obj) {
+      var docId = doc._id;
+      doc = _.omit(doc, ["_id", "restoredAt", "restoredBy", "restored"]);
+      idTableNodes[docId] = GV.collections.Documents.insert(doc);
+
+      obj[key]._id = idTableNodes[docId];
     });
 
     // Import nodes
-    nodes.forEach(function(node) {
+    _.each(nodes, function(node) {
       var nodeId = node._id;
       node = _.omit(node, "_id");
-
-      GV.collections.Nodes.update({
-        _id: nodeId
-      }, {
-        $set: node
-      }, {
-        upsert: true
-      });
+      idTableNodes[nodeId] = GV.collections.Nodes.insert(node);
     });
 
     // import files
-    fileDocs.forEach(function(fileDoc) {
+    _.each(fileDocs, function(fileDoc) {
       var fileId = fileDoc._id;
-      fileDoc = _.omit(fileDoc, "_id");
-      fileDoc.copies.filesStore.updatedAt = new Date();
+      var filePath = path.resolve(srcPath + "/" + fileDoc.copies.filesStore.key);
 
-      GV.collections.Files.update({
-        _id: fileId
-      }, {
-        $set: fileDoc
-      }, {
-        upsert: true
+      var file = new FS.File(filePath);
+      file.name(fileDoc.original.name);
+
+      idTableFiles[fileId] = GV.collections.Files.insert(file, function() {
+
+        GV.collections.Files.update({
+          _id: idTableFiles[fileId]._id
+        }, {
+          $set: {
+            nodeId: idTableNodes[fileDoc.nodeId]
+          }
+        });
+
+        GV.collections.Nodes.update({
+          fileId: fileId
+        }, {
+          $set: {
+            fileId: idTableFiles[fileId]._id,
+            "original.name": fileDoc.original.name,
+            "copies.filesStore.name": fileDoc.original.name
+          }
+        }, {
+          multi: true,
+          upsert: false
+        });
       });
     });
 
-    return true;
-  },
 
-  existsDoc: function(id, callback) {
-    return GV.collections.Documents.find({
-      _id: id
-    }).count() > 0;
+    var key;
+    var val;
+
+    // Update node references and doc reference
+    for (key in idTableNodes) {
+      if (idTableNodes.hasOwnProperty(key)) {
+        val = idTableNodes[key];
+
+        GV.collections.Nodes.update({
+          parent: key.toString()
+        }, {
+          $set: {
+            parent: val.toString()
+          }
+        }, {
+          multi: true,
+          upsert: false
+        });
+      }
+    }
+
+    // Update the children in main document
+    _.each(docs, function(doc) {
+      doc.children = _.map(doc.children, function(childId) {
+        return idTableNodes[childId];
+      });
+
+      GV.collections.Documents.update({
+        _id: doc._id
+      }, {
+        $set: {
+          children: doc.children
+        }
+      });
+    });
+
+
+    return true;
   },
 
   /**

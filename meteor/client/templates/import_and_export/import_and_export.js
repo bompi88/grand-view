@@ -78,20 +78,15 @@ function copyFile(source, target, cb) {
   }
 }
 
-function documentExists(id, callback) {
-  Meteor.call('existsDoc', id, callback);
-}
+function deepCopyImport(docs, nodes, fileDocs, srcPath) {
 
-function importThemStuff(doc, nodes, fileDocs, targetPath, srcPath) {
-  fileDocs.forEach(function(file) {
-    var key = file.copies.filesStore.key;
-    fs.renameSync(srcPath + "/" + key, targetPath + "/" + key);
-  });
-
-  Meteor.call('import', doc, nodes, fileDocs, function(err, res) {
+  Meteor.call('import', docs, nodes, fileDocs, srcPath, function(err, res) {
     if (err) {
       Notifications.error("Feilmelding", err.message);
     } else {
+
+      deleteFolderRecursive(path.join(GV.basePath, "tmp"));
+
       Notifications.success(
         "Importering lyktes",
         "Rapportstrukturen ble importert i systemet og kan finnes på dashbordet."
@@ -100,29 +95,6 @@ function importThemStuff(doc, nodes, fileDocs, targetPath, srcPath) {
       Session.set("working", false);
     }
   });
-}
-
-function askWrite(yes, no) {
-
-  $("div.tooltip").hide();
-
-  // A confirmation prompt before removing the document
-  var confirmationPrompt = {
-    title: "Overskriving av dokument",
-    message: 'Er du sikker på at du vil overskrive dokumentet?',
-    buttons: {
-      cancel: {
-        label: "Nei",
-        callback: no
-      },
-      confirm: {
-        label: "Ja",
-        callback: yes
-      }
-    }
-  };
-
-  bootbox.dialog(confirmationPrompt);
 }
 
 GV.helpers = _.extend(GV.helpers, {
@@ -205,42 +177,20 @@ GV.helpers = _.extend(GV.helpers, {
             fs.createReadStream(tarball).pipe(extract).on('finish', function() {
               Meteor.setTimeout(function() {
                 var nodeImp = fs.readFileSync(dest + "/nodes.json", "utf8");
-                var docImp = fs.readFileSync(dest + "/doc.json", "utf8");
+                var docImp = fs.readFileSync(dest + "/docs.json", "utf8");
                 var fileImp = fs.readFileSync(dest + "/files.json", "utf8");
 
                 // import document to db
-                var doc = (docImp === "") ? [] : JSON.parse(docImp);
+                var docs = (docImp === "") ? [] : JSON.parse(docImp);
                 var nodes = (nodeImp === "") ? [] : JSON.parse(nodeImp);
                 var fileDocs = (fileImp === "") ? [] : JSON.parse(fileImp);
 
-                documentExists(doc._id, function(err, res) {
-                  if (res) {
-                    // Ask what to do
-                    askWrite(function(err, res) {
-                        // if yes
-                        importThemStuff(
-                          doc,
-                          nodes,
-                          fileDocs,
-                          path.join(GV.basePath, "files"),
-                          path.join(GV.basePath, "tmp", "import", "files")
-                        );
-                      },
-                      function(err, res) {
-                        Session.set("working", false);
-                        // if no
-                        deleteFolderRecursive(path.join(GV.basePath, "tmp"));
-                      });
-                  } else {
-                    importThemStuff(
-                      doc,
-                      nodes,
-                      fileDocs,
-                      path.join(GV.basePath, "files"),
-                      path.join(GV.basePath, "tmp", "import", "files")
-                    );
-                  }
-                });
+                deepCopyImport(
+                  docs,
+                  nodes,
+                  fileDocs,
+                  path.join(GV.basePath, "tmp", "import", "files")
+                );
               }, 1000);
             });
           });
@@ -289,7 +239,7 @@ GV.helpers = _.extend(GV.helpers, {
       }).fetch();
 
       // write the data
-      fs.writeFileSync(GV.basePath + "tmp/doc.json", JSON.stringify(doc, null, 4), "utf8");
+      fs.writeFileSync(GV.basePath + "tmp/docs.json", JSON.stringify(doc, null, 4), "utf8");
       fs.writeFileSync(GV.basePath + "tmp/nodes.json", JSON.stringify(nodes, null, 4), "utf8");
       fs.writeFileSync(GV.basePath + "tmp/files.json", JSON.stringify(files, null, 4), "utf8");
 
