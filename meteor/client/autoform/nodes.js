@@ -26,7 +26,7 @@ AutoForm.hooks({
 
     formToDoc: function(doc) {
       doc.lastChanged = new Date();
-
+      console.log(doc);
       return doc;
     },
 
@@ -50,10 +50,12 @@ AutoForm.hooks({
           }
         });
       });
+      Meteor.setTimeout(function(){
+        Session.set("inlineEditNode", null);
+        Session.set("formDirty", false);
+        Notifications.success('Suksess', 'Elementet ble oppdatert!');
 
-      Session.set("inlineEditNode", null);
-      Session.set("formDirty", false);
-      Notifications.success('Suksess', 'Elementet ble oppdatert!');
+      }, 300);
     }
 
   }
