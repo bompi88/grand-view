@@ -52,6 +52,7 @@ Router.route('/documents', {
  */
 Router.route('/template/:_id', {
   name: 'Template',
+  template: 'Document',
   controller: 'GV.routeCtrls.Template'
 });
 

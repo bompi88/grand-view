@@ -39,7 +39,7 @@ GV.routeCtrls.Document = RouteController.extend({
   },
 
   onAfterAction: function() {
-    if(this.ready()) {
+    if(this.ready() && (Session.get('mainDocument') !== this.params._id)) {
 
       GV.tabs.reset();
       GV.tags.reset();
