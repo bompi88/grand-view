@@ -12,7 +12,6 @@ sudo: required
 
 branches:
   only:
-    - prod
     - /\d+\.\d+\.\d+/
 
 before_install:
