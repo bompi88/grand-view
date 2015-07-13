@@ -4,11 +4,6 @@ node_js:
 
 sudo: required
 
-env:
-  global:
-  - GH_REF: github.com/bompi88/grand-view.git
-  - GH_TOKEN: 3a3d2c2f84a3c313443997648f3c3b8172bc5aad
-
 # multiple oses when nodejs env comes to osx on travis
 #os:
 #  - linux
@@ -48,6 +43,8 @@ cache:
 
 deploy:
   provider: releases
+  api-key:
+    secure: "3a3d2c2f84a3c313443997648f3c3b8172bc5aad"
   file:
     - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
     # - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
