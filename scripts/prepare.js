@@ -73,7 +73,8 @@ function copyMeteorBundle(os) {
     case 'win32':
     case 'linux':
     case 'darwin':
-      mv('bundle', './app/bundle');
+      mkdir('./app/bundle');
+      cp('bundle/*', './app/bundle');
       break;
 
     default:
