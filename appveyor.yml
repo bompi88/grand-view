@@ -34,21 +34,21 @@ build_script:
   - npm run pack:win
 
 after_build:
-  - 7z a ElectronMeteor-%APPVEYOR_REPO_TAG_NAME%-win32-ia32-installer.zip "%APPVEYOR_BUILD_FOLDER%\dist\windows\x86\ElectronMeteor Setup.exe"
+  - 7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-ia32-installer.zip "%APPVEYOR_BUILD_FOLDER%\dist\windows\x86\GrandView Setup.exe"
 
 deploy:
   provider: GitHub
   auth_token:
-    secure: <Your Secure API Key>
-  artifact: "ElectronMeteor-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32,ElectronMeteor-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer"
+    secure: tNMKx8kVItLg0Henj9BJJNB+IUTkaa1ScGiJ7WBq6/TxST6l7MhHGe4k0omB6H5V
+  artifact: "GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32,GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer"
   draft: false
   prerelease: false
   on:
     appveyor_repo_tag: true
 
 artifacts:
-  - path: dist\windows\x86\ElectronMeteor-win32-ia32
-    name: ElectronMeteor-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32
+  - path: dist\windows\x86\GrandView-win32-ia32
+    name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32
 
-  - path: ElectronMeteor-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer.zip
-    name: ElectronMeteor-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer
+  - path: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer.zip
+    name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer

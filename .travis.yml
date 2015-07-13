@@ -21,7 +21,7 @@ before_install:
 install:
   # Install meteor
   - curl https://install.meteor.com/ | /bin/sh
-  # setup ElectronMeteor
+  # setup GrandView
   - npm install
 
 script:
@@ -33,9 +33,9 @@ script:
   # - npm run pack:osx
   # zip it up
   # Linux
-  - tar -zcf ElectronMeteor-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz -C dist/linux/x64/ElectronMeteor-linux-x64 .
+  - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz -C dist/linux/x64/GrandView-linux-x64 .
   # Mac
-  # - tar -zcf ElectronMeteor-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/x64/ElectronMeteor.dmg
+  # - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/x64/GrandView.dmg
 
 cache:
   directories:
@@ -44,10 +44,10 @@ cache:
 deploy:
   provider: releases
   api-key:
-    secure: <Your Secure API Key>
+    secure: "p1kepD2AmsT8DewE5D7motmedsrztQ0Scc3J/vngxo8EkFT4DMVaI/eJtANDaNfd79G0IuTTYMcEZkLM+a1KUDcS8PY+lyXd99o+WEUkTgibZY9rLM6hM/MU3CcnE/shPGeSMP6d50xAGhIjzm1yATEnbCQP4eYyzgZpz7AfgvY21bqMEJ0YNJY6NZ0CLh/FgsQEr/tTprjF5PV48YqkOxt5XRswGWSYfpNF2lQTVU6XsaLGaBBUfQGk3U99E29hLi8GCoCAJn2y6yxrzb0FL5UZMeJtYs9IYO3kXyN3/lnR9lQOa6/PC0ELSjCSwyhHSwIiRZPYUia4xkjzonBQkDv6D5ZjRWC0shRWJwHWIEeuAYtTN+dymW68WGJ5flWOPFUSDxv5+jwO2IcmDWBWdjCli1zfSjkxzmM+GZjiJJRe3bq0rLykrG6RC3MozTqpyk7RQwRkVuoypTOjf1WzRtaEUYxIHy+MoThkQBuGkCMsx3hgKScPlZ4uler6ljX6dKJlQRvNS6br6yRTDvkPLF+u1u3wyjNl1fpq5SdagR+MzpZqGp4NKG0j2OWpF1MHxjhKlZCjmweOppMInHXncDVgfVkOenHdnsbyMRa7FMbWNFXWkrc3ELlpeaD7Xq69lIYu4sFOMOZ/8Jh1dYELsDHKI4vnzZGwUtNAZvVaDms="
   file:
-    - "ElectronMeteor-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
-    # - "ElectronMeteor-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
+    - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
+    # - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
   skip_cleanup: true
   on:
     tags: true
