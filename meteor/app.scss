@@ -29,8 +29,8 @@ $black: #222;
 $font-family-sans-serif: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
 $text-color: #555;
 
-@import '.meteor/local/build/programs/server/assets/packages/reywood_bootstrap3-sass/bootstrap';
-@import '.meteor/local/build/programs/server/assets/packages/wolves_bourbon/bourbon/bourbon';
+@import 'bootstrap';
+@import 'bourbon/bourbon';
 
 $blue-base: darken($blue, 6.5%);
 
@@ -152,15 +152,3 @@ thead {
     box-shadow: 0 0 1px rgba(255, 255, 255, .4);
   }
 }
-
-@import "client/templates/document/document";
-@import "client/templates/documents/documents";
-@import "client/templates/index/index";
-@import "client/templates/navigation/navigation";
-@import "client/templates/node/node";
-@import "client/templates/node_detail/node_detail";
-@import "client/templates/references/references";
-@import "client/templates/tabs/tabs";
-@import "client/templates/tags/tags";
-@import "client/templates/tree/tree";
-@import "client/ball";

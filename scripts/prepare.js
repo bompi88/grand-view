@@ -73,7 +73,8 @@ function copyMeteorBundle(os) {
     case 'win32':
     case 'linux':
     case 'darwin':
-      mv('bundle', './app/bundle');
+      mkdir('./app/bundle');
+      cp('-R', 'bundle/*', './app/bundle');
       break;
 
     default:
@@ -110,7 +111,8 @@ function copyBinaryFiles(os, architecture) {
       var np = './cache/' + 'node-' + os + '-' + architecture + '/';
       var mp = './cache/' + 'mongodb-' + os + '-' + architecture + '/';
       cp(np + nodePostfix, './app/resources/');
-      cp(np + 'LICENSE', './app/resources/');
+
+      if(platform !== 'win32') cp(np + 'LICENSE', './app/resources/');
       cp(mp + 'bin/' + mongodbPostfix, './app/resources/');
       cp(mp + 'GNU-AGPL-3.0', './app/resources/');
       break;

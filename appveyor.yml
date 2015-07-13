@@ -24,10 +24,9 @@ install:
 build_script:
   - ps: Start-Sleep -s 5
   - set PATH=C:\Program Files (x86)\NSIS;%PATH%
+  # Supress SCSS error
+  - node scripts/scss
   # For some reason it is necessary to split up the commands
-  - node scripts/download --platform=win32 --arch=x86
-  - node scripts/prepare --platform=win32 --arch=x86
-  - npm run clean:win
   - npm run build:win
   # Update node
   - ps: Update-NodeJsInstallation 0.12.7

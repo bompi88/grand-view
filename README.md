@@ -1,37 +1,35 @@
 # Grand View
 
-[ABOUT GRANDVIEW HERE]
+Helps you structure a large set of information units. Can be used for writing reports and so on.
 
 ## Development
 First clone the repo:
 ``` bash
-$ git clone --recursive git@github.com:andybb/grand-view.git
+$ git clone git@github.com:bompi88/grand-view.git
 ```
 
-### Desktop app
-You have to install all node dependencies, so execute:
+Then setup the dev environment:
 ``` bash
-$ npm install
+$ npm run dev:setup
 ```
 
-After this, run the setup script to install some necessary prerequisites:
-```bash
-$ node ./script/setup.js
-```
-
-Then you can either run it in dev mode:
-```bash
-$ node ./script/run.js
-```
-
-or build for distribution:
-```bash
-$ node ./script/dist.js
-```
-
-### Regular Meteor app
-As usual (inside the `meteor` folder) run:
+Run the App in dev mode:
 ``` bash
-$ meteor
+$ npm run dev
 ```
 
+### Build and pack the App
+To build for windows platform do:
+``` bash
+$ npm run build:osx # others: win, linux
+```
+
+To build installers:
+``` bash
+$ npm run pack:osx
+```
+
+Combined build and pack:
+``` bash
+$ npm run osx
+```
