@@ -20,7 +20,7 @@
 "use strict";
 
 var os = require('os');
-var osName = os.platform();
+var platform = os.platform();
 var cp = require("child_process");
 
 GV.helpers = _.extend(GV.helpers, {
@@ -75,9 +75,9 @@ GV.helpers = _.extend(GV.helpers, {
   openFile: function(filePath, callback) {
     var openCMD;
 
-    if(osName === "win32") {
+    if(platform === "win32") {
       openCMD = '"' + filePath + '"';
-    } else if(osName === "darwin"){
+    } else if(platform === "darwin"){
       openCMD = "open " + filePath;
     } else {
       openCMD = "xdg-open " + filePath;

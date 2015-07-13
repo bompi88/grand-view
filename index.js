@@ -1,228 +1,270 @@
-/*eslint strict:0*/
-var childProcess = require('child_process');
-var os = require('os');
-var fs = require('fs');
-var net = require('net');
-var path = require('path');
-var exec = childProcess.exec;
+////////////////////////////////////////////////////////////////////////////////
+// The Main App file
+////////////////////////////////////////////////////////////////////////////////
 
-/* App Name */
-/* -------- */
-// Be sure to change this or your data might be stored
-// somewhere you don't want it to be.
-var appName = 'GrandView';
+/* jshint strict:false */
+/* eslint strict:false */
+/* global mainWindow:true */
 
+var BrowserWindow = require('browser-window'),
+  childProcess = require('child_process'),
+  pjson = require('./package.json'),
+  path = require('path'),
+  net = require('net'),
+  app = require('app'),
+  os = require('os'),
+  fs = require('fs');
 
-var app = require('app'); // Module to control application life.
-var BrowserWindow = require('browser-window'); // Module to create native browser window.
-
+// Set in package.json
+var appName = pjson.name;
 var dirname = __dirname;
-console.log(dirname); // The name of the directory that the currently executing script resides in.
+var env = process.env;
 
-var handleStartupEvent = function() {
-  if (process.platform !== 'win32') {
-    return false;
-  }
+// -- Some mongo and node variables --------------------------------------------
 
-  var squirrelCommand = process.argv[1];
-  switch (squirrelCommand) {
-    case '--squirrel-install':
-    case '--squirrel-updated':
+var rootURL = 'http://localhost';
+var bindIP = '127.0.0.1';
+var mongoRootUrl = 'mongodb://localhost:';
+var dbName = 'meteor';
 
-      // Optionally do things such as:
-      //
-      // - Install desktop and start menu shortcuts
-      // - Add your .exe to the PATH
-      // - Write to the registry for things like file associations and
-      //   explorer context menus
+// -- Browser window setup -----------------------------------------------------
 
-      // Always quit when done
-      app.quit();
+var width = 1200;
+var height = 800;
+var minWidth = 1000;
+var minHeight = 800;
 
-      return true;
-    case '--squirrel-uninstall':
-      // Undo anything you did in the --squirrel-install and
-      // --squirrel-updated handlers
+var resizeable = true;
+var frame = true;
 
-      // Always quit when done
-      app.quit();
+// -- Set up paths -------------------------------------------------------------
 
-      return true;
-    case '--squirrel-obsolete':
-      // This is called on the outgoing version of your app before
-      // we update to the new version - it's the opposite of
-      // --squirrel-updated
-      app.quit();
-      return true;
-  }
-};
+var resourcesDir = path.join(dirname, 'resources');
+var nodeModulesDir = path.join(dirname, 'node_modules');
+var meteorPath = path.join(dirname, 'bundle');
 
-if (handleStartupEvent()) {
-  return;
+var appPath = '';
+
+if (os.platform() === 'darwin') {
+  appPath = path.join(env.HOME, 'Library/Application Support/', appName, '/');
+} else if (os.platform() === 'win32') {
+  appPath = path.join(env.HOMEPATH, 'AppData/Local/', appName, '/');
+} else if (os.platform() === 'linux') {
+  appPath = path.join(env.HOME, '/.config/', appName, '/');
 }
 
+console.log('App path: ' + appPath);
 
+var dataPath = path.join(appPath, 'data');
 
-// Before starting a local server, freePort will find an available port by letting
-// the OS find it.
-function freePort (callback) {
+// -- Helpers ------------------------------------------------------------------
+
+/**
+ * Determine an occupied port
+ */
+function freePort(callback) {
   var server = net.createServer();
   var port = 0;
 
-  server.on('listening', function () {
+  server.on('listening', function() {
     port = server.address().port;
     server.close();
   });
-  server.on('close', function () {
+
+  server.on('close', function() {
     callback(null, port);
   });
 
   server.listen(0, '127.0.0.1');
 }
 
+/**
+ * Create a dir if it not exists
+ */
+function createDirSync(path) {
+  if (!fs.existsSync(path)) {
+    fs.mkdirSync(path);
+  }
+}
 
-// Write something about Start method
-function start (callback) {
+/**
+ * Read file if exists
+ */
+function readFileSync(path) {
+  if (fs.existsSync(path)) {
+    return fs.readFileSync(path.join(path), 'utf8');
+  }
+  return '';
+}
+
+/**
+ * Start Node Child
+ */
+function startNode(options, mongoChild, callback) {
+
+  console.log('Starting node child...');
+
+  var nodePath = path.join(resourcesDir, 'node');
+  var nodeArgs = path.join(meteorPath, 'main.js');
+
+  var opened = false;
+
+  // Set environment variables
+  env.ROOT_URL = rootURL;
+  env.PORT = options.webPort;
+  env.BIND_IP = bindIP;
+  env.DB_PATH = dataPath;
+  env.MONGO_URL = mongoRootUrl + options.mongoPort + "/" + dbName;
+  env.METEOR_SETTINGS = readFileSync(path.join(appPath, 'settings.json'));
+  env.DIR = dirname;
+  env.NODE_ENV = 'production';
+  env.NODE_PATH = nodeModulesDir;
+
+  var nodeChild = childProcess.execFile(nodePath, [nodeArgs], {
+    env: env
+  });
+
+  // listen for errors
+  nodeChild.stderr.setEncoding('utf8');
+  nodeChild.stderr.on('data', function(nodeData) {
+    console.log('stderr: ', nodeData);
+  });
+
+  // Listen on meteor events
+  nodeChild.stdout.setEncoding('utf8');
+  nodeChild.stdout.on('data', function(nodeData) {
+    if (nodeData.indexOf('Meteor app started.' !== -1)) {
+      if (!opened) {
+        opened = true;
+      } else {
+        return;
+      }
+
+      setTimeout(function() {
+        var fullURL = rootURL + ':' + options.webPort;
+        callback(fullURL, nodeChild, mongoChild);
+      }, 100);
+    }
+  });
+}
+
+/**
+ * Starts mongo on specified port and starts Node on finish
+ */
+function startMongo(options, callback) {
+  // Path to mongod
+  var mongodPath = path.join(resourcesDir, 'mongod');
+  var started = false;
+  var mongodArgs;
+
+  // Arguments passed to mongod
+  if (os.platform() === 'win32') {
+    mongodArgs = [
+      '--bind_ip',
+      '127.0.0.1',
+      '--dbpath',
+      dataPath,
+      '--port',
+      options.mongoPort,
+      '--smallfiles'
+    ];
+  } else {
+    mongodArgs = [
+      '--bind_ip',
+      '127.0.0.1',
+      '--dbpath',
+      dataPath,
+      '--port',
+      options.mongoPort,
+      '--unixSocketPrefix',
+      dataPath,
+      '--smallfiles'
+    ];
+  }
+
+  // Start the Mongo process.
+  var mongoChild = childProcess.spawn(mongodPath, mongodArgs, {
+    env: {
+      PURPOSE: appName
+    }
+  });
+
+  // Listen on mongod errors
+  mongoChild.stderr.setEncoding('utf8');
+  mongoChild.stderr.on('data', function(data) {
+    console.log(data);
+  });
+
+  // Listen on mongo events
+  mongoChild.stdout.setEncoding('utf8');
+  mongoChild.stdout.on('data', function(data) {
+    var mongoRunnning = data.indexOf(
+      'waiting for connections on port ' +
+      options.mongoPort
+    );
+
+    // If mongo is up and running
+    if (mongoRunnning !== -1) {
+
+      if (!started) {
+        started = true;
+      } else {
+        return;
+      }
+
+      // Start node child
+      startNode({
+        mongoPort: options.mongoPort,
+        webPort: options.webPort
+      }, mongoChild, callback);
+    }
+  });
+}
+
+/**
+ * Trigger the boot process
+ */
+function start(callback) {
   if (process.env.NODE_ENV === 'development') {
     console.log('Running in Dev mode.');
     callback('http://localhost:3000');
   } else {
     process.stdout.write('Starting production server\n');
 
-    var appPath = '',
-        dataPath = '',
-        bundlePath = '';
-    if (os.platform() === 'darwin') {
-      appPath = path.join(process.env.HOME, 'Library/Application Support/', appName, '/');
-      dataPath = path.join(appPath, 'data');
-      bundlePath = path.join(appPath, 'bundle');
-    } else if (os.platform() === 'win32') {
-      appPath = path.join(process.env.HOMEPATH, 'AppData/Local/', appName, '/');
-      dataPath = path.join(appPath, 'data');
-      bundlePath = path.join(appPath, 'bundle');
-    } else if (os.platform() === 'linux') {
-      appPath = path.join(process.env.HOME, '/.config/', appName, '/');
-      dataPath = path.join(appPath, 'data');
-      bundlePath = path.join(appPath, 'bundle');
-    }
+    // Create paths
+    createDirSync(appPath);
+    createDirSync(dataPath);
 
-    // If file paths don't yet exist, create them
-    if (!fs.existsSync(appPath)) {
-      fs.mkdirSync(appPath);
-    }
-
-    if (!fs.existsSync(dataPath)) {
-      fs.mkdirSync(dataPath);
-    }
-
-    if (!fs.existsSync(bundlePath)) {
-      fs.mkdirSync(bundlePath);
-    }
-
-    freePort(function (err, webPort) {
-      freePort(function (err, mongoPort) {
+    // Detect unoccupied ports
+    freePort(function(err, webPort) {
+      freePort(function(err, mongoPort) {
         console.log('MongoPort: ', mongoPort);
         console.log('WebPort: ', webPort);
 
-        // Be sure to change the PURPOSE to be the name of your app
-
-        fs.unlink(path.join(dataPath, 'mongod.lock'), function () {
-
-          // Path to mongod command bundled with app.
-          var mongodPath = path.join(dirname, '/../', 'resources', 'mongod');
-
-          // Arguments passed to mongod command.
-          var mongodArgs = ['--bind_ip', '127.0.0.1', '--dbpath', dataPath, '--port', mongoPort, '--unixSocketPrefix', dataPath, '--smallfiles'];
-          if (os.platform() === 'win32') {
-            mongodArgs = ['--bind_ip', '127.0.0.1', '--dbpath', dataPath, '--port', mongoPort, '--smallfiles'];
-          }
-
-          // Start the Mongo process.
-          var mongoChild = childProcess.spawn(mongodPath, mongodArgs, {
-            env: {
-              PURPOSE: 'GrandView'
-            }
-          });
-
-          mongoChild.stderr.setEncoding('utf8');
-          mongoChild.stderr.on('data', function (data) {
-            console.log(data);
-          });
-
-          var started = false;
-          mongoChild.stdout.setEncoding('utf8');
-          mongoChild.stdout.on('data', function (data) {
-            console.log(data);
-
-            if (data.indexOf('waiting for connections on port ' + mongoPort)) {
-              if (!started) {
-                started = true;
-              } else {
-                return;
-              }
-
-              console.log('Starting node child...');
-              var rootURL = 'http://localhost';
-              var userEnv = process.env;
-              userEnv.ROOT_URL = rootURL;
-              userEnv.PORT = webPort;
-              userEnv.BIND_IP = '127.0.0.1';
-              userEnv.DB_PATH = dataPath;
-              userEnv.MONGO_URL = 'mongodb://localhost:' + mongoPort + '/meteor';
-              // user_env.METEOR_SETTINGS = fs.readFileSync(path.join(dirname, 'resources', 'settings.json'), 'utf8');
-              userEnv.DIR = dirname;
-              userEnv.NODE_ENV = 'production';
-              userEnv.NODE_PATH = path.join(dirname, 'node_modules');
-
-              var nodePath = path.join(dirname, '/../', 'resources', 'node');
-              var nodeArgs = path.join(dirname, 'bundle', 'main.js');
-              var nodeChild = childProcess.execFile(nodePath, [nodeArgs], {
-                env: userEnv
-              });
-
-              var opened = false;
-
-              // listen for errors
-              nodeChild.stderr.setEncoding('utf8');
-              nodeChild.stderr.on('data', function (nodeData) {
-                console.log('stderr: ', nodeData);
-              });
-
-              nodeChild.stdout.setEncoding('utf8');
-              nodeChild.stdout.on('data', function (nodeData) {
-                console.log(nodeData);
-
-                if (data.indexOf(!'Meteor app started.' === -1)) {
-                  if (!opened) {
-                    opened = true;
-                  } else {
-                    return;
-                  }
-
-                  setTimeout(function () {
-                    var fullURL = rootURL + ':' + webPort;
-                    callback(fullURL, nodeChild, mongoChild);
-                  }, 100);
-                }
-              });
-            }
-          });
+        // Delete the mongod lock file
+        fs.unlink(path.join(dataPath, 'mongod.lock'), function() {
+          // Start mongo first
+          startMongo({
+            mongoPort: mongoPort,
+            webPort: webPort
+          }, callback);
         });
       });
     });
   }
 }
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the javascript object is GCed.
+// -- Setup the app ------------------------------------------------------------
 
-/*global mainWindow:true*/ // <-- This is to let ESLint know that it's ok to have a global and 'true' allows it to be read/write
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the javascript object is garbage collected.
+
 mainWindow = null;
 
 // Emitted when the application is activated while there is no opened windows.
-// It usually happens when a user has closed all of application's windows and then
-// click on the application's dock icon.
-app.on('activate-with-no-open-windows', function () {
+// It usually happens when a user has closed all of application's windows and
+// then click on the application's dock icon.
+app.on('activate-with-no-open-windows', function() {
   if (mainWindow) {
     mainWindow.show();
   }
@@ -231,21 +273,24 @@ app.on('activate-with-no-open-windows', function () {
 });
 
 // Emitted when Electron has done all of the initialization.
-app.on('ready', function () {
-  start(function (url, nodeChild, mongoChild) {
+app.on('ready', function() {
+  start(function(url, nodeChild, mongoChild) {
     console.log('App occupying ', url);
-    var cleanup = function () {
+
+    var cleanup = function() {
       app.quit();
     };
+
     // Create the browser window.
     var windowOptions = {
-      width: 1200,
-      height: 800,
-      "min-width": 1000,
-      "min-height": 800,
-      resizeable: true,
-      frame: true
+      width: width,
+      height: height,
+      "min-width": minWidth,
+      "min-height": minHeight,
+      resizeable: resizeable,
+      frame: frame
     };
+
     mainWindow = new BrowserWindow(windowOptions);
     mainWindow.focus();
     mainWindow.loadUrl(url);
@@ -253,9 +298,9 @@ app.on('ready', function () {
     process.on('uncaughtException', cleanup);
 
     // Emitted when all windows have been closed and the application will quit.
-    // Calling event.preventDefault() will prevent the default behaviour, which is
-    // terminating the application.
-    app.on('will-quit', function (event) {
+    // Calling event.preventDefault() will prevent the default behaviour, which
+    // is terminating the application.
+    app.on('will-quit', function(event) {
       console.log(event);
       console.log('Cleaning up children.');
 

@@ -1,18 +1,18 @@
-# Test against this version of Node.js
 language: node_js
 node_js:
   - "0.10.36"
 
 sudo: required
 
-# multiple oses
+# multiple oses when nodejs env comes to osx on travis
 #os:
 #  - linux
 #  - osx
 
 branches:
   only:
-    - /\d+\.\d+\.\d+/
+    # only tags on the form vx.x.x or vx.x.xxx and so on
+    - /v\d+\.\d+\.\d+/
 
 before_install:
   - export ARCH=$(uname -m)
@@ -21,23 +21,33 @@ before_install:
 install:
   # Install meteor
   - curl https://install.meteor.com/ | /bin/sh
-  # install modules
+  # setup ElectronMeteor
   - npm install
-  # setup electrometeor
-  - node script/setup
 
 script:
-  # Run first to build the bootstrap file
-  - node script/scss
-  # Run dist script
-  - node script/dist
+  # Pack and build
+  - npm run build:linux
+  # - npm run build:osx
+  # - nvm install 0.12.7
+  # - nvm use 0.12.7
+  # - npm run pack:osx
   # zip it up
-  - tar -zcf grandview-v${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/GrandView
+  # Linux
+  - tar -zcf ElectronMeteor-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz -C dist/linux/x64/ElectronMeteor-linux-x64 .
+  # Mac
+  # - tar -zcf ElectronMeteor-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/x64/ElectronMeteor.dmg
+
+cache:
+  directories:
+  - cache
 
 deploy:
   provider: releases
-  api_key: "c84e543eaa4e8315483285da7e40f8a18c7330df"
-  file: "grandview-v${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
+  api-key:
+    secure: <Your Secure API Key>
+  file:
+    - "ElectronMeteor-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
+    # - "ElectronMeteor-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
   skip_cleanup: true
   on:
     tags: true

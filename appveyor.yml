@@ -1,71 +1,54 @@
-# Test against this version of Node.js
 environment:
   nodejs_version: "0.10.36"
 
-# clone directory
-clone_folder: C:\gv
-
 branches:
   only:
-    - prod
-    - /\d+\.\d+\.\d+/
+    - master
+    - /v\d+\.\d+\.\d+/
 
-# Install scripts. (runs after repo cloning)
 install:
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
-  # install modules
+  # Setup
   - npm install
-  # setup elctrometeor
-  - node script/setup
-  # install grunt
-  - npm install -g grunt-cli
-  # install rimraf
-  - npm install -g rimraf
   # download Meteor
   - ps: Start-FileDownload 'https://s3.amazonaws.com/meteor-windows/InstallMeteor.exe'
   # install meteor
   - .\installMeteor.exe /passive
+  # download NSIS
+  - ps: choco install -y nsis -pre
   # Restart
   - ps: Start-Sleep -s 5
   - ps: Restart-Computer -Force
 
 build_script:
-  # run tests
   - ps: Start-Sleep -s 5
-  - node script/scss
-  - node script/dist
-  # mount dist dir as drive
-  - subst "Y:" "C:\gv\dist\windows\GrandView"
-  # flatten the node_modules
-  - cd Y:\
-  - npm dedupe
-  - cd C:\gv
-  - ps: Start-Sleep -s 2
-  # Create the installer
-  #- ps: Start-Sleep -s 30
-  #- grunt create-windows-installer
+  - set PATH=C:\Program Files (x86)\NSIS;%PATH%
+  # For some reason it is necessary to split up the commands
+  - node scripts/download --platform=win32 --arch=x86
+  - node scripts/prepare --platform=win32 --arch=x86
+  - npm run clean:win
+  - npm run build:win
+  # Update node
+  - ps: Update-NodeJsInstallation 0.12.7
+  - npm run pack:win
 
 after_build:
-  # unmount drive
-  - subst "Y:" /d
+  - 7z a ElectronMeteor-%APPVEYOR_REPO_TAG_NAME%-win32-ia32-installer.zip "%APPVEYOR_BUILD_FOLDER%\dist\windows\x86\ElectronMeteor Setup.exe"
 
 deploy:
   provider: GitHub
   auth_token:
-    secure: 4DLKG48sJhZ2Xbr/ulNR4MUEaVVc/ps6WhTD5OvxgGE5TErcKYH/uuCD3ogw7cfL
-  #artifact: "grandview-v$(APPVEYOR_REPO_TAG_NAME)-win32-ia32,grandview-v$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer"
-  artifact: "grandview-v$(APPVEYOR_REPO_TAG_NAME)-win32-ia32"
+    secure: <Your Secure API Key>
+  artifact: "ElectronMeteor-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32,ElectronMeteor-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer"
   draft: false
   prerelease: false
   on:
     appveyor_repo_tag: true
 
 artifacts:
+  - path: dist\windows\x86\ElectronMeteor-win32-ia32
+    name: ElectronMeteor-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32
 
-  # pushing a single file with environment variable in path and "Deployment name" specified
-  - path: dist\windows\GrandView
-    name: grandview-v$(APPVEYOR_REPO_TAG_NAME)-win32-ia32
-
-  # - path: dist\windows\installer
-  #   name: grandview-v$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer
+  - path: ElectronMeteor-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer.zip
+    name: ElectronMeteor-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer
