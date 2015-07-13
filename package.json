@@ -43,15 +43,15 @@
   "ignore_files": "node_modules/(shelljs|colors|adm-zip|gunzip-maybe|minimist|fs-extra|electron-packager|electron-builder|electron-prebuilt)",
   "scripts": {
     "dev": "node scripts/run",
-    "dev:setup": "npm install && node scripts/setup",
+    "dev:setup": "npm install && node scripts/setup && node scripts/scss",
 
     "clean:osx": "node scripts/clean --platform=darwin --arch=x64",
     "clean:win": "node scripts/clean --platform=win32 --arch=x86",
     "clean:linux": "node scripts/clean --platform=linux --arch=x86",
 
     "build:osx": "node scripts/download --platform=darwin --arch=x64 && node scripts/prepare --platform=darwin --arch=x64 && npm run clean:osx && electron-packager ./app \"$npm_package_name\" --out=dist/osx/x64 --platform=darwin --arch=x64 --version=$npm_package_electron_version --icon=$npm_package_icns --ignore=\"$npm_package_ignore_files\"",
-    "build:linux": "node scripts/download --platform=linux --arch=x64 && node scripts/prepare --platform=linux --arch=x64 && npm run clean:linux && electron-packager ./app \"$npm_package_name\" --out=dist/linux/x64 --platform=linux --arch=x64 --version=$npm_package_electron_version --icon=$npm_package_ico --version-string.CompanyName=\"$npm_package_company\" --version-string.ProductVersion=\"$npm_package_version\" --version-string.ProductName=\"$npm_package_name\" --ignore=\"$npm_package_ignore_files\"",
-    "build:win": "electron-packager ./app \"$npm_package_name\" --out=dist/windows/x86 --platform=win32 --arch=ia32 --version=$npm_package_electron_version --icon=$npm_package_ico --ignore=\"$npm_package_ignore_files\"",
+    "build:linux": "node scripts/download --platform=linux --arch=x64 && node scripts/prepare --platform=linux --arch=x64 && npm run clean:linux && electron-packager ./app \"$npm_package_name\" --out=dist/linux/x64 --platform=linux --arch=x64 --version=$npm_package_electron_version --icon=$npm_package_ico --ignore=\"$npm_package_ignore_files\"",
+    "build:win": "node scripts/download --platform=win32 --arch=x86 && node scripts/prepare --platform=win32 --arch=x86 && npm run clean:win && electron-packager ./app \"$npm_package_name\" --out=dist/windows/x86 --platform=win32 --arch=ia32 --version=$npm_package_electron_version --icon=$npm_package_ico --version-string.CompanyName=\"$npm_package_company\" --version-string.ProductVersion=\"$npm_package_version\" --version-string.ProductName=\"$npm_package_name\" --ignore=\"$npm_package_ignore_files\"",
 
     "pack:osx": "electron-builder \"dist/osx/x64/$npm_package_name-darwin-x64/$npm_package_name.app\" --platform=osx --out=\"dist/osx/x64\" --config=packager.json",
     "pack:win": "electron-builder \"dist/windows/x86/$npm_package_name-win32-ia32\" --platform=win --out=\"dist/windows/x86\" --config=packager.json",
