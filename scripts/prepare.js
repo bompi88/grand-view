@@ -107,8 +107,12 @@ function copyBinaryFiles(os, architecture) {
       mkdir('./app/resources');
       var nodePostfix = (platform === 'win32') ? 'node.exe' : 'bin/node';
       var mongodbPostfix = (platform === 'win32') ? 'mongod.exe' : 'mongod';
-      cp('./cache/' + 'node-' + os + '-' + architecture + '/' + nodePostfix, './app/resources/');
-      cp('./cache/' + 'mongodb-' + os + '-' + architecture + '/bin/' + mongodbPostfix, './app/resources/');
+      var np = './cache/' + 'node-' + os + '-' + architecture + '/';
+      var mp = './cache/' + 'mongodb-' + os + '-' + architecture + '/';
+      cp(np + nodePostfix, './app/resources/');
+      cp(np + 'LICENSE', './app/resources/');
+      cp(mp + 'bin/' + mongodbPostfix, './app/resources/');
+      cp(mp + 'GNU-AGPL-3.0', './app/resources/');
       break;
 
     default:
