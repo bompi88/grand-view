@@ -135,7 +135,7 @@ GV.nodeCtrl = {
           Session.set('showNodeForm', true);
 
           Meteor.defer(function() {
-            $("input[name='title']").tooltip({
+            $("#update-node-form input[name='title']").tooltip({
               'placement': 'top',
               'title':  'Navn på kapittel mangler og trengs for å få god ' +
                         'oversikt i kapittelstrukturen.'
@@ -149,7 +149,7 @@ GV.nodeCtrl = {
 
         if (!elData.description) {
           Meteor.defer(function() {
-            $("textarea[name='description']").tooltip({
+            $("#update-node-form textarea[name='description']").tooltip({
               'placement': 'bottom',
               'title': 'Informasjonselement mangler'
             }).tooltip('show');
@@ -158,7 +158,7 @@ GV.nodeCtrl = {
 
         if (!elData.title) {
           Meteor.defer(function() {
-            $("input[name='title']").tooltip({
+            $("#update-node-form input[name='title']").tooltip({
               'placement': 'top',
               'title':  'Navn på informasjonselement mangler og bør fylles ut ' +
                         'for å kunne få fullt utbytte av nøkkelord- og kildevisningen.'
