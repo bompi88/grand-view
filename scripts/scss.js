@@ -14,7 +14,7 @@ cd(meteorPath);
 
 var child;
 
-echo('-----> Starting Meteor to supress SCSS errors. This will take some minutes. Sorry.');
+echo('-----> Starting Meteor to supress SCSS errors. This will take couple of minutes. Sorry.');
 
 if(platform === "win32") {
   child = child_process.exec("meteor.bat 2> nul");
