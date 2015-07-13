@@ -25,6 +25,10 @@
 GV.routeCtrls.WorkArea = RouteController.extend({
 
   onAfterAction: function() {
+    if(GV.clippy && (GV.clippy._hidden === false)) {
+      GV.clippy.hide();
+    }
+
     var docId = Session.get('mainDocument');
 
     if (docId) {
@@ -68,6 +72,10 @@ GV.routeCtrls.Trash = RouteController.extend({
   },
 
   onAfterAction: function() {
+    if(GV.clippy && (GV.clippy._hidden === false)) {
+      GV.clippy.hide();
+    }
+    
     GV.selectedCtrl.resetAll();
   }
 

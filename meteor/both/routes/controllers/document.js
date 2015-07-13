@@ -39,6 +39,10 @@ GV.routeCtrls.Document = RouteController.extend({
   },
 
   onAfterAction: function() {
+    if(GV.clippy && (GV.clippy._hidden === false)) {
+      GV.clippy.hide();
+    }
+
     if(this.ready() && (Session.get('mainDocument') !== this.params._id)) {
 
       GV.tabs.reset();
@@ -86,6 +90,10 @@ GV.routeCtrls.Documents = RouteController.extend({
   },
 
   onAfterAction: function() {
+    if(GV.clippy && (GV.clippy._hidden === false)) {
+      GV.clippy.hide();
+    }
+
     GV.selectedCtrl.resetAll();
   }
 

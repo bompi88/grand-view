@@ -41,6 +41,10 @@ GV.routeCtrls.Templates = RouteController.extend({
   },
 
   onAfterAction: function() {
+    if(GV.clippy && (GV.clippy._hidden === false)) {
+      GV.clippy.hide();
+    }
+    
     GV.selectedCtrl.resetAll();
   }
 
