@@ -25,6 +25,8 @@ install:
   - npm install
 
 script:
+  # avoid the scss error
+  - node scripts/scss
   # Pack and build
   - npm run build:linux
   # - npm run build:osx
