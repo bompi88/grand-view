@@ -4,6 +4,12 @@ node_js:
 
 sudo: required
 
+env:
+  global:
+  - GH_REF: github.com/bompi88/grand-view.git
+  - secure: "sJhD/iLPU2KYKGuwS6EL6xgGVzsvsFK4DCz01xu1AlAu2bGIYOSLDgxVHYpPfCCROq+Kjo0JASrbzObGKWX2R5wiahBtXAPnuPI0rYJCDCRKicNYUZxBC5ZENesWS6TO/036mnZSK8dRqvZlrlAgo8zEX4jhZY0+mkDZG0BlIdq24ukf2PD3xeC/lcN4gEVWds1S9FVkjcmaRlN4meWUpaEY5glpxThVIoRPMt3KlXwBEJyTuu4D+74KDyocYOF4l5PPtNMpu88GmvmRY6oigSjoXGZWAtfXtbtQfbzmhGU5nEzw2fQC9IjRG5P5AF9lQPrTyul24A5RsdY/EyGxdluuqDuESdxgMMGkdh3hXWdFoK3AfljPZuWSdFqgfhe9U4Ninok4QRkDBtvlS+f94tD0xKqvtLMmY7ZVJMjP+XRTpTcga7qbfS8JX0cjVo2X1IfO2FjG0Vg52ijhq0XScHVNQWXobnWvbXBtSOaCwdF7HgMNv4rIIUrmuNv9aqCMxjdu1JjmIWOXgH5LtuSPYt1TNWXOD8juJlTh5v/zzgJdcFHYvb+lPU1HQpygrle0yISQRnr3ZbDJq1U3g1sPgR7g/ojsEcS5CHSlf8b6X/5HqLJczsbaatvg8vD2RocIwLcVjmUgDZIQfloPP6ZvC+1Ozf2SOvy1ia8aTFLl4Lk="
+
+
 # multiple oses when nodejs env comes to osx on travis
 #os:
 #  - linux
@@ -43,8 +49,6 @@ cache:
 
 deploy:
   provider: releases
-  api-key:
-    secure: "sJhD/iLPU2KYKGuwS6EL6xgGVzsvsFK4DCz01xu1AlAu2bGIYOSLDgxVHYpPfCCROq+Kjo0JASrbzObGKWX2R5wiahBtXAPnuPI0rYJCDCRKicNYUZxBC5ZENesWS6TO/036mnZSK8dRqvZlrlAgo8zEX4jhZY0+mkDZG0BlIdq24ukf2PD3xeC/lcN4gEVWds1S9FVkjcmaRlN4meWUpaEY5glpxThVIoRPMt3KlXwBEJyTuu4D+74KDyocYOF4l5PPtNMpu88GmvmRY6oigSjoXGZWAtfXtbtQfbzmhGU5nEzw2fQC9IjRG5P5AF9lQPrTyul24A5RsdY/EyGxdluuqDuESdxgMMGkdh3hXWdFoK3AfljPZuWSdFqgfhe9U4Ninok4QRkDBtvlS+f94tD0xKqvtLMmY7ZVJMjP+XRTpTcga7qbfS8JX0cjVo2X1IfO2FjG0Vg52ijhq0XScHVNQWXobnWvbXBtSOaCwdF7HgMNv4rIIUrmuNv9aqCMxjdu1JjmIWOXgH5LtuSPYt1TNWXOD8juJlTh5v/zzgJdcFHYvb+lPU1HQpygrle0yISQRnr3ZbDJq1U3g1sPgR7g/ojsEcS5CHSlf8b6X/5HqLJczsbaatvg8vD2RocIwLcVjmUgDZIQfloPP6ZvC+1Ozf2SOvy1ia8aTFLl4Lk="
   file:
     - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
     # - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
