@@ -50,8 +50,8 @@ Meteor.methods({
     // Import nodes
     _.each(nodes, function(node) {
       var nodeId = node._id;
-      node = _.omit(node, "_id");
-      idTableNodes[nodeId] = GV.collections.Nodes.insert(node);
+      var newNode = _.omit(node, "_id");
+      idTableNodes[nodeId] = GV.collections.Nodes.insert(newNode);
     });
 
     // import files
@@ -89,26 +89,17 @@ Meteor.methods({
     });
 
 
-    var key;
-    var val;
-
-    // Update node references and doc reference
-    for (key in idTableNodes) {
-      if (idTableNodes.hasOwnProperty(key)) {
-        val = idTableNodes[key];
-
-        GV.collections.Nodes.update({
-          parent: key.toString()
-        }, {
-          $set: {
-            parent: val.toString()
-          }
-        }, {
-          multi: true,
-          upsert: false
-        });
-      }
-    }
+    // Update parent refs in children
+    nodes.forEach(function(node) {
+      var nodeId = node._id;
+      GV.collections.Nodes.update({
+        _id: idTableNodes[nodeId]
+      }, {
+        $set: {
+          parent: idTableNodes[node.parent]
+        }
+      });
+    });
 
     // Update the children in main document
     _.each(docs, function(doc) {
@@ -158,6 +149,54 @@ Meteor.methods({
       callback();
     }
     return true;
+  },
+
+  /**
+   * Updates a neewly created document with the data from the template
+   */
+  deepCopyTemplate: function(doc, template) {
+    var nodeIds = template.children || [];
+
+    // Get all children
+    var nodes = GV.collections.Nodes.find({
+      _id: {
+        $in: nodeIds
+      }
+    }).fetch();
+
+    var nodeIdTable = {};
+
+    // add The main document to id table
+    nodeIdTable[template._id] = doc._id;
+
+    var newChildren = [];
+
+    // Create new children
+    nodes.forEach(function(node) {
+      var nodeId = node._id;
+      var newNode = _.omit(node, '_id');
+      nodeIdTable[nodeId] = GV.collections.Nodes.insert(newNode);
+      newChildren.push(nodeIdTable[nodeId]);
+    });
+
+    // Update the document with new children
+    GV.collections.Documents.update({ _id: doc._id }, {
+      $set: {
+        children: newChildren
+      }
+    });
+
+    // Update parent refs in children
+    nodes.forEach(function(node) {
+      var nodeId = node._id;
+      GV.collections.Nodes.update({
+        _id: nodeIdTable[nodeId]
+      }, {
+        $set: {
+          parent: nodeIdTable[node.parent]
+        }
+      });
+    });
   }
 
 });

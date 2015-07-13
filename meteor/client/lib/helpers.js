@@ -75,9 +75,9 @@ GV.helpers = _.extend(GV.helpers, {
   openFile: function(filePath, callback) {
     var openCMD;
 
-    if(platform === "win32") {
+    if (platform === "win32") {
       openCMD = '"' + filePath + '"';
-    } else if(platform === "darwin"){
+    } else if (platform === "darwin") {
       openCMD = "open " + filePath;
     } else {
       openCMD = "xdg-open " + filePath;

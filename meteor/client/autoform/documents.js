@@ -21,7 +21,17 @@
 
 AutoForm.hooks({
   "insert-doc": {
+    after: {
+      insert: function(error, docId, tmpl) {
 
+        var doc = GV.collections.Documents.findOne({ _id: docId });
+        var template = GV.collections.Documents.findOne({ _id: doc.templateBasis });
+
+        if(template) {
+          Meteor.call('deepCopyTemplate', doc, template);
+        }
+      }
+    },
     formToDoc: function(doc) {
       doc.lastChanged = new Date();
       doc.title = doc.title ? doc.title : "Mitt nye dokument";
