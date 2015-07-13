@@ -9,3 +9,4 @@ dist
 *.iml
 meteor/scss_index.scss
 bundle/*
+npm-debug.log
