@@ -11,7 +11,6 @@ platform:
   - x64
 
 install:
-  # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version $env:platform
   # Setup
   - npm install
@@ -33,7 +32,7 @@ build_script:
   # For some reason it is necessary to split up the commands
   - npm run build:win:%platform%
   # Update node
-  - ps: Update-NodeJsInstallation 0.12.7 $env:platform
+  - ps: Install-Product node 0.12.7 $env:platform
   - node --version
   - npm run pack:win:%platform%
 
