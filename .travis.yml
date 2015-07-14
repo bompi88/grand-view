@@ -10,8 +10,8 @@ sudo: required
 #  - osx
 
 env:
-  - ARCH = 'x64'
-  - ARCH = 'x86'
+  - ARCH=x64
+  - ARCH=x86
 
 branches:
   only:
