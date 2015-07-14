@@ -3,6 +3,7 @@ environment:
 
 branches:
   only:
+    - prod
     - /v\d+\.\d+\.\d+/
 
 install:
