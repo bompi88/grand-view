@@ -45,7 +45,7 @@ var uploadFile = function(currentFile, self) {
 
   // upload new file
   var file = new FS.File(currentFile);
-
+  
   var meta = {
     docId: self._id,
     nodeId: self._af.doc._id,
@@ -81,9 +81,30 @@ var uploadFile = function(currentFile, self) {
 
 // -- Template events ----------------------------------------------------------
 
+Template.UpdateChapterNode.events({
 
-Template.UpdateNodeForm.events({
+  'click .cancel': function(event, tmpl) {
+    AutoForm.resetForm("update-node-form");
+  },
 
+  'click .delete-chapter-node': function(event, tmpl) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    GV.helpers.showConfirmationPrompt({
+        title: "Bekreftelse på sletting av kapittelelement",
+        message: Blaze.toHTML(Template.RemoveChapterNodeModal)
+      },
+      _.partial(GV.nodeCtrl.removeNodeCallback, _, {
+        title: 'Sletting fullført',
+        text: 'Kapittelelementet ble slettet fra systemet.'
+      })
+    );
+  }
+
+});
+
+Template.UpdateMediaNode.events({
   /**
    * Reset the form on click on cancel button
    */
@@ -181,39 +202,19 @@ Template.UpdateNodeForm.events({
     );
   },
 
-  'click .delete-chapter-node': function(event, tmpl) {
-    event.preventDefault();
-    event.stopPropagation();
-
-    GV.helpers.showConfirmationPrompt({
-        title: "Bekreftelse på sletting av kapittelelement",
-        message: Blaze.toHTML(Template.RemoveChapterNodeModal)
-      },
-      _.partial(GV.nodeCtrl.removeNodeCallback, _, {
-        title: 'Sletting fullført',
-        text: 'Kapittelelementet ble slettet fra systemet.'
-      })
-    );
-  },
-
   'change .file-upload': function(event, tmpl, args) {
     event.preventDefault();
     event.stopPropagation();
 
     uploadFile(event.target.files[0], this);
-  },
-
-  'change input[type="text"], change input[type="textarea"]': function(event, tmpl) {
-    Session.set("formDirty", true);
   }
-
 });
 
 
 // -- Template helpers ---------------------------------------------------------
 
 
-Template.UpdateNodeForm.helpers({
+Template.UpdateMediaNode.helpers({
 
   file: function() {
     return GV.collections.Files.findOne({
