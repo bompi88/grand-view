@@ -24,9 +24,9 @@ install:
   - curl https://install.meteor.com/ | /bin/sh
   # Install correct node version
   - NVER=`node -v`
-  - wget http://nodejs.org/dist/${NVER}/node-${NVER}-${platform}-${ARCH}.tar.gz
-  - tar xf node-${NVER}-${platform}-${ARCH}.tar.gz
-  - export PATH=$(pwd)/node-${NVER}-${platform}-${ARCH}/bin:$PATH
+  - wget http://nodejs.org/dist/${NVER}/node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz
+  - tar xf node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz
+  - export PATH=$(pwd)/node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}/bin:$PATH
   # setup GrandView
   - npm install
 
