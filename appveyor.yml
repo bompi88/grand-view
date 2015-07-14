@@ -6,9 +6,13 @@ branches:
     - prod
     - /v\d+\.\d+\.\d+/
 
+platform:
+  - x86
+  - x64
+
 install:
   # Get the latest stable version of Node.js or io.js
-  - ps: Install-Product node $env:nodejs_version
+  - ps: Install-Product node $env:nodejs_version $env:platform
   # Setup
   - npm install
   # download Meteor
@@ -29,11 +33,7 @@ build_script:
   # For some reason it is necessary to split up the commands
   - npm run build:win
   # Update node
-  - ps: Update-NodeJsInstallation 0.12.7
-  # Restart
-  - ps: Start-Sleep -s 5
-  - ps: Restart-Computer -Force
-  - ps: Start-Sleep -s 5
+  - ps: Update-NodeJsInstallation 0.12.7 $env:platform
   - node --version
   - npm run pack:win
 
