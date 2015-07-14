@@ -31,20 +31,20 @@ build_script:
   # Supress SCSS error
   - node scripts/scss
   # For some reason it is necessary to split up the commands
-  - npm run build:win
+  - npm run build:win:%platform%
   # Update node
   - ps: Update-NodeJsInstallation 0.12.7 $env:platform
   - node --version
-  - npm run pack:win
+  - npm run pack:win:%platform%
 
 after_build:
-  - 7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-ia32-installer.zip "%APPVEYOR_BUILD_FOLDER%\dist\windows\x86\GrandView Setup.exe"
+  - 7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-installer.zip "%APPVEYOR_BUILD_FOLDER%\dist\windows\%platform%\GrandView Setup.exe"
 
 deploy:
   provider: GitHub
   auth_token:
     secure: tNMKx8kVItLg0Henj9BJJNB+IUTkaa1ScGiJ7WBq6/TxST6l7MhHGe4k0omB6H5V
-  artifact: "GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32,GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer"
+  artifact: "GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform),GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer"
   draft: false
   prerelease: false
   on:
@@ -52,7 +52,7 @@ deploy:
 
 artifacts:
   - path: dist\windows\x86\GrandView-win32-ia32
-    name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32
+    name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)
 
-  - path: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer.zip
-    name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-ia32-installer
+  - path: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer.zip
+    name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer
