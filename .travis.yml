@@ -9,18 +9,24 @@ sudo: required
 #  - linux
 #  - osx
 
+env:
+  - ARCH = 'x64'
+  - ARCH = 'x86'
+
 branches:
   only:
     # only tags on the form vx.x.x or vx.x.xxx and so on
     - /v\d+\.\d+\.\d+/
 
-before_install:
-  - export ARCH=$(uname -m)
-
 # Install scripts.
 install:
   # Install meteor
   - curl https://install.meteor.com/ | /bin/sh
+  # Install correct node version
+  - NVER=`node -v`
+  - wget http://nodejs.org/dist/${NVER}/node-${NVER}-${platform}-${ARCH}.tar.gz
+  - tar xf node-${NVER}-${platform}-${ARCH}.tar.gz
+  - export PATH=$(pwd)/node-${NVER}-${platform}-${ARCH}/bin:$PATH
   # setup GrandView
   - npm install
 
@@ -28,14 +34,14 @@ script:
   # avoid the scss error
   - node scripts/scss
   # Pack and build
-  - npm run build:linux
+  - npm run build:linux:$ARCH
   # - npm run build:osx
   # - nvm install 0.12.7
   # - nvm use 0.12.7
   # - npm run pack:osx
   # zip it up
   # Linux
-  - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz -C dist/linux/x64/GrandView-linux-x64 .
+  - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz -C dist/linux/x64/GrandView-${TRAVIS_OS_NAME}-${ARCH} .
   # Mac
   # - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/x64/GrandView.dmg
 
