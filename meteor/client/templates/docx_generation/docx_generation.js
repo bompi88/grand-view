@@ -86,7 +86,8 @@ var renderMediaNode = function(node, par, posLabel) {
     var file = GV.collections.Files.findOne({
       _id: node.fileId
     });
-
+    console.log(node.fileId);
+    console.log(file);
     if (file && (file.copies.filesStore.type.split("/")[0] === "image")) {
       par.addImage(GV.basePath + "files/" + file.copies.filesStore.key);
     } else if (file) {
@@ -142,30 +143,101 @@ var renderChapterNode = function(node, docx, posLabel) {
   });
 };
 
-var renderDocument = function(doc, docx, mainPar) {
+var renderListFormat = function(doc, docx, format) {
+  var undefinedPropertyLabel = 'kkkjasdjnajkcziow782392ujinydsdfs';
 
   var nodes = GV.collections.Nodes.find({
-    parent: doc._id
-  }, {
-    sort: {
-      position: 1
-    }
+    _id: {
+      $in: doc.children || []
+    },
+    nodeType: 'media'
   }).fetch();
 
+  var tagsList = {};
+
   nodes.forEach(function(node) {
-    if (node.nodeType === "chapter") {
-      renderChapterNode(node, docx, 0);
+    var elements = node[format] || [];
+
+    if(elements.length > 0) {
+      elements.forEach(function(element) {
+        if(!_.isArray(tagsList[element])) {
+          tagsList[element] = [];
+        }
+
+        tagsList[element].push(node);
+      });
     } else {
-      renderMediaNode(node, mainPar, 0);
+      if(!_.isArray(tagsList[undefinedPropertyLabel])) {
+        tagsList[undefinedPropertyLabel] = [];
+      }
+      tagsList[undefinedPropertyLabel].push(node);
     }
   });
+
+  if(tagsList) {
+    Object.keys(tagsList)
+          .sort(function(a,b){
+            var lccomp = a.toLowerCase().localeCompare(b.toLowerCase(), 'nb');
+            return lccomp ? lccomp : a > b ? 1 : a < b ? -1 : 0;
+          })
+          .forEach(function(tag, i) {
+            if (tagsList.hasOwnProperty(tag) && (tag !== undefinedPropertyLabel)) {
+              var ns = tagsList[tag];
+              var par = docx.createP();
+
+              par.addText(tag, header2Text);
+
+              ns.forEach(function(n) {
+                renderMediaNode(n, par);
+              });
+            }
+          });
+
+    // Add the others without tags
+    var notDefined = tagsList[undefinedPropertyLabel];
+
+    if(notDefined && notDefined.length) {
+      var notDefinedPar = docx.createP();
+
+      var undefinedLabel = (format === 'tags') ? 'Uten nøkkelord' : 'Uten referanser';
+
+      notDefinedPar.addText(undefinedLabel, header2Text);
+
+      notDefined.forEach(function(n) {
+        renderMediaNode(n, notDefinedPar);
+      });
+    }
+  }
+};
+
+var renderDocument = function(doc, docx, mainPar, format) {
+
+  if (format === 'chapters') {
+    var nodes = GV.collections.Nodes.find({
+      parent: doc._id
+    }, {
+      sort: {
+        position: 1
+      }
+    }).fetch();
+
+    nodes.forEach(function(node) {
+      if (node.nodeType === "chapter") {
+        renderChapterNode(node, docx, 0);
+      } else {
+        renderMediaNode(node, mainPar, 0);
+      }
+    });
+  } else {
+    renderListFormat(doc, docx, format);
+  }
 };
 
 GV.helpers = _.extend(GV.helpers, {
 
-  generateDOCX: function(docId) {
+  generateDOCX: function(docId, format, cb) {
 
-    var fileName = docId + ".docx";
+    var fileName = docId + '_' + format + ".docx";
 
     var docx = officegen('docx');
     var doc = GV.collections.Documents.findOne({
@@ -182,7 +254,7 @@ GV.helpers = _.extend(GV.helpers, {
 
     Router.current().subscribe("filesByDocument", docId, function() {
 
-      renderDocument(doc, docx, mainParagraph);
+      renderDocument(doc, docx, mainParagraph, format);
 
       var out = fs.createWriteStream(GV.basePath + fileName);
 
@@ -193,12 +265,17 @@ GV.helpers = _.extend(GV.helpers, {
           var filePath = path.join(GV.basePath, fileName);
 
           GV.helpers.openFile(filePath, function(error, result) {
-            if(error)
+            if (error) {
               console.log(error);
+              cb(true);
+            } else {
+              cb(null);
+            }
           });
         },
         'error': function(err) {
           console.log(err);
+          cb(true);
         }
       });
     });
