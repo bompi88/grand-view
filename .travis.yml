@@ -27,11 +27,10 @@ install:
   - wget http://nodejs.org/dist/${NVER}/node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz
   - tar xf node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz
   - export PATH=$(pwd)/node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}/bin:$PATH
-  - ls ./node-v0.10.36-linux-x86/bin
-  - which node
-  - node -v
+  - if [[ "${ARCH}" == 'x86' ]]; then sudo apt-get -y install gcc-multilib g++-multilib; fi
+  - if [[ "${ARCH}" == 'x86' ]]; then CC=gcc-4.6 CXX=g++-4.6 npm install --build-from-source; else npm install; fi
   # setup GrandView
-  - npm install
+  # - npm install
 
 script:
   # avoid the scss error
