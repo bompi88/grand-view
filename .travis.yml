@@ -27,6 +27,7 @@ install:
   - wget http://nodejs.org/dist/${NVER}/node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz
   - tar xf node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz
   - export PATH=$(pwd)/node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}/bin:$PATH
+  - ls ./node-v0.10.36-linux-x86/bin
   # setup GrandView
   - npm install
 
