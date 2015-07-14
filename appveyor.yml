@@ -30,7 +30,9 @@ build_script:
   - npm run build:win
   # Update node
   - ps: Update-NodeJsInstallation 0.12.7
+  # Restart
   - ps: Start-Sleep -s 5
+  - ps: Restart-Computer -Force
   - node --version
   - npm run pack:win
 
