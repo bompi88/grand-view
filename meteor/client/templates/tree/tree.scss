@@ -86,8 +86,8 @@
       }
 
       &.selected {
-        background-color: darken(#fff, 14%);
-        color: $blue-base;
+        background-color: lighten($blue-base, 40%);
+        //color: $blue-base;
       }
 
       &.hover {
