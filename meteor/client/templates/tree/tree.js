@@ -219,7 +219,7 @@ Template.Tree.events({
   'click .generate-pdf': function(event, tmpl) {
     event.preventDefault();
 
-    GV.helpers.generateDOCX(this.tree._id);
+    $('#create-printout').modal('show');
   },
 
   'click .export-to-file': function(event, tmpl) {

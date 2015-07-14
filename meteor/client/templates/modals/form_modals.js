@@ -28,12 +28,38 @@ Template.SelectTemplateModal.events({
   }
 });
 
+Template.SelectOutprintModal.events({
+  "click .generate": function(event, tmpl){
+    var doc = Template.instance().doc;
+    var selectedFormat = $(tmpl.find('#select-format')).val();
+
+    if(doc) {
+      GV.helpers.generateDOCX(doc._id, selectedFormat, function(err) {
+        if(err) {
+          Notifications.error('Feil ved generering av utskrift', 'Noe skjedde under genereringen av utskriftsdokumentet, vennligts prøv igjen.');
+        } else {
+          Notifications.success('Utskrift ferdig', 'Utskriften er generert og åpnes nå opp, slik at du kan lagre den eller skrive den ut.');
+        }
+      });
+    }
+  }
+});
+
+Template.SelectOutprintModal.helpers({
+  isTemplate: function(){
+    var docId = Session.get('mainDocument');
+    var doc = GV.collections.Documents.findOne({ _id: docId });
+
+    Template.instance().doc = doc;
+    return doc && doc.template;
+  }
+});
 
 Template.LanguageSelectModal.events({
 
   'click .save-settings': function(event, tmpl) {
     event.preventDefault();
-    
+
     $("#language-select-form").trigger("submit");
   }
 });

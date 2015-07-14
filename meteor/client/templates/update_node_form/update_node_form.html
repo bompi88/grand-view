@@ -22,9 +22,9 @@ The form for updation a Node
     <div class="alert alert-info" role="alert"><b>NB!</b> Du er nå i redigeringsmodus og kan enten lagre eller gå ut av modusen ved bruk av knappene til høyre.</div>
   {{/if}}
   {{#if $eq node.nodeType "chapter"}}
-    {{> UpdateChapterNode hideButtons=hideButtons node=node}}
+    {{> UpdateChapterNode hideButtons=hideButtons node=node mainDoc=this}}
   {{else}}
-    {{> UpdateMediaNode hideButtons=hideButtons node=node}}
+    {{> UpdateMediaNode hideButtons=hideButtons node=node mainDoc=this}}
   {{/if}}
 </template>
 

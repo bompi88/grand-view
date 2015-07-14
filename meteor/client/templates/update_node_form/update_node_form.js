@@ -42,12 +42,12 @@ var uploadFile = function(currentFile, self) {
   }
 
   Session.set("uploadStopped", false);
-
+  
   // upload new file
   var file = new FS.File(currentFile);
-  
+
   var meta = {
-    docId: self._id,
+    docId: Session.get('mainDocument'),
     nodeId: self._af.doc._id,
     path: file.path
   };
@@ -69,7 +69,7 @@ var uploadFile = function(currentFile, self) {
       }
     });
     GV.collections.Documents.update({
-      _id: self._id
+      _id: Session.get('mainDocument')
     }, {
       $addToSet: {
         fileIds: fileId

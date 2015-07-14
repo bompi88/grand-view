@@ -47,6 +47,43 @@ This modal lets the user chose a title for the document and which template to pr
 </template>
 
 <!--
+This modal lets the user chose a title for the document and which template to produce it from.
+-->
+<template name="SelectOutprintModal">
+  <div class="modal fade" id="create-printout" tabindex="-1" role="dialog" aria-labelledby="create-printout" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Generer utskriftsdokument</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12">
+              <p>Du må velge et format på utskriftsdokumentet. F.eks. så lister formatet <em>kapitler</em> kapittelstrukturen med de påfølgende informasjonselementene under hvert kapittel.</p>
+              <div class="form-group">
+                <label for="select-format">Sortering:</label>
+                <select class="form-control" id="select-format">
+                  <option value="chapters">Kapitler</option>
+                  {{#unless isTemplate}}
+                    <option value="tags">Nøkkelord</option>
+                    <option value="references">Kilder</option>
+                  {{/unless}}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Avbryt</button>
+          <button type="button" class="btn btn-primary generate" data-dismiss="modal">Generer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<!--
 Select language modal
 -->
 <template name="LanguageSelectModal">
