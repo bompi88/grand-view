@@ -10,8 +10,8 @@ sudo: required
 #  - osx
 
 env:
-  - ARCH=x64
-  - ARCH=x86
+  - ARCH=x64 ARCH_NAME=x64
+  - ARCH=x86 ARCH_NAME=ia32
 
 branches:
   only:
@@ -43,7 +43,7 @@ script:
   # - npm run pack:osx
   # zip it up
   # Linux
-  - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz -C dist/linux/x64/GrandView-${TRAVIS_OS_NAME}-${ARCH} .
+  - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C dist/linux/x64/GrandView-${TRAVIS_OS_NAME}-${ARCH_NAME} .
   # Mac
   # - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/x64/GrandView.dmg
 
@@ -56,8 +56,7 @@ deploy:
   api-key:
     secure: "3a3d2c2f84a3c313443997648f3c3b8172bc5aad"
   file:
-    - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
-    # - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz"
+    - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz"
   skip_cleanup: true
   on:
     tags: true
