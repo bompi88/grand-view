@@ -43,7 +43,7 @@ script:
   # - npm run pack:osx
   # zip it up
   # Linux
-  - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C dist/linux/x64/GrandView-${TRAVIS_OS_NAME}-${ARCH_NAME} .
+  - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C dist/linux/${ARCH}/GrandView-${TRAVIS_OS_NAME}-${ARCH_NAME} .
   # Mac
   # - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/x64/GrandView.dmg
 
