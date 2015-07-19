@@ -115,7 +115,7 @@ function startNode(options, mongoChild, callback) {
   env.BIND_IP = bindIP;
   env.DB_PATH = dataPath;
   env.MONGO_URL = mongoRootUrl + options.mongoPort + "/" + dbName;
-  env.METEOR_SETTINGS = readFileSync(path.join(appPath, 'settings.json'));
+  //env.METEOR_SETTINGS = readFileSync(path.join(appPath, 'settings.json'));
   env.DIR = dirname;
   env.NODE_ENV = 'production';
   env.NODE_PATH = nodeModulesDir;
