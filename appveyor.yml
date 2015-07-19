@@ -33,9 +33,10 @@ build_script:
   # Supress SCSS error
   - node scripts/scss
   # For some reason it is necessary to split up the commands
-  - node scripts/download --platform=win32 --arch=x64
-  - node scripts/prepare --platform=win32 --arch=x64
-  - npm run clean:win:x64
+  # - node scripts/download --platform=win32 --arch=x64
+  # - node scripts/prepare --platform=win32 --arch=x64
+  # - npm run clean:win:x64
+  - echo %platform%
   - npm run build:win:%platform%
   # Update node
   - ps: Install-Product node 0.12.7 $env:platform
