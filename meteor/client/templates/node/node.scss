@@ -57,6 +57,7 @@ $plus-minus-color: $white;
 .node-text {
   display: inline;
   position: relative;
+  width: calc(100% - 40px);
 }
 
 .icon {

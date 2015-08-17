@@ -41,9 +41,9 @@ Edit information about a Node.
     {{!-- A list of the media nodes linked to this chapter node --}}
     {{#if $eq node.nodeType "chapter"}}
       {{#if $.Session.equals "showMediaNodesView" true}}
-        {{> MediaNodesTable class="media-nodes-view" doc=node headerText="Informasjonselementer i dette kapitlet"}}
+        {{> MediaNodesTable class="media-nodes-view" doc=node headerText=""}}
       {{else}}
-        <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Informasjonselementer i dette kapittelelementet</b></div>
+        <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Vis Informasjonselementer</b></div>
       {{/if}}
     {{/if}}
   {{/unless}}
@@ -129,7 +129,7 @@ A Table that renders the Media Nodes available in a particular Chapter Node.
         {{else}}
           <tr>
             <td></td>
-            <td><em>Ingen informasjonselementer knyttet til det valgte kapittelelementet.</em></td>
+            <td><em>Ingen informasjonselementer knyttet til det valgte kapitlet/underkapitlet.</em></td>
             <td></td>
           </tr>
         {{/each}}
