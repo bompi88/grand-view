@@ -19,6 +19,8 @@
 
 "use strict";
 
+Session.set("mode", "easy");
+
 Template.Document.rendered = function() {
   $('body').on('paste', function(event) {
     var items = (event.clipboardData || event.originalEvent.clipboardData).items;
@@ -91,6 +93,14 @@ Template.Document.events({
     event.preventDefault();
 
     Session.set("structureState", "references");
+  },
+
+  'click .easy-mode': function(event, tmpl) {
+    Session.set("mode", "easy");
+  },
+
+  'click .advanced-mode': function(event, tmpl) {
+    Session.set("mode", "advanced");
   }
 
 });

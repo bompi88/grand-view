@@ -19,7 +19,7 @@ The form for updation a Node
 -->
 <template name="UpdateNodeForm">
   {{#if showEditWarning}}
-    <div class="alert alert-info" role="alert"><b>NB!</b> Du er nå i redigeringsmodus og kan enten lagre eller gå ut av modusen ved bruk av knappene til høyre.</div>
+    <div class="alert alert-info" role="alert"><b>NB!</b> Du er nå i redigeringsmodus. Trykk på Lukk-knappen til høyre eller <kbd>ESC</kbd> for å gå ut.</div>
   {{/if}}
   {{#if $eq node.nodeType "chapter"}}
     {{> UpdateChapterNode hideButtons=hideButtons node=node mainDoc=this}}
@@ -29,7 +29,7 @@ The form for updation a Node
 </template>
 
 <template name="UpdateChapterNode">
-  {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
+  {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update" autosave=true}}
 
     {{> afQuickField name="title" placeholder="Kapittelnavn" label="Kapittelnavn"}}
     {{> afQuickField name="description" rows="6" placeholder="Beskrivelse" label="Beskrivelse"}}
@@ -37,15 +37,13 @@ The form for updation a Node
     {{#unless hideButtons}}
       <div class="form-group">
         <button type="button" class="btn btn-danger pull-left delete-chapter-node"><span class="glyphicon glyphicon-remove"></span> Slett kapittelelement</button>
-        <button type="submit" class="btn btn-primary pull-right">Lagre</button>
-        <button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Nullstill</button>
       </div>
     {{/unless}}
   {{/autoForm}}
 </template>
 
 <template name="UpdateMediaNode">
-  {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update"}}
+  {{#autoForm collection="GV.collections.Nodes" id="update-node-form" doc=node type="update" autosave=true}}
     {{> afQuickField name="title" }}
     {{> afQuickField name="description" rows="6" }}
     {{> afQuickField name="tags" options=getTagsOptions}}
@@ -94,8 +92,6 @@ The form for updation a Node
     {{#unless hideButtons}}
       <div class="form-group">
         <button type="button" class="btn btn-danger pull-left delete-media-node"><span class="glyphicon glyphicon-remove"></span> Slett informasjonselement</button>
-        <button type="submit" class="btn btn-primary pull-right {{#if file}}{{#unless uploadStopped}}{{#unless file.isUploaded}}disabled{{/unless}}{{/unless}}{{/if}}">Lagre</button>
-        <button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Nullstill</button>
       </div>
     {{/unless}}
   {{/autoForm}}

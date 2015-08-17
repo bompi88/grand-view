@@ -47,18 +47,49 @@ for editing of nodes in the tree.
       </div>
 
       {{!-- The detail view of nodes --}}
-      <div class="col-xs-8" style="padding-right:0">
-        <div class="row">
-          <div class="col-xs-12">
-            {{> Tabs}}
+      <div class="col-xs-8" style="padding-right:0;overflow:hidden;height:100%;">
+        <!-- {{#if $.Session.equals "mode" "advanced"}}
+          <div class="row">
+            <div class="col-xs-12">
+              {{> Tabs}}
+            </div>
           </div>
-        </div>
-        <div class="col-xs-12 node-detail-view">
-          {{#if focusOnMainDoc}}
-            {{> GeneralInfo}}
-          {{else}}
-            {{> NodeDetail}}
-          {{/if}}
+        {{/if}} -->
+        <div class="col-xs-12 structure-container">
+          <div class="structure-header">
+
+            {{#unless isTemplate}}
+              <div class="dropdown pull-right btn-group" role="group">
+                <button aria-expanded="false" class="btn btn-default dropdown-toggle menu-button" role="button" data-toggle="dropdown" type="button">
+                <span class="glyphicon glyphicon-cog"></span></button>
+
+    	          <ul class="dropdown-menu toggle-advanced-mode">
+    							{{#if $.Session.equals 'mode' 'easy'}}
+    								<li class="disabled"><a href="#" class="easy-mode"><span class="glyphicon glyphicon-ok green"></span> Kollapset modus</a></li>
+    							{{else}}
+    								<li><a href="#" class="easy-mode no-icon">Kollapset modus</a></li>
+    							{{/if}}
+
+    							{{#if $.Session.equals 'mode' 'advanced'}}
+    								<li class="disabled"><a href="#" class="advanced-mode"><span class="glyphicon glyphicon-ok green"></span> Utvidet modus</a></li>
+    							{{else}}
+    								<li><a href="#" class="advanced-mode no-icon">Utvidet modus</a></li>
+    							{{/if}}
+    	          </ul>
+              </div>
+            {{/unless}}
+
+            <h4 class="header-text">
+              <span class="glyphicon glyphicon-leaf" style="font-size:15px; margin: 0 5px;"></span> Informasjonselementer
+            </h4>
+          </div>
+          <div class="col-xs-12 node-detail-view">
+            {{#if focusOnMainDoc}}
+              {{> GeneralInfo}}
+            {{else}}
+              {{> NodeDetail}}
+            {{/if}}
+          </div>
         </div>
       </div>
     </div>

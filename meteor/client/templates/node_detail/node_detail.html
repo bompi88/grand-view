@@ -20,12 +20,12 @@ Edit information about a Node.
 <template name="NodeDetail">
   {{!-- A presentation of the current selected node --}}
   {{#if node.title}}<h3 style="margin-top:0;">{{node.title}}</h3>{{/if}}
-  {{#if node.description}}<p style="margin-bottom:20px;"><em>{{{convertLineBreaks node.description}}}</em></p>{{/if}}
+  <!-- {{#if node.description}}<p style="margin-bottom:20px;"><em>{{{convertLineBreaks node.description}}}</em></p>{{/if}} -->
 
   {{!-- An edit form for editing the selected node --}}
-  {{#if $.Session.equals "showNodeForm" true}}
+  <!-- {{#if $.Session.equals "showNodeForm" true}}
     <div class="panel panel-default">
-      <!-- Default panel contents -->
+
       <div class="panel-heading block-hider toggle-node-form disable-select"><span class="glyphicon glyphicon-menu-up" style="margin-right:5px;"></span> <b>Rediger {{#if $eq node.nodeType "chapter"}}kapittelelement{{else}}informasjonselement{{/if}}</b></div>
       <div class="panel-body">
         <p><em>Her kan man redigere verdiene for det valgte {{#if $eq node.nodeType "chapter"}}kapittelelementet{{else}}informasjonselementet{{/if}}. Det valgte elementet er markert i kapittelstrukturen.</em></p>
@@ -35,13 +35,13 @@ Edit information about a Node.
     </div>
   {{else}}
     <div class="well well-sm block-hider toggle-node-form"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Rediger {{#if $eq node.nodeType "chapter"}}kapittelelement{{else}}informasjonselement{{/if}}</b></div>
-  {{/if}}
+  {{/if}} -->
 
   {{#unless isTemplate}}
     {{!-- A list of the media nodes linked to this chapter node --}}
     {{#if $eq node.nodeType "chapter"}}
       {{#if $.Session.equals "showMediaNodesView" true}}
-        {{> MediaNodesTable class="media-nodes-view" doc=node headerText="Informasjonselementer i dette kapittelelementet"}}
+        {{> MediaNodesTable class="media-nodes-view" doc=node headerText="Informasjonselementer i dette kapitlet"}}
       {{else}}
         <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Informasjonselementer i dette kapittelelementet</b></div>
       {{/if}}
@@ -70,14 +70,12 @@ Edit top level information about a document. This is basically the root node.
           {{/if}}
         </em></p>
 
-      	{{#autoForm collection="GV.collections.Documents" id="update-document-form" doc=this type="update"}}
+      	{{#autoForm collection="GV.collections.Documents" id="update-document-form" doc=this type="update" autosave=true}}
       		{{> afQuickField name="title" }}
       		{{> afQuickField name="summary"}}
 
       		<div class="form-group">
       			<button type="button" class="btn btn-danger pull-left delete-document">{{#if isTemplate}}Slett malen{{else}}Slett hele dokumentet{{/if}}</button>
-      			<button type="submit" class="btn btn-primary pull-right">Lagre</button>
-      			<button type="button" class="btn btn-default pull-right cancel" style="margin-right:10px;">Nullstill</button>
       		</div>
       	{{/autoForm}}
       </div>
@@ -88,13 +86,13 @@ Edit top level information about a document. This is basically the root node.
     </div>
   {{/if}}
 
-  {{#unless isTemplate}}
+  <!-- {{#unless isTemplate}}
     {{#if $.Session.equals "showMediaNodesView" true}}
       {{> MediaNodesTable class="media-nodes-view" doc=this headerText="Informasjonselementer uten kapittelreferanse"}}
     {{else}}
       <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Informasjonselementer uten kapittelreferanse</b></div>
     {{/if}}
-  {{/unless}}
+  {{/unless}} -->
 </template>
 
 <!--
@@ -150,34 +148,34 @@ A Row element in the Media Nodes Table.
       {{#if isEditing}}
        {{> UpdateNodeForm node=this hideButtons=true showEditWarning=true}}
       {{else}}
-        {{#if title}}<b>{{title}}</b><br>{{/if}}
-        {{#if description}}
-          {{#if showMore}}
-            {{{convertLineBreaks description}}}
-          {{else}}
-            {{shortDescription}}
-          {{/if}}
-        {{else}}-{{/if}}
+        <a href="#" class="edit-media-node node-title">{{#if title}}{{title}}{{else}}<span class="glyphicon glyphicon-alert" style="font-size:12px;margin-right:5px;" aria-hidden="true"></span>Uten navn{{/if}}</a><br>
+        {{#if $.Session.equals "mode" "advanced"}}
+          {{#if description}}
+            {{#if showMore}}
+              {{{convertLineBreaks description}}}
+            {{else}}
+              {{shortDescription}}
+            {{/if}}
+          {{else}}-{{/if}}
 
-        {{#if hasShowMore}}
-          {{> ShowMoreOrLess node=this}}
-        {{else}}
-          {{> HorizontalLine}}
+          {{#if hasShowMore}}
+            {{> ShowMoreOrLess node=this}}
+          {{else}}
+            {{> HorizontalLine}}
+          {{/if}}
+          <ul class="node-list">
+            <li class="node-list-item"><b>Kilder:</b> {{commaSeparated references}}</li>
+            <li class="node-list-item"><b>Nøkkelord:</b> {{commaSeparated tags}}</li>
+            {{#with file}}
+              <li class="node-list-item"><b>Fil:</b> <a href="#" class="download">{{this.name}}</a></li>
+            {{/with}}
+          </ul>
         {{/if}}
-        <ul class="node-list">
-          <li class="node-list-item"><b>Kilder:</b> {{commaSeparated references}}</li>
-          <li class="node-list-item"><b>Nøkkelord:</b> {{commaSeparated tags}}</li>
-          {{#with file}}
-            <li class="node-list-item"><b>Fil:</b> <a href="#" class="download">{{this.name}}</a></li>
-          {{/with}}
-        </ul>
       {{/if}}
     </td>
     <td class="row-item text-right" style="width:60px;">
       {{#if isEditing}}
-        <button type="button" class="btn btn-primary btn-xs save-media-node" style="display: block; width: 100%;">Lagre</button>
-        <button type="button" class="btn btn-default btn-xs dismiss-edit-media-node" style="display: block; width: 100%;">Avbryt</button>
-        <button type="button" class="btn btn-danger btn-xs delete-media-node" style="display: block; width: 100%;">Slett</button>
+        <button type="button" class="btn btn-primary btn-xs save-media-node" style="display: block; width: 100%;">Lukk</button>
       {{else}}
         <button type="button" class="btn btn-success btn-xs edit-media-node" style="display: block; width: 100%;"><span class="glyphicon glyphicon-edit"></span> Rediger</button>
       {{/if}}

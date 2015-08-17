@@ -139,6 +139,7 @@
         "process",
         "LocalCollection",
         "$",
+        "s",
         "_",
         "Random",
         "HTTP",

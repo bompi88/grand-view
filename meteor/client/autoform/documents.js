@@ -76,13 +76,8 @@ AutoForm.hooks({
     onError: function(operation, error, template) {
       Notifications.error('Feil', 'Dokumentet ble ikke lagret');
       console.log(error);
-    },
-
-    onSuccess: function() {
-      Session.set("formDirty", false);
-      Notifications.success('Suksess', 'Dokumentet ble oppdatert!');
     }
-
+    
   }
 
 });

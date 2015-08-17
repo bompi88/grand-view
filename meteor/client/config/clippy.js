@@ -23,7 +23,7 @@ Session.set("clippyInAction", false);
 
 Meteor.startup(function() {
 
-  $(document).on("keydown", function(e) {
+  $(document).on("keyup", function(e) {
     if (e.shiftKey && e.ctrlKey && (e.which === 72)) {
       if (!Session.get("clippyInAction")) {
         Session.set("clippyInAction", true);
@@ -40,6 +40,8 @@ Meteor.startup(function() {
           Session.set("clippyInAction", false);
         }
       }
+    } else if(e.which === 27) {
+      $("#update-node-form").trigger('submit');
     }
   });
 

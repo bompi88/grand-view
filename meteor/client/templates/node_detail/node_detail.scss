@@ -30,6 +30,13 @@ $upload-field-border-color: darken($white, 30%);
 $block-hider-bg-color: darken($white, 10%);
 $block-hider-text-color-hover: $blue-base;
 
+.node-title {
+  display: inline-block;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 300;
+}
+
 .upload-field {
   background-color: $upload-field-bg-color;
   border: 2px dashed $upload-field-border-color;
