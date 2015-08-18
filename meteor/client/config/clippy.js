@@ -41,6 +41,7 @@ Meteor.startup(function() {
         }
       }
     } else if(e.which === 27) {
+      Session.set("closeOnSave", true);
       $("#update-node-form").trigger('submit');
     }
   });

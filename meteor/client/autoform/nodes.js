@@ -19,6 +19,8 @@
 
 "use strict";
 
+Session.set("closeOnSave", false);
+
 AutoForm.hooks({
 
   // Autoform hooks for update node form
@@ -50,9 +52,12 @@ AutoForm.hooks({
           }
         });
       });
-      Meteor.setTimeout(function(){
-        Session.set("inlineEditNode", null);
-      }, 300);
+      if(Session.get("closeOnSave")) {
+        Session.set("closeOnSave", false);
+        Meteor.setTimeout(function(){
+          Session.set("inlineEditNode", null);
+        }, 300);
+      }
     }
 
   }

@@ -312,6 +312,19 @@ Template.MediaNodesTable.events({
 
 });
 
+Template.AttachmentImage.onRendered(function() {
+
+  Meteor.defer(function() {
+    $('.attachment-image').magnificPopup({
+  		type: 'image',
+  		closeOnContentClick: true,
+  		image: {
+  			verticalFit: true
+  		}
+  	});
+  });
+
+});
 
 Template.ViewMediaNode.events({
 
@@ -319,6 +332,7 @@ Template.ViewMediaNode.events({
     event.preventDefault();
     event.stopPropagation();
 
+    console.log(this);
     var it = this;
 
     GV.helpers.showEditWarning(function() {
@@ -336,6 +350,8 @@ Template.ViewMediaNode.events({
 
   'click .save-media-node': function(event, tmpl) {
     event.preventDefault();
+
+    Session.set("closeOnSave", true);
 
     $("#update-node-form").trigger('submit');
   },

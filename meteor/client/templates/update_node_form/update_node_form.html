@@ -19,7 +19,7 @@ The form for updation a Node
 -->
 <template name="UpdateNodeForm">
   {{#if showEditWarning}}
-    <div class="alert alert-info" role="alert"><b>NB!</b> Du er nå i redigeringsmodus. Trykk på Lukk-knappen til høyre eller <kbd>ESC</kbd> for å gå ut.</div>
+    <div class="alert alert-info" role="alert"><b>NB!</b> Du er nå i redigeringsmodus. Trykk på <kbd>ESC</kbd> for å gå ut.</div>
   {{/if}}
   {{#if $eq node.nodeType "chapter"}}
     {{> UpdateChapterNode hideButtons=hideButtons node=node mainDoc=this}}
@@ -56,8 +56,15 @@ The form for updation a Node
             {{!-- Upload process status --}}
             {{#with file}}
                 {{#if this.isUploaded}}
-                  <b><a href="#" class="download">{{this.name}}</a></b> er nå lagt som vedlegg til informasjonselementet.
-                  <button type="button" class="btn btn-danger btn-xs delete-file">Slett</button>
+                  <div class="media">
+                    <div class="media-left">
+                      {{> AttachmentImage}}
+                    </div>
+                    <div class="media-body" style="vertical-align: middle;">
+                      <b><a href="#" class="download">{{this.name}}</a></b> er lagt som vedlegg til informasjonselementet.
+                      <button type="button" class="btn btn-danger btn-xs delete-file">Slett</button>
+                    </div>
+                  </div>
                 {{else}}
 
                   Laster opp <b>{{this.name}}</b>...

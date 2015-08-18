@@ -108,9 +108,8 @@ A Table that renders the Media Nodes available in a particular Chapter Node.
       <thead>
         <tr>
           <th><input type="checkbox" class="checkbox-master" {{allIsMarked}} aria-label="..."></th>
-          <th></th>
           <th>
-            <div class="dropup">
+            <div class="dropup pull-right" style="margin-right:10px;">
               <button class="btn btn-default btn-xs dropdown-toggle" type="button" id="media-node-dropdown" data-toggle="dropdown" aria-expanded="true">
                 Handling
                 <span class="caret"></span>
@@ -167,20 +166,22 @@ A Row element in the Media Nodes Table.
             <li class="node-list-item"><b>Kilder:</b> {{commaSeparated references}}</li>
             <li class="node-list-item"><b>Nøkkelord:</b> {{commaSeparated tags}}</li>
             {{#with file}}
+              {{#if this.isImage}}
+                {{> AttachmentImage}}
+              {{/if}}
               <li class="node-list-item"><b>Fil:</b> <a href="#" class="download">{{this.name}}</a></li>
             {{/with}}
           </ul>
         {{/if}}
       {{/if}}
     </td>
-    <td class="row-item text-right" style="width:60px;">
-      {{#if isEditing}}
-        <button type="button" class="btn btn-primary btn-xs save-media-node" style="display: block; width: 100%;">Lukk</button>
-      {{else}}
-        <button type="button" class="btn btn-success btn-xs edit-media-node" style="display: block; width: 100%;"><span class="glyphicon glyphicon-edit"></span> Rediger</button>
-      {{/if}}
-    </td>
   </tr>
+</template>
+
+<template name="AttachmentImage">
+  <a class="attachment-image" href="{{this.url}}">
+    <img src="{{this.url}}" class="img-rounded" style="margin-top:10px;" height="100">
+  </a>
 </template>
 
 <!--

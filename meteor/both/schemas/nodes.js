@@ -160,6 +160,7 @@ GV.schemas.Nodes = new SimpleSchema({
         selectizeOptions: {
           delimiter: ',',
           preload: true,
+          plugins: ['remove_button'],
           sortField: 'value',
 
           // Can create new tags
@@ -168,7 +169,7 @@ GV.schemas.Nodes = new SimpleSchema({
             if (input && (input.length > 150)) {
               Notifications.error(
                 "Feil ved innsetting av kilde",
-                "Kilden er for lang, og derfor over 150 tegn."
+                "Kilden er for lang, og det vil si at den er over 150 tegn."
               );
 
               return false;

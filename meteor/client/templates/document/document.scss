@@ -21,7 +21,8 @@ $str-height: 77vh;
 
 // -- Structure View Styles ----------------------------------------------------
 
-.container { width: auto; }
+.container.container-media-nodes { width: auto; }
+
 kbd {
   background-color: #6086aa;
 }
@@ -127,6 +128,11 @@ kbd {
 
   &:hover {
     background-color: darken(#fff, 20%);
+  }
+
+  &.menu-button-white {
+    background-color: darken(#fff, 2%);
+    box-shadow: 1px 1px 1px #ddd;
   }
 }
 

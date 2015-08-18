@@ -24,18 +24,30 @@ Session.set("mode", "easy");
 Template.Document.rendered = function() {
   $('body').on('paste', function(event) {
     var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    var item = null;
 
+    for( var i = 0; i < items.length; i++) {
+      if(items[i].kind === 'file') {
+        if(!item) {
+          item = items[i];
+        } else {
+          if(items[i].type.split('/') === 'image') {
+            item = items[i];
+          }
+        }
+      }
+    }
     // if it is a file upload it, else do the regular paste routine decided by browser
-    if (items && items[1] && items[1].type && (items[1].type.split("/")[0] !== "text")) {
+    if (item) {
       var mediaNodeInFocus = GV.collections.Nodes.findOne({
         _id: {
-          $in: [Session.get("editNode"), Session.get("nodeInFocus")]
+          $in: [Session.get("inlineEditNode"), Session.get("nodeInFocus")]
         },
         nodeType: "media"
       });
 
       if (mediaNodeInFocus) {
-        var blob = items[1].getAsFile();
+        var blob = item.getAsFile();
         var file = new FS.File(blob);
 
         GV.collections.Files.insert(file, function(err, fileObj) {
@@ -101,6 +113,21 @@ Template.Document.events({
 
   'click .advanced-mode': function(event, tmpl) {
     Session.set("mode", "advanced");
+  },
+
+  'click .redo-btn': function(event, tmpl) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    document.execCommand('redo', false, null);
+
+  },
+
+  'click .undo-btn': function(event, tmpl) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    document.execCommand('undo', false, null);
   }
 
 });

@@ -30,6 +30,10 @@ $upload-field-border-color: darken($white, 30%);
 $block-hider-bg-color: darken($white, 10%);
 $block-hider-text-color-hover: $blue-base;
 
+.attachment-image img, img.mfp-img {
+  background-color: #fff;
+}
+
 .node-title {
   display: inline-block;
   width: 100%;
