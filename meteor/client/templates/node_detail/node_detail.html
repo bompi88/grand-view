@@ -150,9 +150,13 @@ A Row element in the Media Nodes Table.
         {{#if $.Session.equals "mode" "advanced"}}
           {{#if description}}
             {{#if showMore}}
-              {{{convertLineBreaks description}}}
+              {{#emojione}}
+                {{{convertLineBreaks description}}}
+              {{/emojione}}
             {{else}}
-              {{shortDescription}}
+              {{#emojione}}
+                {{shortDescription}}
+              {{/emojione}}
             {{/if}}
           {{else}}-{{/if}}
 

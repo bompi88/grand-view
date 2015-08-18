@@ -74,6 +74,7 @@ mrt:fake@0.3.4
 natestrauser:animate-css@3.2.6
 observe-sequence@1.0.6
 ordered-dict@1.0.3
+qnub:emojione@0.0.3
 raix:eventemitter@0.1.3
 raix:handlebar-helpers@0.2.4
 random@1.0.3
