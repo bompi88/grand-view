@@ -59,11 +59,28 @@ Template.Document.rendered = function() {
 
           Router.current().subscribe("fileById", fileObj._id);
 
+          GV.collections.Files.update({
+            _id: fileObj._id
+          }, {
+            $set: {
+              nodeId:mediaNodeInFocus._id,
+              docId: Session.get('mainDocument')
+            }
+          });
+
           GV.collections.Nodes.update({
             _id: mediaNodeInFocus._id
           }, {
             $set: {
               fileId: fileObj._id
+            }
+          });
+
+          GV.collections.Documents.update({
+            _id: Session.get('mainDocument')
+          }, {
+            $addToSet: {
+              fileIds: fileObj._id
             }
           });
 
