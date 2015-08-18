@@ -51,12 +51,21 @@ cache:
   directories:
   - cache
 
+# deploy:
+#   provider: releases
+#   api-key:
+#     secure: "HvFmSEsiOIFXpOTwCAd7bIReM45XjL90pq1WDiFOPtkTPv1CvvZFCbuY9+Hwp5QAiASEbdCZIucq3q3rBNmmGhOB9D+wQ+Rj+AciJDtB0WP72sVrGZLM2nPk1+hbn402SpH6WOLUygw1NxZqO9FfjcOMZwida8KLLDp/SDP3OtBYm5Jk+9Nh1cRht73wXd+LRqhuVdCh7GRCgg182L8cfIMq0NztKE297bXMjhk/teV9984bHf1BKXWgwQ5DhSgEtW7xMat2eWFaIGGCjZ3e5gQkSOk1an7QG1NRq1ehYwWa3uuzTeUKxCYwqI6jnbzCX+FzEUuV7Lgr6xPWyukF4faZqDzhsnkqiExZLaqQ4QYWURf5kgT1L7/kkAJdpX3utXM7ElQnou1AzG/jL70kquqgUCCBpEOJcS//hbMHy/VT6BfaH4HkdUrej0geaIdFjV0y6nTC3VIeRYah2VBH/L11UfLc5kOnPu5I86xHFmxiQ/DSMQmuFYTV5/hEkvSh8JqW8nlwdqFzbmw080ZveUogUIn/3ARJgV3HcgJW2rEeCjqut2uNVEkCC9gO5cAjCfIB+Bkao5A0IsdxjguhqdTGnZlMKYz9i/+Wef0H0nMfoRyZS3D4U/NARuFxZXc35wQx8EDwAlhRewgehZmgKtjqV9tBE26L24l6t4xer/8="
+#   file:
+#     - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz"
+#   skip_cleanup: true
+#   on:
+#     tags: true
+
 deploy:
   provider: releases
-  api-key:
-    secure: "HvFmSEsiOIFXpOTwCAd7bIReM45XjL90pq1WDiFOPtkTPv1CvvZFCbuY9+Hwp5QAiASEbdCZIucq3q3rBNmmGhOB9D+wQ+Rj+AciJDtB0WP72sVrGZLM2nPk1+hbn402SpH6WOLUygw1NxZqO9FfjcOMZwida8KLLDp/SDP3OtBYm5Jk+9Nh1cRht73wXd+LRqhuVdCh7GRCgg182L8cfIMq0NztKE297bXMjhk/teV9984bHf1BKXWgwQ5DhSgEtW7xMat2eWFaIGGCjZ3e5gQkSOk1an7QG1NRq1ehYwWa3uuzTeUKxCYwqI6jnbzCX+FzEUuV7Lgr6xPWyukF4faZqDzhsnkqiExZLaqQ4QYWURf5kgT1L7/kkAJdpX3utXM7ElQnou1AzG/jL70kquqgUCCBpEOJcS//hbMHy/VT6BfaH4HkdUrej0geaIdFjV0y6nTC3VIeRYah2VBH/L11UfLc5kOnPu5I86xHFmxiQ/DSMQmuFYTV5/hEkvSh8JqW8nlwdqFzbmw080ZveUogUIn/3ARJgV3HcgJW2rEeCjqut2uNVEkCC9gO5cAjCfIB+Bkao5A0IsdxjguhqdTGnZlMKYz9i/+Wef0H0nMfoRyZS3D4U/NARuFxZXc35wQx8EDwAlhRewgehZmgKtjqV9tBE26L24l6t4xer/8="
-  file:
-    - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz"
+  api_key:
+    secure: JjfmJCkgp5HpyECAoAKJdBHphTIe+x6T7FxHaIWzFRz/feN5ZqWLyacuUEhBrmTHwatYu4moAdv7OIZCOAGnEgCID1DiXG37gZ7NaYBTWHHraXA8FEH3Yx/nm2GeqExxttpUmWqDvIn9pT5TP5nH1t94IgwXvq4ChFrYaeQpeKbkgpZAOUgIhIrWN0c37f5V4QOqrSFUj3IwpCvT+cjHJRFQvGrNFThYGRAHqjR29oC9lZpdMQH2+JLL3dizrp/Cn4I7E/58TGVc9pMzyMt60jjz9sVaXAux2ahRNoMYy6S0jWkrcBcZ2MJ79HpwVoWJ8m96n20mdHSls+Wy682kAHseBuuvAUjxgMAftUf+P9Ts0atfsSw7a8rQ08FcEN4VFEAoT3tYB8MLmrpUU6F0o0Sp1uH2iHpicOhaAeeaTT5DkExS2+9gSIHpISuKcRnMvkM9NvMCIK2M2YPzKgjmGnOroHzXfiuoTpfgsZu2ywBDH97yGBasJKBeH4n894Awi5C8EXBCnVTJj1H4I/x66VlzwLnGeRVpAJCtllTzGTLmhliQ+aCTf2CfcQZ8m0Q79CqvXJ2XKsRdMCBsOa+tcov1ofq77wV4uHStaeNFlnYTPjl9jCqRWjsjYmQBEZs69ZsCkIyqvAIOnI7CXAfVrsqLd8SwnOf6kOdeyWO6Z7Q=
+  file: GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz
   skip_cleanup: true
   on:
     tags: true
