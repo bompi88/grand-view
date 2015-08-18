@@ -68,7 +68,7 @@ deploy:
   file: GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz
   on:
     repo: bompi88/grand-view
-    branch: prod
+    tags: true
 
 notifications:
   email:
