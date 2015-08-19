@@ -24,12 +24,18 @@ AutoForm.hooks({
     after: {
       insert: function(error, docId, tmpl) {
 
-        var doc = GV.collections.Documents.findOne({ _id: docId });
-        var template = GV.collections.Documents.findOne({ _id: doc.templateBasis });
+        Router.current().subscribe('documentById', docId, function() {
+          var doc = GV.collections.Documents.findOne({ _id: docId });
 
-        if(template) {
-          Meteor.call('deepCopyTemplate', doc, template);
-        }
+          var template = GV.collections.Documents.findOne({ _id: doc.templateBasis });
+
+          if(template) {
+            Meteor.call('deepCopyTemplate', doc, template, function() {
+              Router.current().subscribe('nodesByDoc', docId);
+            });
+          }
+
+        });
       }
     },
     formToDoc: function(doc) {
@@ -77,7 +83,7 @@ AutoForm.hooks({
       Notifications.error('Feil', 'Dokumentet ble ikke lagret');
       console.log(error);
     }
-    
+
   }
 
 });
