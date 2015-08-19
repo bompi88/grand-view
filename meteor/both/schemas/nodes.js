@@ -89,7 +89,7 @@ GV.schemas.Nodes = new SimpleSchema({
             });
 
             return {
-              value: input,
+              value: input.toLowerCase(),
               text: input
             };
           },
@@ -181,7 +181,7 @@ GV.schemas.Nodes = new SimpleSchema({
             });
 
             return {
-              value: input,
+              value: input.toLowerCase(),
               text: input
             };
           },

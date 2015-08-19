@@ -134,6 +134,16 @@ kbd {
     background-color: darken(#fff, 2%);
     box-shadow: 1px 1px 1px #ddd;
   }
+
+  &.menu-button-green {
+    color: darken(#fff, 4%);
+    background-color: #5bb75b;
+    box-shadow: 1px 1px 1px #ddd;
+
+    &:hover {
+      background-color: #449c43;
+    }
+  }
 }
 
 div.structure-container {

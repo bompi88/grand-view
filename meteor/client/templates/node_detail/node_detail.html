@@ -19,7 +19,7 @@ Edit information about a Node.
 -->
 <template name="NodeDetail">
   {{!-- A presentation of the current selected node --}}
-  {{#if node.title}}<h3 style="margin-top:0;">{{node.title}}</h3>{{/if}}
+
   <!-- {{#if node.description}}<p style="margin-bottom:20px;"><em>{{{convertLineBreaks node.description}}}</em></p>{{/if}} -->
 
   {{!-- An edit form for editing the selected node --}}
@@ -40,10 +40,18 @@ Edit information about a Node.
   {{#unless isTemplate}}
     {{!-- A list of the media nodes linked to this chapter node --}}
     {{#if $eq node.nodeType "chapter"}}
+      {{#if node.title}}<h3 style="margin-top:0;">{{node.title}}</h3>{{/if}}
       {{#if $.Session.equals "showMediaNodesView" true}}
         {{> MediaNodesTable class="media-nodes-view" doc=node headerText=""}}
       {{else}}
         <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Vis Informasjonselementer</b></div>
+      {{/if}}
+    {{else}}
+      {{#if isEditing node}}
+        {{> UpdateNodeForm node=node hideButtons=true showEditWarning=true}}
+      {{else}}
+        {{#if node.title}}<h3 style="margin-top:0;">{{node.title}}</h3>{{/if}}
+        {{> NodeDescription node}}
       {{/if}}
     {{/if}}
   {{/unless}}
@@ -148,37 +156,41 @@ A Row element in the Media Nodes Table.
       {{else}}
         <a href="#" class="edit-media-node node-title">{{#if title}}{{title}}{{else}}<span class="glyphicon glyphicon-alert" style="font-size:12px;margin-right:5px;" aria-hidden="true"></span>Uten navn{{/if}}</a><br>
         {{#if $.Session.equals "mode" "advanced"}}
-          {{#if description}}
-            {{#if showMore}}
-              {{#emojione}}
-                {{{convertLineBreaks description}}}
-              {{/emojione}}
-            {{else}}
-              {{#emojione}}
-                {{shortDescription}}
-              {{/emojione}}
-            {{/if}}
-          {{else}}-{{/if}}
-
-          {{#if hasShowMore}}
-            {{> ShowMoreOrLess node=this}}
-          {{else}}
-            {{> HorizontalLine}}
-          {{/if}}
-          <ul class="node-list">
-            <li class="node-list-item"><b>Kilder:</b> {{commaSeparated references}}</li>
-            <li class="node-list-item"><b>Nøkkelord:</b> {{commaSeparated tags}}</li>
-            {{#with file}}
-              {{#if this.isImage}}
-                {{> AttachmentImage}}
-              {{/if}}
-              <li class="node-list-item"><b>Fil:</b> <a href="#" class="download">{{this.name}}</a></li>
-            {{/with}}
-          </ul>
+          {{> NodeDescription}}
         {{/if}}
       {{/if}}
     </td>
   </tr>
+</template>
+
+<template name="NodeDescription">
+  {{#if description}}
+    {{#if showMore}}
+      {{#emojione}}
+        {{{convertLineBreaks description}}}
+      {{/emojione}}
+    {{else}}
+      {{#emojione}}
+        {{shortDescription}}
+      {{/emojione}}
+    {{/if}}
+  {{else}}-{{/if}}
+
+  {{#if hasShowMore}}
+    {{> ShowMoreOrLess node=this}}
+  {{else}}
+    {{> HorizontalLine}}
+  {{/if}}
+  <ul class="node-list">
+    <li class="node-list-item"><b>Kilder:</b> {{commaSeparated references}}</li>
+    <li class="node-list-item"><b>Nøkkelord:</b> {{commaSeparated tags}}</li>
+    {{#with file}}
+      {{#if this.isImage}}
+        {{> AttachmentImage}}
+      {{/if}}
+      <li class="node-list-item"><b>Fil:</b> <a href="#" class="download">{{this.name}}</a></li>
+    {{/with}}
+  </ul>
 </template>
 
 <template name="AttachmentImage">

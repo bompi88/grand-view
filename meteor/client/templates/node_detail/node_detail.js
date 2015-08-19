@@ -47,7 +47,12 @@ Template.NodeDetail.helpers({
     return GV.collections.Nodes.findOne({
       _id: Session.get('nodeInFocus')
     });
-  }
+  },
+
+  isEditing: function(node) {
+    var nodeId = node && node._id;
+    return Session.get("inlineEditNode") === nodeId;
+  },
 
 });
 
@@ -90,8 +95,7 @@ Template.MediaNodesTable.helpers({
 
 });
 
-
-Template.ViewMediaNode.helpers({
+Template.NodeDescription.helpers({
 
   file: function() {
     return GV.collections.Files.findOne({
@@ -109,7 +113,12 @@ Template.ViewMediaNode.helpers({
 
   shortDescription: function() {
     return this.description && this.description.split("\n")[0];
-  },
+  }
+
+});
+
+
+Template.ViewMediaNode.helpers({
 
   isEditing: function() {
     return Session.get("inlineEditNode") === this._id;

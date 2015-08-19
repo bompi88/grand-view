@@ -59,24 +59,35 @@ for editing of nodes in the tree.
           <div class="structure-header">
 
             {{#unless isTemplate}}
-              <div class="dropdown pull-right btn-group" role="group">
-                <button aria-expanded="false" class="btn btn-default dropdown-toggle menu-button" role="button" data-toggle="dropdown" type="button">
-                <span class="glyphicon glyphicon-cog"></span></button>
 
-    	          <ul class="dropdown-menu toggle-advanced-mode">
-    							{{#if $.Session.equals 'mode' 'easy'}}
-    								<li class="disabled"><a href="#" class="easy-mode"><span class="glyphicon glyphicon-ok green"></span> Kollapset modus</a></li>
-    							{{else}}
-    								<li><a href="#" class="easy-mode no-icon">Kollapset modus</a></li>
-    							{{/if}}
+              {{#unless focusOnMainDoc}}
+                {{#if isChapter}}
+                <div class="dropdown pull-right btn-group" role="group">
+                  <button aria-expanded="false" class="btn btn-default dropdown-toggle menu-button" role="button" data-toggle="dropdown" type="button">
+                  <span class="glyphicon glyphicon-cog"></span></button>
 
-    							{{#if $.Session.equals 'mode' 'advanced'}}
-    								<li class="disabled"><a href="#" class="advanced-mode"><span class="glyphicon glyphicon-ok green"></span> Utvidet modus</a></li>
-    							{{else}}
-    								<li><a href="#" class="advanced-mode no-icon">Utvidet modus</a></li>
-    							{{/if}}
-    	          </ul>
-              </div>
+      	          <ul class="dropdown-menu toggle-advanced-mode">
+      							{{#if $.Session.equals 'mode' 'easy'}}
+      								<li class="disabled"><a href="#" class="easy-mode"><span class="glyphicon glyphicon-ok green"></span> Kollapset modus</a></li>
+      							{{else}}
+      								<li><a href="#" class="easy-mode no-icon">Kollapset modus</a></li>
+      							{{/if}}
+
+      							{{#if $.Session.equals 'mode' 'advanced'}}
+      								<li class="disabled"><a href="#" class="advanced-mode"><span class="glyphicon glyphicon-ok green"></span> Utvidet modus</a></li>
+      							{{else}}
+      								<li><a href="#" class="advanced-mode no-icon">Utvidet modus</a></li>
+      							{{/if}}
+      	          </ul>
+                </div>
+                {{else}}
+                  <div class="btn-group pull-right" role="group" title="Bytt mellom redigeringsmodus">
+                    <button aria-expanded="false" class="btn menu-button {{#unless $.Session.get 'inlineEditNode'}}menu-button-green {{/unless}}dropdown-toggle edit-btn" role="button" type="button">
+                      {{#if $.Session.get 'inlineEditNode'}}<span class="glyphicon glyphicon-remove animated fadeIn"></span>{{else}}<span class="glyphicon glyphicon-edit animated fadeIn"></span>{{/if}}
+                    </button>
+                  </div>
+                {{/if}}
+              {{/unless}}
               <div class="btn-group pull-right" role="group" title="Gjenta">
                 <button aria-expanded="false" class="btn btn-default dropdown-toggle menu-button menu-button-white redo-btn {{#unless $.Session.get 'inlineEditNode'}}disabled{{/unless}}" role="button" type="button">
                 <i class="fa fa-repeat"></i></button>
@@ -88,7 +99,7 @@ for editing of nodes in the tree.
             {{/unless}}
 
             <h4 class="header-text">
-              <span class="glyphicon glyphicon-leaf" style="font-size:15px; margin: 0 5px;"></span> Informasjonselementer
+              {{#if focusOnMainDoc}}<span class="glyphicon glyphicon-book" style="font-size:15px; margin: 0 5px;"></span> Prosjektbeskrivelse{{else}}<span class="glyphicon glyphicon-leaf" style="font-size:15px; margin: 0 5px;"></span> Informasjonselementer{{/if}}
             </h4>
           </div>
           <div class="col-xs-12 node-detail-view">

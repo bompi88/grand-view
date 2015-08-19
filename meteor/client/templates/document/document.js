@@ -145,6 +145,16 @@ Template.Document.events({
     event.stopPropagation();
 
     document.execCommand('undo', false, null);
+  },
+
+  'click .edit-btn': function(event, tmpl) {
+    var isEditing = !!Session.get('inlineEditNode');
+
+    if(isEditing) {
+      Session.set('inlineEditNode', null);
+    } else {
+      Session.set('inlineEditNode', Session.get('nodeInFocus'));
+    }
   }
 
 });
@@ -159,8 +169,10 @@ Template.Document.helpers({
     return Session.get('nodeInFocus') === Session.get('mainDocument');
   },
 
-  getDoc: function() {
-    return Router.current && Router.current() && Router.current().data && Router.current().data();
+  isChapter: function() {
+    var doc = GV.collections.Nodes.findOne({ _id: Session.get('nodeInFocus') });
+
+    return doc && (doc.nodeType === 'chapter');
   }
 
 });

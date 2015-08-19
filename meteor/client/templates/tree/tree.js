@@ -494,6 +494,7 @@ Template.Tree.events({
       Session.set('movePopoverY', event.pageY - 90 + "px");
       Session.set('showMovePopover', elData._id);
     } else {
+      Session.set('inlineEditNode', null);
       // "Unselect" all selected nodes
       $('li span').removeClass('selected');
 
@@ -523,6 +524,7 @@ Template.Tree.events({
 
       GV.tabs.setDummyTab(null);
 
+      Session.set('inlineEditNode', null);
       Session.set('nodeInFocus', Session.get('mainDocument'));
       Session.set("uploadStopped", false);
       Session.set("file", null);
