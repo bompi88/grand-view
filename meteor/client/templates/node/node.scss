@@ -70,7 +70,7 @@ $plus-minus-color: $white;
   height: 16px;
   margin: 0;
   padding: 0;
-  position: relative;
+  position: absolute;
   width: 16px;
   z-index: 300;
 }
@@ -83,9 +83,9 @@ $plus-minus-color: $white;
 
   background-color: $expand-collapse-icon-color;
   height: 16px;
-  left: -33px;
-  position: relative;
-  top: -16px;
+  left: -27px;
+  position: absolute;
+  top: 15px;
   width: 16px;
 }
 
@@ -113,9 +113,9 @@ $plus-minus-color: $white;
 
   background-color: $expand-collapse-icon-color;
   height: 16px;
-  left: -33px;
-  position: relative;
-  top: -16px;
+  left: -27px;
+  position: absolute;
+  top: 15px;
   width: 16px;
 }
 
