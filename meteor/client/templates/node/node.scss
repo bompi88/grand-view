@@ -35,6 +35,11 @@ $plus-minus-color: $white;
   z-index: 1000;
 }
 
+.node-name[contenteditable="true"] {
+  font-weight: 600;
+  outline: 0;
+}
+
 .slot-visible {
   background-color: $drop-slot-bg-color;
   border: 1px dashed $drop-slot-border-color;

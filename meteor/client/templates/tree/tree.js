@@ -495,6 +495,7 @@ Template.Tree.events({
       Session.set('showMovePopover', elData._id);
     } else {
       Session.set('inlineEditNode', null);
+
       // "Unselect" all selected nodes
       $('li span').removeClass('selected');
 

@@ -31,11 +31,13 @@ A node in the tree, that recursively renders its children.
           {{else}}
             <span class="glyphicon glyphicon-file"></span>
           {{/if}}
-          {{#if title}}
-            {{title}}
-          {{else}}
-            Uten navn
-          {{/if}}
+					<span class="node-name">
+	          {{#if title}}
+	            {{title}}
+	          {{else}}
+	            Uten navn
+	          {{/if}}
+					</span>	
           {{#if $eq nodeType "chapter"}}
              <span>({{childrenCount}})</span>
           {{/if}}

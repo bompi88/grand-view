@@ -114,6 +114,19 @@ Template.NodeLevel.helpers({
 
 
 Template.NodeLevel.rendered = function() {
+      // this.input = $('.tree li[data-id="' + this.data._id + '"] > .element .node-text .node-name');
+      //
+  		// this.autorun((function(self) {
+  		// 	return function() {
+      //     self.input.innerText = (GV.collections.Nodes.findOne({_id: self.data._id }) || {}).title;
+      //     console.log(self.input.innerText);
+      //     console.log(self.input.innerHTML);
+  		// 	};
+  		// })(this));
+
+Tracker.nonreactive(function() {
+
+
 
   $('.tree li.node.root li.node.chapter span').contextMenu('right-click-menu-chapter-node', {
     bindings: {
@@ -174,15 +187,47 @@ Template.NodeLevel.rendered = function() {
       // Edit button
       'edit-node': function(t) {
         var elData = Blaze.getData(t);
-
         if (elData && elData._id) {
-          GV.tabs.addTab(elData._id);
-          Session.set('nodeInFocus', elData._id);
+          var el = $('.tree li[data-id="' + elData._id + '"] > .element .node-text .node-name');
+
+          if(el) {
+            var parent = el.parent().parent();
+            parent.css('text-overflow', 'clip');
+
+            el.prop('contenteditable', true);
+            Session.set('editChapterNodeName', elData._id);
+
+            el.focus();
+            document.execCommand('selectAll', false, null);
+
+            el.blur(function() {
+              Session.set('editChapterNodeName', null);
+              el.prop('contenteditable', false);
+              parent.css('text-overflow', 'ellipsis');
+            });
+
+            el.keypress(function(e){
+              if(e.which === 13) {
+                var target = $(e.target);
+                var text = e.target.innerText;
+
+                GV.collections.Nodes.update({ _id: elData._id }, { $set: { title: text }});
+
+                Session.set('editChapterNodeName', null);
+                target.prop('contenteditable', false);
+                parent.css('text-overflow', 'ellipsis');
+
+                return false;
+              }
+            });
+          }
         }
       }
-
     }
   });
+
+
+});
 
   $('.tree li.node.root li.node.media-node span').contextMenu('right-click-menu-media-node', {
     bindings: {
@@ -232,6 +277,7 @@ Template.NodeLevel.rendered = function() {
         if (elData && elData._id) {
           GV.tabs.addTab(elData._id);
           Session.set('nodeInFocus', elData._id);
+          Session.set('inlineEditNode', elData._id);
         }
       }
 

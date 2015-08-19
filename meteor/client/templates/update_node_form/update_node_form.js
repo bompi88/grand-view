@@ -42,7 +42,7 @@ var uploadFile = function(currentFile, self) {
   }
 
   Session.set("uploadStopped", false);
-  
+
   // upload new file
   var file = new FS.File(currentFile);
 
