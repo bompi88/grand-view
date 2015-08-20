@@ -21,6 +21,7 @@
 
 // -- Template helpers ---------------------------------------------------------
 
+Session.set('editChapterNodeName', null);
 
 Template.NodeLevel.helpers({
 
@@ -105,6 +106,12 @@ Template.NodeLevel.helpers({
     return this.node_index === (GV.collections.Nodes.find({
       parent: this.parent
     }).count() - 1);
+  },
+
+  editableTitle: function () {
+    return '<span class="node-name" contenteditable="' +
+      (Session.get('editChapterNodeName') === this._id) + '">' +
+      (this.title || 'Uten navn') + '</span>';
   }
 
 });
@@ -112,21 +119,7 @@ Template.NodeLevel.helpers({
 
 // -- Template on render -------------------------------------------------------
 
-
 Template.NodeLevel.rendered = function() {
-      // this.input = $('.tree li[data-id="' + this.data._id + '"] > .element .node-text .node-name');
-      //
-  		// this.autorun((function(self) {
-  		// 	return function() {
-      //     self.input.innerText = (GV.collections.Nodes.findOne({_id: self.data._id }) || {}).title;
-      //     console.log(self.input.innerText);
-      //     console.log(self.input.innerHTML);
-  		// 	};
-  		// })(this));
-
-Tracker.nonreactive(function() {
-
-
 
   $('.tree li.node.root li.node.chapter span').contextMenu('right-click-menu-chapter-node', {
     bindings: {
@@ -188,46 +181,57 @@ Tracker.nonreactive(function() {
       'edit-node': function(t) {
         var elData = Blaze.getData(t);
         if (elData && elData._id) {
-          var el = $('.tree li[data-id="' + elData._id + '"] > .element .node-text .node-name');
+          Session.set('editChapterNodeName', elData._id);
+          Meteor.defer(function() {
+            var el = $('.tree li[data-id="' + elData._id + '"] > .element .node-text .node-name');
 
-          if(el) {
-            var parent = el.parent().parent();
-            parent.css('text-overflow', 'clip');
+            if(el) {
+              var parent = el.parent().parent();
+              parent.css('text-overflow', 'clip');
+              console.log(parent);
 
-            el.prop('contenteditable', true);
-            Session.set('editChapterNodeName', elData._id);
+              el.focus();
+              document.execCommand('selectAll', false, null);
 
-            el.focus();
-            document.execCommand('selectAll', false, null);
-
-            el.blur(function() {
-              Session.set('editChapterNodeName', null);
-              el.prop('contenteditable', false);
-              parent.css('text-overflow', 'ellipsis');
-            });
-
-            el.keypress(function(e){
-              if(e.which === 13) {
-                var target = $(e.target);
-                var text = e.target.innerText;
-
-                GV.collections.Nodes.update({ _id: elData._id }, { $set: { title: text }});
-
+              el.blur(function(e) {
+                // var textNode = e.currentTarget.firstChild;
+                //
+                // var caret = 0; // insert caret after the 10th character say
+                // var range = document.createRange();
+                // range.setStart(textNode, caret);
+                // range.setEnd(textNode, caret);
+                // var sel = window.getSelection();
+                // sel.removeAllRanges();
+                // sel.addRange(range);
+                // window.scroll(0,0);
+                $(e.currentTarget).scroll(0,0);
                 Session.set('editChapterNodeName', null);
-                target.prop('contenteditable', false);
-                parent.css('text-overflow', 'ellipsis');
 
-                return false;
-              }
-            });
-          }
+                parent.css('text-overflow', 'ellipsis');
+              });
+
+              el.keypress(function(e){
+                if(e.which === 13) {
+                  var text = e.currentTarget.innerText;
+
+                  GV.collections.Nodes.update({ _id: elData._id }, { $set: { title: text }});
+
+                  Session.set('editChapterNodeName', null);
+                  parent.css('text-overflow', 'ellipsis');
+
+                  return false;
+                }
+              });
+            }
+          });
+
         }
       }
     }
   });
 
 
-});
+
 
   $('.tree li.node.root li.node.media-node span').contextMenu('right-click-menu-media-node', {
     bindings: {
