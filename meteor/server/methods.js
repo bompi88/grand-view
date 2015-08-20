@@ -52,6 +52,38 @@ Meteor.methods({
       var nodeId = node._id;
       var newNode = _.omit(node, "_id");
       idTableNodes[nodeId] = GV.collections.Nodes.insert(newNode);
+
+      if(node.tags && node.tags.length) {
+        _.each(node.tags, function(tag) {
+          GV.collections.Tags.update({
+            value: tag.toLowerCase()
+          },
+          {
+            $setOnInsert: {
+              text: tag
+            }
+          },
+          {
+            upsert: true
+          });
+        });
+      }
+
+      if(node.references && node.references.length) {
+        _.each(node.references, function(reference) {
+          GV.collections.References.update({
+            value: reference.toLowerCase()
+          },
+          {
+            $setOnInsert: {
+              text: reference
+            }
+          },
+          {
+            upsert: true
+          });
+        });
+      }
     });
 
     // import files
