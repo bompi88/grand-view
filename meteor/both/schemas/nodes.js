@@ -69,6 +69,7 @@ GV.schemas.Nodes = new SimpleSchema({
           delimiter: ',',
           preload: true,
           plugins: ['remove_button'],
+          dropdownParent: 'body',
           sortField: 'value',
 
           // Can create new tags
@@ -161,6 +162,7 @@ GV.schemas.Nodes = new SimpleSchema({
           delimiter: ',',
           preload: true,
           plugins: ['remove_button'],
+          dropdownParent: 'body',
           sortField: 'value',
 
           // Can create new tags

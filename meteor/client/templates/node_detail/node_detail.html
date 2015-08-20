@@ -40,7 +40,8 @@ Edit information about a Node.
   {{#unless isTemplate}}
     {{!-- A list of the media nodes linked to this chapter node --}}
     {{#if $.Session.get 'artificialNode'}}
-      {{#if artificialValue}}<h3 style="margin-top:0;">{{artificialValue}}</h3>{{/if}}
+      {{#if artificialValue}}
+      <h3 style="margin-top:0;">{{#if isOnArtificialType 'tag'}}<span class="glyphicon glyphicon-tags" style="font-size:15px; margin: 0 5px;"></span>{{else}}<span class="glyphicon glyphicon-bookmark" style="font-size:15px; margin: 0 5px;"></span>{{/if}}{{artificialValue}}</h3>{{/if}}
       {{#if $.Session.equals "showMediaNodesView" true}}
         {{> MediaNodesTable class="media-nodes-view" doc=artificialData headerText=""}}
       {{else}}
@@ -48,7 +49,7 @@ Edit information about a Node.
       {{/if}}
     {{else}}
       {{#if $eq node.nodeType "chapter"}}
-        {{#if node.title}}<h3 style="margin-top:0;">{{node.title}}</h3>{{/if}}
+        {{#if node.title}}<h3 style="margin-top:0;"><span class="glyphicon glyphicon-tree-conifer" style="font-size:15px; margin: 0 5px;"></span>{{node.title}}</h3>{{/if}}
         {{#if $.Session.equals "showMediaNodesView" true}}
           {{> MediaNodesTable class="media-nodes-view" doc=node headerText=""}}
         {{else}}

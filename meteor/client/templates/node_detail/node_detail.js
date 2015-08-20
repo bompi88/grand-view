@@ -72,6 +72,11 @@ Template.NodeDetail.helpers({
     var meta = Session.get('artificialNode');
 
     return meta.value;
+  },
+
+  isOnArtificialType: function(type) {
+    var meta = Session.get('artificialNode');
+    return meta.type === type;
   }
 
 });
