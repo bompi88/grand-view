@@ -49,3 +49,29 @@ Meteor.publish('filesByDocument', function(id) {
     docId: id
   });
 });
+
+Meteor.publish('filesByArtificialNode', function(an) {
+
+  var nodes = [];
+
+  if(an.type === 'tag') {
+    nodes = GV.collections.Nodes.find({
+      tags: an.value
+    }).fetch();
+  } else if(an.type === 'reference') {
+    nodes = GV.collections.Nodes.find({
+      references: an.value
+    }).fetch();
+  } else {
+    return this.ready();
+  }
+
+  var ids = _.pluck(nodes, "_id") || [];
+
+  // return the documents that the current user owns
+  return GV.collections.Files.find({
+    nodeId: {
+      $in: ids
+    }
+  });
+});

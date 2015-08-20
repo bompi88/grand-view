@@ -117,7 +117,14 @@ GV.nodeCtrl = {
   },
 
   openArtificialNode: function(type, value) {
-    Session.set('artificialNode', { type: type, value: value });
+    var an = { type: type, value: value };
+
+    Router.current().subscribe('filesByArtificialNode', an, function() {
+      Session.set('artificialNode', an);
+      Session.set('showMediaNodesView', true);
+      Session.set('nodeInFocus', null);
+      GV.tabs.setDummyTab();
+    });
   },
 
   /**
