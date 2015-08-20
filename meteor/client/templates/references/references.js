@@ -32,7 +32,7 @@ Template.References.helpers({
 
     var nodes = GV.collections.Nodes.find({
       _id: {
-        $in: doc.children || []
+        $in: doc && doc.children || []
       },
       nodeType: "media"
     }).fetch();
@@ -117,7 +117,7 @@ Template.Reference.events({
   // Selects a node on regular mouse click
   'click li.node span.element': function(event, tmpl) {
     // "Unselect" all selected nodes
-    $('li.node span').removeClass('selected');
+    $('.references li span').removeClass('selected');
 
     // Style the current selected node.
     $(event.currentTarget).addClass('selected');
@@ -131,6 +131,20 @@ Template.Reference.events({
     container.animate({
       scrollTop: 0
     }, 300);
+  },
+
+  // Selects a tag on regular mouse click
+  'click li.reference > span.element': function(event, tmpl) {
+    // "Unselect" all selected nodes
+    $('.references li span').removeClass('selected');
+
+    // Style the current selected node.
+    $(event.currentTarget).addClass('selected');
+
+    var elData = Blaze.getData(event.currentTarget);
+
+    GV.nodeCtrl.openArtificialNode('reference', elData.title);
   }
+
 
 });

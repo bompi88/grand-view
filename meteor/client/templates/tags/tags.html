@@ -39,7 +39,7 @@ The Tags view constructor template.
     {{#each tags}}
       {{> Tag title=this}}
     {{else}}
-      <em>Ingen nøkkelord er tilbundet informasjons- elementene enda. Legg til nøkkelord under redigering av informasjonselement.</em>
+      <em>Ingen nøkkelord er tilbundet informasjonselementene enda. Legg til nøkkelord under redigering av informasjonselement.</em>
     {{/each}}
 
   </div>
@@ -52,11 +52,11 @@ Renders a Tag
 <ul>
     <li class="tag" style="margin-top:0;">
 
-      <span draggable="false" class="element disable-select {{#if isCollapsed}}show-node{{else}}hide-node{{/if}}">
+      <span draggable="false" class="element disable-select">
         {{#if isCollapsed}}
-          <span class="glyphicon glyphicon-plus-sign"></span>
+          <span class="glyphicon glyphicon-plus-sign show-node"></span>
         {{else}}
-          <span class="glyphicon glyphicon-minus-sign"></span>
+          <span class="glyphicon glyphicon-minus-sign hide-node"></span>
         {{/if}}
 
         {{title}}

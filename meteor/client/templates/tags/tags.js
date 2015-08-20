@@ -32,7 +32,7 @@ Template.Tags.helpers({
 
     var nodes = GV.collections.Nodes.find({
       _id: {
-        $in: doc.children || []
+        $in: doc && doc.children || []
       },
       nodeType: "media"
     }).fetch();
@@ -107,17 +107,21 @@ Template.Tag.helpers({
 
 Template.Tag.events({
   'click .hide-node': function(event, tmpl) {
+    event.stopPropagation();
+
     GV.tags.collapse(this.title);
   },
 
   'click .show-node': function(event, tmpl) {
+    event.stopPropagation();
+
     GV.tags.uncollapse(this.title);
   },
 
   // Selects a node on regular mouse click
   'click li.node span.element': function(event, tmpl) {
     // "Unselect" all selected nodes
-    $('li.node span').removeClass('selected');
+    $('.tags li span').removeClass('selected');
 
     // Style the current selected node.
     $(event.currentTarget).addClass('selected');
@@ -125,6 +129,19 @@ Template.Tag.events({
     var elData = Blaze.getData(event.currentTarget);
 
     GV.nodeCtrl.openNode(elData);
+  },
+
+  // Selects a tag on regular mouse click
+  'click li.tag > span.element': function(event, tmpl) {
+    // "Unselect" all selected nodes
+    $('.tags li span').removeClass('selected');
+
+    // Style the current selected node.
+    $(event.currentTarget).addClass('selected');
+
+    var elData = Blaze.getData(event.currentTarget);
+
+    GV.nodeCtrl.openArtificialNode('tag', elData.title);
   }
 
 });

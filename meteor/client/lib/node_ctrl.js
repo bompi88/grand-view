@@ -116,12 +116,17 @@ GV.nodeCtrl = {
       return null;
   },
 
+  openArtificialNode: function(type, value) {
+    Session.set('artificialNode', { type: type, value: value });
+  },
+
   /**
    * Opens a node given data
    */
   openNode: function(elData) {
     if (elData && elData._id) {
       GV.tabs.setDummyTab(elData._id);
+      Session.set("artificialNode", null);
       Session.set('nodeInFocus', elData._id);
       Router.current().subscribe('fileByNode', elData._id);
       Session.set("file", null);

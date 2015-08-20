@@ -54,6 +54,7 @@ GV.routeCtrls.Document = RouteController.extend({
       Session.set("uploadStopped", false);
       Session.set("structureState", "tree");
       Session.set("showMediaNodes", false);
+      Session.set("artificialNode", null);
 
       Meteor.defer(function() {
         $('li.node span')

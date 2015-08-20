@@ -39,7 +39,7 @@ The References view constructor template.
     {{#each references}}
       {{> Reference title=this}}
     {{else}}
-      <em>Ingen kilder er tilbundet informasjons- elementene enda. Legg til kilde under redigering av informasjonselement.</em>
+      <em>Ingen kilder er tilbundet informasjonselementene enda. Legg til kilde under redigering av informasjonselement.</em>
     {{/each}}
 
   </div>
@@ -52,11 +52,11 @@ Renders a reference.
 <ul>
     <li class="reference" style="margin-top:0;">
 
-      <span draggable="false" class="element disable-select {{#if isCollapsed}}show-node{{else}}hide-node{{/if}}">
+      <span draggable="false" class="element disable-select">
         {{#if isCollapsed}}
-          <span class="glyphicon glyphicon-plus-sign"></span>
+          <span class="glyphicon glyphicon-plus-sign show-node"></span>
         {{else}}
-          <span class="glyphicon glyphicon-minus-sign"></span>
+          <span class="glyphicon glyphicon-minus-sign hide-node"></span>
         {{/if}}
 
         {{title}}

@@ -169,7 +169,10 @@ Template.Document.helpers({
     return Session.get('nodeInFocus') === Session.get('mainDocument');
   },
 
-  isChapter: function() {
+  isChapterOrArtificial: function() {
+    if(Session.get('artificialNode'))
+      return true;
+
     var doc = GV.collections.Nodes.findOne({ _id: Session.get('nodeInFocus') });
 
     return doc && (doc.nodeType === 'chapter');

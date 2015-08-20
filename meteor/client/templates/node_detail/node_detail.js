@@ -54,6 +54,26 @@ Template.NodeDetail.helpers({
     return Session.get("inlineEditNode") === nodeId;
   },
 
+  artificialData: function() {
+    var meta = Session.get('artificialNode');
+    if(meta) {
+      if(meta.type === 'tag') {
+        return { children: GV.collections.Nodes.find({ tags: meta.value }) };
+      } else if(meta.type === 'reference') {
+        return { children: GV.collections.Nodes.find({ references: meta.value }) };
+      }
+      return null;
+    } else {
+      return null;
+    }
+  },
+
+  artificialValue: function() {
+    var meta = Session.get('artificialNode');
+
+    return meta.value;
+  }
+
 });
 
 

@@ -39,19 +39,28 @@ Edit information about a Node.
 
   {{#unless isTemplate}}
     {{!-- A list of the media nodes linked to this chapter node --}}
-    {{#if $eq node.nodeType "chapter"}}
-      {{#if node.title}}<h3 style="margin-top:0;">{{node.title}}</h3>{{/if}}
+    {{#if $.Session.get 'artificialNode'}}
+      {{#if artificialValue}}<h3 style="margin-top:0;">{{artificialValue}}</h3>{{/if}}
       {{#if $.Session.equals "showMediaNodesView" true}}
-        {{> MediaNodesTable class="media-nodes-view" doc=node headerText=""}}
+        {{> MediaNodesTable class="media-nodes-view" doc=artificialData headerText=""}}
       {{else}}
         <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Vis Informasjonselementer</b></div>
       {{/if}}
     {{else}}
-      {{#if isEditing node}}
-        {{> UpdateNodeForm node=node hideButtons=true showEditWarning=true}}
-      {{else}}
+      {{#if $eq node.nodeType "chapter"}}
         {{#if node.title}}<h3 style="margin-top:0;">{{node.title}}</h3>{{/if}}
-        {{> NodeDescription node}}
+        {{#if $.Session.equals "showMediaNodesView" true}}
+          {{> MediaNodesTable class="media-nodes-view" doc=node headerText=""}}
+        {{else}}
+          <div class="well well-sm block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-down" style="margin-right:5px;"></span> <b>Vis Informasjonselementer</b></div>
+        {{/if}}
+      {{else}}
+        {{#if isEditing node}}
+          {{> UpdateNodeForm node=node hideButtons=true showEditWarning=true}}
+        {{else}}
+          {{#if node.title}}<h3 style="margin-top:0;">{{node.title}}</h3>{{/if}}
+          {{> NodeDescription node}}
+        {{/if}}
       {{/if}}
     {{/if}}
   {{/unless}}
@@ -109,7 +118,7 @@ A Table that renders the Media Nodes available in a particular Chapter Node.
 <template name="MediaNodesTable">
   <div class="panel panel-default nodes-table {{class}}">
     <!-- Default panel contents -->
-    <div class="panel-heading block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-up" style="margin-right:5px;"></span> <b>{{headerText}}</b> <button type="button" class="btn btn-success btn-xs pull-right add-media-node"><span class="glyphicon glyphicon-plus"></span> informasjonselement</button></div>
+    <div class="panel-heading block-hider toggle-media-nodes-view"><span class="glyphicon glyphicon-menu-up" style="margin-right:5px;"></span> <b>{{headerText}}</b>{{#unless $.Session.get 'artificialNode'}} <button type="button" class="btn btn-success btn-xs pull-right add-media-node"><span class="glyphicon glyphicon-plus"></span> informasjonselement</button>{{/unless}}</div>
 
     <!-- Table -->
     <table class="table table-striped table-hover table-condensed">
@@ -123,7 +132,7 @@ A Table that renders the Media Nodes available in a particular Chapter Node.
                 <span class="caret"></span>
               </button>
               <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="media-node-dropdown">
-                <li role="presentation" class="{{hasMarkedNodes}}"><a role="menuitem" tabindex="-1" href="#" class="move-multiple"><span class="glyphicon glyphicon-move"></span> Flytt markerte</a></li>
+                {{#unless $.Session.get 'artificialNode'}}<li role="presentation" class="{{hasMarkedNodes}}"><a role="menuitem" tabindex="-1" href="#" class="move-multiple"><span class="glyphicon glyphicon-move"></span> Flytt markerte</a></li>{{/unless}}
                 <li role="presentation" class="{{hasMarkedNodes}}"><a role="menuitem" tabindex="-1" href="#" class="delete-multiple"><span class="glyphicon glyphicon-remove"></span> Slett markerte</a></li>
               </ul>
             </div>
@@ -131,14 +140,25 @@ A Table that renders the Media Nodes available in a particular Chapter Node.
         </tr>
       </thead>
       <tbody>
-        {{#each getChildren}}
-          {{> ViewMediaNode}}
+        {{#if $.Session.get 'artificialNode'}}
+          {{#each doc.children}}
+            {{> ViewMediaNode}}
+          {{else}}
+            <tr>
+              <td></td>
+              <td><em>Ingen informasjonselementer knyttet til det valgte kapitlet/underkapitlet.</em></td>
+            </tr>
+          {{/each}}
         {{else}}
-          <tr>
-            <td></td>
-            <td><em>Ingen informasjonselementer knyttet til det valgte kapitlet/underkapitlet.</em></td>
-          </tr>
-        {{/each}}
+          {{#each getChildren}}
+            {{> ViewMediaNode}}
+          {{else}}
+            <tr>
+              <td></td>
+              <td><em>Ingen informasjonselementer knyttet til det valgte kapitlet/underkapitlet.</em></td>
+            </tr>
+          {{/each}}
+        {{/if}}
       </tbody>
     </table>
   </div>
