@@ -271,6 +271,11 @@ Template.MediaNodesTable.events({
     event.preventDefault();
   },
 
+  'dragstart .row-item': function(event, tmpl) {
+    event.stopPropagation();
+    GV.dragElement = event.currentTarget;
+  },
+
   'click .add-media-node': function(event, tmpl) {
     event.preventDefault();
     event.stopPropagation();

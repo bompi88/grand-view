@@ -20,7 +20,7 @@
 "use strict";
 
 // The selected element to drag
-var dragElement;
+GV.dragElement = null;
 
 Session.set("showMovePopover", false);
 
@@ -256,6 +256,11 @@ Template.Tree.events({
     event.preventDefault();
     event.stopPropagation();
 
+    var data = Blaze.getData(GV.dragElement.parentNode);
+
+    if(!Session.get('showMediaNodesView') && data.nodeType === 'media')
+      return false;
+
     $(event.currentTarget).addClass("slot-visible");
   },
 
@@ -275,14 +280,17 @@ Template.Tree.events({
 
     var slot = event.currentTarget;
     var target = slot.parentNode.parentNode;
-    var dragNode = dragElement.parentNode.parentNode;
+    var dragNode = GV.dragElement.parentNode.parentNode;
     var prevNode = $(dragNode).parent().parent();
 
     $(slot).removeClass("slot-visible");
 
     var parent = target.parentNode;
     var dataTarget = Blaze.getData(parent);
-    var data = Blaze.getData(dragElement.parentNode);
+    var data = Blaze.getData(GV.dragElement.parentNode);
+
+    if(!Session.get('showMediaNodesView') && data.nodeType === 'media')
+      return false;
 
     var l;
     if (dataTarget.level >= 0)
@@ -330,11 +338,11 @@ Template.Tree.events({
     if ($(event.currentTarget).hasClass('hover'))
       $(event.currentTarget).removeClass('hover');
 
-    if ($(event.currentTarget)[0] === $(dragElement)[0])
+    if ($(event.currentTarget)[0] === $(GV.dragElement)[0])
       return false;
 
     var dataTarget = Blaze.getData(event.currentTarget);
-    var data = Blaze.getData(dragElement);
+    var data = Blaze.getData(GV.dragElement);
     var parent = event.currentTarget.parentNode;
 
     var l = dataTarget.level + 1;
@@ -372,8 +380,11 @@ Template.Tree.events({
       $(event.currentTarget).removeClass('hover');
 
     var dataTarget = Blaze.getData(event.currentTarget);
-    var data = Blaze.getData(dragElement);
+    var data = Blaze.getData(GV.dragElement);
     var rootNode = event.currentTarget.parentNode;
+
+    if(data.nodeType === 'media')
+      return false;
 
     // Update the node position
     GV.collections.Nodes.update({
@@ -429,7 +440,7 @@ Template.Tree.events({
 
     // Store the node that is being dragged for a
     // later reference.
-    dragElement = event.currentTarget;
+    GV.dragElement = event.currentTarget;
 
     // Unselect all selected nodes
     $('li span').removeClass('selected');
