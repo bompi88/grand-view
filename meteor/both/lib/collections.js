@@ -17,7 +17,7 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-"use strict";
+'use strict';
 
 // -- Document collections -----------------------------------------------------
 
@@ -29,13 +29,14 @@ GV.collections = {
   Settings: new Mongo.Collection('settings')
 };
 
+// Attach the soft removal methods to the documents collection
 GV.collections.Documents.attachBehaviour('softRemovable');
 
 // -- File storage -------------------------------------------------------------
 
-GV.collections.Files = new FS.Collection("files", {
-  stores: [new FS.Store.FileSystem("filesStore", {
-    path: GV.basePath + "files"
+GV.collections.Files = new FS.Collection('files', {
+  stores: [new FS.Store.FileSystem('filesStore', {
+    path: GV.basePath + 'files'
   })]
 });
 

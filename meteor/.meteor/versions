@@ -70,7 +70,6 @@ mobile-status-bar@1.0.3
 momentjs:moment@2.10.6
 mongo@1.1.0
 mongo-livedata@1.0.8
-mrt:fake@0.3.4
 natestrauser:animate-css@3.2.6
 observe-sequence@1.0.6
 ordered-dict@1.0.3

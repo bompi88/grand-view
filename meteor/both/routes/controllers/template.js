@@ -17,7 +17,7 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-"use strict";
+'use strict';
 
 /**
  * View Templates Route Controller
@@ -33,7 +33,7 @@ GV.routeCtrls.Templates = RouteController.extend({
       templates: GV.collections.Documents.find({
         template: true
       }, {
-        sort: _.defaults(Session.get("templateSort") || {}, {
+        sort: _.defaults(Session.get('templateSort') || {}, {
           lastChanged: -1
         })
       })
@@ -41,10 +41,12 @@ GV.routeCtrls.Templates = RouteController.extend({
   },
 
   onAfterAction: function() {
-    if(GV.clippy && (GV.clippy._hidden === false)) {
+    // Hide assistant
+    if (GV.clippy && (GV.clippy._hidden === false)) {
       GV.clippy.hide();
     }
-    
+
+    // Reset table selections
     GV.selectedCtrl.resetAll();
   }
 

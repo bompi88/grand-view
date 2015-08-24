@@ -229,6 +229,14 @@ Meteor.methods({
         }
       });
     });
+  },
+
+  removeTag: function(tag) {
+    GV.collections.Tags.remove({ value: tag });
+  },
+
+  removeReference: function(reference) {
+    GV.collections.References.remove({ value: reference });
   }
 
 });

@@ -17,7 +17,7 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-"use strict";
+'use strict';
 
 GV.schemas.Nodes = new SimpleSchema({
 
@@ -31,12 +31,11 @@ GV.schemas.Nodes = new SimpleSchema({
   title: {
     type: String,
     label: function() {
-      return "Navn på informasjonselement";
+      return 'Navn på informasjonselement';
     },
     optional: true,
-    max: 100,
     autoform: {
-      placeholder: "schemaLabel"
+      placeholder: 'schemaLabel'
     }
   },
 
@@ -44,11 +43,11 @@ GV.schemas.Nodes = new SimpleSchema({
   description: {
     type: String,
     label: function() {
-      return "Informasjonselement";
+      return 'Informasjonselement';
     },
     optional: true,
     autoform: {
-      placeholder: "schemaLabel"
+      placeholder: 'schemaLabel'
     }
   },
 
@@ -56,12 +55,12 @@ GV.schemas.Nodes = new SimpleSchema({
   tags: {
     type: [String],
     label: function() {
-      return "Nøkkelord";
+      return 'Nøkkelord';
     },
     optional: true,
     autoform: {
-      placeholder: "schemaLabel",
-      type: "selectize",
+      placeholder: 'schemaLabel',
+      type: 'selectize',
       afFieldInput: {
         maxCount: 20,
         multiple: true,
@@ -77,8 +76,8 @@ GV.schemas.Nodes = new SimpleSchema({
 
             if (input && (input.length > 100)) {
               Notifications.error(
-                "Feil ved innsetting av nøkkelord",
-                "Nøkkelordet er for langt, og derfor over 80 tegn."
+                'Feil ved innsetting av nøkkelord',
+                'Nøkkelordet er for langt, og derfor over 80 tegn.'
               );
 
               return false;
@@ -95,6 +94,26 @@ GV.schemas.Nodes = new SimpleSchema({
             };
           },
 
+          onDropdownOpen: function() {
+
+            $('.selectize-dropdown-content').on('mousedown', 'div[data-selectable] .btn-delete-tag', function(event) {
+              event.preventDefault();
+              event.stopPropagation();
+
+              var tagEl = $(event.currentTarget).parent();
+              var tag = tagEl.data('value');
+
+              var selectizeEl = $('select[name="tags"]');
+              var selectize = selectizeEl && selectizeEl[0].selectize;
+
+              selectize.removeOption(tag);
+              selectize.refreshOptions();
+
+              Meteor.call('removeTag', tag);
+
+            });
+          },
+
           // How the tags suggestions are rendered
           render: {
             option: function(item, escape) {
@@ -102,7 +121,7 @@ GV.schemas.Nodes = new SimpleSchema({
                 '<span class="title">' +
                 '<span class="name">' + item.text + '</span>' +
                 '</span>' +
-                //'<button type="button" id="btn-editDoc" class="btn btn-success btn-sm pull-right">Slett</button>'
+                '<span class="glyphicon glyphicon-remove btn-delete btn-delete-tag pull-right" aria-hidden="true" title="Slett forslag"></span> ' +
                 '</div>';
             },
             option_create: function(data, escape) {
@@ -149,12 +168,12 @@ GV.schemas.Nodes = new SimpleSchema({
   references: {
     type: [String],
     label: function() {
-      return "Kilder";
+      return 'Kilder';
     },
     optional: true,
     autoform: {
-      placeholder: "schemaLabel",
-      type: "selectize",
+      placeholder: 'schemaLabel',
+      type: 'selectize',
       afFieldInput: {
         maxCount: 20,
         multiple: true,
@@ -170,8 +189,8 @@ GV.schemas.Nodes = new SimpleSchema({
 
             if (input && (input.length > 150)) {
               Notifications.error(
-                "Feil ved innsetting av kilde",
-                "Kilden er for lang, og det vil si at den er over 150 tegn."
+                'Feil ved innsetting av kilde',
+                'Kilden er for lang, og det vil si at den er over 150 tegn.'
               );
 
               return false;
@@ -188,6 +207,26 @@ GV.schemas.Nodes = new SimpleSchema({
             };
           },
 
+          onDropdownOpen: function() {
+
+            $('.selectize-dropdown-content').on('mousedown', 'div[data-selectable] .btn-delete-reference', function(event) {
+              event.preventDefault();
+              event.stopPropagation();
+
+              var referenceEl = $(event.currentTarget).parent();
+              var reference = referenceEl.data('value');
+
+              var selectizeEl = $('select[name="references"]');
+              var selectize = selectizeEl && selectizeEl[0].selectize;
+
+              selectize.removeOption(reference);
+              selectize.refreshOptions();
+
+              Meteor.call('removeReference', reference);
+
+            });
+          },
+
           // How the tags suggestions are rendered
           render: {
             option: function(item, escape) {
@@ -195,6 +234,7 @@ GV.schemas.Nodes = new SimpleSchema({
                 '<span class="title">' +
                 '<span class="name">' + item.text + '</span>' +
                 '</span>' +
+                '<span class="glyphicon glyphicon-remove btn-delete btn-delete-reference pull-right" aria-hidden="true" title="Slett forslag"></span> ' +
                 '</div>';
             },
             option_create: function(data, escape) {
@@ -241,7 +281,7 @@ GV.schemas.Nodes = new SimpleSchema({
     type: String,
     optional: true,
     autoform: {
-      placeholder: "schemaLabel"
+      placeholder: 'schemaLabel'
     }
   },
 
@@ -313,15 +353,15 @@ GV.schemas.Nodes = new SimpleSchema({
 
 // TODO: update these schema messages to represent the actual schema
 GV.schemas.Nodes.messages({
-  // "required email": "Epost må fylles inn",
-  // "required message": "Melding må vedlegges",
-  // "required title": "Emnefeltet må fylles inn",
-  // "maxString name": "Navnet må ikke overskride [max] tegn",
-  // "minString title": "Emnefeltet må inneholde minimum [min] tegn",
-  // "minString message": "Meldingen må inneholde minimum [min] tegn",
-  // maxString: "[label] må ikke overskride [max] tegn",
-  // expectedString: "[label] må inneholde en streng",
-  // "regEx email": "Dette er ikke en gyldig epost"
+  // 'required email': 'Epost må fylles inn',
+  // 'required message': 'Melding må vedlegges',
+  // 'required title': 'Emnefeltet må fylles inn',
+  // 'maxString name': 'Navnet må ikke overskride [max] tegn',
+  // 'minString title': 'Emnefeltet må inneholde minimum [min] tegn',
+  // 'minString message': 'Meldingen må inneholde minimum [min] tegn',
+  // maxString: '[label] må ikke overskride [max] tegn',
+  // expectedString: '[label] må inneholde en streng',
+  // 'regEx email': 'Dette er ikke en gyldig epost'
 });
 
 // Attach the schema to the collection

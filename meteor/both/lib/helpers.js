@@ -20,6 +20,10 @@
 "use strict";
 
 GV.helpers = _.extend(GV.helpers, {
+  /**
+   * Returns true if the current document or the document with the specified id
+   * is a template.
+   */
   isTemplate: function(id) {
     if (id) {
       var doc = GV.collections.Documents.findOne({ _id: id });

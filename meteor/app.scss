@@ -66,6 +66,14 @@ ul.notifications {
   }
 }
 
+.btn-delete {
+  color: darken(#fff, 15%);
+
+  &:hover {
+    color: darken(red, 15%);
+  }
+}
+
 .alert.alert-success.status-bar {
   box-shadow: 0 0 30px $box-shadow-color;
   left: calc(50% - 150px);

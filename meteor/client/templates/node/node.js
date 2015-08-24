@@ -180,33 +180,25 @@ Template.NodeLevel.rendered = function() {
       // Edit button
       'edit-node': function(t) {
         var elData = Blaze.getData(t);
+        
         if (elData && elData._id) {
+
           Session.set('editChapterNodeName', elData._id);
+
           Meteor.defer(function() {
             var el = $('.tree li[data-id="' + elData._id + '"] > .element .node-text .node-name');
 
             if(el) {
               var parent = el.parent().parent();
               parent.css('text-overflow', 'clip');
-              console.log(parent);
 
               el.focus();
               document.execCommand('selectAll', false, null);
 
               el.blur(function(e) {
-                // var textNode = e.currentTarget.firstChild;
-                //
-                // var caret = 0; // insert caret after the 10th character say
-                // var range = document.createRange();
-                // range.setStart(textNode, caret);
-                // range.setEnd(textNode, caret);
-                // var sel = window.getSelection();
-                // sel.removeAllRanges();
-                // sel.addRange(range);
-                // window.scroll(0,0);
-                $(e.currentTarget).scroll(0,0);
                 Session.set('editChapterNodeName', null);
 
+                parent.scrollLeft(0);
                 parent.css('text-overflow', 'ellipsis');
               });
 
@@ -217,6 +209,8 @@ Template.NodeLevel.rendered = function() {
                   GV.collections.Nodes.update({ _id: elData._id }, { $set: { title: text }});
 
                   Session.set('editChapterNodeName', null);
+
+                  parent.scrollLeft(0);
                   parent.css('text-overflow', 'ellipsis');
 
                   return false;

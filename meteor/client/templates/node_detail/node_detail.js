@@ -100,6 +100,10 @@ Template.MediaNodesTable.helpers({
     var children = GV.collections.Nodes.find({
       parent: Session.get('nodeInFocus'),
       nodeType: "media"
+    }, {
+      sort: {
+        position: 1
+      }
     });
 
     Template.instance().currentChildren = children.fetch();

@@ -17,7 +17,7 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-"use strict";
+'use strict';
 
 /**
  * WorkArea Route Controller
@@ -25,7 +25,8 @@
 GV.routeCtrls.WorkArea = RouteController.extend({
 
   onAfterAction: function() {
-    if(GV.clippy && (GV.clippy._hidden === false)) {
+    // Hide the assistant
+    if (GV.clippy && (GV.clippy._hidden === false)) {
       GV.clippy.hide();
     }
 
@@ -45,7 +46,7 @@ GV.routeCtrls.WorkArea = RouteController.extend({
 GV.routeCtrls.Trash = RouteController.extend({
 
   subscriptions: function() {
-    return [ Meteor.subscribe('removedDocuments'), Meteor.subscribe('removedTemplates')];
+    return [Meteor.subscribe('removedDocuments'), Meteor.subscribe('removedTemplates')];
   },
 
   data: function() {
@@ -55,7 +56,7 @@ GV.routeCtrls.Trash = RouteController.extend({
           template: null,
           removed: true
         }, {
-          sort: _.defaults(Session.get("templateSort") || {}, {
+          sort: _.defaults(Session.get('templateSort') || {}, {
             removedAt: -1
           })
         }),
@@ -63,7 +64,7 @@ GV.routeCtrls.Trash = RouteController.extend({
           template: true,
           removed: true
         }, {
-          sort: _.defaults(Session.get("templateSort") || {}, {
+          sort: _.defaults(Session.get('templateSort') || {}, {
             removedAt: -1
           })
         })
@@ -72,10 +73,12 @@ GV.routeCtrls.Trash = RouteController.extend({
   },
 
   onAfterAction: function() {
-    if(GV.clippy && (GV.clippy._hidden === false)) {
+    // Hide the assistant
+    if (GV.clippy && (GV.clippy._hidden === false)) {
       GV.clippy.hide();
     }
-    
+
+    //  Reset table selections
     GV.selectedCtrl.resetAll();
   }
 

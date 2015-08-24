@@ -17,7 +17,7 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-"use strict";
+'use strict';
 
 /**
  * Edit Document Route Controller
@@ -28,7 +28,8 @@ GV.routeCtrls.Document = RouteController.extend({
     return [
       Meteor.subscribe('documentById', this.params._id),
       Meteor.subscribe('nodesByDoc', this.params._id),
-      Meteor.subscribe('tags'), Meteor.subscribe('references')
+      Meteor.subscribe('tags'),
+      Meteor.subscribe('references')
     ];
   },
 
@@ -39,27 +40,30 @@ GV.routeCtrls.Document = RouteController.extend({
   },
 
   onAfterAction: function() {
-    if(GV.clippy && (GV.clippy._hidden === false)) {
+    // Hide the assistant
+    if (GV.clippy && (GV.clippy._hidden === false)) {
       GV.clippy.hide();
     }
 
-    if(this.ready() && (Session.get('mainDocument') !== this.params._id)) {
+    // If ready and document not already opened
+    if (this.ready() && (Session.get('mainDocument') !== this.params._id)) {
 
-      GV.tabs.reset();
       GV.tags.reset();
+      GV.references.reset();
 
       Session.set('mainDocument', this.params._id);
       Session.set('nodeInFocus', this.params._id);
-      Session.set("file", null);
-      Session.set("uploadStopped", false);
-      Session.set("structureState", "tree");
-      Session.set("showMediaNodes", false);
-      Session.set("artificialNode", null);
+      Session.set('file', null);
+      Session.set('uploadStopped', false);
+      Session.set('structureState', 'tree');
+      Session.set('showMediaNodes', false);
+      Session.set('artificialNode', null);
 
+      // Select the root node in tree view
       Meteor.defer(function() {
         $('li.node span')
           .removeClass('selected');
-        $("li.root > span")
+        $('li.root > span')
           .addClass('selected');
       });
     }
@@ -77,13 +81,14 @@ GV.routeCtrls.Documents = RouteController.extend({
   },
 
   data: function() {
+    // Find all documents which are not templates, sorted
     return {
       documents: GV.collections.Documents.find({
         template: {
           $ne: true
         }
       }, {
-        sort: _.defaults(Session.get("documentSort") || {}, {
+        sort: _.defaults(Session.get('documentSort') || {}, {
           lastChanged: -1
         })
       })
@@ -91,10 +96,12 @@ GV.routeCtrls.Documents = RouteController.extend({
   },
 
   onAfterAction: function() {
-    if(GV.clippy && (GV.clippy._hidden === false)) {
+    // Hide our assistant
+    if (GV.clippy && (GV.clippy._hidden === false)) {
       GV.clippy.hide();
     }
 
+    // Reset the table selections
     GV.selectedCtrl.resetAll();
   }
 

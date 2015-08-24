@@ -17,7 +17,7 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-"use strict";
+'use strict';
 
 GV.schemas.Documents = new SimpleSchema({
 
@@ -32,15 +32,15 @@ GV.schemas.Documents = new SimpleSchema({
     type: String,
     label: function() {
       if(GV.helpers.isTemplate()) {
-        return "Navn på mal";
+        return 'Navn på mal';
       } else {
-        return "Dokumenttittel";
+        return 'Dokumenttittel';
       }
     },
     optional: false,
     max: 100,
     autoform: {
-      placeholder: "schemaLabel"
+      placeholder: 'schemaLabel'
     }
   },
 
@@ -49,9 +49,9 @@ GV.schemas.Documents = new SimpleSchema({
     type: String,
     label: function() {
       if(GV.helpers.isTemplate()) {
-        return "Beskrivelse av mal";
+        return 'Beskrivelse av mal';
       } else {
-        return "Prosjektbeskrivelse";
+        return 'Prosjektbeskrivelse';
       }
     },
     optional: true,
@@ -59,9 +59,9 @@ GV.schemas.Documents = new SimpleSchema({
       rows: 6,
       placeholder: function() {
         if(GV.helpers.isTemplate()) {
-          return "Skriv inn en kortfattet beskrivelse av malen";
+          return 'Skriv inn en kortfattet beskrivelse av malen';
         } else {
-          return "Skriv inn en kortfattet beskrivelse av prosjektet";
+          return 'Skriv inn en kortfattet beskrivelse av prosjektet';
         }
       }
     }
@@ -71,11 +71,11 @@ GV.schemas.Documents = new SimpleSchema({
   templateBasis: {
     type: String,
     label: function() {
-      return "Dokumentmal";
+      return 'Dokumentmal';
     },
     optional: true,
     autoform: {
-      type: "select",
+      type: 'select',
       options: function() {
         if (Meteor.isClient) {
           return GV.collections.Documents.find({
@@ -157,15 +157,15 @@ GV.schemas.Documents = new SimpleSchema({
 
 // TODO: update these schema messages to represent the actual schema
 GV.schemas.Documents.messages({
-  // "required email": "Epost må fylles inn",
-  // "required message": "Melding må vedlegges",
-  // "required title": "Emnefeltet må fylles inn",
-  // "maxString name": "Navnet må ikke overskride [max] tegn",
-  // "minString title": "Emnefeltet må inneholde minimum [min] tegn",
-  // "minString message": "Meldingen må inneholde minimum [min] tegn",
-  // maxString: "[label] må ikke overskride [max] tegn",
-  // expectedString: "[label] må inneholde en streng",
-  // "regEx email": "Dette er ikke en gyldig epost"
+  // 'required email': 'Epost må fylles inn',
+  // 'required message': 'Melding må vedlegges',
+  // 'required title': 'Emnefeltet må fylles inn',
+  // 'maxString name': 'Navnet må ikke overskride [max] tegn',
+  // 'minString title': 'Emnefeltet må inneholde minimum [min] tegn',
+  // 'minString message': 'Meldingen må inneholde minimum [min] tegn',
+  // maxString: '[label] må ikke overskride [max] tegn',
+  // expectedString: '[label] må inneholde en streng',
+  // 'regEx email': 'Dette er ikke en gyldig epost'
 });
 
 // Attach the schema to the collection
