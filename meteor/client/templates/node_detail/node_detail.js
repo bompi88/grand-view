@@ -280,7 +280,7 @@ Template.MediaNodesTable.events({
 
   'dragend .row-item': function(event, tmpl) {
     GV.dragElement.css('display', 'table-row');
-    //GV.dragElement.parent().remove(placeholder);
+    placeholder.detach();
 
   },
 
@@ -292,17 +292,10 @@ Template.MediaNodesTable.events({
 
     if(td.hasClass("node-title"))
       td = td.parent();
-
-    console.log(td.attr('class'));
+      
     if(td.hasClass("row-item")) {
       GV.over = td.parent();
-      console.log("OVER:");
-      console.log(GV.over);
-
-      var table = GV.over.parent();
-      table.insertBefore(placeholder, GV.over);
-      console.log(placeholder)
-      console.log(table)
+      placeholder.insertBefore(GV.over);
     } else {
       return;
     }
