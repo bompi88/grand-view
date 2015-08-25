@@ -241,6 +241,8 @@ Template.GeneralInfo.events({
 });
 
 
+var placeholder = $(Blaze.toHTML(Template.PlaceholderRow));
+
 Template.MediaNodesTable.events({
 
   'click .media-nodes-view .checkbox-master': function(event, tmpl) {
@@ -269,6 +271,41 @@ Template.MediaNodesTable.events({
 
   'click .row-item': function(event, tmpl) {
     event.preventDefault();
+  },
+
+  'dragstart .row-item': function(event, tmpl) {
+    event.stopPropagation();
+    GV.dragElement = $(event.currentTarget).parent();
+  },
+
+  'dragend .row-item': function(event, tmpl) {
+    GV.dragElement.css('display', 'table-row');
+    //GV.dragElement.parent().remove(placeholder);
+
+  },
+
+  'dragover .row-item': function(event, tmpl) {
+    event.preventDefault();
+    GV.dragElement.css('display', 'none');
+
+    var td = $(event.target);
+
+    if(td.hasClass("node-title"))
+      td = td.parent();
+
+    console.log(td.attr('class'));
+    if(td.hasClass("row-item")) {
+      GV.over = td.parent();
+      console.log("OVER:");
+      console.log(GV.over);
+
+      var table = GV.over.parent();
+      table.insertBefore(placeholder, GV.over);
+      console.log(placeholder)
+      console.log(table)
+    } else {
+      return;
+    }
   },
 
   'click .add-media-node': function(event, tmpl) {
