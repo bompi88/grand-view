@@ -92,6 +92,12 @@ img.mfp-img {
   }
 }
 
+.table-row .node-title {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .node-list {
   margin-left: 0;
   padding: 0;
@@ -144,6 +150,15 @@ hr {
 
 .row-item span {
   break-word: break-all;
+}
+
+.table-row {
+  &:hover {
+    cursor: default;
+    > td {
+      color: #008cba;
+    }
+  }
 }
 
 .table-row:nth-child(odd) {

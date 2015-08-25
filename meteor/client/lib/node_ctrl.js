@@ -399,32 +399,34 @@ GV.nodeCtrl = {
    * Checks whether a drop target is inside the dragged node itself
    */
   insideItself: function(drag, target) {
+    if(drag.nodeType !== 'media') {
 
-    var dragSectionLabel = drag.prevSection;
-    var targetSectionLabel = target.prevSection;
+      var dragSectionLabel = drag.prevSection;
+      var targetSectionLabel = target.prevSection;
 
-    if (!targetSectionLabel)
-      return false;
+      if (!targetSectionLabel)
+        return false;
 
-    var dragLabels = dragSectionLabel.split(".");
-    var targetLabels = targetSectionLabel.split(".");
+      var dragLabels = dragSectionLabel.split(".");
+      var targetLabels = targetSectionLabel.split(".");
 
-    if (targetLabels >= dragLabels) {
-      var numEquals = 0;
+      if (targetLabels >= dragLabels) {
+        var numEquals = 0;
 
-      for (var i = 0; i < dragLabels.length; i++) {
+        for (var i = 0; i < dragLabels.length; i++) {
 
-        if (dragLabels[i] === targetLabels[i]) {
-          numEquals++;
+          if (dragLabels[i] === targetLabels[i]) {
+            numEquals++;
+          }
         }
-      }
 
-      if (numEquals === dragLabels.length) {
-        Notifications.error(
-          "Feil ved flytting av kapittelelement",
-          "Du kan ikke flytte et kapittelelement inn i sitt eget deltre."
-        );
-        return true;
+        if (numEquals === dragLabels.length) {
+          Notifications.error(
+            "Feil ved flytting av kapittelelement",
+            "Du kan ikke flytte et kapittelelement inn i sitt eget deltre."
+          );
+          return true;
+        }
       }
     }
 

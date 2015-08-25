@@ -292,7 +292,7 @@ Template.MediaNodesTable.events({
 
     if(td.hasClass("node-title"))
       td = td.parent();
-      
+
     if(td.hasClass("row-item")) {
       GV.over = td.parent();
       placeholder.insertBefore(GV.over);
