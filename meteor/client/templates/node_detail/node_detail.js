@@ -241,7 +241,10 @@ Template.GeneralInfo.events({
 });
 
 
-var placeholder = $(Blaze.toHTML(Template.PlaceholderRow));
+var placeholder = $(Blaze.toHTML(Template.PlaceholderRow))[0];
+var nodePlacement = null;
+var hoverPlaceholder = null;
+var tableBody = null;
 
 Template.MediaNodesTable.events({
 
@@ -275,30 +278,85 @@ Template.MediaNodesTable.events({
 
   'dragstart .row-item': function(event, tmpl) {
     event.stopPropagation();
-    GV.dragElement = $(event.currentTarget).parent();
+
+    hoverPlaceholder = false;
+
+    GV.dragElement = event.currentTarget;
+    GV.dragElementRow = event.currentTarget.parentNode;
+    tableBody = GV.dragElementRow.parentNode;
   },
 
   'dragend .row-item': function(event, tmpl) {
-    GV.dragElement.css('display', 'table-row');
-    placeholder.detach();
+    GV.dragElementRow.style.display = 'table-row';
+    tableBody.removeChild(placeholder);
 
+    if(hoverPlaceholder) {
+      var node =  Blaze.getData(GV.dragElement);
+      var to = Blaze.getData(GV.over).position;
+      var from = node.position;
+
+      if(nodePlacement === "after") to++;
+
+      Meteor.call('updateNodePosition', from, to, node);
+
+    } else {
+      return;
+    }
   },
 
   'dragover .row-item': function(event, tmpl) {
     event.preventDefault();
-    GV.dragElement.css('display', 'none');
+    GV.dragElementRow.style.display = 'none';
 
-    var td = $(event.target);
+    var td = event.target;
 
-    if(td.hasClass("node-title"))
-      td = td.parent();
+    if(td.className.indexOf("node-title") >= 0)
+      td = td.parentNode;
 
-    if(td.hasClass("row-item")) {
-      GV.over = td.parent();
-      placeholder.insertBefore(GV.over);
+    var tr = td.parentNode;
+
+    if(tr.className.indexOf('placeholder-hover') >= 0)
+      return;
+
+    if(td.className.indexOf("row-item") >= 0) {
+      GV.over = td;
+
+      var relY = event.originalEvent.clientY - tr.getBoundingClientRect().top;
+      var height = tr.offsetHeight / 2;
+
+      if(relY > height) {
+        nodePlacement = "after";
+        tr.parentNode.insertBefore(placeholder, tr.nextElementSibling);
+      } else if(relY < height) {
+        nodePlacement = "before";
+        tr.parentNode.insertBefore(placeholder, tr);
+      }
     } else {
       return;
     }
+
+  },
+
+  'dragenter .placeholder': function(event, tmpl) {
+    event.preventDefault();
+
+    var t = event.currentTarget;
+
+    hoverPlaceholder = true;
+
+    if(t.className.indexOf('placeholder-hover') === -1)
+      t.className = t.className + ' placeholder-hover';
+  },
+
+  'dragleave .placeholder': function(event, tmpl) {
+    event.preventDefault();
+
+    var t = event.currentTarget;
+
+    hoverPlaceholder = false;
+
+    if(t.className.indexOf('placeholder-hover') >= 0)
+      t.className = t.className.replace(/placeholder-hover/g, '');
   },
 
   'click .add-media-node': function(event, tmpl) {
@@ -400,7 +458,6 @@ Template.ViewMediaNode.events({
     event.preventDefault();
     event.stopPropagation();
 
-    console.log(this);
     var it = this;
 
     GV.helpers.showEditWarning(function() {

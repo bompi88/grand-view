@@ -30,18 +30,28 @@ $upload-field-border-color: darken($white, 30%);
 $block-hider-bg-color: darken($white, 10%);
 $block-hider-text-color-hover: $blue-base;
 
-$placeholder-background: darken(#fff, 15%);
+$placeholder-background: darken(#fff, 5%);
 
-tr.table-row.placeholder {
-  background: $placeholder-background;
+table tr.table-row.placeholder {
+  background-color: $placeholder-background;
+  border: 2px dashed darken($white, 20%);
+  color: #555;
+  font-size: 24px;
+  font-weight: 300;
+  height: 80px;
+  text-align: center;
+  
+  td {
+    vertical-align: middle;
+  }
 
-  &:hover {
-    background: darken($placeholder-background, 10%);
+  &.placeholder-hover {
+    background-color: darken($placeholder-background, 5%);
   }
 }
 
 .attachment-image img, img.mfp-img {
-  background-color: #fff;
+  background-color: $white;
 }
 
 img.mfp-img {

@@ -237,6 +237,46 @@ Meteor.methods({
 
   removeReference: function(reference) {
     GV.collections.References.remove({ value: reference });
+  },
+
+  updateNodePosition: function(from, to, node) {
+    GV.collections.Nodes.update({
+      parent: node.parent,
+      position: {
+        $gt: from
+      }
+    }, {
+      $inc: {
+        position: -1
+      }
+    }, {
+      multi: true,
+      upsert: false
+    });
+
+    GV.collections.Nodes.update({
+      parent: node.parent,
+      position: {
+        $gte: to
+      }
+    }, {
+      $inc: {
+        position: 1
+      }
+    }, {
+      multi: true,
+      upsert: false
+    });
+
+    GV.collections.Nodes.update({
+      _id: node._id
+    }, {
+      $set: {
+        position: to
+      }
+    }, {
+      upsert: false
+    });
   }
 
 });
