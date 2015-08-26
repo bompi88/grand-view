@@ -40,7 +40,7 @@ table tr.table-row.placeholder {
   font-weight: 300;
   height: 80px;
   text-align: center;
-  
+
   td {
     vertical-align: middle;
   }
@@ -162,11 +162,13 @@ hr {
   break-word: break-all;
 }
 
-.table-row {
-  &:hover {
-    cursor: default;
-    > td {
-      color: #008cba;
+.nodes-table {
+  .table-row {
+    &:hover {
+      cursor: default;
+      > td {
+        color: #008cba;
+      }
     }
   }
 }
