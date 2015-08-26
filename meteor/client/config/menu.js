@@ -3,13 +3,7 @@
 Meteor.startup(function() {
   var remote = require('remote');
   var Menu = remote.require('menu');
-  // var BrowserWindow = require('browser-window');
-  // var aboutWin = new BrowserWindow({ width: 300, height: 200, frame: false });
   var resources_root = require('fs').realpathSync( process.env.DIR || process.cwd() + '/../' );
-
-  var isWindows = function() {
-    return process.platform === 'win32';
-  };
 
   var CommandOrCtrl = function() {
     return (process.platform === 'darwin') ? 'Command' : 'Ctrl';
@@ -25,7 +19,7 @@ Meteor.startup(function() {
             var aboutWindow = window.open(
               'file:' + resources_root + '/about.html',
               'Om GrandView',
-              'width=300,height=280,resizable=0,scrollbars=0,status=0,Om GrandView'
+              'width=300, height=280, resizable=no, scrollbars=no, status=no, menubar=no, toolbar=no'
             );
             aboutWindow.focus();
           }
@@ -36,7 +30,16 @@ Meteor.startup(function() {
         {
           label: 'Skjul GrandView',
           accelerator: CommandOrCtrl() + '+H',
-          selector: 'hide:'
+          click: function() {
+            remote.getCurrentWindow().minimize();
+          }
+        },
+        {
+          label: 'Vis GrandView',
+          accelerator: CommandOrCtrl() + '+S',
+          click: function() {
+            remote.getCurrentWindow().show();
+          }
         },
         {
           type: 'separator'
@@ -44,7 +47,9 @@ Meteor.startup(function() {
         {
           label: 'Lukk GrandView',
           accelerator: CommandOrCtrl() + '+Q',
-          selector: 'terminate:'
+          click: function() {
+            remote.getCurrentWindow().close();
+          }
         },
       ]
     },
@@ -53,16 +58,16 @@ Meteor.startup(function() {
       submenu: [
         {
           label: 'Nytt dokument',
-          accelerator: CommandOrCtrl() + '+N',
+          accelerator: CommandOrCtrl() + '+D',
           click: function() {
             $('#template-modal').modal('show');
           }
         },
         {
           label: 'Ny mal',
-          accelerator: CommandOrCtrl() + '+T',
+          accelerator: CommandOrCtrl() + '+M',
           click: function() {
-
+            GV.documentsCtrl.createNewTemplate();
           }
         },
         {
@@ -92,20 +97,35 @@ Meteor.startup(function() {
         },
         {
           label: 'Importer mal',
-          accelerator: CommandOrCtrl() + '+I',
+          accelerator: CommandOrCtrl() + '+Shift+I',
           click: function() {
             GV.helpers.importDocument(true);
           }
         },
         {
           label: 'Eksporter mal',
-          accelerator: CommandOrCtrl() + '+E',
+          accelerator: CommandOrCtrl() + '+Shift+E',
           click: function() {
             var doc = Session.get('mainDocument');
             if(doc) {
               GV.helpers.exportDocument(doc, true);
             } else {
               Notifications.error('Eksportering mislyktes', 'Du må ha åpnet en mal for å kunne eksportere den.');
+            }
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Generer utskriftsdokument',
+          accelerator: CommandOrCtrl() + '+G',
+          click: function() {
+            var doc = Session.get('mainDocument');
+            if(doc) {
+              $('#create-printout').modal('show');
+            } else {
+              Notifications.error('Generering mislyktes', 'Du må ha åpnet et dokument for å kunne generere utskrift.');
             }
           }
         }
@@ -117,12 +137,16 @@ Meteor.startup(function() {
         {
           label: 'Angre',
           accelerator: CommandOrCtrl() + '+Z',
-          selector: 'undo:'
+          click: function() {
+            remote.getCurrentWindow().webContents.undo();
+          }
         },
         {
           label: 'Gjenta',
           accelerator: 'Shift+'+ CommandOrCtrl() + '+Z',
-          selector: 'redo:'
+          click: function() {
+            remote.getCurrentWindow().webContents.redo();
+          }
         },
         {
           type: 'separator'
@@ -130,22 +154,30 @@ Meteor.startup(function() {
         {
           label: 'Klipp ut',
           accelerator: CommandOrCtrl() + '+X',
-          selector: 'cut:'
+          click: function() {
+            remote.getCurrentWindow().webContents.cut();
+          }
         },
         {
           label: 'Kopier',
           accelerator: CommandOrCtrl() + '+C',
-          selector: 'copy:'
+          click: function() {
+            remote.getCurrentWindow().webContents.copy();
+          }
         },
         {
           label: 'Lim inn',
           accelerator: CommandOrCtrl() + '+V',
-          selector: 'paste:'
+          click: function() {
+            remote.getCurrentWindow().webContents.paste();
+          }
         },
         {
           label: 'Merk Alt',
           accelerator: CommandOrCtrl() + '+A',
-          selector: 'selectAll:'
+          click: function() {
+            remote.getCurrentWindow().webContents.selectAll();
+          }
         }
       ]
     },
@@ -158,42 +190,13 @@ Meteor.startup(function() {
           click: function() { remote.getCurrentWindow().reload(); }
         },
         {
-          label: 'Slå på utviklerverktøy',
+          label: 'Slå på/av utviklerverktøy',
           accelerator: 'Alt+' + CommandOrCtrl() + '+I',
           click: function() { remote.getCurrentWindow().toggleDevTools(); }
         },
       ]
-    },
-    {
-      label: 'Vindu',
-      submenu: [
-        {
-          label: 'Minimèr',
-          accelerator: CommandOrCtrl() + '+M',
-          selector: 'performMiniaturize:'
-        },
-        {
-          label: 'Lukk',
-          accelerator: CommandOrCtrl() + '+W',
-          selector: 'performClose:'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Vis alle vinduer',
-          selector: 'arrangeInFront:'
-        }
-      ]
     }
   ];
-
-  if(!isWindows()) {
-    template.push({
-      label: 'Help',
-      submenu: []
-    });
-  }
 
   var menu = Menu.buildFromTemplate(template);
 
