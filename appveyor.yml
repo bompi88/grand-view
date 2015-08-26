@@ -36,7 +36,6 @@ build_script:
   # - node scripts/download --platform=win32 --arch=x64
   # - node scripts/prepare --platform=win32 --arch=x64
   # - npm run clean:win:x64
-  
   - echo %platform%
   - npm run build:win:%platform%
   # Update node
