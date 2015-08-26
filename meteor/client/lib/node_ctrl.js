@@ -210,6 +210,9 @@ GV.nodeCtrl = {
       data = data.tree;
 
     if (data && data._id) {
+
+      var pos = GV.collections.Nodes.find({ parent: data._id }).count();
+
       // Insert a node at the given branch
       GV.collections.Nodes.insert({
           parent: data._id,
@@ -219,7 +222,7 @@ GV.nodeCtrl = {
                         null,
           userId: data.userId,
           lastChanged: new Date(),
-          position: -1,
+          position: pos,
           nodeType: type
         },
         function(error, nodeId) {
