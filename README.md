@@ -19,7 +19,7 @@ $ npm run dev
 ```
 
 ### Build and pack the App
-To build for windows platform do:
+To build for OS X platform do:
 ``` bash
 $ npm run build:osx # others: win, linux
 ```
