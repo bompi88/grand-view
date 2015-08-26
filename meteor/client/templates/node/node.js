@@ -180,45 +180,9 @@ Template.NodeLevel.rendered = function() {
       // Edit button
       'edit-node': function(t) {
         var elData = Blaze.getData(t);
-        
+
         if (elData && elData._id) {
-
-          Session.set('editChapterNodeName', elData._id);
-
-          Meteor.defer(function() {
-            var el = $('.tree li[data-id="' + elData._id + '"] > .element .node-text .node-name');
-
-            if(el) {
-              var parent = el.parent().parent();
-              parent.css('text-overflow', 'clip');
-
-              el.focus();
-              document.execCommand('selectAll', false, null);
-
-              el.blur(function(e) {
-                Session.set('editChapterNodeName', null);
-
-                parent.scrollLeft(0);
-                parent.css('text-overflow', 'ellipsis');
-              });
-
-              el.keypress(function(e){
-                if(e.which === 13) {
-                  var text = e.currentTarget.innerText;
-
-                  GV.collections.Nodes.update({ _id: elData._id }, { $set: { title: text }});
-
-                  Session.set('editChapterNodeName', null);
-
-                  parent.scrollLeft(0);
-                  parent.css('text-overflow', 'ellipsis');
-
-                  return false;
-                }
-              });
-            }
-          });
-
+          GV.nodeCtrl.renameNode(elData._id);
         }
       }
     }

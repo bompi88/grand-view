@@ -258,6 +258,8 @@ GV.nodeCtrl = {
                   if (el && el.length)
                     el.addClass('selected');
 
+                  GV.nodeCtrl.renameNode(nodeId);
+
                   if (!noRedirect) {
                     GV.tabs.setDummyTab(nodeId);
                     Session.set('nodeInFocus', nodeId);
@@ -432,6 +434,44 @@ GV.nodeCtrl = {
 
     return false;
 
+  },
+
+  renameNode: function(id) {
+    Session.set('editChapterNodeName', id);
+
+    Meteor.defer(function() {
+      var el = $('.tree li[data-id="' + id + '"] > .element .node-text .node-name');
+
+      if(el) {
+        var parent = el.parent().parent();
+        parent.css('text-overflow', 'clip');
+
+        el.focus();
+        document.execCommand('selectAll', false, null);
+
+        el.blur(function(e) {
+          Session.set('editChapterNodeName', null);
+
+          parent.scrollLeft(0);
+          parent.css('text-overflow', 'ellipsis');
+        });
+
+        el.keypress(function(e){
+          if(e.which === 13) {
+            var text = e.currentTarget.innerText;
+
+            GV.collections.Nodes.update({ _id: id }, { $set: { title: text }});
+
+            Session.set('editChapterNodeName', null);
+
+            parent.scrollLeft(0);
+            parent.css('text-overflow', 'ellipsis');
+
+            return false;
+          }
+        });
+      }
+    });
   }
 
 };
