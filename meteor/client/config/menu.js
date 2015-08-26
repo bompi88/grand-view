@@ -19,7 +19,7 @@ Meteor.startup(function() {
             var aboutWindow = window.open(
               'file:' + resources_root + '/about.html',
               'Om GrandView',
-              'width=300,height=280,resizable=0,scrollbars=0,status=0,menubar=0,toolbar=0,Om GrandView'
+              'width=300, height=280, resizable=no, scrollbars=no, status=no, menubar=no, toolbar=no'
             );
             aboutWindow.focus();
           }
@@ -31,7 +31,7 @@ Meteor.startup(function() {
           label: 'Skjul GrandView',
           accelerator: CommandOrCtrl() + '+H',
           click: function() {
-            remote.getCurrentWindow().hide();
+            remote.getCurrentWindow().minimize();
           }
         },
         {
