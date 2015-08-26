@@ -1,6 +1,6 @@
 # Grand View
 
-Helps you structure a large set of information units. Can be used for writing reports and so on.
+Helps you structure a large set of information units. Can be used as a tool to plan and gather resources for reports/theses and so on.
 
 ## Development
 First clone the repo:
