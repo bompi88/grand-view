@@ -21,6 +21,11 @@
 
 var path = require('path');
 
+GV.placeholder = $(Blaze.toHTML(Template.PlaceholderRow))[0];
+var nodePlacement = null;
+var hoverPlaceholder = null;
+GV.tableBody = null;
+
 Session.set('isMoveMode', false);
 
 // -- Helper methods -----------------------------------------------------------
@@ -241,10 +246,6 @@ Template.GeneralInfo.events({
 });
 
 
-var placeholder = $(Blaze.toHTML(Template.PlaceholderRow))[0];
-var nodePlacement = null;
-var hoverPlaceholder = null;
-var tableBody = null;
 
 Template.MediaNodesTable.events({
 
@@ -283,12 +284,15 @@ Template.MediaNodesTable.events({
 
     GV.dragElement = event.currentTarget;
     GV.dragElementRow = event.currentTarget.parentNode;
-    tableBody = GV.dragElementRow.parentNode;
+    GV.tableBody = GV.dragElementRow.parentNode;
   },
 
   'dragend .row-item': function(event, tmpl) {
     GV.dragElementRow.style.display = 'table-row';
-    tableBody.removeChild(placeholder);
+    
+    if(GV.tableBody && GV.tableBody.querySelector('.placeholder') !== null) {
+      GV.tableBody.removeChild(GV.placeholder);
+    }
 
     if(hoverPlaceholder) {
       var node =  Blaze.getData(GV.dragElement);
@@ -326,10 +330,10 @@ Template.MediaNodesTable.events({
 
       if(relY > height) {
         nodePlacement = "after";
-        tr.parentNode.insertBefore(placeholder, tr.nextElementSibling);
+        tr.parentNode.insertBefore(GV.placeholder, tr.nextElementSibling);
       } else if(relY < height) {
         nodePlacement = "before";
-        tr.parentNode.insertBefore(placeholder, tr);
+        tr.parentNode.insertBefore(GV.placeholder, tr);
       }
     } else {
       return;

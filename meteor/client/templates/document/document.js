@@ -155,6 +155,18 @@ Template.Document.events({
     } else {
       Session.set('inlineEditNode', Session.get('nodeInFocus'));
     }
+  },
+
+  'dragleave .media-nodes-view': function(event, tmpl) {
+    event.preventDefault();
+    event.stopPropagation();
+  },
+  'dragleave .node-detail-view': function(event, tmpl) {
+    event.preventDefault();
+
+    if(GV.tableBody && GV.tableBody.querySelector('.placeholder') !== null) {
+      GV.tableBody.removeChild(GV.placeholder);
+    }
   }
 
 });
