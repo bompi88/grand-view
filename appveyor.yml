@@ -8,7 +8,7 @@ branches:
 
 platform:
   - x86
-  - x64
+  #- x64
 
 install:
   - ps: Install-Product node $env:nodejs_version $env:platform
@@ -16,7 +16,8 @@ install:
   - SET PATH=C:\Program Files (x86)\MSBuild\12.0\bin\;%PATH%
   - SET PATH=c:\python27;%PATH%
   - npm install -g node-gyp
-  - npm install --build-from-source --msvs_version=2012
+  # - npm install --build-from-source --msvs_version=2012
+  - npm install
   # download Meteor
   - ps: Start-FileDownload 'https://s3.amazonaws.com/meteor-windows/InstallMeteor.exe'
   # install meteor
