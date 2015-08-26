@@ -52,7 +52,7 @@ Meteor.startup(function() {
       $("#update-node-form").trigger('submit');
     } else if(e.which === 8 || e.which === 46) {
       var route = Router.current().route.getName();
-      if((route === 'Document' || route === 'Template') && !Session.get('editChapterNodeName') && !Session.get('inlineEditNode') && !(Session.get('nodeInFocus') === Session.get('mainDocument'))) {
+      if((route === 'Document' || route === 'Template') && Session.get('structureState') === 'tree' && !Session.get('editChapterNodeName') && !Session.get('inlineEditNode') && (Session.get('nodeInFocus') && !(Session.get('nodeInFocus') === Session.get('mainDocument')))) {
         $("div.tooltip").hide();
         var elData = Session.get('nodeInFocus');
 

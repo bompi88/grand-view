@@ -258,7 +258,8 @@ GV.nodeCtrl = {
                   if (el && el.length)
                     el.addClass('selected');
 
-                  GV.nodeCtrl.renameNode(nodeId);
+                  if(type === 'chapter')
+                    GV.nodeCtrl.renameNode(nodeId);
 
                   if (!noRedirect) {
                     GV.tabs.setDummyTab(nodeId);
