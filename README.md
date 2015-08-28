@@ -33,3 +33,7 @@ Combined build and pack:
 ``` bash
 $ npm run osx
 ```
+
+## Credits
+* Knut Samset being the originator of the idea. Working at the [Concept Research Programme](https://www.ntnu.edu/concept).
+* [Electrometeor](https://github.com/sircharleswatson/Electrometeor) - inpired by/forked from.

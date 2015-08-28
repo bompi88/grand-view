@@ -258,7 +258,7 @@ Template.Tree.events({
 
     var data = Blaze.getData(GV.dragElement.parentNode);
 
-    if(!Session.get('showMediaNodesView') && data.nodeType === 'media')
+    if(!Session.get('showMediaNodes') && data.nodeType === 'media')
       return false;
 
     $(event.currentTarget).addClass("slot-visible");
@@ -289,7 +289,7 @@ Template.Tree.events({
     var dataTarget = Blaze.getData(parent);
     var data = Blaze.getData(GV.dragElement.parentNode);
 
-    if(!Session.get('showMediaNodesView') && data.nodeType === 'media')
+    if(!Session.get('showMediaNodes') && data.nodeType === 'media')
       return false;
 
     var l;
@@ -405,9 +405,7 @@ Template.Tree.events({
 
 
   // -- Drag over node events --------------------------------------------------
-
-
-  'dragenter li span.element, dragleave li span.element': function(event, tmpl) {
+  'dragenter li span.element': function(event, tmpl) {
     event.preventDefault();
     event.stopPropagation();
 
