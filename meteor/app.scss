@@ -29,8 +29,8 @@ $black: #222;
 $font-family-sans-serif: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
 $text-color: #555;
 
-@import 'bootstrap';
-@import 'bourbon/bourbon';
+@import '{reywood:bootstrap3-sass}/bootstrap';
+@import '{wolves:bourbon}/bourbon';
 
 $blue-base: darken($blue, 6.5%);
 
