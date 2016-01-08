@@ -45,10 +45,9 @@ var uploadFile = function(currentFile, self) {
 
   // upload new file
   var file = new FS.File(currentFile);
-
   var meta = {
     docId: Session.get('mainDocument'),
-    nodeId: self._af.doc._id,
+    nodeId: self.node._id,
     path: file.path
   };
 
@@ -62,7 +61,7 @@ var uploadFile = function(currentFile, self) {
     Session.set("file", fileId);
     Router.current().subscribe('fileById', fileObj._id);
     GV.collections.Nodes.update({
-      _id: self._af.doc._id
+      _id: self.node._id
     }, {
       $set: {
         fileId: fileId
@@ -211,6 +210,14 @@ Template.UpdateMediaNode.events({
 });
 
 
+// -- Template Onrendered-------------------------------------------------------
+
+
+Template.UpdateMediaNode.onRendered(function() {
+  Meteor.subscribe("fileById", Session.get("file") || this.node && this.node.fileId || null);
+});
+
+
 // -- Template helpers ---------------------------------------------------------
 
 
@@ -218,7 +225,7 @@ Template.UpdateMediaNode.helpers({
 
   file: function() {
     return GV.collections.Files.findOne({
-      _id: Session.get("file") || this._af && this._af.doc && this._af.doc.fileId || null
+      _id: Session.get("file") || this.node && this.node.fileId || null
     });
   },
 
@@ -231,8 +238,8 @@ Template.UpdateMediaNode.helpers({
     var self = this;
     var r;
 
-    if (self._af && self._af.doc && self._af.doc.tags) {
-      r = _.map(self._af.doc.tags, function(val) {
+    if (self._af && self.node && self.node.tags) {
+      r = _.map(self.node.tags, function(val) {
         return {
           label: val,
           value: val
@@ -248,8 +255,8 @@ Template.UpdateMediaNode.helpers({
     var self = this;
     var r;
 
-    if (self._af && self._af.doc && self._af.doc.references) {
-      r = _.map(self._af.doc.references, function(val) {
+    if (self._af && self.node && self.node.references) {
+      r = _.map(self.node.references, function(val) {
         return {
           label: val,
           value: val

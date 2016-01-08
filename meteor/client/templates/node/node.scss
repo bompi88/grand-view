@@ -17,6 +17,8 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
+@import "{}/app";
+
 $drop-slot-bg-color: darken($white, 5%);
 $drop-slot-border-color: darken($white, 40%);
 $expand-collapse-icon-color: #555;

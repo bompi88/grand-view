@@ -4,7 +4,7 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-raix:handlebar-helpers@0.1.1
+raix:handlebar-helpers
 http
 reywood:bootstrap3-sass
 gfk:notifications
@@ -15,7 +15,7 @@ aldeed:autoform
 chhib:selectize-bootstrap-3
 comerc:autoform-selectize
 aldeed:collection2
-fourseven:scss@3.2.0
+fourseven:scss
 aldeed:simple-schema
 cfs:standard-packages
 cfs:ui
@@ -31,3 +31,4 @@ underscorestring:underscore.string
 fortawesome:fontawesome
 gabrielengel:konecty-magnific-popup
 qnub:emojione
+standard-minifiers

@@ -23,6 +23,7 @@ Session.set("mode", "easy");
 
 Template.Document.rendered = function() {
   $('body').on('paste', function(event) {
+    console.log("YAYAYA")
     var items = (event.clipboardData || event.originalEvent.clipboardData).items;
     var item = null;
 
@@ -56,7 +57,6 @@ Template.Document.rendered = function() {
           }
 
           fileObj.name("fil-" + moment().format('MM-DD-YYYY'));
-
           Router.current().subscribe("fileById", fileObj._id);
 
           GV.collections.Files.update({
