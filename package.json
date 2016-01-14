@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "main": "index.js",
   "company": "Concept NTNU",
-  "electron_version": "0.36.3",
+  "electron_version": "0.30.4",
   "mongo_version": "3.2.0",
   "node_version": "0.10.40",
   "author": {
@@ -22,7 +22,7 @@
     "gunzip-maybe": "^1.2.1",
     "minimist": "^1.2.0",
     "fs-extra": "^0.26.4",
-    "electron-prebuilt": "^0.36.3",
+    "electron-prebuilt": "^0.30.4",
     "electron-builder": "^2.5.0",
     "electron-packager": "^5.2.0"
   },
