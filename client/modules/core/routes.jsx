@@ -22,6 +22,9 @@ import {mount} from 'react-mounter';
 
 import MainLayout from './components/main_layout/main_layout.jsx';
 import Index from './components/index/index.jsx';
+import Documents from './components/documents/documents.jsx';
+import Templates from './components/templates/templates.jsx';
+import WorkArea from './components/work_area/work_area.jsx';
 
 export default function (injectDeps, {FlowRouter}) {
   const MainLayoutCtx = injectDeps(MainLayout);
@@ -33,7 +36,7 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'Index',
     action() {
       mount(MainLayoutCtx, {
-        content: () => (<Index />)
+        content: () => <Index />
       });
     }
   });
@@ -60,7 +63,7 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'Documents',
     action() {
       mount(MainLayoutCtx, {
-        content: () => (<span>Documents</span>)
+        content: () => <Documents />
       });
     }
   });
@@ -86,7 +89,7 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'Templates',
     action() {
       mount(MainLayoutCtx, {
-        content: () => (<span>Templates</span>)
+        content: () => <Templates />
       });
     }
   });
@@ -100,7 +103,7 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'WorkArea',
     action() {
       mount(MainLayoutCtx, {
-        content: () => (<span>Workarea</span>)
+        content: () => (<WorkArea />)
       });
     }
   });

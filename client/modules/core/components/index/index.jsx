@@ -28,6 +28,7 @@ export default class Index extends React.Component {
   componentDidMount() {
     clippy.load('Peedy', (agent) => {
 
+      // TODO: Attach clippy
       // GV.clippy = agent;
 
       agent.show();

@@ -54,10 +54,8 @@ export default class TopNavBar extends React.Component {
     if (this.isActiveRoute('Template')) {
       return <NavBarButton route="Template" name="Arbeidsområde"/>;
     }
-    if (this.isActiveRoute('WorkArea')) {
-      return <NavBarButton route="WorkArea" name="Arbeidsområde"/>;
-    }
-    return null;
+
+    return <NavBarButton route="WorkArea" name="Arbeidsområde"/>;
   }
 
   render() {

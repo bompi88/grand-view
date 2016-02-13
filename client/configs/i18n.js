@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Index Template SCSS Styles
+// Notifications package configuration
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -17,25 +17,37 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-.container-fluid.index {
-  background: url('/images/front-page.jpg') no-repeat center center;
-  background-size: cover;
-  height: 100% !important;
+/* eslint no-console: 0 */
 
-  h1 {
-    font-size: 3em;
+import {Meteor} from 'meteor/meteor';
+import {TAPi18n} from 'meteor/tap:i18n';
+import {Tracker} from 'meteor/tracker';
+
+import {Settings} from '/lib/collections';
+
+const getUserLanguage = function () {
+  var settings = Settings.find().fetch();
+  var language = 'en';
+
+  if (settings.length) {
+    language = settings[0].language;
   }
 
-  > .row {
-    margin-left: 40px;
-    margin-top: 100px;
-  }
-}
+  return language.toString();
+};
 
-.outer .jumbotron {
-  background: rgba(220, 220, 220, .8);
+Meteor.startup(function () {
 
-  .lead {
-    font-size: 1.3em;
-  }
-}
+  TAPi18n.setLanguage(getUserLanguage())
+    .done(() => {
+      console.log('Language set.');
+    })
+    .fail((error) => {
+      // Handle the situation
+      console.log(error);
+    });
+});
+
+Tracker.autorun(() => {
+  TAPi18n.setLanguage(getUserLanguage());
+});

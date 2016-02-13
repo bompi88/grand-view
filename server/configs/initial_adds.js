@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Index Template SCSS Styles
+// Initial db adds
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -17,25 +17,10 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-.container-fluid.index {
-  background: url('/images/front-page.jpg') no-repeat center center;
-  background-size: cover;
-  height: 100% !important;
+import {Settings} from '/lib/collections';
 
-  h1 {
-    font-size: 3em;
-  }
-
-  > .row {
-    margin-left: 40px;
-    margin-top: 100px;
-  }
-}
-
-.outer .jumbotron {
-  background: rgba(220, 220, 220, .8);
-
-  .lead {
-    font-size: 1.3em;
-  }
+if (Settings.find().count() === 0) {
+  Settings.insert({
+    language: [ 'en' ]
+  });
 }

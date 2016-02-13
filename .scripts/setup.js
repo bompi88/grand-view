@@ -6,6 +6,8 @@
 /* eslint no-sync: 0 */
 /* eslint no-console: 0 */
 
+'use strict';
+
 require('shelljs/global');
 require('colors');
 

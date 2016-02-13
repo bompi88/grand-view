@@ -3,6 +3,9 @@ import {Meteor} from 'meteor/meteor';
 import {FlowRouter} from 'meteor/kadira:flow-router';
 import {ReactiveDict} from 'meteor/reactive-dict';
 import {Tracker} from 'meteor/tracker';
+import {$} from 'meteor/jquery';
+import {_} from 'meteor/underscore';
+import {Helpers} from '/client/lib/helpers';
 
 export default function () {
   return {
@@ -10,6 +13,9 @@ export default function () {
     FlowRouter,
     Collections,
     LocalState: new ReactiveDict(),
-    Tracker
+    Tracker,
+    Helpers,
+    $,
+    _
   };
 }

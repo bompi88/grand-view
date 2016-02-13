@@ -1,3 +1,5 @@
-export default {
+import document from './document';
 
+export default {
+  document
 };
