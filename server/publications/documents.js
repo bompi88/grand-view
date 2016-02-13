@@ -1,0 +1,91 @@
+////////////////////////////////////////////////////////////////////////////////
+// Publications for Documents Collection
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright 2015 Concept
+//
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+////////////////////////////////////////////////////////////////////////////////
+
+import {Meteor} from 'meteor/meteor';
+import {_} from 'meteor/underscore';
+
+import {Documents, Nodes, Files} from '/lib/collections';
+
+export default function () {
+
+  /**
+   * Publish all documents that a user owns or has access to
+   */
+  Meteor.publish('Documents.all', () => Documents.find());
+
+  /**
+   * Publish all removed documents that a user owns or has access to
+   */
+  Meteor.publish('Documents.removed', () => Documents.find({ removed: true }));
+
+  /**
+   * Publish all templates
+   */
+  Meteor.publish('Documents.templates.all', () => Documents.find({ template: true }));
+
+  /**
+   * Publish all removed documents that a user owns or has access to
+   */
+  Meteor.publish('Documents.templates.removed', () => {
+    return Documents.find({ template: true, removed: true });
+  });
+
+  /**
+   * Publish a particular document by its id, if the user owns it or
+   * has access to it.
+   */
+  Meteor.publish('Documents.byId', (_id) => Documents.find({ _id }));
+
+  /**
+   * Publish all resources linked to a doc;
+   */
+  Meteor.publish('Documents.allByDocs', (docIds) => {
+
+    const ids = _.isArray(docIds) ? docIds : [ docIds ];
+
+    // get the document
+    const docs = Documents.find({
+      _id: { $in: ids }
+    });
+
+    const fetchedDocs = docs.fetch();
+
+    let children = [];
+
+    fetchedDocs.forEach((doc) => {
+      if (doc.children) {
+        children = children.concat(doc.children);
+      }
+    });
+
+    var nodes = Nodes.find({
+      _id: {
+        $in: children
+      }
+    });
+
+    var fetchedDocIds = _.pluck(fetchedDocs, '_id');
+
+    var files = Files.find({
+      docId: { $in: fetchedDocIds }
+    });
+
+    return [ nodes, files, docs ];
+  });
+}

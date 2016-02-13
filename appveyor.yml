@@ -1,5 +1,5 @@
 environment:
-  nodejs_version: "0.10.36"
+  nodejs_version: "0.10.41"
 
 branches:
   only:

@@ -1,0 +1,176 @@
+////////////////////////////////////////////////////////////////////////////////
+// Global SCSS Styles
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright 2015 Concept
+//
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+////////////////////////////////////////////////////////////////////////////////
+
+// -- Standard colors ----------------------------------------------------------
+
+$white: #fff;
+$blue: #428bca;
+$black: #222;
+// -- Bootstrap configuration variables ----------------------------------------
+
+@import url('http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600');
+
+$font-family-sans-serif: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif !default;
+$text-color: #555;
+
+@import '{reywood:bootstrap3-sass}/bootstrap';
+@import '{wolves:bourbon}/bourbon';
+
+$blue-base: darken($blue, 6.5%);
+
+// -- Variables ----------------------------------------------------------------
+
+$notifications-text-color: #fff;
+$box-shadow-color: darken($white, 40%);
+$scroll-bar-color: rgba(0, 0, 0, .5);
+$tree-line-color: darken($white, 30%);
+
+// -- SCSS rules ---------------------------------------------------------------
+
+html,
+body {
+  height: 100%;
+}
+
+#react-root, #react-root > div {
+  height: 100%;
+}
+
+// Always show notifications top right corner, even when container is scrolled
+ul.notifications {
+  position: fixed;
+  width: 400px;
+  z-index: 1045;
+
+  .notification {
+    margin-right: 0;
+    width: 400px;
+
+    .message,
+    .title,
+    .close {
+      color: $notifications-text-color;
+    }
+  }
+}
+
+.btn-delete {
+  color: darken(#fff, 15%);
+
+  &:hover {
+    color: darken(red, 15%);
+  }
+}
+
+.alert.alert-success.status-bar {
+  box-shadow: 0 0 30px $box-shadow-color;
+  left: calc(50% - 150px);
+  position: fixed;
+  top: 70px;
+  width: 300px;
+  z-index: 100;
+}
+
+.disable-select {
+  @include user-select(none);
+}
+
+.default-container {
+  padding-top: 80px;
+}
+
+.no-results-row {
+  padding: 10px;
+  width: 300px;
+}
+
+.table-wrapper {
+  padding-top: 50px;
+}
+
+thead {
+  background-color: darken(#fff, 2%);
+}
+
+.default-table {
+  tbody tr.table-row td {
+    line-height: 35px;
+    vertical-align: middle;
+  }
+}
+
+.ball {
+  padding-top: 40px;
+  text-align: center;
+}
+
+.modal {
+  text-align: center;
+}
+
+.modal:before {
+  content: ' ';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.selectize-input .item {
+  max-width: 400px;
+  word-break: break-all;
+}
+
+.move-panel {
+  box-shadow: 0 0 30px $box-shadow-color;
+  display: block;
+  max-width: 400px;
+  position: fixed;
+  right: 50px;
+  top: 20px;
+  z-index: 99999;
+}
+
+@mixin scroll-bar() {
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 9px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $scroll-bar-color;
+    border-radius: 4px;
+    box-shadow: 0 0 1px rgba(255, 255, 255, .4);
+  }
+}
+
+textarea:focus::-webkit-input-placeholder { color:transparent; }
+textarea:focus:-moz-placeholder { color:transparent; } /* FF 4-18 */
+textarea:focus::-moz-placeholder { color:transparent; } /* FF 19+ */
+textarea:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
+
+input:focus::-webkit-input-placeholder { color:transparent; }
+input:focus:-moz-placeholder { color:transparent; } /* FF 4-18 */
+input:focus::-moz-placeholder { color:transparent; } /* FF 19+ */
+input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
