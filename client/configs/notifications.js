@@ -19,7 +19,7 @@
 
 import {Meteor} from 'meteor/meteor';
 import {Notifications} from 'meteor/gfk:notifications';
-import {Globals} from '/lib/globals';
+import Globals from '/lib/globals';
 
 Meteor.startup(() => {
   Notifications.defaultOptions = { timeout: Globals.timeout, ...Notifications.defaultOptions };
