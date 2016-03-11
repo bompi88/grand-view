@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// References Controller
+// Show More Content Controller
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -17,55 +17,37 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
+import {Tracker} from 'meteor/tracker';
 
 export default {
-  collapsed: [],
+  showMore: {},
   dep: new Tracker.Dependency(),
 
-  isCollapsed: function(tag) {
+  get(key) {
     this.dep.depend();
 
-    return this.collapsed.indexOf(tag) > -1;
+    return this.showMore[key];
   },
 
-  uncollapse: function(tag) {
-    var index = this.collapsed.indexOf(tag);
-
-    if (this.collapsed.indexOf(tag) > -1) {
-      this.collapsed.splice(index, 1);
-
-      this.dep.changed();
-      return this.collapsed;
-    }
-
-    return this.collapsed;
-  },
-
-
-  collapse: function(tag) {
-
-    if (this.collapsed.indexOf(tag) === -1) {
-      this.collapsed.push(tag);
-
-      this.dep.changed();
-      return this.collapsed;
-    }
-
-    return this.collapsed;
-  },
-
-  collapseAll: function(tags) {
-
-    this.collapsed = _.unique(_.union(this.collapsed, tags));
-
+  show(key) {
+    this.showMore[key] = true;
     this.dep.changed();
-    return this.collapsed;
+
+    return this.showMore;
   },
 
-  reset: function(table) {
-    this.collapsed = [];
-
+  hide(key) {
+    this.showMore[key] = false;
     this.dep.changed();
-    return this.collapsed;
+
+    return this.showMore;
+  },
+
+  reset() {
+    this.showMore = {};
+    this.dep.changed();
+
+    return this.showMore;
   }
+
 };

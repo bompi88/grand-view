@@ -19,11 +19,9 @@ http
 reywood:bootstrap3-sass
 gfk:notifications
 kadira:flow-router
-cwohlman:bootboxjs
+mizzao:bootboxjs
 momentjs:moment
-aldeed:collection2
 fourseven:scss
-aldeed:simple-schema
 cfs:standard-packages
 cfs:ui
 cfs:filesystem

@@ -1,6 +1,7 @@
 import React from 'react';
 
-// {{> DocumentTable documents=this.documents hasTemplate="true" editOptions="true" tableName="documents" label="dokument" emptyText="Ingen dokumenter funnet"}}
+import DocumentTable from '../../containers/document_table';
+
 export default class Documents extends React.Component {
   render() {
     return (
@@ -10,6 +11,14 @@ export default class Documents extends React.Component {
             <h3>
               <span className="glyphicon glyphicon-book"></span> Mine dokumenter
             </h3>
+
+            <DocumentTable
+              tableName="documents"
+              label="dokument"
+              hasTemplate={true}
+              editOptions={true}
+              dropdownClasses="pull-right"
+              emptyText="Ingen dokumenter funnet" />
           </div>
         </div>
       </div>

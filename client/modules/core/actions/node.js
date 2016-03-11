@@ -44,10 +44,6 @@ export default {
       this.deleteNode(node, mainDocId);
     });
 
-    // Remove the tab
-    // TODO: Fix tabs?
-    // GV.tabs.removeTab(nodeId);
-
     // Remove the node
     Nodes.remove({
       _id: nodeId
@@ -125,37 +121,35 @@ export default {
     return null;
   },
 
-  openArtificialNode({Meteor}, type, value) {
+  openArtificialNode({LocalState, Meteor}, type, value) {
     const an = { type, value };
 
     Meteor.subscribe('filesByArtificialNode', an, () => {
-      Session.set('artificialNode', an);
-      Session.set('showMediaNodesView', true);
-      Session.set('nodeInFocus', null);
-      // TODO: fix tabs?
-      // GV.tabs.setDummyTab();
+      LocalState.set('artificialNode', an);
+      LocalState.set('showMediaNodesView', true);
+      LocalState.set('nodeInFocus', null);
     });
   },
 
   /**
    * Opens a node given data
    */
-  openNode({Meteor, $}, elData) {
+  openNode({LocalState, Meteor, $}, elData) {
     if (elData && elData._id) {
       // TODO: fix tabs?
       // GV.tabs.setDummyTab(elData._id);
-      Session.set('artificialNode', null);
-      Session.set('nodeInFocus', elData._id);
+      LocalState.set('artificialNode', null);
+      LocalState.set('nodeInFocus', elData._id);
       Meteor.subscribe('fileByNode', elData._id);
-      Session.set('file', null);
-      Session.set('uploadStopped', false);
+      LocalState.set('file', null);
+      LocalState.set('uploadStopped', false);
 
       if (elData.nodeType === 'chapter') {
 
         if (elData.title || elData.description) {
-          Session.set('showNodeForm', false);
+          LocalState.set('showNodeForm', false);
         } else {
-          Session.set('showNodeForm', true);
+          LocalState.set('showNodeForm', true);
 
           Meteor.defer(() => {
             $('#update-node-form input[name="title"]').tooltip({
@@ -166,9 +160,9 @@ export default {
           });
         }
 
-        Session.set('showMediaNodesView', true);
+        LocalState.set('showMediaNodesView', true);
       } else {
-        Session.set('showNodeForm', true);
+        LocalState.set('showNodeForm', true);
 
         if (!elData.description) {
           Meteor.defer(() => {
@@ -218,7 +212,9 @@ export default {
     });
   },
 
-  insertNodeOfType({Meteor, Nodes, Documents, $}, input, type, t, noRedirect, mainDocId) {
+  insertNodeOfType({LocalState, Meteor, Nodes, Documents, $},
+    input, type, t, noRedirect, mainDocId) {
+
     let data = input;
 
     if (data.tree) {
@@ -255,7 +251,7 @@ export default {
 
           if (type === 'chapter' ||
               mainDocId !== data._id.toString() &&
-              (type === 'media' && Session.get('showMediaNodes'))) {
+              (type === 'media' && LocalState.get('showMediaNodes'))) {
 
             Nodes.update({
               _id: data._id
@@ -287,11 +283,9 @@ export default {
                 }
 
                 if (!noRedirect) {
-                  // TODO: fix tabs?
-                  // GV.tabs.setDummyTab(nodeId);
-                  Session.set('nodeInFocus', nodeId);
+                  LocalState.set('nodeInFocus', nodeId);
                 } else {
-                  Session.set('inlineEditNode', nodeId);
+                  LocalState.set('inlineEditNode', nodeId);
 
                   Meteor.defer(() => {
                     var container = $('.node-detail-view');
@@ -333,26 +327,26 @@ export default {
     }
   },
 
-  removeNodeCallback({Notifications}, result, options, id) {
+  removeNodeCallback({LocalState, Notifications}, result, options, id) {
     if (result) {
       if (id) {
-        this.deleteNode(id, Session.get('mainDocument'));
+        this.deleteNode(id, LocalState.get('mainDocument'));
       } else {
-        this.deleteNode(Session.get('nodeInFocus'), Session.get('mainDocument'));
+        this.deleteNode(LocalState.get('nodeInFocus'), LocalState.get('mainDocument'));
 
         // Set the main document in focus
-        Session.set('nodeInFocus', Session.get('mainDocument'));
+        LocalState.set('nodeInFocus', LocalState.get('mainDocument'));
       }
 
       Notifications.success(options.title, options.text);
     }
   },
 
-  removeNodesMultiple({Notifications}, result, options, ids, table) {
+  removeNodesMultiple({LocalState, Notifications}, result, options, ids, table) {
     if (result) {
 
       ids.forEach((id) => {
-        this.deleteNode(id, Session.get('mainDocument'));
+        this.deleteNode(id, LocalState.get('mainDocument'));
       });
 
       if (table) {
@@ -464,8 +458,8 @@ export default {
 
   },
 
-  renameNode({Meteor, Nodes, $}, _id) {
-    Session.set('editChapterNodeName', _id);
+  renameNode({LocalState, Meteor, Nodes, $}, _id) {
+    LocalState.set('editChapterNodeName', _id);
 
     Meteor.defer(() => {
       var el = $('.tree li[data-id="' + _id + '"] > .element .node-text .node-name');
@@ -478,7 +472,7 @@ export default {
         document.execCommand('selectAll', false, null);
 
         el.blur(() => {
-          Session.set('editChapterNodeName', null);
+          LocalState.set('editChapterNodeName', null);
 
           parent.scrollLeft(0);
           parent.css('text-overflow', 'ellipsis');
@@ -490,7 +484,7 @@ export default {
 
             Nodes.update({ _id }, { $set: { title: text }});
 
-            Session.set('editChapterNodeName', null);
+            LocalState.set('editChapterNodeName', null);
 
             parent.scrollLeft(0);
             parent.css('text-overflow', 'ellipsis');

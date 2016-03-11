@@ -19,71 +19,25 @@
 
 export default {
 
-  create({Documents, bootbox, $}, promptTitle, docTitle, callback, template = false) {
-    $('div.tooltip').hide();
-    // TODO: use the helper?
-    // A confirmation prompt before removing the document
-    const confirmationPrompt = {
-      title: promptTitle,
-      buttons: {
-        cancel: {
-          label: 'Avbryt'
-        },
-        confirm: {
-          label: 'Ok'
-        }
-      },
-      callback(title) {
-        if (title !== null) {
-          const doc = {
-            title: title || docTitle,
-            lastChanged: new Date(),
-            template
-          };
-
-          // create a new document
-          const id = Documents.insert(doc);
-
-          return callback(id);
-        }
-      }
-    };
-    bootbox.prompt(confirmationPrompt);
-  },
-
-  createNewDocument() {
-    this.create(
+  createNewDocument({Helpers}) {
+    console.log(Helpers)
+    Helpers.createNewDocument(
       'Vennligst velg en tittel for dokumentet',
       'Mitt nye dokument',
-      this.goToDocument
+      Helpers.goToDocument
     );
   },
 
-  createNewTemplate() {
-    this.create(
+  createNewTemplate({Helpers}) {
+    Helpers.createNewDocument(
       'Vennligst velg en tittel for dokumentmalen',
       'Min nye dokumentmal',
-      this.goToTemplate,
+      Helpers.goToTemplate,
       true
     );
   },
 
-  goto({FlowRouter}, id, template = false) {
-    const route = template ? 'Template' : 'Document';
-    // TODO: fix tabs
-    // GV.tabs.reset();
-    FlowRouter.go(FlowRouter.path(route, { _id: id }));
-  },
-
-  goToDocument({}, id) {
-    this.goto(id);
-  },
-
-  goToTemplate({}, id) {
-    this.goto(id, true);
-  },
-
-  softRemove({Helpers, Documents, Notifications}, id, hideNotification, callback) {
+  softRemove({LocalState, Helpers, Documents, Notifications}, id, hideNotification, callback) {
 
     const isTemplate = Helpers.isTemplate(id);
 
@@ -103,8 +57,7 @@ export default {
           }
         }
 
-        // TODO: set local state?
-        Session.set('mainDocument', null);
+        LocalState.set('mainDocument', null);
 
         return callback && callback();
       }

@@ -2,7 +2,8 @@
 
 import {$} from 'meteor/jquery';
 import {moment} from 'meteor/momentjs:moment';
-import {bootbox} from 'meteor/cwohlman:bootboxjs';
+
+import * as Collections from '/lib/collections';
 
 const os = _require('os');
 const cp = _require('child_process');
@@ -43,8 +44,55 @@ export default {
         }
       }
     };
-    bootbox.dialog(confirmationPrompt);
+    window.bootbox.dialog(confirmationPrompt);
   },
+
+  createNewDocument(promptTitle, docTitle, callback, template = false) {
+    $('div.tooltip').hide();
+    // TODO: use the helper?
+    // A confirmation prompt before removing the document
+    const confirmationPrompt = {
+      title: promptTitle,
+      buttons: {
+        cancel: {
+          label: 'Avbryt'
+        },
+        confirm: {
+          label: 'Ok'
+        }
+      },
+      callback(title) {
+        if (title !== null) {
+          const doc = {
+            title: title || docTitle,
+            lastChanged: new Date(),
+            template
+          };
+          console.log(doc)
+          // create a new document
+          const id = Collections.Documents.insert(doc);
+
+          return callback(id);
+        }
+      }
+    };
+    window.bootbox.prompt(confirmationPrompt);
+  },
+
+  goto({FlowRouter}, id, template = false) {
+    const route = template ? 'Template' : 'Document';
+
+    FlowRouter.go(FlowRouter.path(route, { _id: id }));
+  },
+
+  goToDocument({}, id) {
+    this.goto(id);
+  },
+
+  goToTemplate({}, id) {
+    this.goto(id, true);
+  },
+
 
   showEditWarning(callback) {
     // TODO: Session

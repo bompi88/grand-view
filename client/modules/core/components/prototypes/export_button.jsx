@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// ImportButton Component
+// ExportButton Component
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -20,16 +20,16 @@
 import React from 'react';
 
 
-class ImportButton extends React.Component {
+class ExportButton extends React.Component {
 
   render() {
-    const classes = 'btn btn-default import' + this.props.className;
+    const classes = 'btn btn-default export' + this.props.className;
     return (
       <div className={classes}>
-        <span className="glyphicon glyphicon-import" aria-hidden="true"></span> {this.props.label}
+        <span className="glyphicon glyphicon-export" aria-hidden="true"></span> {this.props.label}
       </div>
     );
   }
 }
 
-export default ImportButton;
+export default ExportButton;
