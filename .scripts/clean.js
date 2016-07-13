@@ -11,6 +11,7 @@
 require('shelljs/global');
 require('colors');
 
+const async = require('async');
 const path = require('path');
 const fs = require('fs-extra');
 
@@ -44,4 +45,21 @@ const base = path.normalize(path.join(dir, '..'));
 platform = (platform === 'darwin') ? 'osx' : platform;
 platform = (platform === 'win32') ? 'windows' : platform;
 
-fs.removeSync(base + '/.dist/' + platform + '/' + arch);
+const r = function (cb) {
+  fs.remove(base + '/.dist/' + platform + '/' + arch, function (err) {
+    if (err) {
+      echo('Could not remove.. Trying again..');
+    }
+    cb(err, null);
+  });
+};
+
+async.retry({
+  times: 5,
+  interval: 100
+}, r, function (err) {
+  if (err) {
+    throw new Error(err);
+  }
+  echo('Build removed.');
+});

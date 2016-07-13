@@ -24,10 +24,10 @@
 import {_} from 'meteor/underscore';
 import {Meteor} from 'meteor/meteor';
 
-import Globals from '/lib/globals';
-import Helpers from '/client/lib/helpers';
+import Globals from './../../lib/globals';
+import Helpers from './../../client/lib/helpers';
 
-import {Documents, Nodes, Files} from '/lib/collections';
+import {Documents, Nodes, Files} from './../../lib/collections';
 
 const officegen = _require('officegen');
 const path = _require('path');

@@ -23,7 +23,7 @@ import {Meteor} from 'meteor/meteor';
 import {TAPi18n} from 'meteor/tap:i18n';
 import {Tracker} from 'meteor/tracker';
 
-import {Settings} from '/lib/collections';
+import {Settings} from './../../lib/collections';
 
 const getUserLanguage = function () {
   var settings = Settings.find().fetch();

@@ -146,11 +146,17 @@ if (!test('-f', mongoFile)) {
 
 if (!test('-f', nodeFile)) {
   echo('-----> Downloading Node...'.yellow + ' (version: ' + nodeVersion + ')');
+  let winPath = '';
+
+  if (platform === 'win32') {
+    winPath = 'win-' + arch + '/';
+  }
+
   const nodeCurl = 'curl -L -o ' +
     nodeFile +
     ' http://nodejs.org/dist/' +
     'v' + nodeVersion +
-    '/' + nodeFile;
+    '/' + winPath + nodeFile;
 
   exec(nodeCurl);
 

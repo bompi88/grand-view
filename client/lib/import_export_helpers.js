@@ -25,8 +25,8 @@ import {_} from 'meteor/underscore';
 import {Meteor} from 'meteor/meteor';
 import {Notifications} from 'meteor/gfk:notifications';
 
-import Globals from '/lib/globals';
-import {Documents, Nodes, Files} from '/lib/collections';
+import Globals from './../../lib/globals';
+import {Documents, Nodes, Files} from './../../lib/collections';
 
 const remote = _require('electron').remote;
 const fs = _require('fs');

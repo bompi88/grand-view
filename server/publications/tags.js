@@ -19,7 +19,7 @@
 
 import {Meteor} from 'meteor/meteor';
 
-import {Tags} from '/lib/collections';
+import {Tags} from './../../lib/collections';
 
 export default function () {
 

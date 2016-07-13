@@ -108,7 +108,7 @@ function startNode(options, mongoChild, callback) {
 
   console.log('Starting node child...');
 
-  const nodePath = path.join(resourcesDir, 'node');
+  const nodePath = path.join(resourcesDir, (platform === 'win32') ? 'node.exe' : 'node');
   const nodeArgs = path.join(meteorPath, 'main.js');
 
   let opened = false;
@@ -136,6 +136,8 @@ function startNode(options, mongoChild, callback) {
   nodeChild.stdout.setEncoding('utf8');
   nodeChild.stdout.on('data', (nodeData) => {
 
+    console.log(nodeData);
+
     if (nodeData.indexOf('Meteor app started.' !== -1)) {
       if (!opened) {
         opened = true;
@@ -159,10 +161,13 @@ function startMongo(options, callback) {
   const mongodPath = path.join(resourcesDir, 'mongod');
   let started = false;
   let mongodArgs;
+  console.log('Starting mongo...');
 
   // Arguments passed to mongod
   if (platform === 'win32') {
     mongodArgs = [
+      '--storageEngine',
+      'mmapv1',
       '--bind_ip',
       '127.0.0.1',
       '--dbpath',
@@ -173,6 +178,8 @@ function startMongo(options, callback) {
     ];
   } else {
     mongodArgs = [
+      '--storageEngine',
+      'mmapv1',
       '--bind_ip',
       '127.0.0.1',
       '--dbpath',
@@ -201,6 +208,13 @@ function startMongo(options, callback) {
   // Listen on mongo events
   mongoChild.stdout.setEncoding('utf8');
   mongoChild.stdout.on('data', (data) => {
+    // console.log(data);
+    const err = data.toLowerCase().indexOf('assertion');
+
+    if (err !== -1) {
+      throw new Error(data);
+    }
+
     const mongoRunnning = data.indexOf(
       'waiting for connections on port ' +
       options.mongoPort
@@ -208,13 +222,12 @@ function startMongo(options, callback) {
 
     // If mongo is up and running
     if (mongoRunnning !== -1) {
-
       if (!started) {
         started = true;
       } else {
         return;
       }
-
+      console.log('Mongo started...');
       // Start node child
       startNode({
         mongoPort: options.mongoPort,
@@ -284,6 +297,17 @@ app.on('activate-with-no-open-windows', () => {
 
 // Emitted when Electron has done all of the initialization.
 app.on('ready', () => {
+
+  const splashScreen = new BrowserWindow({
+    width: 400,
+    height: 300,
+    resizeable: false,
+    frame: false
+  });
+
+  splashScreen.focus();
+  splashScreen.loadURL('file://' + app.getAppPath() + '/.splash.html');
+
   start((url, nodeChild, mongoChild) => {
     console.log('App occupying ', url);
 
@@ -309,6 +333,7 @@ app.on('ready', () => {
 
     const mainWindow = new BrowserWindow(windowOptions);
     mainWindow.focus();
+    splashScreen.close();
     mainWindow.loadURL(url);
     global.mainWindow = mainWindow;
 

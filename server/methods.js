@@ -22,7 +22,7 @@ import {Meteor} from 'meteor/meteor';
 import {_} from 'meteor/underscore';
 import path from 'path';
 
-import {Documents, Nodes, Files, References, Tags} from '/lib/collections';
+import {Documents, Nodes, Files, References, Tags} from './../lib/collections';
 
 export default function () {
 

@@ -14,6 +14,7 @@ require('colors');
 const path = require('path');
 const AdmZip = require('adm-zip');
 const pjson = require('../package.json');
+const fs = require('fs-extra');
 
 // Auto-exit on errors
 config.fatal = true;
@@ -55,17 +56,19 @@ if (!test('-f', electronFile)) {
     electronVersion + '/' + electronFile;
 
   exec(electronCurl);
-
-  echo('-----> Extracting Electron archive...'.yellow);
-
-  if (onWindows) {
-    const electronZip = new AdmZip(electronFile);
-    electronZip.extractAllTo('electron', true);
-  } else {
-    mkdir('electron');
-    exec('unzip -d electron ' + electronFile);
-  }
-  echo('Finished!'.green);
-} else {
-  echo('Electron v' + electronVersion + ' already installed.');
 }
+
+echo('-----> Extracting Electron archive...'.yellow);
+
+fs.removeSync('electron/');
+
+if (onWindows) {
+  const electronZip = new AdmZip(electronFile);
+  electronZip.extractAllTo('electron', true);
+} else {
+  if (!test('-d', 'electron')) {
+    mkdir('electron');
+  }
+  exec('unzip -d electron ' + electronFile);
+}
+echo('Finished!'.green);

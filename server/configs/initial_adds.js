@@ -17,7 +17,7 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-import {Settings} from '/lib/collections';
+import {Settings} from './../../lib/collections';
 
 if (Settings.find().count() === 0) {
   Settings.insert({

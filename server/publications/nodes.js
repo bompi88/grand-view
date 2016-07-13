@@ -19,7 +19,7 @@
 
 import {Meteor} from 'meteor/meteor';
 
-import {Nodes, Documents} from '/lib/collections';
+import {Nodes, Documents} from './../../lib/collections';
 
 export default function () {
 

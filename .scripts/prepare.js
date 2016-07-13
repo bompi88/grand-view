@@ -93,7 +93,9 @@ function copyStartupFiles(os) {
     case 'linux':
     case 'darwin':
       cp('./.index.js', './.app/');
+      cp('./.preload.js', './.app/');
       cp('./.about.html', './.app/');
+      cp('./.splash.html', './.app/');
       cp('./package.json', './.app/');
       cp('-R', './node_modules', './.app/');
       break;

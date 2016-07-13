@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {formatDateRelative, formatDateRegular} from '/client/lib/helpers';
+import {formatDateRelative, formatDateRegular} from './../../../../../client/lib/helpers';
 
 
 export default class DocumentTableRow extends React.Component {

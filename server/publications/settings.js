@@ -19,7 +19,7 @@
 
 import {Meteor} from 'meteor/meteor';
 
-import {Settings} from '/lib/collections';
+import {Settings} from './../../lib/collections';
 
 export default function () {
 

@@ -20,7 +20,7 @@
 import {Meteor} from 'meteor/meteor';
 import {_} from 'meteor/underscore';
 
-import {Nodes, Files} from '/lib/collections';
+import {Nodes, Files} from './../../lib/collections';
 
 export default function () {
 
