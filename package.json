@@ -1,11 +1,9 @@
 {
   "name": "GrandView",
-  "version": "0.0.1",
-  "main": ".index.js",
+  "productName": "GrandView",
+  "description": "Helps you structure a large set of information units. Can be used as a tool to plan and gather resources for reports/theses and so on.",
+  "version": "0.1.0",
   "company": "Concept NTNU",
-  "electron_version": "1.2.6",
-  "mongo_version": "3.2.0",
-  "node_version": "4.4.7",
   "author": {
     "name": "Bjørn Bråthen"
   },
@@ -14,6 +12,10 @@
       "name": "Andreas Drivenes"
     }
   ],
+  "main": ".index.js",
+  "electron_version": "1.2.6",
+  "mongo_version": "3.2.0",
+  "node_version": "4.4.7",
   "devDependencies": {
     "shelljs": "^0.5.3",
     "colors": "^1.1.2",
@@ -46,7 +48,7 @@
     "async": "^1.5.2",
     "domready": "^1.0.8",
     "mantra-core": "^1.7.0",
-    "shimo-officegen": "^0.3.5",
+    "officegen": "^0.2.10",
     "react": "^15.0.0",
     "react-dom": "^15.0.0",
     "react-mounter": "^1.2.0",
@@ -54,9 +56,6 @@
     "string": "^3.3.1",
     "tar-stream": "^1.5.2"
   },
-  "ico": ".assets/icons/grandview.ico",
-  "icns": ".assets/icons/grandview.icns",
-  "ignore_files": "node_modules/(shelljs|colors|adm-zip|gunzip-maybe|minimist|fs-extra|electron-packager|electron-builder|electron-prebuilt)",
   "scripts": {
     "dev": "node .scripts/run",
     "reset": "meteor reset",
@@ -66,17 +65,11 @@
     "clean:win:x64": "node .scripts/clean --platform=win32 --arch=x64",
     "clean:linux:x86": "node .scripts/clean --platform=linux --arch=x86",
     "clean:linux:x64": "node .scripts/clean --platform=linux --arch=x64",
-    "build:osx": "node .scripts/download --platform=darwin --arch=x64 && node .scripts/prepare --platform=darwin --arch=x64 && npm run clean:osx && electron-packager ./.app \"$npm_package_name\" --out=.dist/osx/x64 --platform=darwin --arch=x64 --version=$npm_package_electron_version --icon=$npm_package_icns --ignore=\"$npm_package_ignore_files\"",
-    "build:linux:x86": "node .scripts/download --platform=linux --arch=x86 && node .scripts/prepare --platform=linux --arch=x86 && npm run clean:linux:x86 && electron-packager ./.app \"$npm_package_name\" --out=.dist/linux/x86 --platform=linux --arch=ia32 --version=$npm_package_electron_version --icon=$npm_package_ico --ignore=\"$npm_package_ignore_files\"",
-    "build:linux:x64": "node .scripts/download --platform=linux --arch=x64 && node .scripts/prepare --platform=linux --arch=x64 && npm run clean:linux:x64 && electron-packager ./.app \"$npm_package_name\" --out=.dist/linux/x64 --platform=linux --arch=x64 --version=$npm_package_electron_version --icon=$npm_package_ico --ignore=\"$npm_package_ignore_files\"",
-    "build:win:x86": "node .scripts/download --platform=win32 --arch=x86 && node .scripts/prepare --platform=win32 --arch=x86 && npm run clean:win:x86 && electron-packager ./.app \"$npm_package_name\" --out=.dist/windows/x86 --platform=win32 --arch=ia32 --version=$npm_package_electron_version --icon=$npm_package_ico --version-string.CompanyName=\"$npm_package_company\" --version-string.ProductVersion=\"$npm_package_version\" --version-string.ProductName=\"$npm_package_name\" --ignore=\"$npm_package_ignore_files\"",
-    "build:win:x64": "node .scripts/download --platform=win32 --arch=x64 && node .scripts/prepare --platform=win32 --arch=x64 && npm run clean:win:x64 && electron-packager ./.app \"%npm_package_name%\" --out=.dist/windows/x64 --platform=win32 --arch=x64 --version=%npm_package_electron_version% --icon=%npm_package_ico% --version-string.CompanyName=\"%npm_package_company%\" --version-string.ProductVersion=\"%npm_package_version%\" --version-string.ProductName=\"%npm_package_name%\" --ignore=\"%npm_package_ignore_files%\"",
-    "pack:osx": "electron-builder \".dist/osx/x64/$npm_package_name-darwin-x64/$npm_package_name.app\" --platform=osx --out=\".dist/osx/x64\" --config=packager.json",
-    "pack:win:x86": "electron-builder \".dist/windows/x86/%npm_package_name%-win32-ia32\" --platform=win --out=\".dist/windows/x86\" --config=packager.json",
-    "pack:win:x64": "electron-builder \".dist/windows/x86/%npm_package_name%-win32-x64\" --platform=win --out=\".dist/windows/x64\" --config=packager.json",
-    "osx": "npm run build:osx && npm run pack:osx",
-    "linux": "npm run build:linux",
-    "win": "npm run build:win && npm run pack:win",
+    "build:osx": "node .scripts/download --platform=darwin --arch=x64 && node .scripts/prepare --platform=darwin --arch=x64 && node_modules/.bin/build --osx",
+    "build:linux:x86": "node .scripts/download --platform=linux --arch=x86 && node .scripts/prepare --platform=linux --arch=x86 && node_modules/.bin/build --linux --ia32",
+    "build:linux:x64": "node .scripts/download --platform=linux --arch=x64 && node .scripts/prepare --platform=linux --arch=x64 && node_modules/.bin/build --linux --x64",
+    "build:win:x86": "node .scripts/download --platform=win32 --arch=x86 && node .scripts/prepare --platform=win32 --arch=x86 && node_modules/.bin/build --win --ia32",
+    "build:win:x64": "node .scripts/download --platform=win32 --arch=x64 && node .scripts/prepare --platform=win32 --arch=x64 && node_modules/.bin/build --linux --x64",
     "lint": "eslint ./lib ./client ./server --ext .js --ext .jsx",
     "lintfix": "npm run lint -- --fix",
     "testonly": "mocha meteor/client/**/tests/**/*.js --compilers js:babel-core/register",
@@ -84,32 +77,46 @@
     "test-watch": "npm run testonly -- --watch --watch-extensions js,jsx"
   },
   "build": {
-    "appId": "org.develar.onshape",
-    "app-category-type": "public.app-category.graphics-design",
+    "appId": "no.conceptntnu.grandview",
+    "app-category-type": "public.app-category.productivity",
+    "asar": false,
+    "electronVersion": "1.2.6",
+    "files": [
+      "**\/*",
+      "**\/.*"
+    ],
+    "mac": {
+      "icon": ".assets/osx/grandview.icns"
+    },
     "dmg": {
+      "title": "GrandView",
+      "icon": ".assets/osx/grandview.icns",
+      "background": ".assets/osx/installer.png",
+      "icon-size": 80,
       "contents": [
         {
-          "x": 410,
-          "y": 150,
+          "x": 438,
+          "y": 344,
           "type": "link",
           "path": "/Applications"
         },
         {
-          "x": 130,
-          "y": 150,
+          "x": 192,
+          "y": 344,
           "type": "file"
         }
       ]
     },
     "win": {
-      "remoteReleases": "https://github.com/develar/onshape-desktop-shell"
+      "icon": ".assets/win/grandview.ico"
     },
     "linux": {
       "target": ["deb", "AppImage"]
-    },
-    "directories": {
-      "app": "./.app"
     }
+  },
+  "directories": {
+    "app": "./.app",
+    "output": "./.dist"
   },
   "private": true
 }

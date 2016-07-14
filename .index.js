@@ -330,7 +330,6 @@ app.on('ready', () => {
         preload: require.resolve('./.preload')
       }
     };
-
     const mainWindow = new BrowserWindow(windowOptions);
     mainWindow.focus();
     splashScreen.close();

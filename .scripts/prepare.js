@@ -96,7 +96,7 @@ function copyStartupFiles(os) {
       cp('./.preload.js', './.app/');
       cp('./.about.html', './.app/');
       cp('./.splash.html', './.app/');
-      cp('./package.json', './.app/');
+      cp('./app-package.json', './.app/package.json');
       cp('-R', './node_modules', './.app/');
       break;
 
