@@ -20,7 +20,7 @@
 import React from 'react';
 import {$} from 'meteor/jquery';
 import {clippy} from 'meteor/macrozone:clippy';
-import ImportButton from '../prototypes/import_button.jsx';
+import ImportButton from '/client/modules/core/components/prototypes/import_button';
 
 export default class Index extends React.Component {
 
@@ -63,6 +63,8 @@ export default class Index extends React.Component {
   }
 
   render() {
+    const {openCreateModal, importFile} = this.props;
+
     return (
       <div className="container-fluid index animated fadeIn">
         <div className="row animated bounceInRight">
@@ -77,14 +79,13 @@ export default class Index extends React.Component {
                 <button
                   type="button"
                   className="btn btn-success"
-                  data-toggle="modal"
-                  data-target="#template-modal">
+                  onClick={openCreateModal}>
 
                   <span className="glyphicon glyphicon-plus"></span> Opprette nytt dokument
                 </button>
                 <br /><span className="or-separator">eller</span>
                 <br />
-                <ImportButton label="Importere fil fra disk"/>
+                <ImportButton label="Importere fil fra disk" onClick={importFile}/>
               </div>
             </div>
           </div>

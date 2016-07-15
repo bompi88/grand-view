@@ -20,7 +20,6 @@
 export default {
 
   createNewDocument({Helpers}) {
-    console.log(Helpers)
     Helpers.createNewDocument(
       'Vennligst velg en tittel for dokumentet',
       'Mitt nye dokument',

@@ -1,4 +1,4 @@
-import DocumentTable from '../components/document_table/document_table.jsx';
+import DocumentTable from '../components/document_table/document_table';
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
 export const composer = ({context, clearErrors}, onData) => {

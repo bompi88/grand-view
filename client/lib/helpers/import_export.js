@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Import export helpers
+// Import and export helpers
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -25,8 +25,9 @@ import {_} from 'meteor/underscore';
 import {Meteor} from 'meteor/meteor';
 import {Notifications} from 'meteor/gfk:notifications';
 
-import Globals from './../../lib/globals';
-import {Documents, Nodes, Files} from './../../lib/collections';
+import Globals from '/lib/globals';
+import {Documents, Nodes, Files} from '/lib/collections';
+import {LocalState} from './../../configs/context';
 
 const remote = _require('electron').remote;
 const fs = _require('fs');
@@ -51,7 +52,7 @@ export default {
           'Rapportstrukturen ble importert i systemet og kan finnes på dashbordet.'
         );
 
-        Session.set('working', false);
+        LocalState.set('WORKING', false);
       }
     });
   },
@@ -122,8 +123,8 @@ export default {
       properties: [ 'openFile' ]
     }, (filePathAndName) => {
       if (filePathAndName) {
-        Session.set('working', true);
-        Session.set('workingText', 'Importerer fil... vennligst vent...');
+        LocalState.set('WORKING', true);
+        LocalState.set('WORKING_TEXT', 'Importerer fil... vennligst vent...');
 
         var originalPath = filePathAndName[0];
         var newPath = path.join(Globals.basePath, 'tmp', 'import');
@@ -212,8 +213,8 @@ export default {
 
     var extension = isTemplate ? 'gvt' : 'gvd';
 
-    Session.set('working', true);
-    Session.set('workingText', 'Pakker fil... vennligst vent...');
+    LocalState.set('WORKING', true);
+    LocalState.set('WORKING_TEXT', 'Pakker fil... vennligst vent...');
 
     // create all directories
     this.mkdirSync(Globals.basePath);
@@ -291,7 +292,7 @@ export default {
           console.log(archive.pointer() + ' total bytes');
           console.log('archiver has been finalized and the output file descriptor has closed.');
 
-          Session.set('working', false);
+          LocalState.set('WORKING', false);
 
           // rewrite to a GrandView file (.gvf)
           remote.require('dialog').showSaveDialog({

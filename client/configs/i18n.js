@@ -21,13 +21,12 @@
 
 import {Meteor} from 'meteor/meteor';
 import {TAPi18n} from 'meteor/tap:i18n';
-import {Tracker} from 'meteor/tracker';
 
 import {Settings} from './../../lib/collections';
 
 const getUserLanguage = function () {
   var settings = Settings.find().fetch();
-  var language = 'en';
+  var language = 'no-NB';
 
   if (settings.length) {
     language = settings[0].language;
@@ -40,14 +39,9 @@ Meteor.startup(function () {
 
   TAPi18n.setLanguage(getUserLanguage())
     .done(() => {
-      console.log('Language set.');
+      console.log('Language set as: ' + TAPi18n.getLanguage());
     })
     .fail((error) => {
-      // Handle the situation
       console.log(error);
     });
-});
-
-Tracker.autorun(() => {
-  TAPi18n.setLanguage(getUserLanguage());
 });

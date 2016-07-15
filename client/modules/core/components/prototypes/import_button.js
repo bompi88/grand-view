@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Document Table Actions
+// ImportButton Component
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -17,19 +17,19 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-export default {
+import React from 'react';
 
-  isDisabledOnManyAndNone({SelectedCtrl}, tableName) {
-    return SelectedCtrl.getSelected(tableName).length !== 1;
-  },
 
-  isDisabledOnNone({SelectedCtrl}, tableName) {
-    return SelectedCtrl.getSelected(tableName).length === 0;
-  },
+class ImportButton extends React.Component {
 
-  getTemplateTitle({Collections}, _id) {
-    const template = Collections.Documents.findOne({ _id });
-    return template && template.title;
+  render() {
+    const classes = 'btn btn-default import' + this.props.className;
+    return (
+      <div className={classes} onClick={this.props.onClick}>
+        <span className="glyphicon glyphicon-import" aria-hidden="true"></span> {this.props.label}
+      </div>
+    );
   }
+}
 
-};
+export default ImportButton;

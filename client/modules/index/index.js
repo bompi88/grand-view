@@ -4,6 +4,5 @@ import routes from './routes';
 export default {
   routes,
   actions,
-  load() {
-  }
+  load() {}
 };

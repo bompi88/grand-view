@@ -1,0 +1,13 @@
+{
+  "export_office_modal": {
+    "title": "Generer utskriftsdokument",
+    "description": "Du må velge et format på utskriftsdokumentet. F.eks. så lister formatet 'kapitler' kapittelstrukturen med de påfølgende informasjonselementene under hvert kapittel.",
+    "generate": "Generer",
+    "select": {
+      "default": "Sorter på:",
+      "chapters": "Kapitler",
+      "tags": "Nøkkelord",
+      "references": "Kilder"
+    }
+  }
+}

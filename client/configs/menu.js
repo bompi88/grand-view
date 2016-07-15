@@ -20,11 +20,7 @@
 /* globals _require */
 /* eslint no-sync: 0 */
 
-import {Meteor} from 'meteor/meteor';
-import {$} from 'meteor/jquery';
-import {Notifications} from 'meteor/gfk:notifications';
-
-Meteor.startup(() => {
+export default ({LocalState, Helpers, NotificationManager, TAPi18n, Tracker}) => {
   const remote = _require('electron').remote;
   const Menu = remote.Menu;
   const resourcesRoot = _require('fs').realpathSync(process.env.DIR || process.cwd());
@@ -33,211 +29,224 @@ Meteor.startup(() => {
     return (process.platform === 'darwin') ? 'Command' : 'Ctrl';
   };
 
-  const template = [
-    {
-      label: 'GrandView',
-      submenu: [
-        {
-          label: 'Om GrandView',
-          click() {
-            const aboutWindow = window.open(
-              'file:' + resourcesRoot + '/.about.html',
-              'Om GrandView',
-              'width=300, ' +
-              'height=300, ' +
-              'resizable=no, ' +
-              'scrollbars=no, ' +
-              'status=no, ' +
-              'menubar=no, ' +
-              'toolbar=no'
-            );
-            aboutWindow.focus();
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Skjul GrandView',
-          accelerator: CommandOrCtrl() + '+H',
-          click() {
-            remote.getCurrentWindow().minimize();
-          }
-        },
-        {
-          label: 'Vis GrandView',
-          accelerator: CommandOrCtrl() + '+S',
-          click() {
-            remote.getCurrentWindow().show();
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Lukk GrandView',
-          accelerator: CommandOrCtrl() + '+Q',
-          click() {
-            remote.getCurrentWindow().close();
-          }
-        },
-      ]
-    },
-    {
-      label: 'Fil',
-      submenu: [
-        {
-          label: 'Nytt dokument',
-          accelerator: CommandOrCtrl() + '+D',
-          click() {
-            $('#template-modal').modal('show');
-          }
-        },
-        {
-          label: 'Ny mal',
-          accelerator: CommandOrCtrl() + '+M',
-          click() {
-            GV.documentsCtrl.createNewTemplate();
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Importer dokument',
-          accelerator: CommandOrCtrl() + '+I',
-          click() {
-            GV.helpers.importDocument();
-          }
-        },
-        {
-          label: 'Eksporter dokument',
-          accelerator: CommandOrCtrl() + '+E',
-          click() {
-            var doc = Session.get('mainDocument');
-            if (doc) {
-              GV.helpers.exportDocument(doc);
-            } else {
-              Notifications.error(
-                'Eksportering mislyktes',
-                'Du må ha åpnet et dokument for å kunne eksportere det.'
-              );
-            }
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Importer mal',
-          accelerator: CommandOrCtrl() + '+Shift+I',
-          click() {
-            GV.helpers.importDocument(true);
-          }
-        },
-        {
-          label: 'Eksporter mal',
-          accelerator: CommandOrCtrl() + '+Shift+E',
-          click() {
-            var doc = Session.get('mainDocument');
-            if (doc) {
-              GV.helpers.exportDocument(doc, true);
-            } else {
-              Notifications.error(
-                'Eksportering mislyktes',
-                'Du må ha åpnet en mal for å kunne eksportere den.'
-              );
-            }
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Generer utskriftsdokument',
-          accelerator: CommandOrCtrl() + '+G',
-          click() {
-            var doc = Session.get('mainDocument');
-            if (doc) {
-              $('#create-printout').modal('show');
-            } else {
-              Notifications.error(
-                'Generering mislyktes',
-                'Du må ha åpnet et dokument for å kunne generere utskrift.'
-              );
-            }
-          }
-        }
-      ]
-    },
-    {
-      label: 'Rediger',
-      submenu: [
-        {
-          label: 'Angre',
-          accelerator: CommandOrCtrl() + '+Z',
-          click() {
-            remote.getCurrentWindow().webContents.undo();
-          }
-        },
-        {
-          label: 'Gjenta',
-          accelerator: 'Shift+' + CommandOrCtrl() + '+Z',
-          click() {
-            remote.getCurrentWindow().webContents.redo();
-          }
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Klipp ut',
-          accelerator: CommandOrCtrl() + '+X',
-          click() {
-            remote.getCurrentWindow().webContents.cut();
-          }
-        },
-        {
-          label: 'Kopier',
-          accelerator: CommandOrCtrl() + '+C',
-          click() {
-            remote.getCurrentWindow().webContents.copy();
-          }
-        },
-        {
-          label: 'Lim inn',
-          accelerator: CommandOrCtrl() + '+V',
-          click() {
-            remote.getCurrentWindow().webContents.paste();
-          }
-        },
-        {
-          label: 'Merk Alt',
-          accelerator: CommandOrCtrl() + '+A',
-          click() {
-            remote.getCurrentWindow().webContents.selectAll();
-          }
-        }
-      ]
-    },
-    {
-      label: 'Vis',
-      submenu: [
-        {
-          label: 'Oppfrisk',
-          accelerator: CommandOrCtrl() + '+R',
-          click() { remote.getCurrentWindow().reload(); }
-        },
-        {
-          label: 'Slå på/av utviklerverktøy',
-          accelerator: 'Alt+' + CommandOrCtrl() + '+I',
-          click() { remote.getCurrentWindow().toggleDevTools(); }
-        },
-      ]
-    }
-  ];
+  Tracker.autorun(function () {
+    const lang = TAPi18n.getLanguage();
 
-  const menu = Menu.buildFromTemplate(template);
+    const template = [
+      {
+        label: TAPi18n.__('menu.grandview'),
+        submenu: [
+          {
+            label: TAPi18n.__('menu.about_grandview'),
+            click() {
+              const file = (lang === 'no-NB') ? '/.about-no-NB.html' : '/.about-en.html';
+              const aboutWindow = window.open(
+                'file:' + resourcesRoot + file,
+                TAPi18n.__('menu.about_grandview'),
+                'width=300, ' +
+                'height=300, ' +
+                'resizable=no, ' +
+                'scrollbars=no, ' +
+                'status=no, ' +
+                'menubar=no, ' +
+                'toolbar=no'
+              );
+              aboutWindow.focus();
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: TAPi18n.__('menu.hide_grandview'),
+            accelerator: CommandOrCtrl() + '+H',
+            click() {
+              remote.getCurrentWindow().minimize();
+            }
+          },
+          {
+            label: TAPi18n.__('menu.show_grandview'),
+            accelerator: CommandOrCtrl() + '+S',
+            click() {
+              remote.getCurrentWindow().show();
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: TAPi18n.__('menu.close_grandview'),
+            accelerator: CommandOrCtrl() + '+Q',
+            click() {
+              remote.getCurrentWindow().close();
+            }
+          },
+        ]
+      },
+      {
+        label: TAPi18n.__('menu.file'),
+        submenu: [
+          {
+            label: TAPi18n.__('menu.new_document'),
+            accelerator: CommandOrCtrl() + '+D',
+            click() {
+              LocalState.set('CREATE_MODAL_VISIBLE', true);
+            }
+          },
+          {
+            label: TAPi18n.__('menu.new_template'),
+            accelerator: CommandOrCtrl() + '+T',
+            click() {
+              GV.documentsCtrl.createNewTemplate();
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: TAPi18n.__('menu.import_document'),
+            accelerator: CommandOrCtrl() + '+I',
+            click() {
+              Helpers.importDocument();
+            }
+          },
+          {
+            label: TAPi18n.__('menu.export_document'),
+            accelerator: CommandOrCtrl() + '+E',
+            click() {
+              const doc = LocalState.get('CURRENT_DOCUMENT');
 
-  Menu.setApplicationMenu(menu);
-});
+              if (doc) {
+                Helpers.exportDocument(doc);
+              } else {
+                NotificationManager.warning(
+                  TAPi18n.__('notifications.export_document_failed.message'),
+                  TAPi18n.__('notifications.export_document_failed.title')
+                );
+              }
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: TAPi18n.__('menu.import_template'),
+            accelerator: CommandOrCtrl() + '+Shift+I',
+            click() {
+              Helpers.importDocument(true);
+            }
+          },
+          {
+            label: TAPi18n.__('menu.export_template'),
+            accelerator: CommandOrCtrl() + '+Shift+E',
+            click() {
+              const doc = LocalState.get('CURRENT_DOCUMENT');
+
+              if (doc) {
+                Helpers.exportDocument(doc, true);
+              } else {
+                NotificationManager.warning(
+                  TAPi18n.__('notifications.export_template_failed.message'),
+                  TAPi18n.__('notifications.export_template_failed.title')
+                );
+              }
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: TAPi18n.__('menu.generate_print'),
+            accelerator: CommandOrCtrl() + '+G',
+            click() {
+              const doc = LocalState.get('CURRENT_DOCUMENT');
+
+              if (doc) {
+                if (doc.template) {
+                  // Helpers.generateDocument();
+                } else {
+                  LocalState.set('EXPORT_OFFICE_MODAL_VISIBLE', true);
+                }
+              } else {
+                NotificationManager.warning(
+                  TAPi18n.__('notifications.generation_failed.message'),
+                  TAPi18n.__('notifications.generation_failed.title')
+                );
+              }
+            }
+          }
+        ]
+      },
+      {
+        label: TAPi18n.__('menu.edit'),
+        submenu: [
+          {
+            label: TAPi18n.__('menu.undo'),
+            accelerator: CommandOrCtrl() + '+Z',
+            click() {
+              remote.getCurrentWindow().webContents.undo();
+            }
+          },
+          {
+            label: TAPi18n.__('menu.redo'),
+            accelerator: 'Shift+' + CommandOrCtrl() + '+Z',
+            click() {
+              remote.getCurrentWindow().webContents.redo();
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: TAPi18n.__('menu.cut'),
+            accelerator: CommandOrCtrl() + '+X',
+            click() {
+              remote.getCurrentWindow().webContents.cut();
+            }
+          },
+          {
+            label: TAPi18n.__('menu.copy'),
+            accelerator: CommandOrCtrl() + '+C',
+            click() {
+              remote.getCurrentWindow().webContents.copy();
+            }
+          },
+          {
+            label: TAPi18n.__('menu.paste'),
+            accelerator: CommandOrCtrl() + '+V',
+            click() {
+              remote.getCurrentWindow().webContents.paste();
+            }
+          },
+          {
+            label: TAPi18n.__('menu.select_all'),
+            accelerator: CommandOrCtrl() + '+A',
+            click() {
+              remote.getCurrentWindow().webContents.selectAll();
+            }
+          }
+        ]
+      },
+      {
+        label: TAPi18n.__('menu.show'),
+        submenu: [
+          {
+            label: TAPi18n.__('menu.refresh'),
+            accelerator: CommandOrCtrl() + '+R',
+            click() { remote.getCurrentWindow().reload(); }
+          },
+          {
+            label: TAPi18n.__('menu.developer_tools'),
+            accelerator: 'Alt+' + CommandOrCtrl() + '+I',
+            click() { remote.getCurrentWindow().toggleDevTools(); }
+          },
+        ]
+      }
+    ];
+
+    const menu = Menu.buildFromTemplate(template);
+
+    Menu.setApplicationMenu(menu);
+
+  });
+};

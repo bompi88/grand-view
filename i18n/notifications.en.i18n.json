@@ -1,0 +1,8 @@
+{
+  "notifications": {
+    "generation_failed": {
+        "title": "Generering mislyktes",
+        "message": "Du må ha åpnet et dokument for å kunne generere utskrift."
+    }
+  }
+}

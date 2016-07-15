@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Document Table Actions
+// Index Actions
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -19,17 +19,11 @@
 
 export default {
 
-  isDisabledOnManyAndNone({SelectedCtrl}, tableName) {
-    return SelectedCtrl.getSelected(tableName).length !== 1;
+  generate({Helpers}) {
+
   },
 
-  isDisabledOnNone({SelectedCtrl}, tableName) {
-    return SelectedCtrl.getSelected(tableName).length === 0;
-  },
-
-  getTemplateTitle({Collections}, _id) {
-    const template = Collections.Documents.findOne({ _id });
-    return template && template.title;
+  close({LocalState}) {
+    return LocalState.set('EXPORT_OFFICE_MODAL_VISIBLE', false);
   }
-
 };

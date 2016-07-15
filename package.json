@@ -48,10 +48,14 @@
     "async": "^1.5.2",
     "domready": "^1.0.8",
     "mantra-core": "^1.7.0",
+    "meteor-node-stubs": "^0.2.3",
     "officegen": "^0.2.10",
     "react": "^15.0.0",
+    "react-addons-css-transition-group": "^15.2.1",
+    "react-bootstrap": "^0.29.5",
     "react-dom": "^15.0.0",
     "react-mounter": "^1.2.0",
+    "react-notifications": "^1.2.0",
     "rimraf": "^2.5.3",
     "string": "^3.3.1",
     "tar-stream": "^1.5.2"
@@ -82,8 +86,8 @@
     "asar": false,
     "electronVersion": "1.2.6",
     "files": [
-      "**\/*",
-      "**\/.*"
+      "**/*",
+      "**/.*"
     ],
     "mac": {
       "icon": ".assets/osx/grandview.icns"
@@ -111,7 +115,10 @@
       "icon": ".assets/win/grandview.ico"
     },
     "linux": {
-      "target": ["deb", "AppImage"]
+      "target": [
+        "deb",
+        "AppImage"
+      ]
     }
   },
   "directories": {

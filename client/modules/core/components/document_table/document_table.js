@@ -1,7 +1,7 @@
 import React from 'react';
 
-import DocumentTableDropdown from './document_table_dropdown.jsx';
-import DocumentTableRow from './document_table_row.jsx';
+import DocumentTableDropdown from './document_table_dropdown';
+import DocumentTableRow from './document_table_row';
 
 
 export default class DocumentTable extends React.Component {

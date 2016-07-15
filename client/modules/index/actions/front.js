@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// ImportButton Component
+// Index Actions
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -17,19 +17,19 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
+export default {
 
+  openCreateModal({LocalState}) {
+    return LocalState.set('CREATE_MODAL_VISIBLE', true);
+  },
 
-class ImportButton extends React.Component {
+  importFile({Helpers}) {
+    console.log(Helpers)
+    Helpers.importDocument();
+  },
 
-  render() {
-    const classes = 'btn btn-default import' + this.props.className;
-    return (
-      <div className={classes}>
-        <span className="glyphicon glyphicon-import" aria-hidden="true"></span> {this.props.label}
-      </div>
-    );
+  clearStates({LocalState}) {
+    return LocalState.set('CREATE_MODAL_VISIBLE', false);
   }
-}
 
-export default ImportButton;
+};

@@ -17,10 +17,13 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
+import 'react-notifications/lib/notifications.css';
 
-import * as ContextMenus from '../context_menu/context_menu.jsx';
-import TopNavBar from '../top_nav_bar/top_nav_bar.jsx';
+import React from 'react';
+import {NotificationContainer} from 'react-notifications';
+import ContextMenus from '../context_menu';
+import TopNavBar from '../top_nav_bar/top_nav_bar';
+import Modals from '../modals/modals';
 
 const Layout = ({content = () => null }) => (
   <div>
@@ -34,6 +37,8 @@ const Layout = ({content = () => null }) => (
 
     {content()}
 
+    <Modals />
+    <NotificationContainer/>
   </div>
 );
 

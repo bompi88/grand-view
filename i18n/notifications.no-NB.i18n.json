@@ -1,0 +1,16 @@
+{
+  "notifications": {
+    "generation_failed": {
+        "title": "Generering mislyktes",
+        "message": "Du må ha åpnet et dokument for å kunne generere utskrift."
+    },
+    "export_document_failed": {
+      "title": "Eksportering av dokument(er) mislyktes",
+      "message": "Du må ha åpnet et dokument for å kunne eksportere det."
+    },
+    "export_template_failed": {
+      "title": "Eksportering av mal(er) mislyktes",
+      "message": "Du må ha åpnet en mal for å kunne eksportere den."
+    }
+  }
+}

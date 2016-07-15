@@ -20,27 +20,13 @@
 import React from 'react';
 import {mount} from 'react-mounter';
 
-import MainLayout from './components/main_layout/main_layout.jsx';
-import Index from './components/index/index.jsx';
-import Documents from './components/documents/documents.jsx';
-import Templates from './components/templates/templates.jsx';
-import WorkArea from './components/work_area/work_area.jsx';
+import MainLayout from './components/main_layout/main_layout';
+import Documents from './components/documents/documents';
+import Templates from './components/templates/templates';
+import WorkArea from './components/work_area/work_area';
 
 export default function (injectDeps, {FlowRouter}) {
   const MainLayoutCtx = injectDeps(MainLayout);
-
-  /**
-   * Landing page
-   */
-  FlowRouter.route('/', {
-    name: 'Index',
-    action() {
-      mount(MainLayoutCtx, {
-        content: () => <Index />
-      });
-    }
-  });
-
 
   // -- Document routes --------------------------------------------------------
 

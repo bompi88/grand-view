@@ -5,6 +5,8 @@ import {ReactiveDict} from 'meteor/reactive-dict';
 import {Tracker} from 'meteor/tracker';
 import {$} from 'meteor/jquery';
 import {_} from 'meteor/underscore';
+import {TAPi18n} from 'meteor/tap:i18n';
+import {NotificationManager} from 'react-notifications';
 
 import Helpers from './../lib/helpers';
 import SelectedCtrl from './../lib/controllers/selected_nodes';
@@ -12,13 +14,14 @@ import ReferencesCtrl from './../lib/controllers/references';
 import ShowMoreCtrl from './../lib/controllers/show_more';
 import TagsCtrl from './../lib/controllers/tags';
 
-
 export default function () {
   return {
+    NotificationManager,
     SelectedCtrl,
     ReferencesCtrl,
     ShowMoreCtrl,
     TagsCtrl,
+    TAPi18n,
     Meteor,
     FlowRouter,
     Collections,

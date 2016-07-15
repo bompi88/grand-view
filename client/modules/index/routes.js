@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Document Table Actions
+// Index Module Routes
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -17,19 +17,25 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-export default {
+import React from 'react';
+import {mount} from 'react-mounter';
 
-  isDisabledOnManyAndNone({SelectedCtrl}, tableName) {
-    return SelectedCtrl.getSelected(tableName).length !== 1;
-  },
+import MainLayout from '/client/modules/core/components/main_layout/main_layout';
+import Index from './containers/index';
 
-  isDisabledOnNone({SelectedCtrl}, tableName) {
-    return SelectedCtrl.getSelected(tableName).length === 0;
-  },
+export default function (injectDeps, {FlowRouter}) {
+  const MainLayoutCtx = injectDeps(MainLayout);
 
-  getTemplateTitle({Collections}, _id) {
-    const template = Collections.Documents.findOne({ _id });
-    return template && template.title;
-  }
+  /**
+   * Index page
+   */
+  FlowRouter.route('/', {
+    name: 'Index',
+    action() {
+      mount(MainLayoutCtx, {
+        content: () => <Index />
+      });
+    }
+  });
 
-};
+}

@@ -1,0 +1,27 @@
+{
+  "menu": {
+    "grandview": "GrandView",
+    "about_grandview": "Om GrandView",
+    "hide_grandview": "Skjul GrandView",
+    "show_grandview": "Vis GrandView",
+    "close_grandview": "Lukk GrandView",
+    "file": "Fil",
+    "new_document": "Nytt dokument",
+    "new_template": "Ny mal",
+    "import_document": "Importer dokument",
+    "export_document": "Eksporter dokument",
+    "import_template": "Importer mal",
+    "export_template": "Eksporter mal",
+    "generate_print": "Generer utskrift",
+    "edit": "Rediger",
+    "undo": "Angre",
+    "redo": "Gjenta",
+    "cut": "Klipp ut",
+    "copy": "Kopier",
+    "paste": "Lim inn",
+    "select_all": "Merk Alt",
+    "show": "Vis",
+    "refresh": "Oppfrisk",
+    "developer_tools": "Slå på/av utviklerverktøy"
+  }
+}

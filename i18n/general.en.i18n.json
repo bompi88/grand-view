@@ -1,0 +1,10 @@
+{
+  "languages": {
+    "en": "English",
+    "no-NB": "Norwegian (Bokmål)"
+  },
+  "forms": {
+    "ok": "OK",
+    "cancel": "Cancel"
+  }
+}
