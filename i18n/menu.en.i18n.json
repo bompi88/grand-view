@@ -2,6 +2,7 @@
   "menu": {
     "grandview": "GrandView",
     "about_grandview": "About GrandView",
+    "change_language": "Change language",
     "hide_grandview": "Hide GrandView",
     "show_grandview": "Show GrandView",
     "close_grandview": "Close GrandView",

@@ -20,9 +20,11 @@
 /* globals _require */
 /* eslint no-sync: 0 */
 
-export default ({LocalState, Helpers, NotificationManager, TAPi18n, Tracker}) => {
+export default (context) => {
   const remote = _require('electron').remote;
   const Menu = remote.Menu;
+
+  const {LocalState, Helpers, NotificationManager, TAPi18n, Tracker} = context;
   const resourcesRoot = _require('fs').realpathSync(process.env.DIR || process.cwd());
 
   const CommandOrCtrl = () => {
@@ -30,6 +32,7 @@ export default ({LocalState, Helpers, NotificationManager, TAPi18n, Tracker}) =>
   };
 
   Tracker.autorun(function () {
+    const currentDocument = LocalState.get('CURRENT_DOCUMENT');
     const lang = TAPi18n.getLanguage();
 
     const template = [
@@ -52,6 +55,12 @@ export default ({LocalState, Helpers, NotificationManager, TAPi18n, Tracker}) =>
                 'toolbar=no'
               );
               aboutWindow.focus();
+            }
+          },
+          {
+            label: TAPi18n.__('menu.change_language'),
+            click() {
+              LocalState.set('LANGUAGE_MODAL_VISIBLE', true);
             }
           },
           {
@@ -90,14 +99,15 @@ export default ({LocalState, Helpers, NotificationManager, TAPi18n, Tracker}) =>
             label: TAPi18n.__('menu.new_document'),
             accelerator: CommandOrCtrl() + '+D',
             click() {
-              LocalState.set('CREATE_MODAL_VISIBLE', true);
+              LocalState.set('NEW_DOCUMENT_MODAL', true);
             }
           },
           {
             label: TAPi18n.__('menu.new_template'),
             accelerator: CommandOrCtrl() + '+T',
             click() {
-              GV.documentsCtrl.createNewTemplate();
+              LocalState.set('NEW_TEMPLATE_MODAL', true);
+
             }
           },
           {
@@ -107,17 +117,18 @@ export default ({LocalState, Helpers, NotificationManager, TAPi18n, Tracker}) =>
             label: TAPi18n.__('menu.import_document'),
             accelerator: CommandOrCtrl() + '+I',
             click() {
-              Helpers.importDocument();
+              Helpers.importDocument(context);
             }
           },
           {
             label: TAPi18n.__('menu.export_document'),
             accelerator: CommandOrCtrl() + '+E',
+            enabled: Boolean(currentDocument),
             click() {
               const doc = LocalState.get('CURRENT_DOCUMENT');
 
               if (doc) {
-                Helpers.exportDocument(doc);
+                Helpers.exportDocument(context, doc);
               } else {
                 NotificationManager.warning(
                   TAPi18n.__('notifications.export_document_failed.message'),
@@ -133,17 +144,18 @@ export default ({LocalState, Helpers, NotificationManager, TAPi18n, Tracker}) =>
             label: TAPi18n.__('menu.import_template'),
             accelerator: CommandOrCtrl() + '+Shift+I',
             click() {
-              Helpers.importDocument(true);
+              Helpers.importDocument(context, true);
             }
           },
           {
             label: TAPi18n.__('menu.export_template'),
             accelerator: CommandOrCtrl() + '+Shift+E',
+            enabled: Boolean(currentDocument),
             click() {
               const doc = LocalState.get('CURRENT_DOCUMENT');
 
               if (doc) {
-                Helpers.exportDocument(doc, true);
+                Helpers.exportDocument(context, doc, true);
               } else {
                 NotificationManager.warning(
                   TAPi18n.__('notifications.export_template_failed.message'),
@@ -158,12 +170,16 @@ export default ({LocalState, Helpers, NotificationManager, TAPi18n, Tracker}) =>
           {
             label: TAPi18n.__('menu.generate_print'),
             accelerator: CommandOrCtrl() + '+G',
+            enabled: Boolean(currentDocument),
             click() {
               const doc = LocalState.get('CURRENT_DOCUMENT');
 
               if (doc) {
                 if (doc.template) {
-                  // Helpers.generateDocument();
+                  NotificationManager.warning(
+                    TAPi18n.__('notifications.generation_template_failed.message'),
+                    TAPi18n.__('notifications.generation_template_failed.title')
+                  );
                 } else {
                   LocalState.set('EXPORT_OFFICE_MODAL_VISIBLE', true);
                 }

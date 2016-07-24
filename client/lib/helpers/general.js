@@ -66,38 +66,6 @@ export default {
     window.bootbox.dialog(confirmationPrompt);
   },
 
-  createNewDocument(promptTitle, docTitle, callback, template = false) {
-    $('div.tooltip').hide();
-    // TODO: use the helper?
-    // A confirmation prompt before removing the document
-    const confirmationPrompt = {
-      title: promptTitle,
-      buttons: {
-        cancel: {
-          label: 'Avbryt'
-        },
-        confirm: {
-          label: 'Ok'
-        }
-      },
-      callback(title) {
-        if (title !== null) {
-          const doc = {
-            title: title || docTitle,
-            lastChanged: new Date(),
-            template
-          };
-          console.log(doc)
-          // create a new document
-          const id = Collections.Documents.insert(doc);
-
-          return callback(id);
-        }
-      }
-    };
-    window.bootbox.prompt(confirmationPrompt);
-  },
-
   goto({FlowRouter}, id, template = false) {
     const route = template ? 'Template' : 'Document';
 

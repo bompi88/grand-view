@@ -7,24 +7,24 @@ export const composer = ({context}, onData) => {
   const {LocalState, TAPi18n} = context();
 
   const isOpen = LocalState.get('EXPORT_OFFICE_MODAL_VISIBLE') || false;
-  const title = TAPi18n.__('export_office_modal.title');
-  const description = TAPi18n.__('export_office_modal.description');
-  const generateBtn = TAPi18n.__('export_office_modal.generate');
+  const title = TAPi18n.__('modals.export_office_modal.title');
+  const description = TAPi18n.__('modals.export_office_modal.description');
+  const generateBtn = TAPi18n.__('modals.export_office_modal.generate');
   const cancelBtn = TAPi18n.__('forms.cancel');
-  const selectLabel = TAPi18n.__('export_office_modal.select.default');
+  const selectLabel = TAPi18n.__('modals.export_office_modal.select.label');
 
   const selectOptions = [
     {
       value: 'chapters',
-      label: TAPi18n.__('export_office_modal.select.chapters')
+      label: TAPi18n.__('modals.export_office_modal.select.chapters')
     },
     {
       value: 'tags',
-      label: TAPi18n.__('export_office_modal.select.tags')
+      label: TAPi18n.__('modals.export_office_modal.select.tags')
     },
     {
       value: 'references',
-      label: TAPi18n.__('export_office_modal.select.references')
+      label: TAPi18n.__('modals.export_office_modal.select.references')
     }
   ];
 

@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Index Actions
+// Clippy Actions
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -19,11 +19,8 @@
 
 export default {
 
-  createDocument({Helpers}) {
-
-  },
-
-  close({LocalState}) {
-    return LocalState.set('CREATE_MODAL_VISIBLE', false);
+  openLanguageModal({LocalState}) {
+    LocalState.set('LANGUAGE_MODAL_VISIBLE', true);
   }
+
 };

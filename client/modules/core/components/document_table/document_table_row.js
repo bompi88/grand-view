@@ -1,36 +1,51 @@
 import React from 'react';
+import {moment} from 'meteor/momentjs:moment';
 
-import {formatDateRelative, formatDateRegular} from './../../../../../client/lib/helpers';
-
+import ExportButton from './../prototypes/export_button';
 
 export default class DocumentTableRow extends React.Component {
 
   formatDateRelative(time) {
-    return formatDateRelative(time);
+    return moment && moment(time).calendar();
   }
 
-  getTemplateTitle(doc) {
+  formatDateRegular(time) {
+    return moment && moment(time).format('L');
+  }
+
+  renderTemplateTitle(doc) {
     const {getTemplateTitle} = this.props;
-    return getTemplateTitle(doc.templateBasis) + ' (av ' +
-      formatDateRegular(document.createdOn) + ')';
+    return getTemplateTitle(doc.hasTemplate) + ' (av ' +
+      this.formatDateRegular(doc.createdAt) + ')';
   }
 
   renderTemplateData(doc) {
     return (
-      <td class="row-item">
-        {doc.templateBasis ? this.renderTemplateTitle(doc) : '-'}
+      <td className="row-item">
+        {doc.hasTemplate ? this.renderTemplateTitle(doc) : '-'}
       </td>
     );
   }
 
   renderEditOptions(doc) {
+    const {exportDocument, removeDocument} = this.props;
+
     return (
       <td>
-        <div class="btn-group pull-right">
-          <ExportButton doc={doc} clasName="btn-sm" label="Eksporter"/>
+        <div className="btn-group pull-right">
+          <ExportButton
+            className="btn-sm"
+            label="Eksporter"
+            onClick={exportDocument.bind(this, doc._id)}
+            doc={doc}
+          />
 
-          <button type="button" id="btn-remove" class="btn btn-danger btn-sm">
-            <span class="glyphicon glyphicon-trash"></span> Fjern
+          <button
+            type="button"
+            className="btn btn-danger btn-sm"
+            onClick={removeDocument.bind(this, doc._id)}
+          >
+            <span className="glyphicon glyphicon-trash"></span> Fjern
           </button>
         </div>
       </td>
@@ -38,18 +53,19 @@ export default class DocumentTableRow extends React.Component {
   }
 
   render() {
-    const doc = this.props.document;
+    const {document: doc, showTemplates, showEditOptions, openDocument} = this.props;
 
     return (
-      <tr class="table-row">
-        <td class="row-item"><input type="checkbox" class="checkbox" aria-label="..." /></td>
-        <td class="row-item">{doc.title}</td>
-        <td class="row-item">{this.formatDateRelative(doc.createdOn)}</td>
-        <td class="row-item">{this.formatDateRelative(doc.lastChanged)}</td>
-        {this.hasTemplate ? this.renderTemplateData(doc) : null}
-        {this.editOptions ? this.renderEditOptions(doc) : null}
+      <tr className="table-row" onClick={openDocument.bind(this, doc._id)}>
+        <td className="row-item">
+          <input type="checkbox" className="checkbox" aria-label="..." />
+        </td>
+        <td className="row-item">{doc.title}</td>
+        <td className="row-item">{this.formatDateRelative(doc.createdOn)}</td>
+        <td className="row-item">{this.formatDateRelative(doc.lastChanged)}</td>
+        {showTemplates ? this.renderTemplateData(doc) : null}
+        {showEditOptions ? this.renderEditOptions(doc) : null}
       </tr>
     );
-
   }
 }

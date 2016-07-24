@@ -1,0 +1,37 @@
+{
+  "modals": {
+    "create_modal": {
+      "title": "Choose title and document template",
+      "description": "Please fill in a title for your document and optionally choose a document template to begin  with. If you do not select a template, there will be no initial structure of the new document.",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Document title",
+      "select": {
+        "label": "Select a template (optional)",
+        "none": "(No template selected)"
+      },
+      "helperTexts": {
+        "minLengthString": "Title must contain at least %s characters"
+      }
+    },
+    "export_office_modal": {
+      "title": "Generate printable and editable document",
+      "description": "Please select a structure of your document. The option \"Chapters\" will list information units by chapter, \"Tags\" and \"References\" will sort information units by tags and references, respectively.",
+      "generate": "Generate",
+      "select": {
+        "label": "Order by",
+        "chapters": "Chapters",
+        "tags": "Tags",
+        "references": "References"
+      }
+    },
+    "language_modal": {
+      "title": "Choose a language",
+      "description": "Select a language for the application.",
+      "select": {
+        "label": "Select a language",
+        "no-NB": "Norwegian (Bokmål)",
+        "en": "English"
+      }
+    }
+  }
+}

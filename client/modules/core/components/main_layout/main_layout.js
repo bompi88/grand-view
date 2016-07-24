@@ -21,15 +21,17 @@ import 'react-notifications/lib/notifications.css';
 
 import React from 'react';
 import {NotificationContainer} from 'react-notifications';
-import ContextMenus from '../context_menu';
 import TopNavBar from '../top_nav_bar/top_nav_bar';
 import Modals from '../modals/modals';
+import ContextMenuRoot from '../../containers/context_menu_root';
+import ContextMenuChapter from '../../containers/context_menu_chapter';
+import ContextMenuNode from '../../containers/context_menu_node';
 
 const Layout = ({content = () => null }) => (
   <div>
-    <ContextMenus.RootNode />
-    <ContextMenus.ChapterNode />
-    <ContextMenus.MediaNode />
+    <ContextMenuRoot />
+    <ContextMenuChapter />
+    <ContextMenuNode />
 
     <TopNavBar />
 

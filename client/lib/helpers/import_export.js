@@ -21,15 +21,10 @@
 /* eslint no-console: 0 */
 /* global _require */
 
-import {_} from 'meteor/underscore';
-import {Meteor} from 'meteor/meteor';
-import {Notifications} from 'meteor/gfk:notifications';
-
 import Globals from '/lib/globals';
-import {Documents, Nodes, Files} from '/lib/collections';
-import {LocalState} from './../../configs/context';
 
-const remote = _require('electron').remote;
+const {remote} = _require('electron');
+const {dialog} = remote;
 const fs = _require('fs');
 const path = _require('path');
 const async = _require('async');
@@ -38,18 +33,18 @@ const tar = _require('tar-stream');
 
 export default {
 
-  deepCopyImport(docs, nodes, fileDocs, srcPath) {
+  deepCopyImport({Meteor, NotificationManager, LocalState}, docs, nodes, fileDocs, srcPath) {
 
     Meteor.call('import', docs, nodes, fileDocs, srcPath, (err) => {
       if (err) {
-        Notifications.error('Feilmelding', err.message);
+        NotificationManager.error(err.message, 'Feilmelding');
       } else {
 
         this.deleteFolderRecursive(path.join(Globals.basePath, 'tmp'));
 
-        Notifications.success(
-          'Importering lyktes',
-          'Rapportstrukturen ble importert i systemet og kan finnes på dashbordet.'
+        NotificationManager.success(
+          'Rapportstrukturen ble importert i systemet og kan finnes på dashbordet.',
+          'Importering lyktes'
         );
 
         LocalState.set('WORKING', false);
@@ -107,12 +102,12 @@ export default {
     }
   },
 
-  importDocument(isTemplate) {
+  importDocument({Meteor, NotificationManager, LocalState}, isTemplate) {
 
     var extension = isTemplate ? 'gvt' : 'gvd';
 
-    // show open dialog for GrandView files (.gvf)
-    remote.require('dialog').showOpenDialog({
+    // show open dialog for GrandView files (.gvt  or .gvd)
+    dialog.showOpenDialog({
       title: 'Importer rapportstruktur',
       filters: [
         {
@@ -196,6 +191,7 @@ export default {
                 var fileDocs = (fileImp === '') ? [] : JSON.parse(fileImp);
 
                 this.deepCopyImport(
+                  {Meteor, NotificationManager, LocalState},
                   docs,
                   nodes,
                   fileDocs,
@@ -209,7 +205,7 @@ export default {
     });
   },
 
-  exportDocument(docIds, isTemplate) {
+  exportDocument({Meteor, LocalState, Collections, _, NotificationManager}, docIds, isTemplate) {
 
     var extension = isTemplate ? 'gvt' : 'gvd';
 
@@ -231,7 +227,7 @@ export default {
       const ids = docIds.isArray() ? docIds : [ docIds ];
 
       // Just in case the data is outdated in client
-      var docs = Documents.find({
+      var docs = Collections.Documents.find({
         _id: { $in: ids }
       }).fetch();
 
@@ -243,7 +239,7 @@ export default {
         }
       });
 
-      var nodes = Nodes.find({
+      var nodes = Collections.Nodes.find({
         _id: {
           $in: children
         }
@@ -254,7 +250,7 @@ export default {
       var fileIds = _.filter(_.pluck(nodes, 'fileId'), (node) => {
         return node;
       });
-      var files = Files.find({
+      var files = Collections.Files.find({
         _id: {
           $in: fileIds || []
         }
@@ -295,7 +291,7 @@ export default {
           LocalState.set('WORKING', false);
 
           // rewrite to a GrandView file (.gvf)
-          remote.require('dialog').showSaveDialog({
+          dialog.showSaveDialog({
             title: 'Eksporter rapportstrukturen',
             filters: [
               {
@@ -309,9 +305,9 @@ export default {
                 if (error) {
                   console.log(error);
                 } else {
-                  Notifications.success(
-                    'Eksportering fullført',
-                    'Filen ble lagret her: ' + filePathAndName
+                  NotificationManager.success(
+                    'Filen ble lagret her: ' + filePathAndName,
+                    'Eksportering fullført'
                   );
                 }
 

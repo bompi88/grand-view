@@ -1,6 +1,0 @@
-{
-  "create_modal": {
-    "title": "Valg av tittel og dokumentmal",
-    "description": "Her kan man velge tittel på dokumentet, samt om man skal bruke en dokumentmal eller ikke. Hvis mal ikke velges, starter man med et tomt dokument uten struktur."
-  }
-}

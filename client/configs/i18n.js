@@ -19,29 +19,25 @@
 
 /* eslint no-console: 0 */
 
-import {Meteor} from 'meteor/meteor';
-import {TAPi18n} from 'meteor/tap:i18n';
-
 import {Settings} from './../../lib/collections';
 
 const getUserLanguage = function () {
-  var settings = Settings.find().fetch();
-  var language = 'no-NB';
-
-  if (settings.length) {
-    language = settings[0].language;
-  }
-
-  return language.toString();
+  const {language} = Settings.findOne({ _id: 'user' });
+  return language;
 };
 
-Meteor.startup(function () {
-
-  TAPi18n.setLanguage(getUserLanguage())
-    .done(() => {
-      console.log('Language set as: ' + TAPi18n.getLanguage());
-    })
-    .fail((error) => {
-      console.log(error);
+export default function ({Meteor, TAPi18n, Tracker}) {
+  Meteor.startup(() => {
+    Tracker.autorun(() => {
+      if (Meteor.subscribe('settings').ready()) {
+        TAPi18n.setLanguage(getUserLanguage())
+        .done(() => {
+          console.log('Language set as: ' + TAPi18n.getLanguage());
+        })
+        .fail((error) => {
+          console.log(error);
+        });
+      }
     });
-});
+  });
+}

@@ -18,59 +18,31 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 import React from 'react';
-import {$} from 'meteor/jquery';
-import {clippy} from 'meteor/macrozone:clippy';
 import ImportButton from '/client/modules/core/components/prototypes/import_button';
+import Clippy from '../../containers/clippy';
+
+import {ContextMenuLayer} from 'react-contextmenu';
+
+const MyComponent = ContextMenuLayer('node')(
+  React.createClass({
+    render() {
+      return <div className="well"></div>;
+    }
+  })
+);
 
 export default class Index extends React.Component {
-
-  // TODO: Hook clippy up to local state
-  componentDidMount() {
-    clippy.load('Peedy', (agent) => {
-
-      // TODO: Attach clippy
-      // GV.clippy = agent;
-
-      agent.show();
-      Session.set("clippyVisible", true);
-      agent.speak("Hei og velkommen! Du kan velge språk ved å klikke på meg.");
-      agent.speak("Du kan skru meg av og på ved å trykke Ctrl+Shift+H.", true);
-      Session.set('clippyState', 'languageSelection');
-
-      let left = 0;
-      let top = 0;
-
-      $('.clippy').on({
-        mousedown(event) {
-          left = event.pageX;
-          top = event.pageY;
-        },
-        mouseup(event) {
-          var deltaX = event.pageX - left;
-          var deltaY = event.pageY - top;
-          var euclidean = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-          if (euclidean < 5) {
-            agent.stopCurrent();
-            agent.play('DoMagic1');
-            agent.play('DoMagic2', 850, () => {
-              $('#language-select').modal('show');
-            });
-          }
-        }
-      });
-    });
-  }
-
   render() {
     const {openCreateModal, importFile} = this.props;
 
     return (
       <div className="container-fluid index animated fadeIn">
+        <Clippy />
         <div className="row animated bounceInRight">
           <div className="col-sm-6 col-md-6 outer">
             <div className="jumbotron">
               <h1>GrandView</h1>
+              <MyComponent />
               <p className="lead">
                 Dette er et verktøy for å strukturere store informasjonsmengder.
                  Kom i gang ved å enten:</p>

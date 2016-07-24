@@ -20,7 +20,7 @@
 export default {
 
   openCreateModal({LocalState}) {
-    return LocalState.set('CREATE_MODAL_VISIBLE', true);
+    return LocalState.set('NEW_DOCUMENT_MODAL', true);
   },
 
   importFile({Helpers}) {
@@ -29,7 +29,7 @@ export default {
   },
 
   clearStates({LocalState}) {
-    return LocalState.set('CREATE_MODAL_VISIBLE', false);
+    return LocalState.set('NEW_DOCUMENT_MODAL', false);
   }
 
 };

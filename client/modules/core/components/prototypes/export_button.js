@@ -23,9 +23,12 @@ import React from 'react';
 class ExportButton extends React.Component {
 
   render() {
-    const classes = 'btn btn-default export' + this.props.className;
+    const {onClick} = this.props;
+    const classes = 'btn btn-default export' +
+      (this.props.className ? ' ' + this.props.className : '');
+
     return (
-      <div className={classes}>
+      <div className={classes} onClick={onClick}>
         <span className="glyphicon glyphicon-export" aria-hidden="true"></span> {this.props.label}
       </div>
     );

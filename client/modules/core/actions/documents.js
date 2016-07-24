@@ -30,6 +30,43 @@ export default {
   getTemplateTitle({Collections}, _id) {
     const template = Collections.Documents.findOne({ _id });
     return template && template.title;
+  },
+
+  createNewDocument({LocalState}) {
+    LocalState.set('NEW_DOCUMENT_MODAL', true);
+  },
+
+  openDocument({LocalState, Collections}, _id) {
+    const doc = Collections.Documents.findOne({_id});
+    LocalState.set('CURRENT_DOCUMENT', doc);
+  },
+
+  exportDocument({}, id, e) {
+    e.stopPropagation();
+    console.log('export');
+  },
+
+  importDocument({}, e) {
+    e.stopPropagation();
+    console.log('import');
+  },
+
+  removeDocument({Meteor, NotificationManager, TAPi18n}, id, e) {
+    e.stopPropagation();
+
+    Meteor.call('documents.remove', id, (err) => {
+      if (err) {
+        NotificationManager.error(
+          TAPi18n.__('notifications.soft_remove_document_failed.message'),
+          TAPi18n.__('notifications.soft_remove_document_failed.title')
+        );
+      } else {
+        NotificationManager.success(
+          TAPi18n.__('notifications.soft_remove_document_success.message'),
+          TAPi18n.__('notifications.soft_remove_document_success.title')
+        );
+      }
+    });
   }
 
 };

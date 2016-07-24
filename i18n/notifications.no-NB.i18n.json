@@ -11,6 +11,18 @@
     "export_template_failed": {
       "title": "Eksportering av mal(er) mislyktes",
       "message": "Du må ha åpnet en mal for å kunne eksportere den."
+    },
+    "context_menu_root": {
+      "title": "Sletting feilet",
+      "message": "Kan ikke slette rotnoden. For å slette dokumentet må du gjøre dette under \"Mine dokumenter\""
+    },
+    "soft_remove_document_failed": {
+      "title": "Feil ved sletting",
+      "message": "Kunne ikke putte dokumentet i papirkurven."
+    },
+    "soft_remove_document_success": {
+      "title": "Sletting fullført",
+      "message": "Dokumentet er lagt i papirkurven."
     }
   }
 }

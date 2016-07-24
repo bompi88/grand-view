@@ -1,6 +1,6 @@
 import React from 'react';
 
-import DocumentTableDropdown from './document_table_dropdown';
+import DocumentTableDropdown from '../../containers/document_table_dropdown';
 import DocumentTableRow from './document_table_row';
 
 
@@ -9,6 +9,7 @@ export default class DocumentTable extends React.Component {
   renderDocumentRow(doc) {
     return (
       <DocumentTableRow
+        key={doc._id}
         document={doc}
         {... this.props}
         />
@@ -23,8 +24,8 @@ export default class DocumentTable extends React.Component {
     }
 
     return (
-      <tr className="no-results-row">
-        <td colSpan={this.props.hasTemplate ? '6' : '5'}>
+      <tr className="no-results-row" key="none">
+        <td colSpan={this.props.showTemplates ? '6' : '5'}>
           {this.props.emptyText ? this.props.emptyText : 'Tom' }...
         </td>
       </tr>
@@ -46,7 +47,7 @@ export default class DocumentTable extends React.Component {
                     <th>Navn</th>
                     <th>Opprettet</th>
                     <th>Sist endret</th>
-                    { this.props.hasTemplate ? (<th>Mal brukt</th>) : null }
+                    { this.props.showTemplates ? (<th>Mal brukt</th>) : null }
                     <th></th>
                   </tr>
                 </thead>

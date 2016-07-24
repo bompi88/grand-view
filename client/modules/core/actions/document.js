@@ -19,14 +19,6 @@
 
 export default {
 
-  createNewDocument({Helpers}) {
-    Helpers.createNewDocument(
-      'Vennligst velg en tittel for dokumentet',
-      'Mitt nye dokument',
-      Helpers.goToDocument
-    );
-  },
-
   createNewTemplate({Helpers}) {
     Helpers.createNewDocument(
       'Vennligst velg en tittel for dokumentmalen',

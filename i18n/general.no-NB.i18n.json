@@ -5,6 +5,7 @@
   },
   "forms": {
     "ok": "OK",
+    "save": "Lagre",
     "cancel": "Avbryt"
   }
 }

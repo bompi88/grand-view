@@ -2,6 +2,7 @@
   "menu": {
     "grandview": "GrandView",
     "about_grandview": "Om GrandView",
+    "change_language": "Bytt språk",
     "hide_grandview": "Skjul GrandView",
     "show_grandview": "Vis GrandView",
     "close_grandview": "Lukk GrandView",

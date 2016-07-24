@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Publications for Documents Collection
+// Publications for Documents
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -27,35 +27,23 @@ export default function () {
   /**
    * Publish all documents that a user owns or has access to
    */
-  Meteor.publish('Documents.all', () => Documents.find());
+  Meteor.publish('documents.all', () => Documents.find({ isTemplate: false }));
 
   /**
    * Publish all removed documents that a user owns or has access to
    */
-  Meteor.publish('Documents.removed', () => Documents.find({ removed: true }));
-
-  /**
-   * Publish all templates
-   */
-  Meteor.publish('Documents.templates.all', () => Documents.find({ template: true }));
-
-  /**
-   * Publish all removed documents that a user owns or has access to
-   */
-  Meteor.publish('Documents.templates.removed', () => {
-    return Documents.find({ template: true, removed: true });
-  });
+  Meteor.publish('documents.removed', () => Documents.find({ isTemplate: false, removed: true }));
 
   /**
    * Publish a particular document by its id, if the user owns it or
    * has access to it.
    */
-  Meteor.publish('Documents.byId', (_id) => Documents.find({ _id }));
+  Meteor.publish('documents.byId', (_id) => Documents.find({ _id }));
 
   /**
    * Publish all resources linked to a doc;
    */
-  Meteor.publish('Documents.allByDocs', (docIds) => {
+  Meteor.publish('documents.allByDocs', (docIds) => {
 
     const ids = _.isArray(docIds) ? docIds : [ docIds ];
 
@@ -88,4 +76,5 @@ export default function () {
 
     return [ nodes, files, docs ];
   });
+
 }

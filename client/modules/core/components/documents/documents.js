@@ -15,8 +15,6 @@ export default class Documents extends React.Component {
             <DocumentTable
               tableName="documents"
               label="dokument"
-              hasTemplate={true}
-              editOptions={true}
               dropdownClasses="pull-right"
               emptyText="Ingen dokumenter funnet" />
           </div>

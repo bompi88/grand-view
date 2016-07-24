@@ -1,6 +1,7 @@
 import {createApp} from 'mantra-core';
 import initContext from './configs/context';
 import initMenu from './configs/menu';
+import initi18n from './configs/i18n';
 
 // Modules
 import coreModule from './modules/core';
@@ -10,8 +11,10 @@ import modalsModule from './modules/modals';
 // Init context
 const context = initContext();
 
-// Init the Electron Menu
+
+// configurations
 initMenu(context);
+initi18n(context);
 
 // Create app
 const app = createApp(context);

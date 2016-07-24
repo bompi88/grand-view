@@ -23,6 +23,6 @@ import {Settings} from './../../lib/collections';
 
 export default function () {
 
-  Meteor.publish(null, () => Settings.find());
+  Meteor.publish('settings', () => Settings.find({ _id: 'user' }));
 
 }

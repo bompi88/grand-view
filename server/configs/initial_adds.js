@@ -21,6 +21,7 @@ import {Settings} from './../../lib/collections';
 
 if (Settings.find().count() === 0) {
   Settings.insert({
-    language: [ 'en' ]
+    _id: 'user',
+    language: 'en'
   });
 }

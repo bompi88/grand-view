@@ -1,0 +1,11 @@
+{
+  "dropdowns": {
+    "document_table": {
+      "create_document": "Opprett dokument",
+      "edit_document": "Rediger dokument",
+      "import_document": "Importer dokument",
+      "export_document": "Eksporter dokument",
+      "remove_document": "Legg i papirkurv"
+    }
+  }
+}

@@ -1,6 +1,0 @@
-{
-  "create_modal": {
-    "title": "Choose title and document template",
-    "description": "Please fill in a title for your document and optionally choose a document template to begin  with. If you do not select a template, there will be no initial structure of the new document."
-  }
-}
