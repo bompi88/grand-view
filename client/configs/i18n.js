@@ -26,12 +26,18 @@ const getUserLanguage = function () {
   return language;
 };
 
-export default function ({Meteor, TAPi18n, Tracker}) {
+export default function ({Meteor, TAPi18n, Tracker, moment}) {
   Meteor.startup(() => {
     Tracker.autorun(() => {
       if (Meteor.subscribe('settings').ready()) {
-        TAPi18n.setLanguage(getUserLanguage())
+        const lang = getUserLanguage();
+        TAPi18n.setLanguage(lang)
         .done(() => {
+          if (lang === 'no-NB') {
+            moment.locale('nb');
+          } else if (lang === 'en') {
+            moment.locale('en');
+          }
           console.log('Language set as: ' + TAPi18n.getLanguage());
         })
         .fail((error) => {

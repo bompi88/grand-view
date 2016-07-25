@@ -1,0 +1,22 @@
+{
+  "document_table": {
+    "title": "Title",
+    "created_at": "Created at",
+    "last_modified": "Last modified",
+    "template_used": "Template used",
+    "is_empty": "No documents found",
+    "by": "by",
+    "remove": "Remove",
+    "export": "Export",
+    "header": "My Documents"
+  },
+  "template_table": {
+    "title": "Title",
+    "created_at": "Created at",
+    "last_modified": "Last modified",
+    "is_empty": "No templates found",
+    "remove": "Remove",
+    "export": "Export",
+    "header": "My Templates"
+  }
+}

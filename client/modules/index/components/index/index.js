@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// TopNavbar SCSS Styles
+// Index Component
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -31,9 +31,9 @@ const MyComponent = ContextMenuLayer('node')(
   })
 );
 
-export default class Index extends React.Component {
+class Index extends React.Component {
   render() {
-    const {openCreateModal, importFile} = this.props;
+    const {openCreateModal, importFile, text} = this.props;
 
     return (
       <div className="container-fluid index animated fadeIn">
@@ -41,11 +41,9 @@ export default class Index extends React.Component {
         <div className="row animated bounceInRight">
           <div className="col-sm-6 col-md-6 outer">
             <div className="jumbotron">
-              <h1>GrandView</h1>
+              <h1>{text.header}</h1>
               <MyComponent />
-              <p className="lead">
-                Dette er et verktøy for å strukturere store informasjonsmengder.
-                 Kom i gang ved å enten:</p>
+              <p className="lead">{text.description}</p>
               <br />
               <div className="text-center">
                 <button
@@ -53,11 +51,11 @@ export default class Index extends React.Component {
                   className="btn btn-success"
                   onClick={openCreateModal}>
 
-                  <span className="glyphicon glyphicon-plus"></span> Opprette nytt dokument
+                  <span className="glyphicon glyphicon-plus"></span> {text.createDocument}
                 </button>
-                <br /><span className="or-separator">eller</span>
+                <br /><span className="or-separator">{text.or}</span>
                 <br />
-                <ImportButton label="Importere fil fra disk" onClick={importFile}/>
+                <ImportButton label={text.importDocument} onClick={importFile}/>
               </div>
             </div>
           </div>
@@ -66,5 +64,17 @@ export default class Index extends React.Component {
     );
   }
 }
+
+Index.propTypes = {
+  text: React.PropTypes.shape({
+    header: React.PropTypes.string.isRequired,
+    description: React.PropTypes.string.isRequired,
+    createDocument: React.PropTypes.string.isRequired,
+    importDocument: React.PropTypes.string.isRequired,
+    or: React.PropTypes.string.isRequired
+  }),
+  openCreateModal: React.PropTypes.func.isRequired,
+  importFile: React.PropTypes.func.isRequired
+};
 
 export default Index;

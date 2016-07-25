@@ -33,6 +33,10 @@ $nav-col-highlight: #444;
     position: relative;
     top: -3px;
   }
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 // -- Bootstrap overrides ------------------------------------------------------

@@ -35,7 +35,7 @@ export default {
 
   deepCopyImport({Meteor, NotificationManager, LocalState}, docs, nodes, fileDocs, srcPath) {
 
-    Meteor.call('import', docs, nodes, fileDocs, srcPath, (err) => {
+    Meteor.call('importResources', docs, nodes, fileDocs, srcPath, (err) => {
       if (err) {
         NotificationManager.error(err.message, 'Feilmelding');
       } else {
@@ -64,7 +64,7 @@ export default {
           fs.unlinkSync(curPath);
         }
       });
-      fs.rmdirSync(path);
+      fs.rmdirSync(p);
     }
   },
 
@@ -206,7 +206,6 @@ export default {
   },
 
   exportDocument({Meteor, LocalState, Collections, _, NotificationManager}, docIds, isTemplate) {
-
     var extension = isTemplate ? 'gvt' : 'gvd';
 
     LocalState.set('WORKING', true);
@@ -219,12 +218,12 @@ export default {
 
     // Gather document in one file, and nodes in another and put the them inside
     // the new folder
+    const ids = _.isArray(docIds) ? docIds : [ docIds ];
 
     // Subscribe to all files first
     // TODO: Convert to flowrouter?
-    Meteor.subscribe('allByDocs', docIds, () => {
+    Meteor.subscribe('documents.allByDocs', ids, () => {
 
-      const ids = docIds.isArray() ? docIds : [ docIds ];
 
       // Just in case the data is outdated in client
       var docs = Collections.Documents.find({
@@ -310,7 +309,7 @@ export default {
                     'Eksportering fullført'
                   );
                 }
-
+                console.log(Globals.basePath + 'tmp')
                 this.deleteFolderRecursive(Globals.basePath + 'tmp');
               });
             } else {

@@ -1,11 +1,20 @@
 {
   "dropdowns": {
     "document_table": {
+      "select_action": "Velg handling",
       "create_document": "Opprett dokument",
       "edit_document": "Rediger dokument",
       "import_document": "Importer dokument",
       "export_document": "Eksporter dokument",
       "remove_document": "Legg i papirkurv"
+    },
+    "template_table": {
+      "select_action": "Velg handling",
+      "create_template": "Opprett mal",
+      "edit_template": "Rediger mal",
+      "import_template": "Importer mal",
+      "export_template": "Eksporter mal",
+      "remove_template": "Legg i papirkurv"
     }
   }
 }

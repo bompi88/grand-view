@@ -8,15 +8,7 @@ export default class Documents extends React.Component {
       <div className="container default-container animated fadeIn">
         <div className="row">
           <div>
-            <h3>
-              <span className="glyphicon glyphicon-book"></span> Mine dokumenter
-            </h3>
-
-            <DocumentTable
-              tableName="documents"
-              label="dokument"
-              dropdownClasses="pull-right"
-              emptyText="Ingen dokumenter funnet" />
+            <DocumentTable dropdownClasses="pull-right" />
           </div>
         </div>
       </div>

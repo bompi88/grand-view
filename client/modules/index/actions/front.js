@@ -23,9 +23,9 @@ export default {
     return LocalState.set('NEW_DOCUMENT_MODAL', true);
   },
 
-  importFile({Helpers}) {
-    console.log(Helpers)
-    Helpers.importDocument();
+  importFile(context) {
+    const {Helpers} = context;
+    Helpers.importDocument(context);
   },
 
   clearStates({LocalState}) {

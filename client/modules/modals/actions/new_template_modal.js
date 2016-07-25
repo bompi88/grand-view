@@ -23,14 +23,14 @@ export default {
     Meteor.call('documents.create', doc, (err) => {
       if (err) {
         NotificationManager.error(
-          TAPi18n.__('notifications.create_document_failed.message'),
-          TAPi18n.__('notifications.create_document_failed.title')
+          TAPi18n.__('notifications.create_template_failed.message'),
+          TAPi18n.__('notifications.create_template_failed.title')
         );
       } else {
         LocalState.set('NEW_TEMPLATE_MODAL', false);
         NotificationManager.success(
-          TAPi18n.__('notifications.create_document_success.message'),
-          TAPi18n.__('notifications.create_document_success.title')
+          TAPi18n.__('notifications.create_template_success.message'),
+          TAPi18n.__('notifications.create_template_success.title')
         );
       }
       if (cb) {
@@ -39,7 +39,8 @@ export default {
     });
   },
 
-  close({LocalState}) {
+  close({LocalState}, reset) {
+    reset();
     return LocalState.set('NEW_TEMPLATE_MODAL', false);
   }
 };

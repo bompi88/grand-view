@@ -1,0 +1,12 @@
+{
+  "navbar": {
+    "grandview": "GrandView",
+    "my_documents": "My documents",
+    "my_templates": "My templates",
+    "trash": "Trash",
+    "work_area": "Work desk",
+    "concept_logo": "Concept's logo",
+    "toggle_navigation": "Toggle navigation",
+    "goto_home": "Got to front page"
+  }
+}

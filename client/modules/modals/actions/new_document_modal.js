@@ -39,7 +39,8 @@ export default {
     });
   },
 
-  close({LocalState}) {
+  close({LocalState}, reset) {
+    reset();
     return LocalState.set('NEW_DOCUMENT_MODAL', false);
   }
 };

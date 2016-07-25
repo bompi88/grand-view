@@ -17,6 +17,8 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
+/* eslint no-console: 0 */
+
 export default {
 
   changeLanguage({Meteor, LocalState, TAPi18n}, lang) {

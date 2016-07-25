@@ -63,7 +63,7 @@ export default {
     return this.collapsed;
   },
 
-  reset(table) {
+  reset() {
     this.collapsed = [];
 
     this.dep.changed();

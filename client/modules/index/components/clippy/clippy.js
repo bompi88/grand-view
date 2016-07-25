@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// TopNavbar SCSS Styles
+// Clippy Component
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -20,11 +20,11 @@
 import React from 'react';
 import {clippy} from 'meteor/macrozone:clippy';
 
-export default class Clippy extends React.Component {
+class Clippy extends React.Component {
 
   componentDidMount() {
-    const {openLanguageModal} = this.props;
-    const {TAPi18n, $} = this.props.context();
+    const {openLanguageModal, text} = this.props;
+    const {$} = this.props.context();
 
     clippy.load('Peedy', (agent) => {
       const uuid = Math.random().toString();
@@ -33,8 +33,8 @@ export default class Clippy extends React.Component {
 
       agent.show();
 
-      agent.speak(TAPi18n.__('clippy.welcome_message'));
-      agent.speak(TAPi18n.__('clippy.hide_me'), true);
+      agent.speak(text.welcome);
+      agent.speak(text.hideMe, true);
 
       let left = 0;
       let top = 0;
@@ -76,5 +76,13 @@ export default class Clippy extends React.Component {
     return <div></div>;
   }
 }
+
+Clippy.propTypes = {
+  text: React.PropTypes.shape({
+    welcome: React.PropTypes.string.isRequired,
+    hideMe: React.PropTypes.string.isRequired
+  }),
+  openLanguageModal: React.PropTypes.func.isRequired
+};
 
 export default Clippy;

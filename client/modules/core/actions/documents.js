@@ -36,19 +36,68 @@ export default {
     LocalState.set('NEW_DOCUMENT_MODAL', true);
   },
 
-  openDocument({LocalState, Collections}, _id) {
+  openDocument({LocalState, Collections, FlowRouter}, _id) {
     const doc = Collections.Documents.findOne({_id});
     LocalState.set('CURRENT_DOCUMENT', doc);
+    FlowRouter.go('Document', { _id });
   },
 
-  exportDocument({}, id, e) {
+  toggleSelected({SelectedCtrl}, id, e) {
     e.stopPropagation();
-    console.log('export');
+    e.preventDefault();
+
+    if (SelectedCtrl.isSelected('documents', id)) {
+      SelectedCtrl.remove('documents', id);
+    } else {
+      SelectedCtrl.add('documents', id);
+    }
   },
 
-  importDocument({}, e) {
+  toggleSort({LocalState}, field) {
+    let curSort = LocalState.get('TABLE_SORT');
+
+    if (curSort && curSort[field]) {
+      curSort[field] *= -1;
+    } else {
+      const sortObj = {};
+      sortObj[field] = 1;
+      curSort = sortObj;
+    }
+    LocalState.set('TABLE_SORT', curSort);
+  },
+
+  getSort({LocalState}, field) {
+    const sort = LocalState.get('TABLE_SORT') || { title: 1 };
+    return sort[field];
+  },
+
+  isSelected({SelectedCtrl}, id) {
+    return SelectedCtrl.isSelected('documents', id);
+  },
+
+  selectAll({SelectedCtrl}, ids) {
+    SelectedCtrl.addAll('documents', ids);
+  },
+
+  deselectAll({SelectedCtrl}, ids) {
+    SelectedCtrl.removeAll('documents', ids);
+  },
+
+  hasAllSelected({SelectedCtrl}, len) {
+    const selected = SelectedCtrl.getSelected('documents').length;
+    return selected > 0 && selected === len;
+  },
+
+  exportDocument(context, id, e) {
     e.stopPropagation();
-    console.log('import');
+    const {Helpers} = context;
+    Helpers.exportDocument(context, id);
+  },
+
+  importDocument(context, e) {
+    e.stopPropagation();
+    const {Helpers} = context;
+    Helpers.importDocument(context);
   },
 
   removeDocument({Meteor, NotificationManager, TAPi18n}, id, e) {
@@ -67,6 +116,11 @@ export default {
         );
       }
     });
+  },
+
+  clearState({LocalState, SelectedCtrl}) {
+    LocalState.set('TABLE_SORT', { title: 1 });
+    SelectedCtrl.reset('documents');
   }
 
 };

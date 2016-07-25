@@ -19,27 +19,80 @@
 
 export default {
 
-  isDisabledOnManyAndNone({SelectedCtrl}, tableName) {
-    return SelectedCtrl.getSelected(tableName).length !== 1;
+  isDisabledOnManyAndNone({SelectedCtrl}) {
+    return SelectedCtrl.getSelected('templates').length !== 1;
   },
 
-  isDisabledOnNone({SelectedCtrl}, tableName) {
-    return SelectedCtrl.getSelected(tableName).length === 0;
+  isDisabledOnNone({SelectedCtrl}) {
+    return SelectedCtrl.getSelected('templates').length === 0;
   },
 
   createNewTemplate({LocalState}) {
     LocalState.set('NEW_TEMPLATE_MODAL', true);
   },
 
-  openTemplate({LocalState, Collections}, _id) {
+  openTemplate({LocalState, Collections, FlowRouter}, _id) {
     const doc = Collections.Documents.findOne({_id});
     LocalState.set('CURRENT_DOCUMENT', doc);
+    FlowRouter.go('Document', { _id });
   },
 
-  exportTemplate({}, id, e) {
+  toggleSelected({SelectedCtrl}, id, e) {
     e.stopPropagation();
-    console.log(id)
-    console.log("export");
+    e.preventDefault();
+
+    if (SelectedCtrl.isSelected('templates', id)) {
+      SelectedCtrl.remove('templates', id);
+    } else {
+      SelectedCtrl.add('templates', id);
+    }
+  },
+
+  toggleSort({LocalState}, field) {
+    let curSort = LocalState.get('TABLE_SORT');
+
+    if (curSort && curSort[field]) {
+      curSort[field] *= -1;
+    } else {
+      const sortObj = {};
+      sortObj[field] = 1;
+      curSort = sortObj;
+    }
+    LocalState.set('TABLE_SORT', curSort);
+  },
+
+  getSort({LocalState}, field) {
+    const sort = LocalState.get('TABLE_SORT') || { title: 1 };
+    return sort[field];
+  },
+
+  isSelected({SelectedCtrl}, id) {
+    return SelectedCtrl.isSelected('templates', id);
+  },
+
+  selectAll({SelectedCtrl}, ids) {
+    SelectedCtrl.addAll('templates', ids);
+  },
+
+  deselectAll({SelectedCtrl}, ids) {
+    SelectedCtrl.removeAll('templates', ids);
+  },
+
+  hasAllSelected({SelectedCtrl}, len) {
+    const selected = SelectedCtrl.getSelected('templates').length;
+    return selected > 0 && selected === len;
+  },
+
+  exportTemplate(context, id, e) {
+    e.stopPropagation();
+    const {Helpers} = context;
+    Helpers.exportDocument(context, id, true);
+  },
+
+  importTemplate(context, e) {
+    e.stopPropagation();
+    const {Helpers} = context;
+    Helpers.importDocument(context, true);
   },
 
   removeTemplate({Meteor, NotificationManager, TAPi18n}, id, e) {
@@ -58,6 +111,11 @@ export default {
         );
       }
     });
+  },
+
+  clearState({LocalState, SelectedCtrl}) {
+    LocalState.set('TABLE_SORT', { title: 1 });
+    SelectedCtrl.reset('templates');
   }
 
 };

@@ -7,6 +7,7 @@ import {$} from 'meteor/jquery';
 import {_} from 'meteor/underscore';
 import {TAPi18n} from 'meteor/tap:i18n';
 import {NotificationManager} from 'react-notifications';
+import {moment} from 'meteor/momentjs:moment';
 
 import Helpers from './../lib/helpers';
 import SelectedCtrl from './../lib/controllers/selected_nodes';
@@ -17,6 +18,7 @@ import TagsCtrl from './../lib/controllers/tags';
 export default function () {
   return {
     NotificationManager,
+    moment,
     SelectedCtrl,
     ReferencesCtrl,
     ShowMoreCtrl,

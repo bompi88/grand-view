@@ -7,15 +7,19 @@ export const composer = ({context}, onData) => {
   const {Meteor, LocalState, TAPi18n, _, Collections} = context();
 
   const isOpen = LocalState.get('NEW_TEMPLATE_MODAL') || false;
-  const title = TAPi18n.__('modals.create_modal.title');
-  const description = TAPi18n.__('modals.create_modal.description');
-  const okBtn = TAPi18n.__('forms.ok');
-  const cancelBtn = TAPi18n.__('forms.cancel');
-  const selectLabel = TAPi18n.__('modals.create_modal.select.label');
-  const titleLabel = TAPi18n.__('modals.create_modal.titleLabel');
-  const titlePlaceholder = TAPi18n.__('modals.create_modal.titlePlaceholder');
+
   const helperTexts = {
     minLengthString: TAPi18n.__('modals.create_modal.helperTexts.minLengthString', 3)
+  };
+
+  const text = {
+    title: TAPi18n.__('modals.create_modal.title'),
+    description: TAPi18n.__('modals.create_modal.description'),
+    okBtn: TAPi18n.__('forms.ok'),
+    cancelBtn: TAPi18n.__('forms.cancel'),
+    selectLabel: TAPi18n.__('modals.create_modal.select.label'),
+    titleLabel: TAPi18n.__('modals.create_modal.titleLabel'),
+    titlePlaceholder: TAPi18n.__('modals.create_modal.titlePlaceholder')
   };
 
   let selectOptions = [
@@ -37,14 +41,8 @@ export const composer = ({context}, onData) => {
 
   onData(null, {
     isOpen,
-    title,
-    description,
-    okBtn,
-    cancelBtn,
+    text,
     selectOptions,
-    selectLabel,
-    titleLabel,
-    titlePlaceholder,
     helperTexts,
     isTemplate: true
   });

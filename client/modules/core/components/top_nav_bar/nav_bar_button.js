@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Notifications package configuration
+// NavBar Button Component
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -17,10 +17,35 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-import {Meteor} from 'meteor/meteor';
-import {Notifications} from 'meteor/gfk:notifications';
-import Globals from './../../lib/globals';
+import React from 'react';
+import {FlowRouter} from 'meteor/kadira:flow-router';
 
-Meteor.startup(() => {
-  Notifications.defaultOptions = { timeout: Globals.timeout, ...Notifications.defaultOptions };
-});
+class NavBarButton extends React.Component {
+
+  renderAsActive(route) {
+    const currentRoute = FlowRouter.getRouteName();
+    return currentRoute === route ? 'active' : '';
+  }
+
+  render() {
+
+    const {name, route} = this.props;
+
+    return (
+      <li
+        className={this.renderAsActive(route)}
+        data-toggle="collapse"
+        data-target=".in">
+
+        <a href={FlowRouter.path(route)}>{name}</a>
+      </li>
+    );
+  }
+}
+
+NavBarButton.propTypes = {
+  route: React.PropTypes.string.isRequired,
+  name: React.PropTypes.string.isRequired
+};
+
+export default NavBarButton;

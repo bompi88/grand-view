@@ -15,7 +15,7 @@ export default function () {
       const doc = {
         title,
         isTemplate,
-        lastChanged: new Date(),
+        lastModified: new Date(),
         createdAt: new Date()
       };
 

@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Documents Template SCSS Styles
+// Document Table SCSS
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -17,11 +17,22 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
+$table-row-hover-text-color: #008cba;
+
+.clickable-list-item:hover {
+  cursor: pointer;
+}
+
+.sort-icon {
+  margin-left: 10px;
+}
+
 .table-row {
   &:hover {
     cursor: pointer;
+
     > td {
-      color: #008cba;
+      color: $table-row-hover-text-color;
     }
   }
 }

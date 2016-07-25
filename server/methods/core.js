@@ -33,9 +33,9 @@ export default function () {
       const idTableNodes = {};
       const idTableFiles = {};
 
-      const importDocs = docs.isArray() ? docs : [ docs ];
-      const importNodes = nodes.isArray() ? nodes : [ nodes ];
-      const importFileDocs = fileDocs.isArray() ? fileDocs : [ fileDocs ];
+      const importDocs = _.isArray(docs) ? docs : [ docs ];
+      const importNodes = _.isArray(nodes) ? nodes : [ nodes ];
+      const importFileDocs = _.isArray(fileDocs) ? fileDocs : [ fileDocs ];
 
       _.each(importDocs, (doc, key, obj) => {
         const {_id} = doc;

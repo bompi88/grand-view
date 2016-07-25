@@ -22,8 +22,6 @@
 import {$} from 'meteor/jquery';
 import {moment} from 'meteor/momentjs:moment';
 
-import * as Collections from '/lib/collections';
-
 const os = _require('os');
 const cp = _require('child_process');
 

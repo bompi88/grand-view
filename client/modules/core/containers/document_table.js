@@ -1,27 +1,45 @@
 import DocumentTable from '../components/document_table/document_table';
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
-export const composer = ({context, clearErrors}, onData) => {
-  const {Meteor, Collections} = context();
+export const composer = ({context, clearState}, onData) => {
+  const {Meteor, Collections, LocalState, TAPi18n} = context();
 
-  if (Meteor.subscribe('documents.all').ready()) {
-    const documents = Collections.Documents.find({ isTemplate: false }).fetch();
+  const tableName = 'documents';
+  const sort = LocalState.get('TABLE_SORT') || { title: 1 };
 
-    if (Meteor.subscribe('templates.all').ready()) {
-      onData(null, {
-        documents,
-        showTemplates: true,
-        showEditOptions: true
-      });
-    } else {
-      onData(null, {});
-    }
+  const text = {
+    header: TAPi18n.__('document_table.header'),
+    title: TAPi18n.__('document_table.title'),
+    createdAt: TAPi18n.__('document_table.created_at'),
+    lastModified: TAPi18n.__('document_table.last_modified'),
+    isEmpty: TAPi18n.__('document_table.is_empty'),
+    remove: TAPi18n.__('document_table.remove'),
+    export: TAPi18n.__('document_table.export'),
+    by: TAPi18n.__('document_table.by'),
+    templateUsed: TAPi18n.__('document_table.template_used')
+  };
+
+  const props = {
+    tableName,
+    text,
+    showTemplates: true,
+    showEditOptions: true
+  };
+
+  if (Meteor.subscribe('documents.all').ready() && Meteor.subscribe('templates.all').ready()) {
+    const documents = Collections.Documents.find({
+      isTemplate: false
+    }, { sort }).fetch();
+
+    onData(null, {
+      documents,
+      ...props
+    });
   } else {
-    onData(null, {});
+    onData(null, props);
   }
 
-  // clearErrors when unmounting the component
-  return clearErrors;
+  return clearState;
 };
 
 export const depsMapper = (context, actions) => ({
@@ -30,6 +48,14 @@ export const depsMapper = (context, actions) => ({
   removeDocument: actions.documents.removeDocument,
   openDocument: actions.documents.openDocument,
   getTemplateTitle: actions.documents.getTemplateTitle,
+  toggleSelected: actions.documents.toggleSelected,
+  isSelected: actions.documents.isSelected,
+  selectAll: actions.documents.selectAll,
+  deselectAll: actions.documents.deselectAll,
+  hasAllSelected: actions.documents.hasAllSelected,
+  toggleSort: actions.documents.toggleSort,
+  getSort: actions.documents.getSort,
+  clearState: actions.documents.clearState,
   context: () => context
 });
 

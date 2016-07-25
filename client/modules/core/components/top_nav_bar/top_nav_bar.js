@@ -17,28 +17,13 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
+/* globals _require */
+
 import React from 'react';
 import {FlowRouter} from 'meteor/kadira:flow-router';
+import NavBarButton from './nav_bar_button';
 
-class NavBarButton extends React.Component {
-
-  renderAsActive() {
-    const currentRoute = FlowRouter.getRouteName();
-    return currentRoute === this.props.route ? 'active' : '';
-  }
-
-  render() {
-    return (
-      <li
-        className={this.renderAsActive()}
-        data-toggle="collapse"
-        data-target=".in">
-
-        <a href={FlowRouter.path(this.props.route)}>{this.props.name}</a>
-      </li>
-    );
-  }
-}
+const {shell} = _require('electron');
 
 export default class TopNavBar extends React.Component {
 
@@ -47,23 +32,38 @@ export default class TopNavBar extends React.Component {
     return currentRoute === route;
   }
 
-  renderWorkAreaButton() {
+  renderWorkAreaButton(label) {
     if (this.isActiveRoute('Document')) {
-      return <NavBarButton route="Document" name="Arbeidsområde"/>;
+      return <NavBarButton route="Document" name={label}/>;
     }
     if (this.isActiveRoute('Template')) {
-      return <NavBarButton route="Template" name="Arbeidsområde"/>;
+      return <NavBarButton route="Template" name={label}/>;
     }
 
-    return <NavBarButton route="WorkArea" name="Arbeidsområde"/>;
+    return <NavBarButton route="WorkArea" name={label}/>;
+  }
+
+  openConcept() {
+    shell.openExternal('http://www.ntnu.no/concept/');
+  }
+
+  gotoHome(e) {
+    e.preventDefault();
+    FlowRouter.go('Index');
   }
 
   render() {
+    const {text} = this.props;
+
     return (
       <div className="navbar navbar-default navbar-fixed-top animated fadeInDown" role="navigation">
         <div className="container-fluid">
-          <span className="navbar-brand navbar-right" rel="home" href="#">
-            <img src="/images/concept_logo.png" alt="Logoen til Concept" />
+          <span
+            className="navbar-brand navbar-right"
+            rel="home"
+            onClick={this.openConcept}
+          >
+            <img src="/images/concept_logo.png" alt={text.conceptLogo} />
           </span>
 
           <div className="navbar-header">
@@ -75,21 +75,27 @@ export default class TopNavBar extends React.Component {
               aria-expanded="false"
               aria-controls="navbar">
 
-              <span className="sr-only">Toggle navigation</span>
+              <span className="sr-only">{text.toggleNavigation}</span>
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
 
-            <a className="navbar-brand" rel="home" href="/" title="Til forsiden">GrandView</a>
+            <a
+              className="navbar-brand"
+              rel="home"
+              href="#"
+              onClick={this.gotoHome}
+              title={text.gotoHome}
+            >{text.grandview}</a>
           </div>
           <div className="navbar-collapse collapse">
             <ul className="nav navbar-nav">
-              <NavBarButton route="Documents" name="Mine dokumenter"/>
-              <NavBarButton route="Templates" name="Mine maler"/>
-              <NavBarButton route="Trash" name="Papirkurv"/>
+              <NavBarButton route="Documents" name={text.myDocuments}/>
+              <NavBarButton route="Templates" name={text.myTemplates}/>
+              <NavBarButton route="Trash" name={text.trash}/>
 
-              {this.renderWorkAreaButton()}
+              {this.renderWorkAreaButton(text.workArea)}
 
             </ul>
           </div>

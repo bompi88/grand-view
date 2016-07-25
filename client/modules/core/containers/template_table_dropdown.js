@@ -6,37 +6,37 @@ export const composer = ({context}, onData) => {
 
   const items = [
     {
-      func: 'createNewDocument',
+      func: 'createNewTemplate',
       icon: 'glyphicon glyphicon-plus',
-      label: TAPi18n.__('dropdowns.document_table.create_document'),
+      label: TAPi18n.__('dropdowns.template_table.create_template'),
     },
     {
-      func: 'openDocument',
+      func: 'openTemplate',
       icon: 'glyphicon glyphicon-edit',
-      label: TAPi18n.__('dropdowns.document_table.edit_document'),
+      label: TAPi18n.__('dropdowns.template_table.edit_template'),
       disabledOn: 'MANY_AND_NONE'
     },
     {
       divider: true
     },
     {
-      func: 'importDocument',
+      func: 'importTemplate',
       icon: 'glyphicon glyphicon-import',
-      label: TAPi18n.__('dropdowns.document_table.import_document')
+      label: TAPi18n.__('dropdowns.template_table.import_template')
     },
     {
-      func: 'exportDocument',
+      func: 'exportTemplate',
       icon: 'glyphicon glyphicon-export',
-      label: TAPi18n.__('dropdowns.document_table.export_document'),
+      label: TAPi18n.__('dropdowns.template_table.export_template'),
       disabledOn: 'NONE'
     },
     {
       divider: true
     },
     {
-      func: 'removeDocument',
+      func: 'removeTemplate',
       icon: 'glyphicon glyphicon-trash',
-      label: TAPi18n.__('dropdowns.document_table.remove_document'),
+      label: TAPi18n.__('dropdowns.template_table.remove_template'),
       disabledOn: 'NONE'
     }
   ];
@@ -49,13 +49,13 @@ export const composer = ({context}, onData) => {
 };
 
 export const depsMapper = (context, actions) => ({
-  createNewDocument: actions.documents.createNewDocument,
-  openDocument: actions.documents.openDocument,
-  importDocument: actions.documents.importDocument,
-  exportDocument: actions.documents.exportDocument,
-  removeDocument: actions.documents.removeDocument,
-  isDisabledOnManyAndNone: actions.documents.isDisabledOnManyAndNone,
-  isDisabledOnNone: actions.documents.isDisabledOnNone,
+  createNewTemplate: actions.templates.createNewTemplate,
+  openTemplate: actions.templates.openTemplate,
+  importTemplate: actions.templates.importTemplate,
+  exportTemplate: actions.templates.exportTemplate,
+  removeTemplate: actions.templates.removeTemplate,
+  isDisabledOnManyAndNone: actions.templates.isDisabledOnManyAndNone,
+  isDisabledOnNone: actions.templates.isDisabledOnNone,
   context: () => context
 });
 

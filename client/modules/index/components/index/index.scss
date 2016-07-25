@@ -17,10 +17,12 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
+$jumbotron-bg-color: rgba(220, 220, 220, .8);
+
 .container-fluid.index {
   background: url('/images/front-page.jpg') no-repeat center center;
   background-size: cover;
-  height: 100% !important;
+  height: 100%;
 
   h1 {
     font-size: 3em;
@@ -33,7 +35,7 @@
 }
 
 .outer .jumbotron {
-  background: rgba(220, 220, 220, .8);
+  background: $jumbotron-bg-color;
 
   .lead {
     font-size: 1.3em;

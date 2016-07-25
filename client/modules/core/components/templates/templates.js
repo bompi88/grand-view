@@ -8,17 +8,7 @@ export default class Documents extends React.Component {
       <div className="container default-container animated fadeIn">
         <div className="row">
           <div>
-            <h3>
-              <span className="glyphicon glyphicon-book"></span> Mine maler
-            </h3>
-
-            <TemplateTable
-              tableName="templates"
-              label="mal"
-              hasTemplate={false}
-              editOptions={true}
-              dropdownClasses="pull-right"
-              emptyText="Ingen maler funnet" />
+            <TemplateTable dropdownClasses="pull-right" />
           </div>
         </div>
       </div>
