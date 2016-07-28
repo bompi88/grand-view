@@ -19,8 +19,29 @@
 
 export default {
 
-  generate({Helpers}) {
+  generate({Helpers, NotificationManager, TAPi18n, LocalState}, format) {
+    const _id = LocalState.get('CURRENT_DOCUMENT');
 
+    if (_id) {
+      Helpers.generateDOCX(_id, format, (err) => {
+        if (err) {
+          NotificationManager.error(
+            TAPi18n.__('notifications.generation_docx_failed.message'),
+            TAPi18n.__('notifications.generation_docx_failed.title')
+          );
+        } else {
+          NotificationManager.success(
+            TAPi18n.__('notifications.generation_docx_success.message'),
+            TAPi18n.__('notifications.generation_docx_success.title')
+          );
+        }
+      });
+    } else {
+      NotificationManager.error(
+        TAPi18n.__('notifications.generation_must_open_document.message'),
+        TAPi18n.__('notifications.generation_must_open_document.title')
+      );
+    }
   },
 
   close({LocalState}) {

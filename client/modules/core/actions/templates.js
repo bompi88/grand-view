@@ -28,13 +28,12 @@ export default {
   },
 
   createNewTemplate({LocalState}) {
-    LocalState.set('NEW_TEMPLATE_MODAL', true);
+    LocalState.set('NEW_TEMPLATE_MODAL_VISIBLE', true);
   },
 
   openTemplate({LocalState, Collections, FlowRouter}, _id) {
-    const doc = Collections.Documents.findOne({_id});
-    LocalState.set('CURRENT_DOCUMENT', doc);
-    FlowRouter.go('Document', { _id });
+    LocalState.set('CURRENT_DOCUMENT', _id);
+    FlowRouter.go('WorkArea');
   },
 
   toggleSelected({SelectedCtrl}, id, e) {

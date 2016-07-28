@@ -23,6 +23,30 @@
     "soft_remove_document_success": {
       "title": "Sletting fullført",
       "message": "Dokumentet er lagt i papirkurven."
+    },
+    "soft_remove_template_failed": {
+      "title": "Feil ved sletting",
+      "message": "Kunne ikke putte malen i papirkurven."
+    },
+    "soft_remove_template_success": {
+      "title": "Sletting fullført",
+      "message": "Malen er lagt i papirkurven."
+    },
+    "create_document_failed": {
+      "title": "Kunne ikke opprette dokument",
+      "message": "Kunne ikke opprette dokumentet. Vennligst prøv igjen."
+    },
+    "create_document_success": {
+      "title": "Dokument opprettet",
+      "message": "Dokumentet er nå opprettet og klar til bruk."
+    },
+    "create_template_failed": {
+      "title": "Kunne ikke opprette dokument",
+      "message": "Kunne ikke opprette malen. Vennligst prøv igjen."
+    },
+    "create_template_success": {
+      "title": "Mal opprettet",
+      "message": "Malen er nå opprettet og klar til bruk."
     }
   }
 }

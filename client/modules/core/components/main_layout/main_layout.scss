@@ -52,22 +52,18 @@ body {
   height: 100%;
 }
 
-// Always show notifications top right corner, even when container is scrolled
-ul.notifications {
+.notification-container {
+  box-sizing: border-box;
   position: fixed;
-  width: 400px;
-  z-index: 1045;
-
-  .notification {
-    margin-right: 0;
-    width: 400px;
-
-    .message,
-    .title,
-    .close {
-      color: $notifications-text-color;
-    }
-  }
+  top: 0;
+  right: 0;
+  z-index: 999999;
+  width: 500px;
+  padding: 0 15px;
+  max-height: calc(100% - 30px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  word-wrap: break-word;
 }
 
 .btn-delete {

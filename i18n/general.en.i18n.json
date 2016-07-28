@@ -7,5 +7,12 @@
     "ok": "OK",
     "save": "Save",
     "cancel": "Cancel"
-  }
+  },
+  "no_title": "No title",
+  "without_tags": "No tags",
+  "without_references": "No references",
+  "no_chapter_title": "No chapter name",
+  "file_path": "File path",
+  "references": "References",
+  "tags": "Tags"
 }

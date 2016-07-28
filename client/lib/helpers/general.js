@@ -17,15 +17,8 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-/* globals _require */
-
 import {$} from 'meteor/jquery';
 import {moment} from 'meteor/momentjs:moment';
-
-const os = _require('os');
-const cp = _require('child_process');
-
-const platform = os.platform();
 
 export default {
 
@@ -94,19 +87,5 @@ export default {
     } else {
       return callback();
     }
-  },
-
-  openFile(filePath, callback) {
-    let openCMD;
-
-    if (platform === 'win32') {
-      openCMD = '"' + filePath + '"';
-    } else if (platform === 'darwin') {
-      openCMD = 'open ' + filePath;
-    } else {
-      openCMD = 'xdg-open ' + filePath;
-    }
-
-    cp.exec(openCMD, callback);
   }
 };

@@ -23,12 +23,15 @@
 
 import {_} from 'meteor/underscore';
 import {Meteor} from 'meteor/meteor';
+import {TAPi18n} from 'meteor/tap:i18n';
 
-import Globals from './../../lib/globals';
-import Helpers from './../../client/lib/helpers';
+import Globals from '/lib/globals';
+import {Documents, Nodes, Files} from '/lib/collections';
 
-import {Documents, Nodes, Files} from './../../lib/collections';
+const os = _require('os');
+const cp = _require('child_process');
 
+const platform = os.platform();
 const officegen = _require('officegen');
 const path = _require('path');
 const fs = _require('fs');
@@ -71,9 +74,25 @@ const keywordText = {
   italic: true
 };
 
-export default {
+const openFile = (filePath, callback) => {
+  let openCMD;
+
+  if (platform === 'win32') {
+    openCMD = '"' + filePath + '"';
+  } else if (platform === 'darwin') {
+    openCMD = 'open ' + filePath;
+  } else {
+    openCMD = 'xdg-open ' + filePath;
+  }
+
+  cp.exec(openCMD, callback);
+};
+
+
+const generationDocx = {
   renderMediaNode(node, par) {
     const {title, tags, references, fileId, description} = node;
+
     if (title || (tags && tags.length) ||
       (references && references.length) || fileId || description) {
       par.addLineBreak();
@@ -87,13 +106,13 @@ export default {
     }
 
     if (tags) {
-      par.addText('Nøkkelord:', keywordHeaderText);
+      par.addText(TAPi18n.__('tags') + ':', keywordHeaderText);
       par.addText(' ' + tags.join(', '), keywordText);
       par.addLineBreak();
     }
 
     if (references) {
-      par.addText('Kilder:', keywordHeaderText);
+      par.addText(TAPi18n.__('references') + ':', keywordHeaderText);
       par.addText(' ' + references.join(', '), keywordText);
       par.addLineBreak();
     }
@@ -106,7 +125,7 @@ export default {
       if (file && (file.copies.filesStore.type.split('/')[0] === 'image')) {
         par.addImage(Globals.basePath + 'files/' + file.copies.filesStore.key);
       } else if (file) {
-        par.addText('Filbane:', keywordHeaderText);
+        par.addText(TAPi18n.__('file_path') + ':', keywordHeaderText);
         par.addText(' \"' + Globals.basePath +
           'files/' + file.copies.filesStore.key +
           '\"', keywordText);
@@ -132,14 +151,15 @@ export default {
   renderChapterNode(node, docx, posLabel) {
     const par = docx.createP();
     const {_id, title, nodeType, position} = node;
+    let numbering;
 
     if (posLabel) {
-      const numbering = posLabel + '.' + (position + 1);
-      par.addText(numbering + ' ' + (title || 'Ukjent kapitteltittel'), header2Text);
+      numbering = posLabel + '.' + (position + 1);
     } else {
-      const numbering = position + 1;
-      par.addText(numbering + ' ' + (title || 'Ukjent kapitteltittel'), header2Text);
+      numbering = position + 1;
     }
+
+    par.addText(numbering + ' ' + (title || TAPi18n.__('no_chapter_title')), header2Text);
 
     const nodes = Nodes.find({
       parent: _id
@@ -192,13 +212,13 @@ export default {
     if (tagsList) {
       Object.keys(tagsList)
         .sort((a, b) => {
-          var lccomp = a.toLowerCase().localeCompare(b.toLowerCase(), 'nb');
+          const lccomp = a.toLowerCase().localeCompare(b.toLowerCase(), 'nb');
           return lccomp ? lccomp : a > b ? 1 : a < b ? -1 : 0;
         })
         .forEach((tag) => {
           if (tagsList.hasOwnProperty(tag) && (tag !== undefinedPropertyLabel)) {
-            var ns = tagsList[tag];
-            var par = docx.createP();
+            const ns = tagsList[tag];
+            const par = docx.createP();
 
             par.addText(tag, header2Text);
 
@@ -209,12 +229,13 @@ export default {
         });
 
       // Add the others without tags
-      var notDefined = tagsList[undefinedPropertyLabel];
+      const notDefined = tagsList[undefinedPropertyLabel];
 
       if (notDefined && notDefined.length) {
-        var notDefinedPar = docx.createP();
+        const notDefinedPar = docx.createP();
 
-        var undefinedLabel = (format === 'tags') ? 'Uten nøkkelord' : 'Uten referanser';
+        const undefinedLabel = (format === 'tags') ?
+          TAPi18n.__('without_tags') : TAPi18n.__('without_references');
 
         notDefinedPar.addText(undefinedLabel, header2Text);
 
@@ -249,36 +270,34 @@ export default {
     }
   },
 
-  generateDOCX(docId, format, cb) {
+  generateDOCX(_id, format, cb) {
 
-    const fileName = docId + '_' + format + '.docx';
+    const fileName = _id + '_' + format + '.docx';
 
     const docx = officegen('docx');
-    const doc = Documents.findOne({ _id: docId });
+    const doc = Documents.findOne({_id});
     const {title, description} = doc;
 
-    docx.setDocTitle(title || 'Ingen tittel');
+    docx.setDocTitle(title || TAPi18n.__('no_title'));
     docx.setDescription(description || '');
 
     // create main paragraph
     const mainParagraph = docx.createP();
 
-    mainParagraph.addText(title || 'Ingen tittel', header1Text);
+    mainParagraph.addText(title || TAPi18n.__('no_title'), header1Text);
 
-    // TODO: convert to Flowrouter
-    Meteor.subscribe('filesByDocument', docId, () => {
-
+    Meteor.subscribe('files.byDocument', _id, () => {
       this.renderDocument(doc, docx, mainParagraph, format);
 
       const out = fs.createWriteStream(Globals.basePath + fileName);
 
       docx.generate(out, {
         finalize(written) {
-          console.log('Ferdig å skrive Word-fil.\nBytes skrevet: ' + written + '\n');
+          console.log('Finnished to write docx-file.\nBytes written: ' + written + '\n');
 
           const filePath = path.join(Globals.basePath, fileName);
 
-          Helpers.openFile(filePath, (error) => {
+          openFile(filePath, (error) => {
             if (error) {
               console.log(error);
               return cb(true);
@@ -295,3 +314,5 @@ export default {
     });
   }
 };
+
+export default generationDocx;

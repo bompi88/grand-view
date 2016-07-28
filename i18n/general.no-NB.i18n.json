@@ -7,5 +7,12 @@
     "ok": "OK",
     "save": "Lagre",
     "cancel": "Avbryt"
-  }
+  },
+  "no_title": "Ingen tittel",
+  "without_tags": "Uten nøkkelord",
+  "without_references": "Uten referanser",
+  "no_chapter_title": "Uten kapitteltittel",
+  "file_path": "Filbane",
+  "references": "Kilder",
+  "tags": "Nøkkelord"
 }

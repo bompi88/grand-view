@@ -27,6 +27,7 @@ const base = path.normalize(path.join(dir, '..'));
 const platform = process.platform;
 const arch = process.arch;
 const onWindows = platform === 'win32';
+let meteorStarted = false;
 
 console.log('Detected platform: '.bold.white, platform);
 console.log('Detected architecture: '.bold.white, arch);
@@ -47,7 +48,10 @@ meteor.stdout.setEncoding('utf8');
 meteor.stdout.on('data', function (data) {
   console.log(data);
   if (data.indexOf('Meteor app started.') !== -1) {
-    startElectron();
+    if (!meteorStarted) {
+      startElectron();
+      meteorStarted = true;
+    }
   }
 });
 

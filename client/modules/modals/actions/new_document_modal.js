@@ -19,19 +19,21 @@
 
 export default {
 
-  createDocument({Meteor, LocalState, NotificationManager, TAPi18n}, doc, cb) {
-    Meteor.call('documents.create', doc, (err) => {
+  createDocument({Meteor, LocalState, NotificationManager, TAPi18n, FlowRouter}, doc, cb) {
+    Meteor.call('documents.create', doc, (err, _id) => {
       if (err) {
         NotificationManager.error(
           TAPi18n.__('notifications.create_document_failed.message'),
           TAPi18n.__('notifications.create_document_failed.title')
         );
       } else {
-        LocalState.set('NEW_DOCUMENT_MODAL', false);
+        LocalState.set('NEW_DOCUMENT_MODAL_VISIBLE', false);
         NotificationManager.success(
           TAPi18n.__('notifications.create_document_success.message'),
           TAPi18n.__('notifications.create_document_success.title')
         );
+        LocalState.set('CURRENT_DOCUMENT', _id);
+        FlowRouter.go('WorkArea', {_id});
       }
       if (cb) {
         return cb(err);
@@ -41,6 +43,6 @@ export default {
 
   close({LocalState}, reset) {
     reset();
-    return LocalState.set('NEW_DOCUMENT_MODAL', false);
+    return LocalState.set('NEW_DOCUMENT_MODAL_VISIBLE', false);
   }
 };

@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Index Module Routes
+// Work Area Actions
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -17,25 +17,14 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-import React from 'react';
-import {mount} from 'react-mounter';
+export default {
 
-import MainLayout from '/client/modules/core/components/main_layout/main_layout';
-import Index from './containers/index';
+  createNewDocument({LocalState}) {
+    return LocalState.set('NEW_DOCUMENT_MODAL_VISIBLE', true);
+  },
 
-export default function (injectDeps, {FlowRouter}) {
-  const MainLayoutCtx = injectDeps(MainLayout);
+  gotoDocuments({FlowRouter}) {
+    FlowRouter.go('Documents');
+  }
 
-  // /**
-  //  * Index page
-  //  */
-  // FlowRouter.route('/', {
-  //   name: 'Index',
-  //   action() {
-  //     mount(MainLayoutCtx, {
-  //       content: () => <Index />
-  //     });
-  //   }
-  // });
-
-}
+};

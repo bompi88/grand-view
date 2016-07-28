@@ -99,14 +99,14 @@ export default (context) => {
             label: TAPi18n.__('menu.new_document'),
             accelerator: CommandOrCtrl() + '+D',
             click() {
-              LocalState.set('NEW_DOCUMENT_MODAL', true);
+              LocalState.set('NEW_DOCUMENT_MODAL_VISIBLE', true);
             }
           },
           {
             label: TAPi18n.__('menu.new_template'),
             accelerator: CommandOrCtrl() + '+T',
             click() {
-              LocalState.set('NEW_TEMPLATE_MODAL', true);
+              LocalState.set('NEW_TEMPLATE_MODAL_VISIBLE', true);
 
             }
           },

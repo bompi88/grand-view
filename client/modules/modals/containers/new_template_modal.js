@@ -6,7 +6,7 @@ import CreateModal from '../components/create_modal/create_modal';
 export const composer = ({context}, onData) => {
   const {Meteor, LocalState, TAPi18n, _, Collections} = context();
 
-  const isOpen = LocalState.get('NEW_TEMPLATE_MODAL') || false;
+  const isOpen = LocalState.get('NEW_TEMPLATE_MODAL_VISIBLE') || false;
 
   const helperTexts = {
     minLengthString: TAPi18n.__('modals.create_modal.helperTexts.minLengthString', 3)

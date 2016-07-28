@@ -1,0 +1,9 @@
+{
+  "work_area": {
+    "title": "Velkommen til arbeidsområdet",
+    "description": "Dette er stedet man redigerer dokumenter eller maler. Ingen dokument eller mal er valgt til redigering enda, derfor er denne siden tom. For å komme i gang kan du enten:",
+    "create_document": "Opprette et nytt dokument",
+    "or": "eller",
+    "goto_documents": "Gå til Mine dokumenter"
+  }
+}

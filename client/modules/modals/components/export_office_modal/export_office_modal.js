@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {Modal, FormGroup, ControlLabel, FormControl, Button} from 'react-bootstrap';
 
 const CreateModal = React.createClass({
@@ -25,11 +26,16 @@ const CreateModal = React.createClass({
     });
   },
 
+  generate() {
+    const {generate} = this.props;
+    const format = ReactDOM.findDOMNode(this.refs.format).value;
+    generate(format);
+  },
+
   render() {
     const {
       isOpen,
       close,
-      generate,
       title,
       description,
       cancelBtn,
@@ -50,7 +56,7 @@ const CreateModal = React.createClass({
             </p>
             <FormGroup controlId="formControlsSelect">
               <ControlLabel>{selectLabel || 'Select'}</ControlLabel>
-              <FormControl componentClass="select" placeholder="select">
+              <FormControl ref="format" componentClass="select" placeholder="select">
                 {this.renderSelectOptions()}
               </FormControl>
             </FormGroup>
@@ -58,7 +64,7 @@ const CreateModal = React.createClass({
 
           <Modal.Footer>
             <Button onClick={close}>{cancelBtn || 'Cancel'}</Button>
-            <Button onClick={generate} bsStyle="primary">{generateBtn || 'OK'}</Button>
+            <Button onClick={this.generate} bsStyle="primary">{generateBtn || 'OK'}</Button>
           </Modal.Footer>
 
         </Modal>

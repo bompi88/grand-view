@@ -3,6 +3,50 @@
     "generation_failed": {
         "title": "Generering mislyktes",
         "message": "Du må ha åpnet et dokument for å kunne generere utskrift."
+    },
+    "export_document_failed": {
+      "title": "Exporting document(s) failed",
+      "message": "You must open a document before exporting it."
+    },
+    "export_template_failed": {
+      "title": "Exporting template(s) failed",
+      "message": "You must open a template before exporting it."
+    },
+    "context_menu_root": {
+      "title": "Error while removing",
+      "message": "You cannot delete the root node. To remove a document, do this in \"My documents\"."
+    },
+    "soft_remove_document_failed": {
+      "title": "Error while removing",
+      "message": "Could not move the document to the trash."
+    },
+    "soft_remove_document_success": {
+      "title": "Removal successful",
+      "message": "The document is now in the trash."
+    },
+    "soft_remove_template_failed": {
+      "title": "Error while removing",
+      "message": "Could not move the template to the trash."
+    },
+    "soft_remove_template_success": {
+      "title": "Removal successful",
+      "message": "The template is now in the trash."
+    },
+    "create_document_failed": {
+      "title": "Failed creating new document",
+      "message": "Could not create the new document. Please try again."
+    },
+    "create_document_success": {
+      "title": "Document created",
+      "message": "The document is ready to be used."
+    },
+    "create_template_failed": {
+      "title": "Failed creating new template",
+      "message": "Could not create the new template. Please try again."
+    },
+    "create_template_success": {
+      "title": "Template created",
+      "message": "The template is ready to be used."
     }
   }
 }

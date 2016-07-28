@@ -23,7 +23,7 @@ export default function () {
         doc.hasTemplate = hasTemplate;
       }
 
-      Collections.Documents.insert(doc);
+      return Collections.Documents.insert(doc);
     },
 
     'documents.remove'(_id) {

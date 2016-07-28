@@ -21,16 +21,6 @@ import React from 'react';
 import ImportButton from '/client/modules/core/components/prototypes/import_button';
 import Clippy from '../../containers/clippy';
 
-import {ContextMenuLayer} from 'react-contextmenu';
-
-const MyComponent = ContextMenuLayer('node')(
-  React.createClass({
-    render() {
-      return <div className="well"></div>;
-    }
-  })
-);
-
 class Index extends React.Component {
   render() {
     const {openCreateModal, importFile, text} = this.props;
@@ -42,7 +32,6 @@ class Index extends React.Component {
           <div className="col-sm-6 col-md-6 outer">
             <div className="jumbotron">
               <h1>{text.header}</h1>
-              <MyComponent />
               <p className="lead">{text.description}</p>
               <br />
               <div className="text-center">

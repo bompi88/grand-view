@@ -43,7 +43,7 @@ export default {
         this.deleteFolderRecursive(path.join(Globals.basePath, 'tmp'));
 
         NotificationManager.success(
-          'Rapportstrukturen ble importert i systemet og kan finnes på dashbordet.',
+          'Rapportstrukturen ble importert i systemet og kan finnes i "Mine dokumenter".',
           'Importering lyktes'
         );
 

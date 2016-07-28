@@ -23,7 +23,9 @@ import {mount} from 'react-mounter';
 import MainLayout from './components/main_layout/main_layout';
 import Documents from './components/documents/documents';
 import Templates from './components/templates/templates';
-import WorkArea from './components/work_area/work_area';
+import Trash from './components/trash/trash';
+import WorkArea from './containers/work_area';
+import Index from '/client/modules/index/containers/index';
 
 export default function (injectDeps, {FlowRouter}) {
   const MainLayoutCtx = injectDeps(MainLayout);
@@ -31,13 +33,13 @@ export default function (injectDeps, {FlowRouter}) {
   // -- Document routes --------------------------------------------------------
 
   /**
-   * Edit Document
+   * Index page
    */
-  FlowRouter.route('/document/:_id', {
-    name: 'Document',
+  FlowRouter.route('/', {
+    name: 'Index',
     action() {
       mount(MainLayoutCtx, {
-        content: () => (<span>Document</span>)
+        content: () => <Index />
       });
     }
   });
@@ -50,20 +52,6 @@ export default function (injectDeps, {FlowRouter}) {
     action() {
       mount(MainLayoutCtx, {
         content: () => <Documents />
-      });
-    }
-  });
-
-  // -- Template routes --------------------------------------------------------
-
-  /**
-   * Edit Template
-   */
-  FlowRouter.route('/template/:_id', {
-    name: 'Template',
-    action() {
-      mount(MainLayoutCtx, {
-        content: () => (<span>Template</span>)
       });
     }
   });
@@ -89,7 +77,7 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'WorkArea',
     action() {
       mount(MainLayoutCtx, {
-        content: () => (<WorkArea />)
+        content: () => <WorkArea />
       });
     }
   });
@@ -101,10 +89,9 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'Trash',
     action() {
       mount(MainLayoutCtx, {
-        content: () => (<span>Trash</span>)
+        content: () => <Trash />
       });
     }
   });
-
 
 }
