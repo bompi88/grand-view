@@ -21,9 +21,9 @@ import React from 'react';
 import {mount} from 'react-mounter';
 
 import MainLayout from './components/main_layout/main_layout';
-import Documents from './components/documents/documents';
-import Templates from './components/templates/templates';
-import Trash from './components/trash/trash';
+import Documents from './containers/documents';
+import Templates from './containers/templates';
+import Trash from './containers/trash';
 import WorkArea from './containers/work_area';
 import Index from '/client/modules/index/containers/index';
 

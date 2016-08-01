@@ -1,0 +1,12 @@
+{
+  "trash": {
+    "title": "Tittel",
+    "created_at": "Opprettet",
+    "last_modified": "Sist endret",
+    "header": "Trash",
+    "documents_header": "Deleted documents",
+    "templates_header": "Deleted templates",
+    "is_templates_empty": "No templates in trash",
+    "is_documents_empty": "No documents in trash"
+  }
+}

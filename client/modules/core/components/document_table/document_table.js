@@ -19,8 +19,6 @@
 
 import React from 'react';
 
-import DocumentTableDropdown from '../../containers/document_table_dropdown';
-import TemplateTableDropdown from '../../containers/template_table_dropdown';
 import DocumentTableRow from './document_table_row';
 
 
@@ -37,7 +35,7 @@ class DocumentTable extends React.Component {
   }
 
   renderDocuments(documents) {
-    const {text, showTemplates} = this.props;
+    const {text, showTemplates, emptyText} = this.props;
 
     if (documents && documents.length) {
       return documents.map((doc) => {
@@ -47,15 +45,15 @@ class DocumentTable extends React.Component {
     return (
       <tr className="no-results-row" key="none">
         <td colSpan={showTemplates ? '6' : '5'}>
-          {text.isEmpty}...
+          {emptyText ? emptyText : text.isEmpty}...
         </td>
       </tr>
     );
   }
 
   getSortIcon(field) {
-    const {getSort} = this.props;
-    const sort = getSort(field);
+    const {getSort, tableName} = this.props;
+    const sort = getSort(field, tableName);
 
     if (!sort) {
       return <span></span>;
@@ -68,7 +66,7 @@ class DocumentTable extends React.Component {
     return <span className="glyphicon glyphicon-chevron-down sort-icon"></span>;
   }
 
-  render() {
+  renderTable() {
     const {
       text,
       documents,
@@ -76,69 +74,76 @@ class DocumentTable extends React.Component {
       hasAllSelected,
       selectAll,
       deselectAll,
-      toggleSort
+      toggleSort,
+      tableName
     } = this.props;
 
     const {_} = this.props.context();
 
-    const checked = hasAllSelected(documents && documents.length || 0);
+    const checked = hasAllSelected(documents && documents.length || 0, tableName);
     const ids = _.pluck(documents, '_id');
 
     return (
-      <div>
-        { showTemplates ? (
-            <DocumentTableDropdown {...this.props} />
-          ) : (
-            <TemplateTableDropdown {...this.props} />
-          )
-        }
-        <h3>
-          <span className="glyphicon glyphicon-book"></span> {text.header}
-        </h3>
-        <div className="row default-table table-wrapper">
-          <div className="col-xs-12">
+      <table className="table table-hover">
+        <thead>
+          <tr>
+            <th>
+              <input
+                type="checkbox"
+                className="checkbox-master"
+                checked={checked}
+                onChange={checked ? deselectAll.bind(this, ids, tableName) :
+                  selectAll.bind(this, ids, tableName)}
+              />
+            </th>
+            <th
+              className="clickable-list-item"
+              onClick={toggleSort.bind(this, 'title', tableName)}
+            >
+              {text.title} {this.getSortIcon('title')}
+            </th>
+            <th
+              className="clickable-list-item"
+              onClick={toggleSort.bind(this, 'createdAt', tableName)}
+            >
+              {text.createdAt} {this.getSortIcon('createdAt')}
+            </th>
+            <th
+              className="clickable-list-item"
+              onClick={toggleSort.bind(this, 'lastModified', tableName)}
+            >
+              {text.lastModified} {this.getSortIcon('lastModified')}
+            </th>
+            { showTemplates ? (<th>{text.templateUsed}</th>) : null }
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.renderDocuments(documents)}
+        </tbody>
+      </table>
+    );
+  }
+
+  render() {
+
+    const {tableHeader} = this.props;
+
+    return (
+      <div className="row default-table table-wrapper">
+        <div className="col-xs-12">
+          { tableHeader ? (
             <div className="panel panel-default">
-              <table className="table table-hover">
-                <thead>
-                  <tr>
-                    <th>
-                      <input
-                        type="checkbox"
-                        className="checkbox-master"
-                        checked={checked}
-                        onChange={checked ? deselectAll.bind(this, ids) : selectAll.bind(this, ids)}
-                      />
-                    </th>
-                    <th
-                      className="clickable-list-item"
-                      onClick={toggleSort.bind(this, 'title')}
-                    >
-                      {text.title} {this.getSortIcon('title')}
-                    </th>
-                    <th
-                      className="clickable-list-item"
-                      onClick={toggleSort.bind(this, 'createdAt')}
-                    >
-                      {text.createdAt} {this.getSortIcon('createdAt')}
-                    </th>
-                    <th
-                      className="clickable-list-item"
-                      onClick={toggleSort.bind(this, 'lastModified')}
-                    >
-                      {text.lastModified} {this.getSortIcon('lastModified')}
-                    </th>
-                    { showTemplates ? (<th>{text.templateUsed}</th>) : null }
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.renderDocuments(documents)}
-                </tbody>
-              </table>
+              <div className="panel-heading"><b>{tableHeader}</b></div>
+              {this.renderTable()}
             </div>
-          </div>
-        </div>
+          ) : (
+            <div className="panel panel-default">
+              {this.renderTable()}
+            </div>
+          )}
       </div>
+    </div>
     );
   }
 }
@@ -161,7 +166,7 @@ DocumentTable.propTypes = {
     remove: React.PropTypes.string,
     export: React.PropTypes.string
   }),
-  openDocument: React.PropTypes.func.isRequired,
+  openDocument: React.PropTypes.func,
   exportDocument: React.PropTypes.func,
   removeDocument: React.PropTypes.func,
   getTemplateTitle: React.PropTypes.func,

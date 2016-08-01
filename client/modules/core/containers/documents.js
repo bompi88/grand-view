@@ -1,22 +1,22 @@
-import DocumentTable from '../components/document_table/document_table';
+import Documents from '../components/documents/documents';
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
 export const composer = ({context, clearState}, onData) => {
   const {Meteor, Collections, LocalState, TAPi18n} = context();
 
   const tableName = 'documents';
-  const sort = LocalState.get('TABLE_SORT') || { title: 1 };
+  const sort = LocalState.get('TABLE_SORT_DOCUMENTS') || { title: 1 };
 
   const text = {
-    header: TAPi18n.__('document_table.header'),
-    title: TAPi18n.__('document_table.title'),
-    createdAt: TAPi18n.__('document_table.created_at'),
-    lastModified: TAPi18n.__('document_table.last_modified'),
-    isEmpty: TAPi18n.__('document_table.is_empty'),
-    remove: TAPi18n.__('document_table.remove'),
-    export: TAPi18n.__('document_table.export'),
-    by: TAPi18n.__('document_table.by'),
-    templateUsed: TAPi18n.__('document_table.template_used')
+    header: TAPi18n.__('documents.header'),
+    title: TAPi18n.__('documents.title'),
+    createdAt: TAPi18n.__('documents.created_at'),
+    lastModified: TAPi18n.__('documents.last_modified'),
+    isEmpty: TAPi18n.__('documents.is_empty'),
+    remove: TAPi18n.__('documents.remove'),
+    export: TAPi18n.__('documents.export'),
+    by: TAPi18n.__('documents.by'),
+    templateUsed: TAPi18n.__('documents.template_used')
   };
 
   const props = {
@@ -62,4 +62,4 @@ export const depsMapper = (context, actions) => ({
 export default composeAll(
   composeWithTracker(composer),
   useDeps(depsMapper)
-)(DocumentTable);
+)(Documents);

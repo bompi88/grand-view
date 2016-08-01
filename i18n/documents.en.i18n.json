@@ -1,5 +1,5 @@
 {
-  "document_table": {
+  "documents": {
     "title": "Title",
     "created_at": "Created at",
     "last_modified": "Last modified",
@@ -9,14 +9,5 @@
     "remove": "Remove",
     "export": "Export",
     "header": "My Documents"
-  },
-  "template_table": {
-    "title": "Title",
-    "created_at": "Created at",
-    "last_modified": "Last modified",
-    "is_empty": "No templates found",
-    "remove": "Remove",
-    "export": "Export",
-    "header": "My Templates"
   }
 }

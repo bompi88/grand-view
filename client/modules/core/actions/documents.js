@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Document Table Actions
+// Document Actions
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -41,19 +41,19 @@ export default {
     FlowRouter.go('WorkArea');
   },
 
-  toggleSelected({SelectedCtrl}, id, e) {
+  toggleSelected({SelectedCtrl}, id, tableName, e) {
     e.stopPropagation();
     e.preventDefault();
 
-    if (SelectedCtrl.isSelected('documents', id)) {
-      SelectedCtrl.remove('documents', id);
+    if (SelectedCtrl.isSelected(tableName, id)) {
+      SelectedCtrl.remove(tableName, id);
     } else {
-      SelectedCtrl.add('documents', id);
+      SelectedCtrl.add(tableName, id);
     }
   },
 
-  toggleSort({LocalState}, field) {
-    let curSort = LocalState.get('TABLE_SORT');
+  toggleSort({LocalState}, field, tableName) {
+    let curSort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase());
 
     if (curSort && curSort[field]) {
       curSort[field] *= -1;
@@ -62,28 +62,28 @@ export default {
       sortObj[field] = 1;
       curSort = sortObj;
     }
-    LocalState.set('TABLE_SORT', curSort);
+    LocalState.set('TABLE_SORT_' + tableName.toUpperCase(), curSort);
   },
 
-  getSort({LocalState}, field) {
-    const sort = LocalState.get('TABLE_SORT') || { title: 1 };
+  getSort({LocalState}, field, tableName) {
+    const sort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase()) || { title: 1 };
     return sort[field];
   },
 
-  isSelected({SelectedCtrl}, id) {
-    return SelectedCtrl.isSelected('documents', id);
+  isSelected({SelectedCtrl}, id, tableName) {
+    return SelectedCtrl.isSelected(tableName, id);
   },
 
-  selectAll({SelectedCtrl}, ids) {
-    SelectedCtrl.addAll('documents', ids);
+  selectAll({SelectedCtrl}, ids, tableName) {
+    SelectedCtrl.addAll(tableName, ids);
   },
 
-  deselectAll({SelectedCtrl}, ids) {
-    SelectedCtrl.removeAll('documents', ids);
+  deselectAll({SelectedCtrl}, ids, tableName) {
+    SelectedCtrl.removeAll(tableName, ids);
   },
 
-  hasAllSelected({SelectedCtrl}, len) {
-    const selected = SelectedCtrl.getSelected('documents').length;
+  hasAllSelected({SelectedCtrl}, len, tableName) {
+    const selected = SelectedCtrl.getSelected(tableName).length;
     return selected > 0 && selected === len;
   },
 
@@ -102,7 +102,7 @@ export default {
   removeDocument({Meteor, NotificationManager, TAPi18n}, id, e) {
     e.stopPropagation();
 
-    Meteor.call('documents.remove', id, (err) => {
+    Meteor.call('documents.softRemove', id, (err) => {
       if (err) {
         NotificationManager.error(
           TAPi18n.__('notifications.soft_remove_document_failed.message'),
@@ -118,7 +118,7 @@ export default {
   },
 
   clearState({LocalState, SelectedCtrl}) {
-    LocalState.set('TABLE_SORT', { title: 1 });
+    LocalState.set('TABLE_SORT_DOCUMENTS', { title: 1 });
     SelectedCtrl.reset('documents');
   }
 

@@ -24,7 +24,7 @@ class DocumentTableDropdown extends React.Component {
 
   renderItem(item, index) {
     let disabled = '';
-    const {isDisabledOnManyAndNone, isDisabledOnNone, tableName} = this.props;
+    const {isDisabledOnManyAndNone, isDisabledOnNone, isDisabledNoDocs, tableName} = this.props;
 
     if (item.divider) {
       return <li className="divider" key={index}></li>;
@@ -34,6 +34,8 @@ class DocumentTableDropdown extends React.Component {
       disabled = isDisabledOnNone(tableName) ? 'disabled' : '';
     } else if (item.disabledOn === 'MANY_AND_NONE') {
       disabled = isDisabledOnManyAndNone(tableName) ? 'disabled' : '';
+    } else if (item.disabledOn === 'NO_DOCS') {
+      disabled = isDisabledNoDocs() ? 'disabled' : '';
     }
 
     return (

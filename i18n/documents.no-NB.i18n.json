@@ -1,5 +1,5 @@
 {
-  "document_table": {
+  "documents": {
     "title": "Tittel",
     "created_at": "Opprettet",
     "last_modified": "Sist endret",
@@ -9,14 +9,5 @@
     "remove": "Fjern",
     "export": "Eksporter",
     "header": "Mine Dokumenter"
-  },
-  "template_table": {
-    "title": "Tittel",
-    "created_at": "Opprettet",
-    "last_modified": "Sist endret",
-    "is_empty": "Ingen maler funnet",
-    "remove": "Fjern",
-    "export": "Eksporter",
-    "header": "Mine maler"
   }
 }

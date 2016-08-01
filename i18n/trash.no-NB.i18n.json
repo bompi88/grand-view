@@ -1,0 +1,12 @@
+{
+  "trash": {
+    "title": "Tittel",
+    "created_at": "Opprettet",
+    "last_modified": "Sist endret",
+    "header": "Papirkurv",
+    "documents_header": "Slettede dokumenter",
+    "templates_header": "Slettede maler",
+    "is_templates_empty": "Ingen maler i papirkurven",
+    "is_documents_empty": "Ingen dokumenter i papirkurven"
+  }
+}

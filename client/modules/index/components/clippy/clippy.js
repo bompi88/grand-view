@@ -22,6 +22,11 @@ import {clippy} from 'meteor/macrozone:clippy';
 
 class Clippy extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
   componentDidMount() {
     const {openLanguageModal, text} = this.props;
     const {$} = this.props.context();
@@ -66,10 +71,12 @@ class Clippy extends React.Component {
   componentWillUnmount() {
     const {$} = this.props.context();
 
-    this.state.agent.hide(false, () => {
-      $('.clippy[data-uuid="' + this.state.uuid + '"]').remove();
-      $('.clippy-balloon').remove();
-    });
+    if (this.state.agent) {
+      this.state.agent.hide(false, () => {
+        $('.clippy[data-uuid="' + this.state.uuid + '"]').remove();
+        $('.clippy-balloon').remove();
+      });
+    }
   }
 
   render() {

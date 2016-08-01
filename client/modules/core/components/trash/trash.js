@@ -1,14 +1,36 @@
 import React from 'react';
 
-import TemplateTrashTable from '../../containers/template_trash_table';
+import DocumentTable from '../document_table/document_table';
+import TrashTableDropdown from '../../containers/trash_table_dropdown';
 
 export default class Documents extends React.Component {
   render() {
+    const {text, docs, templates} = this.props;
+
     return (
       <div className="container default-container animated fadeIn">
         <div className="row">
           <div>
-            <TemplateTrashTable dropdownClasses="pull-right" />
+            <TrashTableDropdown {...this.props} dropdownClasses="pull-right" />
+            <h3>
+              <span className="glyphicon glyphicon-trash"></span> {text.header}
+            </h3>
+            <DocumentTable
+              dropdownClasses="pull-right"
+              documents={docs}
+              tableName="trash_documents"
+              tableHeader={text.docsTableHeader}
+              emptyText={text.isDocumentsEmpty}
+              {...this.props}
+            />
+            <DocumentTable
+              dropdownClasses="pull-right"
+              documents={templates}
+              tableName="trash_templates"
+              tableHeader={text.templatesTableHeader}
+              emptyText={text.isTemplatesEmpty}
+              {...this.props}
+            />
           </div>
         </div>
       </div>

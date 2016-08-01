@@ -1,4 +1,4 @@
-import DocumentTable from '../components/document_table/document_table';
+import Templates from '../components/templates/templates';
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
 export const composer = ({context, clearState}, onData) => {
@@ -6,16 +6,16 @@ export const composer = ({context, clearState}, onData) => {
 
   const tableName = 'templates';
 
-  const sort = LocalState.get('TABLE_SORT') || { title: 1 };
+  const sort = LocalState.get('TABLE_SORT_TEMPLATES') || { title: 1 };
 
   const text = {
-    header: TAPi18n.__('template_table.header'),
-    title: TAPi18n.__('template_table.title'),
-    createdAt: TAPi18n.__('template_table.created_at'),
-    lastModified: TAPi18n.__('template_table.last_modified'),
-    isEmpty: TAPi18n.__('template_table.is_empty'),
-    remove: TAPi18n.__('template_table.remove'),
-    export: TAPi18n.__('template_table.export'),
+    header: TAPi18n.__('templates.header'),
+    title: TAPi18n.__('templates.title'),
+    createdAt: TAPi18n.__('templates.created_at'),
+    lastModified: TAPi18n.__('templates.last_modified'),
+    isEmpty: TAPi18n.__('templates.is_empty'),
+    remove: TAPi18n.__('templates.remove'),
+    export: TAPi18n.__('templates.export'),
   };
 
   const props = {
@@ -60,4 +60,4 @@ export const depsMapper = (context, actions) => ({
 export default composeAll(
   composeWithTracker(composer),
   useDeps(depsMapper)
-)(DocumentTable);
+)(Templates);

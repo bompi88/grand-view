@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////
-// Template Actions
+// Trash Actions
 ////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
@@ -19,21 +19,13 @@
 
 export default {
 
-  isDisabledOnManyAndNone({SelectedCtrl}, tableName) {
-    return SelectedCtrl.getSelected(tableName).length !== 1;
+  isDisabledOnNone({SelectedCtrl}) {
+    return SelectedCtrl.getSelected('trash_documents').length === 0 &&
+      SelectedCtrl.getSelected('trash_templates').length === 0;
   },
 
-  isDisabledOnNone({SelectedCtrl}, tableName) {
-    return SelectedCtrl.getSelected(tableName).length === 0;
-  },
-
-  createNewTemplate({LocalState}) {
-    LocalState.set('NEW_TEMPLATE_MODAL_VISIBLE', true);
-  },
-
-  openTemplate({LocalState, Collections, FlowRouter}, _id) {
-    LocalState.set('CURRENT_DOCUMENT', _id);
-    FlowRouter.go('WorkArea');
+  isDisabledNoDocs({Collections}) {
+    return Collections.Documents.find({ removed: true }).fetch().length === 0;
   },
 
   toggleSelected({SelectedCtrl}, id, tableName, e) {
@@ -82,39 +74,65 @@ export default {
     return selected > 0 && selected === len;
   },
 
-  exportTemplate(context, id, e) {
-    e.stopPropagation();
-    const {Helpers} = context;
-    Helpers.exportDocument(context, id, true);
-  },
+  remove({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}) {
+    const selected = _.union(SelectedCtrl.getSelected('trash_documents'),
+      SelectedCtrl.getSelected('trash_templates'));
 
-  importTemplate(context, e) {
-    e.stopPropagation();
-    const {Helpers} = context;
-    Helpers.importDocument(context, true);
-  },
-
-  removeTemplate({Meteor, NotificationManager, TAPi18n}, id, e) {
-    e.stopPropagation();
-
-    Meteor.call('documents.softRemove', id, (err) => {
+    Meteor.call('documents.remove', selected, (err) => {
       if (err) {
         NotificationManager.error(
-          TAPi18n.__('notifications.soft_remove_template_failed.message'),
-          TAPi18n.__('notifications.soft_remove_template_failed.title')
+          TAPi18n.__('notifications.permanent_remove_failed.message'),
+          TAPi18n.__('notifications.permanent_remove_failed.title')
         );
       } else {
         NotificationManager.success(
-          TAPi18n.__('notifications.soft_remove_template_success.message'),
-          TAPi18n.__('notifications.soft_remove_template_success.title')
+          TAPi18n.__('notifications.permanent_remove_success.message'),
+          TAPi18n.__('notifications.permanent_remove_success.title')
+        );
+      }
+    });
+  },
+
+  restore({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}) {
+    const selected = _.union(SelectedCtrl.getSelected('trash_documents'),
+      SelectedCtrl.getSelected('trash_templates'));
+    Meteor.call('documents.restore', selected, (err) => {
+      if (err) {
+        NotificationManager.error(
+          TAPi18n.__('notifications.restore_failed.message'),
+          TAPi18n.__('notifications.restore_failed.title')
+        );
+      } else {
+        NotificationManager.success(
+          TAPi18n.__('notifications.restore_success.message'),
+          TAPi18n.__('notifications.restore_success.title')
+        );
+        SelectedCtrl.resetAll();
+      }
+    });
+  },
+
+  emptyTrash({Meteor, NotificationManager, TAPi18n}) {
+    Meteor.call('documents.emptyTrash', (err) => {
+      if (err) {
+        NotificationManager.error(
+          TAPi18n.__('notifications.empty_trash_failed.message'),
+          TAPi18n.__('notifications.empty_trash_failed.title')
+        );
+      } else {
+        NotificationManager.success(
+          TAPi18n.__('notifications.empty_trash_success.message'),
+          TAPi18n.__('notifications.empty_trash_success.title')
         );
       }
     });
   },
 
   clearState({LocalState, SelectedCtrl}) {
-    LocalState.set('TABLE_SORT_TEMPLATES', { title: 1 });
-    SelectedCtrl.reset('templates');
+    LocalState.set('TABLE_SORT_TRASH_DOCUMENTS', { title: 1 });
+    LocalState.set('TABLE_SORT_TRASH_TEMPLATES', { title: 1 });
+    SelectedCtrl.reset('trash_documents');
+    SelectedCtrl.reset('trash_templates');
   }
 
 };

@@ -15,6 +15,12 @@
       "import_template": "Importer mal",
       "export_template": "Eksporter mal",
       "remove_template": "Legg i papirkurv"
+    },
+    "trash_table": {
+      "select_action": "Velg handling",
+      "restore": "Gjenopprett",
+      "remove": "Slett",
+      "empty_trash": "Tøm papirkurven"
     }
   }
 }

@@ -15,6 +15,12 @@
       "import_template": "Import template",
       "export_template": "Export template",
       "remove_template": "Move to trash"
+    },
+    "trash_table": {
+      "select_action": "Select action",
+      "restore": "Restore",
+      "remove": "Delete",
+      "empty_trash": "Empty trash"
     }
   }
 }

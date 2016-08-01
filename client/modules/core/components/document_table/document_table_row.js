@@ -80,17 +80,18 @@ class DocumentTableRow extends React.Component {
       showEditOptions,
       openDocument,
       toggleSelected,
-      isSelected
+      isSelected,
+      tableName
     } = this.props;
 
-    const checked = isSelected(doc._id) ? 'checked' : null;
+    const checked = isSelected(doc._id, tableName) ? 'checked' : null;
 
     return (
-      <tr className="table-row" onClick={openDocument.bind(this, doc._id)}>
+      <tr className="table-row" onClick={openDocument ? openDocument.bind(this, doc._id) : null}>
         <td
           className="row-item"
           onClick={(e) => { e.stopPropagation(); }}
-          onChange={toggleSelected.bind(this, doc._id)}
+          onChange={toggleSelected.bind(this, doc._id, tableName)}
         >
           <input type="checkbox" className="checkbox" checked={checked}/>
         </td>
@@ -116,7 +117,7 @@ DocumentTableRow.propTypes = {
     remove: React.PropTypes.string,
     export: React.PropTypes.string
   }),
-  openDocument: React.PropTypes.func.isRequired,
+  openDocument: React.PropTypes.func,
   exportDocument: React.PropTypes.func,
   removeDocument: React.PropTypes.func,
   getTemplateTitle: React.PropTypes.func,

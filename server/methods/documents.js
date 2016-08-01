@@ -1,5 +1,6 @@
 import {Meteor} from 'meteor/meteor';
 import {check} from 'meteor/check';
+import {_} from 'meteor/underscore';
 
 import * as Collections from '/lib/collections';
 
@@ -26,10 +27,31 @@ export default function () {
       return Collections.Documents.insert(doc);
     },
 
-    'documents.remove'(_id) {
+    'documents.softRemove'(_id) {
       check(_id, String);
 
       Collections.Documents.softRemove({_id});
+    },
+
+    'documents.remove'(ids) {
+      check(ids, [ String ]);
+
+      Collections.Documents.remove({ _id: { $in: ids }});
+    },
+
+    'documents.restore'(ids) {
+      check(ids, [ String ]);
+
+      ids.forEach((id) => {
+        Collections.Documents.restore(id);
+      });
+    },
+
+    'documents.emptyTrash'() {
+      const removedDocs = Collections.Documents.find({ removed: true }).fetch();
+
+      const ids = _.pluck(removedDocs, '_id');
+      Collections.Documents.remove({ _id: { $in: ids }});
     }
 
   });

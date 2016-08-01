@@ -1,7 +1,7 @@
 {
   "work_area": {
     "title": "Welcome to the work desk",
-    "description": "This is the place where you can edit documents and templated. No document nor template is selected for editing, thus this page is empty. To get started you can:",
+    "description": "This is the place where you can edit documents and templates. No document nor template is selected for editing, thus this page is empty. To get started you can:",
     "create_document": "Create a new document",
     "or": "or",
     "goto_documents": "Go to My documents"
