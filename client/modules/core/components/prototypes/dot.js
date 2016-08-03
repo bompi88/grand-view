@@ -4,13 +4,7 @@ import {$} from 'meteor/jquery';
 class Dot extends React.Component {
 
   componentDidMount() {
-    $('.dot').tooltip({
-      container: 'body'
-    });
-  }
-
-  componentWillUpdate() {
-    $('.dot').tooltip({
+    $(this.refs.dot).tooltip({
       container: 'body'
     });
   }
@@ -19,11 +13,11 @@ class Dot extends React.Component {
     const {label} = this.props;
     return (
       <span
-        id="work-area-dot"
+        ref="dot"
         className="dot dot-bright-blue waves"
         data-toggle="tooltip"
         data-placement="bottom"
-        title={label}
+        data-original-title={label}
       >&nbsp;</span>
     );
   }

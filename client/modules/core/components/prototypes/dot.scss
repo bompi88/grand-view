@@ -1,48 +1,58 @@
+$dot-color: #304650;
+$dot-bg-color: #0096ff;
+
+$waves-transparent-color: rgba(0, 150, 255, .5);
+$waves-fully-transparent-color: rgba(0, 150, 255, 0);
+
 .dot {
-  position:absolute;
-  top: 5px;
-  right: 5px;
-  line-height: 1.625em;
-  text-align: center;
-  display: block;
-  width: 1em;
-  height: 1em;
   border-radius: 50%;
+  display: block;
+  height: 1em;
+  line-height: 1.625em;
+  position: absolute;
+  right: 5px;
+  text-align: center;
+  top: 5px;
+  width: 1em;
 }
+
 .dot:hover {
   text-decoration: none;
 }
+
 .dot-bright-blue:focus {
-  box-shadow: 0 0 0 8px #fff,0 0 0 16px rgba(0,150,255,.5);
+  -webkit-animation: vibrate .1s linear infinite;
+  animation: vibrate .1s linear infinite;
+  box-shadow: 0 0 0 8px $waves-fully-transparent-color, 0 0 0 16px $waves-transparent-color;
   outline: 0;
-  -webkit-animation: vibrate 0.1s linear infinite;
-  animation: vibrate 0.1s linear infinite;
 }
-.dot-blue {
-  color: #fff;
-  background-color: #0076df;
-}
+
 .dot-bright-blue {
-  color: #304650;
-  background-color: #0096ff;
+  background-color: $dot-bg-color;
+  color: $dot-color;
 }
+
 .waves {
-  -webkit-animation: waves 1.0s linear infinite;
-  animation: waves 1.0s linear infinite;
+  -webkit-animation: waves 1s linear infinite;
+  animation: waves 1s linear infinite;
 }
+
 @-webkit-keyframes waves {
   from {
-    box-shadow: 0 0 #fff,0 0 0 1px rgba(0,150,255,.5);
+    box-shadow: 0 0 $waves-fully-transparent-color, 0 0 0 1px $waves-transparent-color;
   }
+
   to {
-    box-shadow: 0 0 0 8px #fff,0 0 0 16px rgba(0,150,255,0);
+    box-shadow: 0 0 0 8px $waves-fully-transparent-color, 0 0 0 16px $waves-fully-transparent-color;
   }
 }
+
 @keyframes waves {
   from {
-    box-shadow: 0 0 rgba(0,150,255,0),0 0 0 1px rgba(0,150,255,.5);
+    box-shadow: 0 0 $waves-fully-transparent-color, 0 0 0 1px $waves-transparent-color;
   }
+
   to {
-    box-shadow: 0 0 0 8px rgba(0,150,255,0),0 0 0 16px rgba(0,150,255,0);
+    box-shadow: 0 0 0 8px $waves-fully-transparent-color, 0 0 0 16px $waves-fully-transparent-color;
   }
 }
