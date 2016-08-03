@@ -39,6 +39,7 @@ export default class TopNavBar extends React.Component {
   renderButton(button) {
     return (
       <NavBarButton
+        key={button.route}
         route={button.route}
         name={button.label}
         hasDot={button.hasDot}

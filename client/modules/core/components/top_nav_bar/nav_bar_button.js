@@ -38,7 +38,6 @@ class NavBarButton extends React.Component {
         className={this.renderAsActive(route)}
         data-toggle="collapse"
         data-target=".in"
-        ref={route}
       >
 
         <a href={FlowRouter.path(route)}>{name}</a>
