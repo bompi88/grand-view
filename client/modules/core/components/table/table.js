@@ -19,7 +19,7 @@
 
 import React from 'react';
 
-import DocumentTableRow from './document_table_row';
+import DocumentTableRow from './table_row';
 
 
 class DocumentTable extends React.Component {

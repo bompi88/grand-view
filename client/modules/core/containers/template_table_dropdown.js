@@ -1,4 +1,4 @@
-import DocumentTableDropdown from '../components/document_table_dropdown/document_table_dropdown';
+import DocumentTableDropdown from '../components/table_dropdown/table_dropdown';
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
 export const composer = ({context}, onData) => {
@@ -11,7 +11,7 @@ export const composer = ({context}, onData) => {
       label: TAPi18n.__('dropdowns.template_table.create_template'),
     },
     {
-      func: 'openTemplate',
+      func: 'openSelectedTemplate',
       icon: 'glyphicon glyphicon-edit',
       label: TAPi18n.__('dropdowns.template_table.edit_template'),
       disabledOn: 'MANY_AND_NONE'
@@ -20,12 +20,12 @@ export const composer = ({context}, onData) => {
       divider: true
     },
     {
-      func: 'importTemplate',
+      func: 'importTemplates',
       icon: 'glyphicon glyphicon-import',
       label: TAPi18n.__('dropdowns.template_table.import_template')
     },
     {
-      func: 'exportTemplate',
+      func: 'exportSelectedTemplates',
       icon: 'glyphicon glyphicon-export',
       label: TAPi18n.__('dropdowns.template_table.export_template'),
       disabledOn: 'NONE'
@@ -34,7 +34,7 @@ export const composer = ({context}, onData) => {
       divider: true
     },
     {
-      func: 'removeTemplate',
+      func: 'removeSelectedTemplates',
       icon: 'glyphicon glyphicon-trash',
       label: TAPi18n.__('dropdowns.template_table.remove_template'),
       disabledOn: 'NONE'
@@ -51,9 +51,12 @@ export const composer = ({context}, onData) => {
 export const depsMapper = (context, actions) => ({
   createNewTemplate: actions.templates.createNewTemplate,
   openTemplate: actions.templates.openTemplate,
-  importTemplate: actions.templates.importTemplate,
+  openSelectedTemplate: actions.templates.openSelectedTemplate,
+  importTemplates: actions.templates.importTemplates,
   exportTemplate: actions.templates.exportTemplate,
+  exportSelectedTemplates: actions.templates.exportSelectedTemplates,
   removeTemplate: actions.templates.removeTemplate,
+  removeSelectedTemplates: actions.templates.removeSelectedTemplates,
   isDisabledOnManyAndNone: actions.templates.isDisabledOnManyAndNone,
   isDisabledOnNone: actions.templates.isDisabledOnNone,
   context: () => context

@@ -27,7 +27,7 @@ class Clippy extends React.Component {
     this.state = {};
   }
 
-  componentDidMount() {
+  mountClippy() {
     const {openLanguageModal, text} = this.props;
     const {$} = this.props.context();
 
@@ -68,15 +68,31 @@ class Clippy extends React.Component {
     });
   }
 
-  componentWillUnmount() {
+  unMountClippy(cb) {
     const {$} = this.props.context();
 
     if (this.state.agent) {
       this.state.agent.hide(false, () => {
         $('.clippy[data-uuid="' + this.state.uuid + '"]').remove();
         $('.clippy-balloon').remove();
+
+        if (cb) {
+          return cb();
+        }
       });
     }
+  }
+
+  componentDidMount() {
+    this.mountClippy();
+  }
+
+  componentWillUpdate() {
+    this.unMountClippy(this.mountClippy.bind(this));
+  }
+
+  componentWillUnmount() {
+    this.unMountClippy();
   }
 
   render() {

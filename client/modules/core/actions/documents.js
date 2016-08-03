@@ -41,6 +41,12 @@ export default {
     FlowRouter.go('WorkArea');
   },
 
+  openSelectedDocument({LocalState, Collections, FlowRouter, SelectedCtrl}, tableName) {
+    const _id = SelectedCtrl.getSelected(tableName)[0];
+    LocalState.set('CURRENT_DOCUMENT', _id);
+    FlowRouter.go('WorkArea');
+  },
+
   toggleSelected({SelectedCtrl}, id, tableName, e) {
     e.stopPropagation();
     e.preventDefault();
@@ -93,13 +99,22 @@ export default {
     Helpers.exportDocument(context, id);
   },
 
-  importDocument(context, e) {
-    e.stopPropagation();
-    const {Helpers} = context;
-    Helpers.importDocument(context);
+  exportSelectedDocuments(context, tableName) {
+    const {Helpers, SelectedCtrl} = context;
+    const selectedIds = SelectedCtrl.getSelected(tableName);
+    Helpers.exportDocument(context, selectedIds);
   },
 
-  removeDocument({Meteor, NotificationManager, TAPi18n}, id, e) {
+  importDocuments(context, e) {
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
+
+    const {Helpers} = context;
+    Helpers.importDocuments(context);
+  },
+
+  removeDocument({Meteor, NotificationManager, TAPi18n, SelectedCtrl}, id, e) {
     e.stopPropagation();
 
     Meteor.call('documents.softRemove', id, (err) => {
@@ -109,6 +124,26 @@ export default {
           TAPi18n.__('notifications.soft_remove_document_failed.title')
         );
       } else {
+        SelectedCtrl.remove('documents', id);
+        NotificationManager.success(
+          TAPi18n.__('notifications.soft_remove_document_success.message'),
+          TAPi18n.__('notifications.soft_remove_document_success.title')
+        );
+      }
+    });
+  },
+
+  removeSelectedDocuments({Meteor, NotificationManager, TAPi18n, SelectedCtrl}, tableName) {
+    const selectedIds = SelectedCtrl.getSelected(tableName);
+
+    Meteor.call('documents.softRemove', selectedIds, (err) => {
+      if (err) {
+        NotificationManager.error(
+          TAPi18n.__('notifications.soft_remove_document_failed.message'),
+          TAPi18n.__('notifications.soft_remove_document_failed.title')
+        );
+      } else {
+        SelectedCtrl.reset(tableName);
         NotificationManager.success(
           TAPi18n.__('notifications.soft_remove_document_success.message'),
           TAPi18n.__('notifications.soft_remove_document_success.title')

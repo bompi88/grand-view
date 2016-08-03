@@ -28,7 +28,7 @@ export const composer = ({context, clearStates}, onData) => {
     header: TAPi18n.__('index.header'),
     description: TAPi18n.__('index.description'),
     createDocument: TAPi18n.__('index.create_document'),
-    importDocument: TAPi18n.__('index.import_document'),
+    importDocuments: TAPi18n.__('index.import_document'),
     or: TAPi18n.__('index.or')
   };
 

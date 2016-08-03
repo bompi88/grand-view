@@ -1,0 +1,48 @@
+.dot {
+  position:absolute;
+  top: 5px;
+  right: 5px;
+  line-height: 1.625em;
+  text-align: center;
+  display: block;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+}
+.dot:hover {
+  text-decoration: none;
+}
+.dot-bright-blue:focus {
+  box-shadow: 0 0 0 8px #fff,0 0 0 16px rgba(0,150,255,.5);
+  outline: 0;
+  -webkit-animation: vibrate 0.1s linear infinite;
+  animation: vibrate 0.1s linear infinite;
+}
+.dot-blue {
+  color: #fff;
+  background-color: #0076df;
+}
+.dot-bright-blue {
+  color: #304650;
+  background-color: #0096ff;
+}
+.waves {
+  -webkit-animation: waves 1.0s linear infinite;
+  animation: waves 1.0s linear infinite;
+}
+@-webkit-keyframes waves {
+  from {
+    box-shadow: 0 0 #fff,0 0 0 1px rgba(0,150,255,.5);
+  }
+  to {
+    box-shadow: 0 0 0 8px #fff,0 0 0 16px rgba(0,150,255,0);
+  }
+}
+@keyframes waves {
+  from {
+    box-shadow: 0 0 rgba(0,150,255,0),0 0 0 1px rgba(0,150,255,.5);
+  }
+  to {
+    box-shadow: 0 0 0 8px rgba(0,150,255,0),0 0 0 16px rgba(0,150,255,0);
+  }
+}

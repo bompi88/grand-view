@@ -1,4 +1,4 @@
-import DocumentTableDropdown from '../components/document_table_dropdown/document_table_dropdown';
+import DocumentTableDropdown from '../components/table_dropdown/table_dropdown';
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
 export const composer = ({context}, onData) => {

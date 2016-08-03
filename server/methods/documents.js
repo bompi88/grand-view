@@ -1,5 +1,5 @@
 import {Meteor} from 'meteor/meteor';
-import {check} from 'meteor/check';
+import {check, Match} from 'meteor/check';
 import {_} from 'meteor/underscore';
 
 import * as Collections from '/lib/collections';
@@ -27,10 +27,14 @@ export default function () {
       return Collections.Documents.insert(doc);
     },
 
-    'documents.softRemove'(_id) {
-      check(_id, String);
+    'documents.softRemove'(ids) {
+      check(ids, Match.OneOf(String, [ String ]));
 
-      Collections.Documents.softRemove({_id});
+      if (_.isArray(ids)) {
+        Collections.Documents.softRemove({_id: { $in: ids }});
+      } else {
+        Collections.Documents.softRemove({_id: ids});
+      }
     },
 
     'documents.remove'(ids) {

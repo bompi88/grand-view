@@ -44,7 +44,7 @@ class Index extends React.Component {
                 </button>
                 <br /><span className="or-separator">{text.or}</span>
                 <br />
-                <ImportButton label={text.importDocument} onClick={importFile}/>
+                <ImportButton label={text.importDocuments} onClick={importFile}/>
               </div>
             </div>
           </div>
@@ -59,7 +59,7 @@ Index.propTypes = {
     header: React.PropTypes.string.isRequired,
     description: React.PropTypes.string.isRequired,
     createDocument: React.PropTypes.string.isRequired,
-    importDocument: React.PropTypes.string.isRequired,
+    importDocuments: React.PropTypes.string.isRequired,
     or: React.PropTypes.string.isRequired
   }),
   openCreateModal: React.PropTypes.func.isRequired,

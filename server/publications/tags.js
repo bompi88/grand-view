@@ -26,13 +26,13 @@ export default function () {
   /**
    * Publish tags by query and sort
    */
-  Meteor.publish('tags.byQuery', (query = {}, sort = {}) => {
+  Meteor.publish('tags.byQuery', function (query = {}, sort = {}) {
     return Tags.find(query, sort);
   });
 
   /**
    * Publish all tags
    */
-  Meteor.publish('tags.all', () => Tags.find());
+  Meteor.publish('tags.all', function () { return Tags.find(); });
 
 }

@@ -117,7 +117,7 @@ export default (context) => {
             label: TAPi18n.__('menu.import_document'),
             accelerator: CommandOrCtrl() + '+I',
             click() {
-              Helpers.importDocument(context);
+              Helpers.importDocuments(context);
             }
           },
           {
@@ -144,7 +144,7 @@ export default (context) => {
             label: TAPi18n.__('menu.import_template'),
             accelerator: CommandOrCtrl() + '+Shift+I',
             click() {
-              Helpers.importDocument(context, true);
+              Helpers.importDocuments(context, true);
             }
           },
           {

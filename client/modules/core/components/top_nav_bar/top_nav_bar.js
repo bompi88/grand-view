@@ -27,22 +27,6 @@ const {shell} = _require('electron');
 
 export default class TopNavBar extends React.Component {
 
-  isActiveRoute(route) {
-    const currentRoute = FlowRouter.getRouteName();
-    return currentRoute === route;
-  }
-
-  renderWorkAreaButton(label) {
-    if (this.isActiveRoute('Document')) {
-      return <NavBarButton route="Document" name={label}/>;
-    }
-    if (this.isActiveRoute('Template')) {
-      return <NavBarButton route="Template" name={label}/>;
-    }
-
-    return <NavBarButton route="WorkArea" name={label}/>;
-  }
-
   openConcept() {
     shell.openExternal('http://www.ntnu.no/concept/');
   }
@@ -50,6 +34,25 @@ export default class TopNavBar extends React.Component {
   gotoHome(e) {
     e.preventDefault();
     FlowRouter.go('Index');
+  }
+
+  renderButton(button) {
+    return (
+      <NavBarButton
+        route={button.route}
+        name={button.label}
+        hasDot={button.hasDot}
+        dotTooltip={button.dotTooltip}
+      />
+    );
+  }
+
+  renderButtons() {
+    const {buttons} = this.props;
+
+    return buttons.map((button) => {
+      return this.renderButton(button);
+    });
   }
 
   render() {
@@ -91,12 +94,7 @@ export default class TopNavBar extends React.Component {
           </div>
           <div className="navbar-collapse collapse">
             <ul className="nav navbar-nav">
-              <NavBarButton route="Documents" name={text.myDocuments}/>
-              <NavBarButton route="Templates" name={text.myTemplates}/>
-              <NavBarButton route="Trash" name={text.trash}/>
-
-              {this.renderWorkAreaButton(text.workArea)}
-
+              {this.renderButtons()}
             </ul>
           </div>
         </div>

@@ -26,13 +26,13 @@ export default function () {
   /**
    * Publish references by query and sort
    */
-  Meteor.publish('references.byQuery', (query = {}, sort = {}) => {
+  Meteor.publish('references.byQuery', function (query = {}, sort = {}) {
     return References.find(query, sort);
   });
 
   /**
    * Publish all references
    */
-  Meteor.publish('references.all', () => References.find());
+  Meteor.publish('references.all', function () { return References.find(); });
 
 }

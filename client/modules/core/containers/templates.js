@@ -15,17 +15,17 @@ export const composer = ({context, clearState}, onData) => {
     lastModified: TAPi18n.__('templates.last_modified'),
     isEmpty: TAPi18n.__('templates.is_empty'),
     remove: TAPi18n.__('templates.remove'),
-    export: TAPi18n.__('templates.export'),
+    export: TAPi18n.__('templates.export')
   };
 
   const props = {
     tableName,
     text,
     showTemplates: false,
-    showEditOptions: true,
+    showEditOptions: true
   };
 
-  if (Meteor.subscribe('templates.all').ready()) {
+  if (Meteor.subscribe('templates.all').ready() && Meteor.subscribe('templates.all').ready()) {
     const documents = Collections.Documents.find({
       isTemplate: true
     }, { sort }).fetch();

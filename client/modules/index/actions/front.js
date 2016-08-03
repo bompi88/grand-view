@@ -25,7 +25,7 @@ export default {
 
   importFile(context) {
     const {Helpers} = context;
-    Helpers.importDocument(context);
+    Helpers.importDocuments(context);
   },
 
   clearStates({LocalState}) {

@@ -26,7 +26,7 @@ export default function () {
   /**
    * Publish all nodes that are being used by a document with a particular id.
    */
-  Meteor.publish('nodes.byDocument', (_id) => {
+  Meteor.publish('nodes.byDocument', function (_id) {
 
     // get the document
     var doc = Documents.findOne({ _id });
@@ -46,6 +46,6 @@ export default function () {
   /**
    * Publish a particular node by id
    */
-  Meteor.publish('nodes.byId', (_id) => Nodes.find({ _id }));
+  Meteor.publish('nodes.byId', function (_id) { return Nodes.find({ _id }); });
 
 }

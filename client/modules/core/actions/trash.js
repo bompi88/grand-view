@@ -85,6 +85,7 @@ export default {
           TAPi18n.__('notifications.permanent_remove_failed.title')
         );
       } else {
+        SelectedCtrl.resetAll();
         NotificationManager.success(
           TAPi18n.__('notifications.permanent_remove_success.message'),
           TAPi18n.__('notifications.permanent_remove_success.title')
@@ -103,6 +104,7 @@ export default {
           TAPi18n.__('notifications.restore_failed.title')
         );
       } else {
+        SelectedCtrl.resetAll();
         NotificationManager.success(
           TAPi18n.__('notifications.restore_success.message'),
           TAPi18n.__('notifications.restore_success.title')
@@ -112,7 +114,7 @@ export default {
     });
   },
 
-  emptyTrash({Meteor, NotificationManager, TAPi18n}) {
+  emptyTrash({Meteor, NotificationManager, TAPi18n, SelectedCtrl}) {
     Meteor.call('documents.emptyTrash', (err) => {
       if (err) {
         NotificationManager.error(
@@ -120,6 +122,7 @@ export default {
           TAPi18n.__('notifications.empty_trash_failed.title')
         );
       } else {
+        SelectedCtrl.resetAll();
         NotificationManager.success(
           TAPi18n.__('notifications.empty_trash_success.message'),
           TAPi18n.__('notifications.empty_trash_success.title')

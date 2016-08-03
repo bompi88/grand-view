@@ -24,9 +24,9 @@ import {Nodes, Files} from './../../lib/collections';
 
 export default function () {
 
-  Meteor.publish('files.byId', (_id) => Files.find({ _id }));
+  Meteor.publish('files.byId', function (_id) { return Files.find({ _id }); });
 
-  Meteor.publish('files.byNode', (id) => {
+  Meteor.publish('files.byNode', function (id) {
 
     const nodes = Nodes.find({
       parent: id
@@ -42,9 +42,9 @@ export default function () {
     });
   });
 
-  Meteor.publish('files.byDocument', (docId) => Files.find({ docId }));
+  Meteor.publish('files.byDocument', function (docId) { return Files.find({ docId }); });
 
-  Meteor.publish('files.byArtificialNode', (an) => {
+  Meteor.publish('files.byArtificialNode', function (an) {
 
     var nodes = [];
 

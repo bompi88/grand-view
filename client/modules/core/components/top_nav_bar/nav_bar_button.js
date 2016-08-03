@@ -20,6 +20,8 @@
 import React from 'react';
 import {FlowRouter} from 'meteor/kadira:flow-router';
 
+import Dot from '../prototypes/dot';
+
 class NavBarButton extends React.Component {
 
   renderAsActive(route) {
@@ -29,15 +31,18 @@ class NavBarButton extends React.Component {
 
   render() {
 
-    const {name, route} = this.props;
+    const {name, route, hasDot, dotTooltip} = this.props;
 
     return (
       <li
         className={this.renderAsActive(route)}
         data-toggle="collapse"
-        data-target=".in">
+        data-target=".in"
+        ref={route}
+      >
 
         <a href={FlowRouter.path(route)}>{name}</a>
+        {hasDot ? (<Dot label={dotTooltip} />) : ''}
       </li>
     );
   }

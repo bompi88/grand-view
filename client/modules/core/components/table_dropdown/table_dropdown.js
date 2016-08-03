@@ -22,6 +22,12 @@ import React from 'react';
 
 class DocumentTableDropdown extends React.Component {
 
+  handleClick(func, e) {
+    const {tableName} = this.props;
+    const f = this.props[func];
+    f(tableName, e);
+  }
+
   renderItem(item, index) {
     let disabled = '';
     const {isDisabledOnManyAndNone, isDisabledOnNone, isDisabledNoDocs, tableName} = this.props;
@@ -40,7 +46,7 @@ class DocumentTableDropdown extends React.Component {
 
     return (
       <li
-        onClick={disabled === 'disabled' ? null : this.props[item.func].bind(this)}
+        onClick={disabled === 'disabled' ? null : this.handleClick.bind(this, item.func)}
         className={disabled}
         key={index}
       >

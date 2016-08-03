@@ -36,6 +36,12 @@ export default {
     FlowRouter.go('WorkArea');
   },
 
+  openSelectedTemplate({LocalState, Collections, FlowRouter, SelectedCtrl}, tableName) {
+    const _id = SelectedCtrl.getSelected(tableName)[0];
+    LocalState.set('CURRENT_DOCUMENT', _id);
+    FlowRouter.go('WorkArea');
+  },
+
   toggleSelected({SelectedCtrl}, id, tableName, e) {
     e.stopPropagation();
     e.preventDefault();
@@ -88,13 +94,22 @@ export default {
     Helpers.exportDocument(context, id, true);
   },
 
-  importTemplate(context, e) {
-    e.stopPropagation();
-    const {Helpers} = context;
-    Helpers.importDocument(context, true);
+  exportSelectedTemplates(context, tableName) {
+    const {Helpers, SelectedCtrl} = context;
+    const selectedIds = SelectedCtrl.getSelected(tableName);
+    Helpers.exportDocument(context, selectedIds, true);
   },
 
-  removeTemplate({Meteor, NotificationManager, TAPi18n}, id, e) {
+  importTemplates(context, e) {
+    if (e.stopPropagation) {
+      e.stopPropagation();
+    }
+
+    const {Helpers} = context;
+    Helpers.importDocuments(context, true);
+  },
+
+  removeTemplate({Meteor, NotificationManager, TAPi18n, SelectedCtrl}, id, e) {
     e.stopPropagation();
 
     Meteor.call('documents.softRemove', id, (err) => {
@@ -104,6 +119,26 @@ export default {
           TAPi18n.__('notifications.soft_remove_template_failed.title')
         );
       } else {
+        SelectedCtrl.remove('templates', id);
+        NotificationManager.success(
+          TAPi18n.__('notifications.soft_remove_template_success.message'),
+          TAPi18n.__('notifications.soft_remove_template_success.title')
+        );
+      }
+    });
+  },
+
+  removeSelectedTemplates({Meteor, NotificationManager, TAPi18n, SelectedCtrl}, tableName) {
+    const selectedIds = SelectedCtrl.getSelected(tableName);
+
+    Meteor.call('documents.softRemove', selectedIds, (err) => {
+      if (err) {
+        NotificationManager.error(
+          TAPi18n.__('notifications.soft_remove_template_failed.message'),
+          TAPi18n.__('notifications.soft_remove_template_failed.title')
+        );
+      } else {
+        SelectedCtrl.reset(tableName);
         NotificationManager.success(
           TAPi18n.__('notifications.soft_remove_template_success.message'),
           TAPi18n.__('notifications.soft_remove_template_success.title')

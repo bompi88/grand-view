@@ -1,6 +1,6 @@
 import React from 'react';
 
-import DocumentTable from '../document_table/document_table';
+import DocumentTable from '../table/table';
 import TrashTableDropdown from '../../containers/trash_table_dropdown';
 
 export default class Documents extends React.Component {

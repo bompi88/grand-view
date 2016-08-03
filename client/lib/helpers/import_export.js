@@ -102,7 +102,7 @@ export default {
     }
   },
 
-  importDocument({Meteor, NotificationManager, LocalState}, isTemplate) {
+  importDocuments({Meteor, NotificationManager, LocalState}, isTemplate) {
 
     var extension = isTemplate ? 'gvt' : 'gvd';
 

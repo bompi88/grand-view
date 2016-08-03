@@ -2,7 +2,7 @@ import Documents from '../components/documents/documents';
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
 export const composer = ({context, clearState}, onData) => {
-  const {Meteor, Collections, LocalState, TAPi18n} = context();
+  const {Meteor, Collections, TAPi18n, LocalState} = context();
 
   const tableName = 'documents';
   const sort = LocalState.get('TABLE_SORT_DOCUMENTS') || { title: 1 };

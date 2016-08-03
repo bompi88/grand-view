@@ -1,5 +1,6 @@
 import * as Collections from './../../lib/collections';
 import {Meteor} from 'meteor/meteor';
+import {Match} from 'meteor/check';
 import {FlowRouter} from 'meteor/kadira:flow-router';
 import {ReactiveDict} from 'meteor/reactive-dict';
 import {Tracker} from 'meteor/tracker';
@@ -19,6 +20,7 @@ export default function () {
   return {
     NotificationManager,
     moment,
+    Match,
     SelectedCtrl,
     ReferencesCtrl,
     ShowMoreCtrl,

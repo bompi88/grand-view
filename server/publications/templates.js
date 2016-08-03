@@ -26,12 +26,12 @@ export default function () {
   /**
    * Publish all templates
    */
-  Meteor.publish('templates.all', () => Documents.find({ isTemplate: true }));
+  Meteor.publish('templates.all', function () { return Documents.find({ isTemplate: true }); });
 
   /**
    * Publish all removed documents that a user owns or has access to
    */
-  Meteor.publish('templates.removed', () => {
+  Meteor.publish('templates.removed', function () {
     return Documents.find({ isTemplate: true, removed: true });
   });
 

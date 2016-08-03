@@ -5,6 +5,7 @@
     "my_templates": "My templates",
     "trash": "Trash",
     "work_area": "Work desk",
+    "work_area_tooltip": "Click on \"Work desk\" to get back to the document",
     "concept_logo": "Concept's logo",
     "toggle_navigation": "Toggle navigation",
     "goto_home": "Got to front page"
