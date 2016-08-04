@@ -309,7 +309,6 @@ export default {
                     'Eksportering fullført'
                   );
                 }
-                console.log(Globals.basePath + 'tmp')
                 this.deleteFolderRecursive(Globals.basePath + 'tmp');
               });
             } else {

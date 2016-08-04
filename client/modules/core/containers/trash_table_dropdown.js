@@ -33,8 +33,8 @@ export const composer = ({context}, onData) => {
 };
 
 export const depsMapper = (context, actions) => ({
-  remove: actions.trash.remove,
-  restore: actions.trash.restore,
+  remove: actions.trash.removeSelected,
+  restore: actions.trash.restoreSelected,
   emptyTrash: actions.trash.emptyTrash,
   isDisabledOnNone: actions.trash.isDisabledOnNone,
   isDisabledNoDocs: actions.trash.isDisabledNoDocs,

@@ -19,6 +19,10 @@
 
 export default {
 
+  formatDateRelative({moment}, time) {
+    return moment && moment(time).calendar();
+  },
+
   isDisabledOnManyAndNone({SelectedCtrl}, tableName) {
     return SelectedCtrl.getSelected(tableName).length !== 1;
   },
@@ -109,7 +113,7 @@ export default {
     Helpers.importDocuments(context, true);
   },
 
-  removeTemplate({Meteor, NotificationManager, TAPi18n, SelectedCtrl}, id, e) {
+  removeTemplate({Meteor, NotificationManager, TAPi18n, SelectedCtrl, LocalState}, id, e) {
     e.stopPropagation();
 
     Meteor.call('documents.softRemove', id, (err) => {
@@ -120,6 +124,11 @@ export default {
         );
       } else {
         SelectedCtrl.remove('templates', id);
+
+        if (id === LocalState.get('CURRENT_DOCUMENT')) {
+          LocalState.set('CURRENT_DOCUMENT', null);
+        }
+
         NotificationManager.success(
           TAPi18n.__('notifications.soft_remove_template_success.message'),
           TAPi18n.__('notifications.soft_remove_template_success.title')
@@ -128,7 +137,8 @@ export default {
     });
   },
 
-  removeSelectedTemplates({Meteor, NotificationManager, TAPi18n, SelectedCtrl}, tableName) {
+  removeSelectedTemplates(context, tableName) {
+    const {Meteor, NotificationManager, TAPi18n, SelectedCtrl, _, LocalState} = context;
     const selectedIds = SelectedCtrl.getSelected(tableName);
 
     Meteor.call('documents.softRemove', selectedIds, (err) => {
@@ -139,6 +149,11 @@ export default {
         );
       } else {
         SelectedCtrl.reset(tableName);
+
+        if (_.contains(selectedIds, LocalState.get('CURRENT_DOCUMENT'))) {
+          LocalState.set('CURRENT_DOCUMENT', null);
+        }
+
         NotificationManager.success(
           TAPi18n.__('notifications.soft_remove_template_success.message'),
           TAPi18n.__('notifications.soft_remove_template_success.title')

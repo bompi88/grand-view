@@ -175,18 +175,11 @@ export default (context) => {
               const doc = LocalState.get('CURRENT_DOCUMENT');
 
               if (doc) {
-                if (doc.template) {
-                  NotificationManager.warning(
-                    TAPi18n.__('notifications.generation_template_failed.message'),
-                    TAPi18n.__('notifications.generation_template_failed.title')
-                  );
-                } else {
-                  LocalState.set('EXPORT_OFFICE_MODAL_VISIBLE', true);
-                }
+                LocalState.set('EXPORT_OFFICE_MODAL_VISIBLE', true);
               } else {
                 NotificationManager.warning(
-                  TAPi18n.__('notifications.generation_failed.message'),
-                  TAPi18n.__('notifications.generation_failed.title')
+                  TAPi18n.__('notifications.generation_must_open_document.message'),
+                  TAPi18n.__('notifications.generation_must_open_document.title')
                 );
               }
             }

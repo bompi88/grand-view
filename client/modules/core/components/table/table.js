@@ -35,7 +35,7 @@ class DocumentTable extends React.Component {
   }
 
   renderDocuments(documents) {
-    const {text, showTemplates, emptyText} = this.props;
+    const {text, emptyText, columns} = this.props;
 
     if (documents && documents.length) {
       return documents.map((doc) => {
@@ -44,7 +44,7 @@ class DocumentTable extends React.Component {
     }
     return (
       <tr className="no-results-row" key="none">
-        <td colSpan={showTemplates ? '6' : '5'}>
+        <td colSpan={columns.length + 1}>
           {emptyText ? emptyText : text.isEmpty}...
         </td>
       </tr>
@@ -66,15 +66,33 @@ class DocumentTable extends React.Component {
     return <span className="glyphicon glyphicon-chevron-down sort-icon"></span>;
   }
 
+  renderHeaderColumn(column) {
+    const {tableName, toggleSort} = this.props;
+    const {field, label, sortable} = column;
+    return (
+      <th
+        className={sortable ? 'clickable-list-item' : ''}
+        onClick={sortable ? toggleSort.bind(this, field, tableName) : null}
+      >
+        {label ? label : ''} {sortable ? this.getSortIcon(field) : ''}
+      </th>
+    );
+  }
+
+  renderHeaderColumns() {
+    const {columns} = this.props;
+
+    return columns.map((column) => {
+      return this.renderHeaderColumn(column);
+    });
+  }
+
   renderTable() {
     const {
-      text,
       documents,
-      showTemplates,
       hasAllSelected,
       selectAll,
       deselectAll,
-      toggleSort,
       tableName
     } = this.props;
 
@@ -96,26 +114,7 @@ class DocumentTable extends React.Component {
                   selectAll.bind(this, ids, tableName)}
               />
             </th>
-            <th
-              className="clickable-list-item"
-              onClick={toggleSort.bind(this, 'title', tableName)}
-            >
-              {text.title} {this.getSortIcon('title')}
-            </th>
-            <th
-              className="clickable-list-item"
-              onClick={toggleSort.bind(this, 'createdAt', tableName)}
-            >
-              {text.createdAt} {this.getSortIcon('createdAt')}
-            </th>
-            <th
-              className="clickable-list-item"
-              onClick={toggleSort.bind(this, 'lastModified', tableName)}
-            >
-              {text.lastModified} {this.getSortIcon('lastModified')}
-            </th>
-            { showTemplates ? (<th>{text.templateUsed}</th>) : null }
-            <th></th>
+            {this.renderHeaderColumns()}
           </tr>
         </thead>
         <tbody>
@@ -172,8 +171,6 @@ DocumentTable.propTypes = {
   getTemplateTitle: React.PropTypes.func,
   toggleSelected: React.PropTypes.func.isRequired,
   isSelected: React.PropTypes.func.isRequired,
-  showTemplates: React.PropTypes.bool,
-  showEditOptions: React.PropTypes.bool,
   tableName: React.PropTypes.string.isRequired
 };
 

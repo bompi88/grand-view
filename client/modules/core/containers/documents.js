@@ -1,4 +1,7 @@
 import Documents from '../components/documents/documents';
+import EditColumn from '../components/table/edit_column';
+import TemplateColumn from '../components/table/template_column';
+
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
 export const composer = ({context, clearState}, onData) => {
@@ -9,21 +12,46 @@ export const composer = ({context, clearState}, onData) => {
 
   const text = {
     header: TAPi18n.__('documents.header'),
-    title: TAPi18n.__('documents.title'),
-    createdAt: TAPi18n.__('documents.created_at'),
-    lastModified: TAPi18n.__('documents.last_modified'),
     isEmpty: TAPi18n.__('documents.is_empty'),
     remove: TAPi18n.__('documents.remove'),
     export: TAPi18n.__('documents.export'),
-    by: TAPi18n.__('documents.by'),
-    templateUsed: TAPi18n.__('documents.template_used')
+    by: TAPi18n.__('documents.by')
   };
+
+  const columns = [
+    {
+      label: TAPi18n.__('documents.title'),
+      field: 'title',
+      sortable: true
+    },
+    {
+      label: TAPi18n.__('documents.created_at'),
+      field: 'createdAt',
+      sortable: true,
+      transform: 'formatDateRelative'
+    },
+    {
+      label: TAPi18n.__('documents.last_modified'),
+      field: 'lastModified',
+      sortable: true,
+      transform: 'formatDateRelative'
+    },
+    {
+      label: TAPi18n.__('documents.template_used'),
+      field: 'hasTemplate',
+      component: TemplateColumn,
+      transform: 'renderTemplateTitle',
+      args: [ 'doc', 'text' ]
+    },
+    {
+      component: EditColumn
+    }
+  ];
 
   const props = {
     tableName,
     text,
-    showTemplates: true,
-    showEditOptions: true
+    columns
   };
 
   if (Meteor.subscribe('documents.all').ready() && Meteor.subscribe('templates.all').ready()) {
@@ -43,6 +71,8 @@ export const composer = ({context, clearState}, onData) => {
 };
 
 export const depsMapper = (context, actions) => ({
+  formatDateRelative: actions.documents.formatDateRelative,
+  renderTemplateTitle: actions.documents.renderTemplateTitle,
   createNewDocument: actions.documents.createNewDocument,
   exportDocument: actions.documents.exportDocument,
   removeDocument: actions.documents.removeDocument,

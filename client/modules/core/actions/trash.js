@@ -19,6 +19,10 @@
 
 export default {
 
+  formatDateRelative({moment}, time) {
+    return moment && moment(time).calendar();
+  },
+
   isDisabledOnNone({SelectedCtrl}) {
     return SelectedCtrl.getSelected('trash_documents').length === 0 &&
       SelectedCtrl.getSelected('trash_templates').length === 0;
@@ -74,7 +78,25 @@ export default {
     return selected > 0 && selected === len;
   },
 
-  remove({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}) {
+  remove({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}, _id) {
+
+    Meteor.call('documents.remove', _id, (err) => {
+      if (err) {
+        NotificationManager.error(
+          TAPi18n.__('notifications.permanent_remove_failed.message'),
+          TAPi18n.__('notifications.permanent_remove_failed.title')
+        );
+      } else {
+        SelectedCtrl.resetAll();
+        NotificationManager.success(
+          TAPi18n.__('notifications.permanent_remove_success.message'),
+          TAPi18n.__('notifications.permanent_remove_success.title')
+        );
+      }
+    });
+  },
+
+  removeSelected({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}) {
     const selected = _.union(SelectedCtrl.getSelected('trash_documents'),
       SelectedCtrl.getSelected('trash_templates'));
 
@@ -94,7 +116,25 @@ export default {
     });
   },
 
-  restore({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}) {
+  restore({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}, _id) {
+    Meteor.call('documents.restore', _id, (err) => {
+      if (err) {
+        NotificationManager.error(
+          TAPi18n.__('notifications.restore_failed.message'),
+          TAPi18n.__('notifications.restore_failed.title')
+        );
+      } else {
+        SelectedCtrl.resetAll();
+        NotificationManager.success(
+          TAPi18n.__('notifications.restore_success.message'),
+          TAPi18n.__('notifications.restore_success.title')
+        );
+        SelectedCtrl.resetAll();
+      }
+    });
+  },
+
+  restoreSelected({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}) {
     const selected = _.union(SelectedCtrl.getSelected('trash_documents'),
       SelectedCtrl.getSelected('trash_templates'));
     Meteor.call('documents.restore', selected, (err) => {

@@ -17,7 +17,32 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-export default {
+const actions = {
+
+  formatDateRelative({moment}, time) {
+    return moment && moment(time).calendar();
+  },
+
+  formatDateRegular({moment}, time) {
+    return moment && moment(time).format('L');
+  },
+
+  renderTemplateTitle({Collections, moment}, _id, o) {
+
+    if (!_id) {
+      return '-';
+    }
+
+    const {doc, text} = o;
+    const template = Collections.Documents.findOne({ _id });
+
+    if (!template) {
+      return '-';
+    }
+
+    const title = template.title;
+    return title + ' (' + text.by + ' ' + moment(doc.createdAt).format('L') + ')';
+  },
 
   isDisabledOnManyAndNone({SelectedCtrl}, tableName) {
     return SelectedCtrl.getSelected(tableName).length !== 1;
@@ -114,7 +139,7 @@ export default {
     Helpers.importDocuments(context);
   },
 
-  removeDocument({Meteor, NotificationManager, TAPi18n, SelectedCtrl}, id, e) {
+  removeDocument({Meteor, NotificationManager, TAPi18n, SelectedCtrl, LocalState}, id, e) {
     e.stopPropagation();
 
     Meteor.call('documents.softRemove', id, (err) => {
@@ -125,6 +150,11 @@ export default {
         );
       } else {
         SelectedCtrl.remove('documents', id);
+
+        if (id === LocalState.get('CURRENT_DOCUMENT')) {
+          LocalState.set('CURRENT_DOCUMENT', null);
+        }
+
         NotificationManager.success(
           TAPi18n.__('notifications.soft_remove_document_success.message'),
           TAPi18n.__('notifications.soft_remove_document_success.title')
@@ -133,7 +163,8 @@ export default {
     });
   },
 
-  removeSelectedDocuments({Meteor, NotificationManager, TAPi18n, SelectedCtrl}, tableName) {
+  removeSelectedDocuments(context, tableName) {
+    const {Meteor, NotificationManager, TAPi18n, SelectedCtrl, _, LocalState} = context;
     const selectedIds = SelectedCtrl.getSelected(tableName);
 
     Meteor.call('documents.softRemove', selectedIds, (err) => {
@@ -144,6 +175,11 @@ export default {
         );
       } else {
         SelectedCtrl.reset(tableName);
+
+        if (_.contains(selectedIds, LocalState.get('CURRENT_DOCUMENT'))) {
+          LocalState.set('CURRENT_DOCUMENT', null);
+        }
+
         NotificationManager.success(
           TAPi18n.__('notifications.soft_remove_document_success.message'),
           TAPi18n.__('notifications.soft_remove_document_success.title')
@@ -158,3 +194,5 @@ export default {
   }
 
 };
+
+export default actions;

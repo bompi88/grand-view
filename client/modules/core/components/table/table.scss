@@ -27,7 +27,7 @@ $table-row-hover-text-color: #008cba;
   margin-left: 10px;
 }
 
-.table-row {
+.table-row.clickable-row {
   &:hover {
     cursor: pointer;
 

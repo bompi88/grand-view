@@ -20,86 +20,59 @@
 
 import React from 'react';
 
-import ExportButton from './../prototypes/export_button';
-
 class DocumentTableRow extends React.Component {
 
-  formatDateRelative(time) {
-    const {moment} = this.props.context();
-    return moment && moment(time).calendar();
-  }
+  renderColumns(doc) {
+    const {columns, context} = this.props;
+    const {_} = context();
 
-  formatDateRegular(time) {
-    const {moment} = this.props.context();
-    return moment && moment(time).format('L');
-  }
+    return columns.map((column) => {
+      const {transform, field, label, args = []} = column;
 
-  renderTemplateTitle(doc) {
-    const {getTemplateTitle, text} = this.props;
-    return getTemplateTitle(doc.hasTemplate) + ' (' + text.by + ' ' +
-      this.formatDateRegular(doc.createdAt) + ')';
-  }
+      let value;
+      if (transform) {
+        value = args.length ? this.props[transform](doc[field], { ..._.pick(this.props, args) }) :
+          this.props[transform](doc[field]);
+      } else {
+        value = doc[field];
+      }
 
-  renderTemplateData(doc) {
-    return (
-      <td className="row-item">
-        {doc.hasTemplate ? this.renderTemplateTitle(doc) : '-'}
-      </td>
-    );
-  }
+      if (column.component) {
+        return <column.component value={value} key={value} {...this.props}/>;
+      }
 
-  renderEditOptions(doc) {
-    const {exportDocument, removeDocument, text} = this.props;
-
-    return (
-      <td>
-        <div className="btn-group pull-right">
-          <ExportButton
-            className="btn-sm"
-            label={text.export}
-            onClick={exportDocument.bind(this, doc._id)}
-            doc={doc}
-          />
-
-          <button
-            type="button"
-            className="btn btn-danger btn-sm"
-            onClick={removeDocument.bind(this, doc._id)}
-          >
-            <span className="glyphicon glyphicon-trash"></span> {text.remove}
-          </button>
-        </div>
-      </td>
-    );
+      return <td key={label} className="row-item">{value}</td>;
+    });
   }
 
   render() {
     const {
       doc,
-      showTemplates,
-      showEditOptions,
       openDocument,
       toggleSelected,
       isSelected,
-      tableName
+      tableName,
+      disablePointer
     } = this.props;
 
     const checked = isSelected(doc._id, tableName) ? 'checked' : null;
 
     return (
-      <tr className="table-row" onClick={openDocument ? openDocument.bind(this, doc._id) : null}>
+      <tr
+        className={disablePointer ? 'table-row' : 'table-row clickable-row'}
+        onClick={openDocument ? openDocument.bind(this, doc._id) : null}
+      >
         <td
+          key="checkbox"
           className="row-item"
           onClick={(e) => { e.stopPropagation(); }}
           onChange={toggleSelected.bind(this, doc._id, tableName)}
         >
           <input type="checkbox" className="checkbox" checked={checked}/>
         </td>
-        <td className="row-item">{doc.title}</td>
-        <td className="row-item">{this.formatDateRelative(doc.createdAt)}</td>
-        <td className="row-item">{this.formatDateRelative(doc.lastModified)}</td>
-        {showTemplates ? this.renderTemplateData(doc) : null}
-        {showEditOptions ? this.renderEditOptions(doc) : null}
+
+        {this.renderColumns(doc)}
+
       </tr>
     );
   }

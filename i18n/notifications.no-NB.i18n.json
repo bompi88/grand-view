@@ -1,24 +1,20 @@
 {
   "notifications": {
-    "generation_failed": {
-        "title": "Generering mislyktes",
-        "message": "Du må ha åpnet et dokument for å kunne generere utskrift."
-    },
     "export_document_failed": {
       "title": "Eksportering av dokument(er) mislyktes",
-      "message": "Du må ha åpnet et dokument for å kunne eksportere det."
+      "message": "Du må ha åpnet eller valgt et dokument i tabellen for å kunne eksportere det."
     },
     "export_template_failed": {
       "title": "Eksportering av mal(er) mislyktes",
-      "message": "Du må ha åpnet en mal for å kunne eksportere den."
+      "message": "Du må ha åpnet eller valgt en mal i tabellen for å kunne eksportere det."
     },
     "context_menu_root": {
       "title": "Sletting feilet",
-      "message": "Kan ikke slette rotnoden. For å slette dokumentet må du gjøre dette under \"Mine dokumenter\""
+      "message": "Man kan ikke slette rotnoden. For å slette dokumentet/malen må man gjøre dette under \"Mine dokumenter\""
     },
     "soft_remove_document_failed": {
       "title": "Feil ved sletting",
-      "message": "Kunne ikke putte dokumentet i papirkurven."
+      "message": "Kunne ikke putte dokumentet i papirkurven. Vennligst prøv igjen."
     },
     "soft_remove_document_success": {
       "title": "Sletting fullført",
@@ -26,7 +22,7 @@
     },
     "soft_remove_template_failed": {
       "title": "Feil ved sletting",
-      "message": "Kunne ikke putte malen i papirkurven."
+      "message": "Kunne ikke putte malen i papirkurven. Vennligst prøv igjen."
     },
     "soft_remove_template_success": {
       "title": "Sletting fullført",
@@ -38,15 +34,51 @@
     },
     "create_document_success": {
       "title": "Dokument opprettet",
-      "message": "Dokumentet er nå opprettet og klar til bruk."
+      "message": "Dokumentet er nå opprettet og er klart til bruk."
     },
     "create_template_failed": {
-      "title": "Kunne ikke opprette dokument",
+      "title": "Kunne ikke opprette mal",
       "message": "Kunne ikke opprette malen. Vennligst prøv igjen."
     },
     "create_template_success": {
       "title": "Mal opprettet",
-      "message": "Malen er nå opprettet og klar til bruk."
+      "message": "Malen er nå opprettet og er klar til bruk."
+    },
+    "permanent_remove_failed": {
+      "title": "Permanent sletting feilet",
+      "message": "Kunne ikke slette dokumentet/malen. Vennligst prøv igjen."
+    },
+    "permanent_remove_success": {
+      "title": "Permanent sletting fullført",
+      "message": "Dokumentet/Malen er nå slettet for godt."
+    },
+    "restore_failed": {
+      "title": "Feil ved gjenoppretting",
+      "message": "Kunne ikke gjenopprette dokumentet/malen. Vennligst prøv igjen."
+    },
+    "restore_success": {
+      "title": "Gjenoppretting fullført",
+      "message": "Dokumentet/Malen er nå gjenopprettet og befinner seg i \"Mine dokumenter\" eller \"Mine maler\"."
+    },
+    "empty_trash_failed": {
+      "title": "Feil ved sletting",
+      "message": "Kunne ikke slette innholdet i papirkurven. Vennligst prøv igjen, eller prøv å slett hvert dokument hver for seg."
+    },
+    "empty_trash_success": {
+      "title": "Sletting fullført",
+      "message": "Papirkurven din er nå fri for dokumenter/maler."
+    },
+    "generation_docx_failed": {
+      "title": "Feil under generering av .docx fil",
+      "message": "Noe uforberedt skjedde under generering av .docx fil. Vennligst prøv igjen."
+    },
+    "generation_docx_success": {
+      "title": "Generering lyktes",
+      "message": "Filen ble ferdigstilt og åpnes opp i et nytt vindu. Hvis du vil ta vare på filen klikker du på \"Fil->Lagre som\" i det nye vinduet."
+    },
+    "generation_must_open_document": {
+      "title": "Generering av .docx fil mislyktes",
+      "message": "Du må ha åpnet et dokument for å kunne generere utskrift."
     }
   }
 }

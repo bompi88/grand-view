@@ -38,17 +38,24 @@ export default function () {
     },
 
     'documents.remove'(ids) {
-      check(ids, [ String ]);
+      check(ids, Match.OneOf(String, [ String ]));
 
-      Collections.Documents.remove({ _id: { $in: ids }});
+      if (_.isArray(ids)) {
+        Collections.Documents.remove({_id: { $in: ids }});
+      } else {
+        Collections.Documents.remove({_id: ids});
+      }
     },
 
     'documents.restore'(ids) {
-      check(ids, [ String ]);
-
-      ids.forEach((id) => {
-        Collections.Documents.restore(id);
-      });
+      check(ids, Match.OneOf(String, [ String ]));
+      if (_.isArray(ids)) {
+        ids.forEach((id) => {
+          Collections.Documents.restore(id);
+        });
+      } else {
+        Collections.Documents.restore(ids);
+      }
     },
 
     'documents.emptyTrash'() {

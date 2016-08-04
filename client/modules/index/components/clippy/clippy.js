@@ -39,7 +39,7 @@ class Clippy extends React.Component {
       agent.show();
 
       agent.speak(text.welcome);
-      agent.speak(text.hideMe, true);
+      // agent.speak(text.hideMe, true);
 
       let left = 0;
       let top = 0;

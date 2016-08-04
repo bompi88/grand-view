@@ -1,4 +1,6 @@
 import Templates from '../components/templates/templates';
+import EditColumn from '../components/table/edit_column';
+
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
 export const composer = ({context, clearState}, onData) => {
@@ -18,11 +20,33 @@ export const composer = ({context, clearState}, onData) => {
     export: TAPi18n.__('templates.export')
   };
 
+  const columns = [
+    {
+      label: TAPi18n.__('templates.title'),
+      field: 'title',
+      sortable: true
+    },
+    {
+      label: TAPi18n.__('templates.created_at'),
+      field: 'createdAt',
+      sortable: true,
+      transform: 'formatDateRelative'
+    },
+    {
+      label: TAPi18n.__('templates.last_modified'),
+      field: 'lastModified',
+      sortable: true,
+      transform: 'formatDateRelative'
+    },
+    {
+      component: EditColumn
+    }
+  ];
+
   const props = {
     tableName,
     text,
-    showTemplates: false,
-    showEditOptions: true
+    columns
   };
 
   if (Meteor.subscribe('templates.all').ready() && Meteor.subscribe('templates.all').ready()) {
@@ -42,6 +66,7 @@ export const composer = ({context, clearState}, onData) => {
 };
 
 export const depsMapper = (context, actions) => ({
+  formatDateRelative: actions.templates.formatDateRelative,
   createNewDocument: actions.templates.createNewTemplate,
   exportDocument: actions.templates.exportTemplate,
   removeDocument: actions.templates.removeTemplate,

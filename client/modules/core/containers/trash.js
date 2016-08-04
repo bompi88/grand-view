@@ -1,4 +1,6 @@
 import Trash from '../components/trash/trash';
+import TrashColumn from '../components/table/trash_column';
+
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
 export const composer = ({context, clearState}, onData) => {
@@ -15,15 +17,44 @@ export const composer = ({context, clearState}, onData) => {
     isTemplatesEmpty: TAPi18n.__('trash.is_templates_empty'),
     isDocumentsEmpty: TAPi18n.__('trash.is_documents_empty'),
     remove: TAPi18n.__('trash.remove'),
-    export: TAPi18n.__('trash.export'),
-    by: TAPi18n.__('trash.by'),
-    templateUsed: TAPi18n.__('trash.template_used'),
+    restore: TAPi18n.__('trash.restore'),
     docsTableHeader: TAPi18n.__('trash.documents_header'),
     templatesTableHeader: TAPi18n.__('trash.templates_header')
   };
 
+  const columns = [
+    {
+      label: TAPi18n.__('trash.title'),
+      field: 'title',
+      sortable: true
+    },
+    {
+      label: TAPi18n.__('trash.created_at'),
+      field: 'createdAt',
+      sortable: true,
+      transform: 'formatDateRelative'
+    },
+    {
+      label: TAPi18n.__('trash.last_modified'),
+      field: 'lastModified',
+      sortable: true,
+      transform: 'formatDateRelative'
+    },
+    {
+      label: TAPi18n.__('trash.removed_at'),
+      field: 'removedAt',
+      sortable: true,
+      transform: 'formatDateRelative'
+    },
+    {
+      component: TrashColumn
+    }
+  ];
+
   const props = {
-    text
+    text,
+    disablePointer: true,
+    columns
   };
 
   if (Meteor.subscribe('documents.removed').ready() &&
@@ -52,6 +83,9 @@ export const composer = ({context, clearState}, onData) => {
 };
 
 export const depsMapper = (context, actions) => ({
+  restore: actions.trash.restore,
+  remove: actions.trash.remove,
+  formatDateRelative: actions.trash.formatDateRelative,
   toggleSelected: actions.trash.toggleSelected,
   isSelected: actions.trash.isSelected,
   selectAll: actions.trash.selectAll,
