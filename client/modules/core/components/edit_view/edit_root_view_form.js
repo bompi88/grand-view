@@ -26,7 +26,7 @@ class EditRootViewForm extends React.Component {
           autoComplete="off"
           placeholder={text.description}
           label={text.description}
-          rows={6}
+          rows={12}
           componentClass={React.DOM.textarea}
           onChange={(e) => {
             change('description', e.target.value);

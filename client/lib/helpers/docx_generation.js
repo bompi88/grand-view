@@ -286,7 +286,13 @@ const generationDocx = {
     mainParagraph.addText(title || TAPi18n.__('no_title'), header1Text);
 
     if (description) {
-      docx.createP().addText(description, descText);
+      const paragraphs = description ? description.split('\n') : [];
+
+      paragraphs.forEach((paragraph) => {
+        if (paragraph.length) {
+          docx.createP().addText(paragraph, descText);
+        }
+      });
     }
 
     Meteor.subscribe('files.byDocument', _id, () => {
