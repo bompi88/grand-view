@@ -1,9 +1,9 @@
 import Templates from '../components/templates/templates';
 import EditColumn from '../components/table/edit_column';
 
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
-export const composer = ({context, clearState}, onData) => {
+export const composer = ({ context, clearState }, onData) => {
   const {Meteor, Collections, TAPi18n, LocalState} = context();
 
   const tableName = 'templates';
@@ -24,22 +24,26 @@ export const composer = ({context, clearState}, onData) => {
     {
       label: TAPi18n.__('templates.title'),
       field: 'title',
+      key: 'title',
       sortable: true
     },
     {
       label: TAPi18n.__('templates.created_at'),
       field: 'createdAt',
+      key: 'created-at',
       sortable: true,
       transform: 'formatDateRelative'
     },
     {
       label: TAPi18n.__('templates.last_modified'),
       field: 'lastModified',
+      key: 'last-modified',
       sortable: true,
       transform: 'formatDateRelative'
     },
     {
-      component: EditColumn
+      component: EditColumn,
+      key: 'edit-column'
     }
   ];
 

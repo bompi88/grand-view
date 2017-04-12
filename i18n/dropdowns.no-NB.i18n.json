@@ -21,6 +21,16 @@
       "restore": "Gjenopprett",
       "remove": "Slett",
       "empty_trash": "Tøm papirkurven"
+    },
+    "document_options": {
+      "hide_media_nodes": "Skjul informasjonselementer",
+      "show_media_nodes": "Vis informasjonselementer",
+      "create_chapter": "Opprett kapittel",
+      "expand_nodes": "Utvid alle elementer",
+      "collapse_nodes": "Sammentrekk alle elementer",
+      "generate_docx": "Utskrift",
+      "export_to_file": "Eksporter til fil",
+      "help": "Hjelp"
     }
   }
 }

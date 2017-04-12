@@ -20,7 +20,7 @@
 import React from 'react';
 import {mount} from 'react-mounter';
 
-import MainLayout from './components/main_layout/main_layout';
+import MainLayout from './containers/main_layout';
 import Documents from './containers/documents';
 import Templates from './containers/templates';
 import Trash from './containers/trash';

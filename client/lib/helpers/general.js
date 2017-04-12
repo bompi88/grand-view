@@ -17,8 +17,9 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-import {$} from 'meteor/jquery';
+import {$} from 'jquery';
 import {moment} from 'meteor/momentjs:moment';
+import bootbox from 'bootbox';
 
 export default {
 
@@ -54,7 +55,7 @@ export default {
         }
       }
     };
-    window.bootbox.dialog(confirmationPrompt);
+    bootbox.dialog(confirmationPrompt);
   },
 
   goto({FlowRouter}, id, template = false) {

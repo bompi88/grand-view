@@ -1,0 +1,23 @@
+{
+  "edit_view": {
+    "empty": "No information elements under this chapter node.",
+    "informationelement": "Information element",
+    "tableHeader": "Information elements in this chapter",
+    "form": {
+      "tagsPlaceholder": "Tags",
+      "tagsLabel": "Select tags",
+      "referencesPlaceholder": "References",
+      "referencesLabel": "Select references",
+      "name": "Name (Optional)",
+      "description": "Information element",
+      "createTag": "Click to create the tag",
+      "createReference": "Click to create the reference",
+      "removeItem": "Remove from dropdown list",
+      "noResultsText": "No results, try to input more letters in the box above."
+    },
+    "root_form": {
+      "title": "Title",
+      "description": "Description"
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {$} from 'meteor/jquery';
+import $ from 'jquery';
 
 class Dot extends React.Component {
 

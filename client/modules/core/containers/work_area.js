@@ -16,6 +16,7 @@ export const composer = ({context}, onData) => {
 
   if (_id && Meteor.subscribe('documents.allByDocs', _id)) {
     const doc = Collections.Documents.findOne({_id});
+
     onData(null, {text, doc});
   } else {
     onData(null, {text});

@@ -9,8 +9,15 @@ import coreModule from './modules/core';
 import indexModule from './modules/index';
 import modalsModule from './modules/modals';
 
+// combine all module reducers
+const coreReducers = coreModule.reducers;
+
+const reducers = {
+  ...coreReducers
+};
+
 // Init context
-const context = initContext();
+const context = initContext({ reducers });
 
 // configurations
 initMenu(context);

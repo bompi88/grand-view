@@ -156,9 +156,9 @@ const generationDocx = {
     if (posLabel) {
       numbering = posLabel + '.' + (position + 1);
     } else {
-      numbering = position + 1;
+      numbering = position;
     }
-
+    console.log(node)
     par.addText(numbering + ' ' + (title || TAPi18n.__('no_chapter_title')), header2Text);
 
     const nodes = Nodes.find({
@@ -189,7 +189,7 @@ const generationDocx = {
     }).fetch();
 
     const tagsList = {};
-
+    console.log(format)
     nodes.forEach((node) => {
       const elements = node[format] || [];
 
@@ -256,6 +256,8 @@ const generationDocx = {
           position: 1
         }
       }).fetch();
+
+      console.log(nodes)
 
       nodes.forEach((node) => {
         const {nodeType} = node;

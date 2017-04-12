@@ -19,6 +19,7 @@ export default class CtxMenu extends React.Component {
 
   render() {
     const {identifier} = this.props;
+
     return (
       <ContextMenu identifier={identifier} currentItem={this.currentItem}>
         {this.renderMenuItems()}

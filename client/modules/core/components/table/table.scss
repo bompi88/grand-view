@@ -31,8 +31,18 @@ $table-row-hover-text-color: #008cba;
   &:hover {
     cursor: pointer;
 
-    > td {
+    > td a {
       color: $table-row-hover-text-color;
     }
   }
+}
+
+.Select-menu-outer .Select-menu {
+  z-index: 100000;
+}
+
+.Select-menu .Select-option {
+  height: 40px;
+  line-height: 1.7;
+
 }

@@ -22,29 +22,34 @@ export const composer = ({context, clearState}, onData) => {
     {
       label: TAPi18n.__('documents.title'),
       field: 'title',
+      key: 'title',
       sortable: true
     },
     {
       label: TAPi18n.__('documents.created_at'),
       field: 'createdAt',
+      key: 'created-at',
       sortable: true,
       transform: 'formatDateRelative'
     },
     {
       label: TAPi18n.__('documents.last_modified'),
       field: 'lastModified',
+      key: 'last-modified',
       sortable: true,
       transform: 'formatDateRelative'
     },
     {
       label: TAPi18n.__('documents.template_used'),
       field: 'hasTemplate',
+      key: 'template-used',
       component: TemplateColumn,
       transform: 'renderTemplateTitle',
       args: [ 'doc', 'text' ]
     },
     {
-      component: EditColumn
+      component: EditColumn,
+      key: 'edit-column'
     }
   ];
 

@@ -27,7 +27,7 @@ class DocumentTableRow extends React.Component {
     const {_} = context();
 
     return columns.map((column) => {
-      const {transform, field, label, args = []} = column;
+      const {transform, field, label, key, args = []} = column;
 
       let value;
       if (transform) {
@@ -38,7 +38,7 @@ class DocumentTableRow extends React.Component {
       }
 
       if (column.component) {
-        return <column.component value={value} key={value} {...this.props}/>;
+        return <column.component value={value} key={key} {...this.props}/>;
       }
 
       return <td key={label} className="row-item">{value}</td>;

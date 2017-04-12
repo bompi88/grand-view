@@ -20,6 +20,7 @@
 import 'react-notifications/lib/notifications.css';
 
 import React from 'react';
+import { Provider } from 'react-redux';
 import {NotificationContainer} from 'react-notifications';
 import TopNavBar from '../../containers/top_nav_bar';
 import Modals from '../modals/modals';
@@ -27,21 +28,30 @@ import ContextMenuRoot from '../../containers/context_menu_root';
 import ContextMenuChapter from '../../containers/context_menu_chapter';
 import ContextMenuNode from '../../containers/context_menu_node';
 
-const Layout = ({content = () => null }) => (
-  <div>
-    <ContextMenuRoot />
-    <ContextMenuChapter />
-    <ContextMenuNode />
+class MainLayout extends React.Component {
 
-    <TopNavBar />
+  render() {
+    const { content = () => null, store } = this.props;
 
-    <div className="clippy"></div>
+    return (
+      <Provider store={store}>
+        <div>
+          <ContextMenuRoot />
+          <ContextMenuChapter />
+          <ContextMenuNode />
 
-    {content()}
+          <TopNavBar />
 
-    <Modals />
-    <NotificationContainer/>
-  </div>
-);
+          <div className="clippy"></div>
 
-export default Layout;
+          {content()}
+
+          <Modals />
+          <NotificationContainer/>
+        </div>
+      </Provider>
+    );
+  }
+}
+
+export default MainLayout;

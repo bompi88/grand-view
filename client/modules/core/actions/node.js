@@ -18,6 +18,14 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 export default {
+
+  handleClick({Meteor, LocalState}, { _id }, e) {
+    if (e.nativeEvent.which === 1) {
+      Meteor.call('document.setSelectedNode', LocalState.get('CURRENT_DOCUMENT'), _id);
+      LocalState.set('CURRENT_NODE', _id);
+    }
+  },
+
   /**
    * NodeLevel: deleteNode
    * parameter: _id (node collection id)
@@ -458,41 +466,14 @@ export default {
 
   },
 
-  renameNode({LocalState, Meteor, Nodes, $}, _id) {
+  renameNode({LocalState, Meteor, $}, _id) {
+
     LocalState.set('editChapterNodeName', _id);
 
     Meteor.defer(() => {
-      var el = $('.tree li[data-id="' + _id + '"] > .element .node-text .node-name');
-
-      if (el) {
-        var parent = el.parent().parent();
-        parent.css('text-overflow', 'clip');
-
-        el.focus();
-        document.execCommand('selectAll', false, null);
-
-        el.blur(() => {
-          LocalState.set('editChapterNodeName', null);
-
-          parent.scrollLeft(0);
-          parent.css('text-overflow', 'ellipsis');
-        });
-
-        el.keypress((e) => {
-          if (e.which === 13) {
-            var text = e.currentTarget.innerText;
-
-            Nodes.update({ _id }, { $set: { title: text }});
-
-            LocalState.set('editChapterNodeName', null);
-
-            parent.scrollLeft(0);
-            parent.css('text-overflow', 'ellipsis');
-
-            return false;
-          }
-        });
-      }
+      var el = $('.tree li .element.nodes.selected div.node-text');
+      el.focus();
+      document.execCommand('selectAll', false, null);
     });
   }
 };

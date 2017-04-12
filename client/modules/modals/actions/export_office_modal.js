@@ -30,6 +30,7 @@ export default {
             TAPi18n.__('notifications.generation_docx_failed.title')
           );
         } else {
+          LocalState.set('EXPORT_OFFICE_MODAL_VISIBLE', false);
           NotificationManager.success(
             TAPi18n.__('notifications.generation_docx_success.message'),
             TAPi18n.__('notifications.generation_docx_success.title')

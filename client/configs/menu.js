@@ -20,11 +20,13 @@
 /* globals _require */
 /* eslint no-sync: 0 */
 
+import { ActionCreators } from 'redux-undo';
+
 export default (context) => {
   const remote = _require('electron').remote;
   const Menu = remote.Menu;
 
-  const {LocalState, Helpers, NotificationManager, TAPi18n, Tracker} = context;
+  const {LocalState, dispatch, Helpers, NotificationManager, TAPi18n, Tracker} = context;
   const resourcesRoot = _require('fs').realpathSync(process.env.DIR || process.cwd());
 
   const CommandOrCtrl = () => {
@@ -47,7 +49,7 @@ export default (context) => {
                 'file:' + resourcesRoot + file,
                 TAPi18n.__('menu.about_grandview'),
                 'width=300, ' +
-                'height=300, ' +
+                'height=450, ' +
                 'resizable=no, ' +
                 'scrollbars=no, ' +
                 'status=no, ' +
@@ -193,14 +195,16 @@ export default (context) => {
             label: TAPi18n.__('menu.undo'),
             accelerator: CommandOrCtrl() + '+Z',
             click() {
-              remote.getCurrentWindow().webContents.undo();
+              dispatch(ActionCreators.undo());
+              // remote.getCurrentWindow().webContents.undo();
             }
           },
           {
             label: TAPi18n.__('menu.redo'),
             accelerator: 'Shift+' + CommandOrCtrl() + '+Z',
             click() {
-              remote.getCurrentWindow().webContents.redo();
+              dispatch(ActionCreators.redo());
+              // remote.getCurrentWindow().webContents.redo();
             }
           },
           {

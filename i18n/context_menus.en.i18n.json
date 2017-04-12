@@ -1,0 +1,10 @@
+{
+  "context_menus": {
+    "add_chapter": "Add chapter",
+    "add_subchapter": "Add subchapter",
+    "add_media_node": "Add media node",
+    "remove": "Remove",
+    "rename": "Rename",
+    "edit": "Edit"
+  }
+}

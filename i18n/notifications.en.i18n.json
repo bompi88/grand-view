@@ -79,6 +79,10 @@
     "generation_must_open_document": {
       "title": "Generation of .docx file failed",
       "message": "You must open a document to be able to generate the printable version."
+    },
+    "max_number_of_subchapters": {
+      "title": "Limit of maximum nested subchapters",
+      "message": "You can have a maximum depth of 5 subchapters per chapter."
     }
   }
 }

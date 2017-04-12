@@ -39,19 +39,26 @@
         margin: 10px auto;
       }
 
-      .developers {
+      .para {
         margin-top:20px;
         width: 100%;
       }
 
-      .developers h3 {
+      .para h4 {
         margin-bottom: 10px;
+        font-weight: 600;
       }
 
       .version {
         margin-bottom: 20px;
       }
     </style>
+    <script type="text/javascript">
+      function openConcept(e) {
+        const sh = require('electron').shell;
+        sh.openExternal('http://www.ntnu.no/concept');
+      }
+    </script>
   </head>
   <body>
     <div class="container">
@@ -61,11 +68,18 @@
       </div>
       <div class="company">
         <div class="image"></div>
-        Copyright &copy; Concept 2015
+        Copyright &copy; <a href="#" onClick="javascript:openConcept();">Concept</a> 2015
       </div>
-      <div class="developers">
-        <h3>Developers:</h3>
-        Bjørn Bråthen<br>
+      <div class="para">
+        <h4>Author:</h4>
+        Bjørn Bråthen
+      </div>
+      <div class="para">
+        <h4>Concept originator:</h4>
+        Knut Fredrik Samset
+      </div>
+      <div class="para">
+        <h4>Contributors:</h4>
         Andreas Drivenes
       </div>
     </div>

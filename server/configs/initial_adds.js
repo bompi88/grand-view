@@ -17,11 +17,45 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-import {Settings} from './../../lib/collections';
+import { Settings, Tags } from './../../lib/collections';
+
+const tags = [
+  {
+    value: 'test',
+    label: 'test'
+  },
+  {
+    value: 'test2',
+    label: 'test2'
+  },
+  {
+    value: 'test3',
+    label: 'test3'
+  },
+  {
+    value: 'test4',
+    label: 'test4'
+  },
+  {
+    value: 'kanskje1',
+    label: 'kanskje1'
+  },
+  {
+    value: 'kanskje2',
+    label: 'kanskje2'
+  }
+];
 
 if (Settings.find().count() === 0) {
   Settings.insert({
     _id: 'user',
     language: 'en'
+  });
+}
+
+if (!Tags.findOne()) {
+  console.log('----> Inserting tags...');
+  tags.forEach((contact) => {
+    Tags.insert(contact);
   });
 }

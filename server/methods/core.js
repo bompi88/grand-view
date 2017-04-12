@@ -19,6 +19,7 @@
 
 import {FS} from 'meteor/cfs:base-package';
 import {Meteor} from 'meteor/meteor';
+import {check} from 'meteor/check';
 import {_} from 'meteor/underscore';
 import path from 'path';
 
@@ -27,6 +28,35 @@ import {Documents, Nodes, Files, References, Tags} from '/lib/collections';
 export default function () {
 
   Meteor.methods({
+
+    setNodeEditable(_id, mainDocId, isInEditMode = true) {
+      check(_id, String);
+      check(mainDocId, String);
+
+      Nodes.update({
+        mainDocId,
+        isInEditMode: true
+      }, {
+        $set: { isInEditMode: false }
+      }, {
+        multi: true
+      });
+
+      Nodes.update({ _id }, { $set: { isInEditMode }});
+    },
+
+    unsetEditable(mainDocId) {
+      check(mainDocId, String);
+
+      Nodes.update({
+        mainDocId,
+        isInEditMode: true
+      }, {
+        $set: { isInEditMode: false }
+      }, {
+        multi: true
+      });
+    },
 
     importResources(docs = [], nodes = [], fileDocs = [], srcPath) {
 
@@ -229,11 +259,35 @@ export default function () {
     },
 
     removeTag(value) {
+      check(value, String);
       Tags.remove({ value });
     },
 
+    insertTags(tags) {
+      tags.forEach((tag) => {
+        if (!Tags.findOne({ value: tag.value })) {
+          Tags.insert({
+            value: tag.value,
+            label: tag.label
+          });
+        }
+      });
+    },
+
     removeReference(value) {
+      check(value, String);
       References.remove({ value });
+    },
+
+    insertReferences(references) {
+      references.forEach((reference) => {
+        if (!References.findOne({ value: reference.value })) {
+          References.insert({
+            value: reference.value,
+            label: reference.label
+          });
+        }
+      });
     },
 
     updateNodePosition(from, to, {_id, parent}) {

@@ -2,7 +2,7 @@
   "context_menus": {
     "add_chapter": "Legg til kapittel",
     "add_subchapter": "Legg til underkapittel",
-    "add_node": "Legg til informasjonselement",
+    "add_media_node": "Legg til informasjonselement",
     "remove": "Slett",
     "rename": "Gi nytt navn",
     "edit": "Rediger"

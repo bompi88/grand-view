@@ -21,6 +21,16 @@
       "restore": "Restore",
       "remove": "Delete",
       "empty_trash": "Empty trash"
+    },
+    "document_options": {
+      "hide_media_nodes": "Hide media elements",
+      "show_media_nodes": "Show media elements",
+      "create_chapter": "Create new chapter",
+      "expand_nodes": "Expand all elements",
+      "collapse_nodes": "Collapse all elements",
+      "generate_docx": "Generate printable document",
+      "export_to_file": "Export document",
+      "help": "Help"
     }
   }
 }

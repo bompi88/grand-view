@@ -26,8 +26,10 @@ export default function () {
   /**
    * Publish tags by query and sort
    */
-  Meteor.publish('tags.byQuery', function (query = {}, sort = {}) {
-    return Tags.find(query, sort);
+  Meteor.publish('searchTags', function (queryText = '') {
+    return Tags.find({
+      label: { $regex: queryText, $options: 'i' }
+    });
   });
 
   /**

@@ -79,6 +79,10 @@
     "generation_must_open_document": {
       "title": "Generering av .docx fil mislyktes",
       "message": "Du må ha åpnet et dokument for å kunne generere utskrift."
+    },
+    "max_number_of_subchapters": {
+      "title": "Begrensning på antall forgreninger",
+      "message": "Man kan maksimalt ha en dybde på 5 underkapitler under hvert kapittel."
     }
   }
 }

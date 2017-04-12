@@ -19,33 +19,27 @@
 
 import {Meteor} from 'meteor/meteor';
 
-import {Nodes, Documents} from './../../lib/collections';
+import {Nodes} from './../../lib/collections';
 
 export default function () {
 
   /**
    * Publish all nodes that are being used by a document with a particular id.
    */
-  Meteor.publish('nodes.byDocument', function (_id) {
-
-    // get the document
-    var doc = Documents.findOne({ _id });
-
-    if (!doc) {
-      return this.ready();
-    }
-
-    // If there is a document, return all its nodes
-    return Nodes.find({
-      _id: {
-        $in: doc.children || []
-      }
-    });
+  Meteor.publish('nodes.byParent', function (parent) {
+    return Nodes.find({ parent });
   });
 
   /**
    * Publish a particular node by id
    */
   Meteor.publish('nodes.byId', function (_id) { return Nodes.find({ _id }); });
+
+  Meteor.publish('nodes.byDoc', function (mainDocId, nodeType) {
+    return Nodes.find({
+      mainDocId,
+      nodeType
+    });
+  });
 
 }

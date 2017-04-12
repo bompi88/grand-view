@@ -26,28 +26,33 @@ export const composer = ({context, clearState}, onData) => {
     {
       label: TAPi18n.__('trash.title'),
       field: 'title',
+      key: 'title',
       sortable: true
     },
     {
       label: TAPi18n.__('trash.created_at'),
       field: 'createdAt',
+      key: 'created-at',
       sortable: true,
       transform: 'formatDateRelative'
     },
     {
       label: TAPi18n.__('trash.last_modified'),
       field: 'lastModified',
+      key: 'last-modified',
       sortable: true,
       transform: 'formatDateRelative'
     },
     {
       label: TAPi18n.__('trash.removed_at'),
       field: 'removedAt',
+      key: 'removed-at',
       sortable: true,
       transform: 'formatDateRelative'
     },
     {
-      component: TrashColumn
+      component: TrashColumn,
+      key: 'trash-column'
     }
   ];
 

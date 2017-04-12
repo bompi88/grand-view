@@ -26,8 +26,10 @@ export default function () {
   /**
    * Publish references by query and sort
    */
-  Meteor.publish('references.byQuery', function (query = {}, sort = {}) {
-    return References.find(query, sort);
+  Meteor.publish('searchReferences', function (queryText = '') {
+    return References.find({
+      label: { $regex: queryText, $options: 'i' }
+    });
   });
 
   /**

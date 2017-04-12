@@ -1,0 +1,23 @@
+{
+  "edit_view": {
+    "empty": "Ingen informasjonselementer funnet under dette kapittelet.",
+    "informationelement": "Legg til informasjonselement",
+    "tableHeader": "Informasjonselementer i valgte kapittel",
+    "form": {
+      "tagsPlaceholder": "Nøkkelord",
+      "tagsLabel": "Lag eller søk etter nøkkelord i listen",
+      "referencesPlaceholder": "Kilder",
+      "referencesLabel": "Lag eller søk etter kilder i listen",
+      "name": "Navn på informasjonselement (valgfritt)",
+      "description": "Informasjonselement",
+      "createTag": "Klikk for å opprette nøkkelordet",
+      "createReference": "Klikk for å opprette kilden",
+      "removeItem": "Fjern fra nedtrekkslisten",
+      "noResultsText": "Ingen resultater, prøv å skrive inn flere bokstaver i boksen over."
+    },
+    "root_form": {
+      "title": "Tittel",
+      "description": "Beskrivelse"
+    }
+  }
+}

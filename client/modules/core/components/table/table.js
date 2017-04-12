@@ -68,11 +68,12 @@ class DocumentTable extends React.Component {
 
   renderHeaderColumn(column) {
     const {tableName, toggleSort} = this.props;
-    const {field, label, sortable} = column;
+    const {field, label, key, sortable} = column;
     return (
       <th
         className={sortable ? 'clickable-list-item' : ''}
         onClick={sortable ? toggleSort.bind(this, field, tableName) : null}
+        key={key}
       >
         {label ? label : ''} {sortable ? this.getSortIcon(field) : ''}
       </th>
@@ -105,7 +106,7 @@ class DocumentTable extends React.Component {
       <table className="table table-hover">
         <thead>
           <tr>
-            <th>
+            <th key="checkbox">
               <input
                 type="checkbox"
                 className="checkbox-master"
