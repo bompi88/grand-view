@@ -91,29 +91,29 @@ const openFile = (filePath, callback) => {
 
 const generationDocx = {
   renderMediaNode(node, par) {
-    const {title, tags, references, fileId, description} = node;
+    const { name, tags, references, fileId, description } = node;
 
-    if (title || (tags && tags.length) ||
+    if (name || (tags && tags.length) ||
       (references && references.length) || fileId || description) {
       par.addLineBreak();
       par.addText('_______________________________________________________________');
       par.addLineBreak();
     }
 
-    if (title) {
-      par.addText(title || '', header3Text);
+    if (name) {
+      par.addText(name || '', header3Text);
       par.addLineBreak();
     }
 
     if (tags) {
       par.addText(TAPi18n.__('tags') + ':', keywordHeaderText);
-      par.addText(' ' + tags.join(', '), keywordText);
+      par.addText(' ' + tags.map(t => t.label).join(', '), keywordText);
       par.addLineBreak();
     }
 
     if (references) {
       par.addText(TAPi18n.__('references') + ':', keywordHeaderText);
-      par.addText(' ' + references.join(', '), keywordText);
+      par.addText(' ' + references.map(r => r.label).join(', '), keywordText);
       par.addLineBreak();
     }
 
@@ -133,7 +133,7 @@ const generationDocx = {
 
       par.addLineBreak();
       par.addLineBreak();
-    } else if (title || tags || references) {
+    } else if (name || tags || references) {
       par.addLineBreak();
     }
 
@@ -150,16 +150,16 @@ const generationDocx = {
 
   renderChapterNode(node, docx, posLabel) {
     const par = docx.createP();
-    const {_id, title, nodeType, position} = node;
+    const { _id, name, nodeType, position } = node;
     let numbering;
 
     if (posLabel) {
-      numbering = posLabel + '.' + (position + 1);
+      numbering = posLabel + '.' + position;
     } else {
       numbering = position;
     }
-    console.log(node)
-    par.addText(numbering + ' ' + (title || TAPi18n.__('no_chapter_title')), header2Text);
+
+    par.addText(numbering + ' ' + (name || TAPi18n.__('no_chapter_title')), header2Text);
 
     const nodes = Nodes.find({
       parent: _id
@@ -170,10 +170,11 @@ const generationDocx = {
     }).fetch();
 
     nodes.forEach((elNode) => {
-      if (nodeType === 'chapter') {
-        this.renderChapterNode(elNode, docx, posLabel);
+      const { nodeType: type } = elNode;
+      if (type === 'chapter') {
+        this.renderChapterNode(elNode, docx, numbering);
       } else {
-        this.renderMediaNode(elNode, par, posLabel);
+        this.renderMediaNode(elNode, par, numbering);
       }
     });
   },
@@ -182,19 +183,17 @@ const generationDocx = {
     const undefinedPropertyLabel = 'kkkjasdjnajkcziow782392ujinydsdfs';
 
     const nodes = Nodes.find({
-      _id: {
-        $in: doc.children || []
-      },
+      mainDocId: doc._id,
       nodeType: 'media'
     }).fetch();
 
     const tagsList = {};
-    console.log(format)
+
     nodes.forEach((node) => {
       const elements = node[format] || [];
 
       if (elements.length > 0) {
-        elements.forEach((element) => {
+        elements.map(e => e.value).forEach((element) => {
           if (!_.isArray(tagsList[element])) {
             tagsList[element] = [];
           }
@@ -257,8 +256,6 @@ const generationDocx = {
         }
       }).fetch();
 
-      console.log(nodes)
-
       nodes.forEach((node) => {
         const {nodeType} = node;
         if (nodeType === 'chapter') {
@@ -287,6 +284,10 @@ const generationDocx = {
     const mainParagraph = docx.createP();
 
     mainParagraph.addText(title || TAPi18n.__('no_title'), header1Text);
+
+    if (description) {
+      docx.createP().addText(description, descText);
+    }
 
     Meteor.subscribe('files.byDocument', _id, () => {
       this.renderDocument(doc, docx, mainParagraph, format);
