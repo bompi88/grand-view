@@ -26,6 +26,26 @@ export default {
     }
   },
 
+  collapseNode({Meteor, LocalState, Collections}, { _id }) {
+    Collections.Nodes.update({
+      _id
+    }, {
+      $set: {
+        isCollapsed: true
+      }
+    });
+  },
+
+  expandNode({Meteor, LocalState, Collections}, { _id }) {
+    Collections.Nodes.update({
+      _id
+    }, {
+      $set: {
+        isCollapsed: false
+      }
+    });
+  },
+
   /**
    * NodeLevel: deleteNode
    * parameter: _id (node collection id)

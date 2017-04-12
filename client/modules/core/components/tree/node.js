@@ -98,6 +98,30 @@ class Node extends React.Component {
     });
   }
 
+  renderCollapseButton() {
+    const {node, nodes = [], expandNode, collapseNode} = this.props;
+    if (nodes.length > 0) {
+
+      if (node.isCollapsed) {
+        return (
+          <span
+            className="icon icon-plus show-node"
+            onClick={expandNode.bind(this, node)}
+          ></span>
+        );
+      }
+      return (
+        <span
+          className="icon icon-minus hide-node"
+          onClick={collapseNode.bind(this, node)}
+        ></span>
+      );
+    }
+    return (
+      <span></span>
+    );
+  }
+
   render() {
     const {node} = this.props;
 
@@ -106,11 +130,13 @@ class Node extends React.Component {
 
     return connectDragSource(
       <li className={node.nodeType === 'chapter' ? 'node chapter' : 'node media-node'}>
-          { node.nodeType === 'media' ? <MediaNode {...this.props} /> :
+        {this.renderCollapseButton()}
+        { node.nodeType === 'media' ? <MediaNode {...this.props} /> :
             <ChapterNode {...this.props} />}
         <ul>
-          {this.renderNodes()}
+          { node.isCollapsed ? null : this.renderNodes()}
         </ul>
+
       </li>
     );
   }

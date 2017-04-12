@@ -19,6 +19,9 @@
 
 @import '{}/client/modules/core/components/main_layout/main_layout';
 
+$expand-collapse-icon-color: #555;
+$plus-minus-color: $white;
+
 .tree {
   li.node.root ul {
     list-style: none;
@@ -102,5 +105,95 @@
         background-color: darken(#fff, 15%);
       }
     }
+  }
+}
+
+.icon {
+  display: block;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 16px;
+  z-index: 300;
+}
+
+.icon-minus {
+  @include border-top-radius(8px);
+  @include border-right-radius(8px);
+  @include border-bottom-radius(8px);
+  @include border-left-radius(8px);
+
+  background-color: $expand-collapse-icon-color;
+  height: 16px;
+  left: -27px;
+  position: absolute;
+  top: 15px;
+  width: 16px;
+}
+
+.icon-minus:after {
+  @include border-top-radius(1px);
+  @include border-right-radius(1px);
+  @include border-bottom-radius(1px);
+  @include border-left-radius(1px);
+
+  background-color: $plus-minus-color;
+  content: '';
+  height: 2px;
+  left: 3.5px;
+  position: absolute;
+  top: 7px;
+  width: 8px;
+  z-index: 4;
+}
+
+.icon-plus {
+  @include border-top-radius(8px);
+  @include border-right-radius(8px);
+  @include border-bottom-radius(8px);
+  @include border-left-radius(8px);
+
+  background-color: $expand-collapse-icon-color;
+  height: 16px;
+  left: -27px;
+  position: absolute;
+  top: 15px;
+  width: 16px;
+}
+
+.icon-plus:after {
+  @include border-top-radius(1px);
+  @include border-right-radius(1px);
+  @include border-bottom-radius(1px);
+  @include border-left-radius(1px);
+
+  background-color: $plus-minus-color;
+  content: '';
+  height: 2px;
+  left: 4px;
+  position: absolute;
+  top: 7px;
+  width: 8px;
+}
+
+.icon-plus:before {
+  @include border-top-radius(1px);
+  @include border-right-radius(1px);
+  @include border-bottom-radius(1px);
+  @include border-left-radius(1px);
+
+  background-color: $plus-minus-color;
+  content: '';
+  height: 8px;
+  left: 7px;
+  position: absolute;
+  top: 4px;
+  width: 2px;
+}
+
+.show-node, .hide-node {
+  &:hover {
+    cursor: pointer;
   }
 }

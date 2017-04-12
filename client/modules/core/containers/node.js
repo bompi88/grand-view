@@ -39,6 +39,8 @@ export const composer = (t, onData) => {
 
 export const depsMapper = (context, actions) => ({
   handleClick: actions.node.handleClick,
+  collapseNode: actions.node.collapseNode,
+  expandNode: actions.node.expandNode,
   context: () => context
 });
 

@@ -6,8 +6,7 @@ export default {
     const children = Collections.Nodes.find({ parent }).fetch();
     const position = children.length + 1;
 
-    // Insert a node at the given branch
-    Collections.Nodes.insert({
+    const doc = {
       parent,
       level: level ? level + 1 : 1,
       userId,
@@ -15,7 +14,14 @@ export default {
       position,
       nodeType,
       mainDocId: LocalState.get('CURRENT_DOCUMENT')
-    },
+    };
+
+    if (nodeType === 'chapter') {
+      doc.isCollapsed = false;
+    }
+
+    // Insert a node at the given branch
+    Collections.Nodes.insert(doc,
     (error, nodeId) => {
       if (error) {
         console.log(error);
