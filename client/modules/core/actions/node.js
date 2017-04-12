@@ -488,7 +488,7 @@ export default {
 
   renameNode({LocalState, Meteor, $}, _id) {
 
-    LocalState.set('editChapterNodeName', _id);
+    LocalState.set('RENAME_NODE', _id);
 
     Meteor.defer(() => {
       var el = $('.tree li .element.nodes.selected div.node-text');

@@ -6,6 +6,7 @@ export const composer = (t, onData) => {
   const {Meteor, Collections, LocalState} = context();
 
   const showMediaNodes = LocalState.get('MEDIA_NODES_VISIBLE') || false;
+  const renameNode = LocalState.get('RENAME_NODE') || false;
   const parent = node._id;
 
   if (Meteor.subscribe('nodes.byParent', parent).ready()) {
@@ -29,10 +30,11 @@ export const composer = (t, onData) => {
 
     onData(null, {
       nodes,
-      sectionLabel
+      sectionLabel,
+      renameNode
     });
   } else {
-    onData(null, { sectionLabel });
+    onData(null, { sectionLabel, renameNode });
   }
 
 };

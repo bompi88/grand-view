@@ -7,11 +7,11 @@ import {ContextMenuLayer} from 'react-contextmenu';
 
 class NodeElement extends React.Component {
 
-  updateTitle(title) {
+  updateTitle(name) {
     const { context, node } = this.props;
     const { _id } = node;
     const { Collections } = context();
-    Collections.Nodes.update({ _id }, { $set: { title }});
+    Collections.Nodes.update({ _id }, { $set: { name }});
   }
 
   handleKeypress(e) {
@@ -22,7 +22,7 @@ class NodeElement extends React.Component {
       const { LocalState } = context();
 
       this.updateTitle(e.target.innerHTML);
-      LocalState.set('editChapterNodeName', null);
+      LocalState.set('RENAME_NODE', null);
       // parent.scrollLeft(0);
     }
   }
@@ -32,12 +32,12 @@ class NodeElement extends React.Component {
     const { LocalState } = context();
 
     this.updateTitle(e.target.innerHTML);
-    LocalState.set('editChapterNodeName', null);
+    LocalState.set('RENAME_NODE', null);
     // parent.scrollLeft(0);
   }
 
   render() {
-    const {node, nodes = [], handleClick, sectionLabel, isEditable = false} = this.props;
+    const {node, nodes = [], handleClick, sectionLabel, renameNode} = this.props;
     const {name, nodeType, isSelected} = node;
 
     const pre = (nodeType === 'media') ? (<span className="glyphicon glyphicon-file"></span>) :
@@ -54,7 +54,7 @@ class NodeElement extends React.Component {
         onClick={handleClick.bind(this, node)}
         title={combined}
         style={{
-          textOverflow: isEditable ? 'clip' : 'ellipsis'
+          textOverflow: renameNode ? 'clip' : 'ellipsis'
         }}
       >
         <span>{pre}{' '}</span>
@@ -64,7 +64,7 @@ class NodeElement extends React.Component {
           onKeyPress={this.handleKeypress.bind(this)}
           onBlur={this.handleBlur.bind(this)}
           html={nodeTitle}
-          disabled={!isEditable}
+          disabled={!renameNode}
           style={{
             display: 'inline'
           }}

@@ -194,6 +194,7 @@ $plus-minus-color: $white;
 
 .show-node, .hide-node {
   &:hover {
+    background-color: lighten($blue-base, 10%);
     cursor: pointer;
   }
 }
