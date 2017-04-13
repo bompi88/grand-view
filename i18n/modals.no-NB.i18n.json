@@ -1,10 +1,10 @@
 {
   "modals": {
     "create_modal": {
-      "title": "Valg av tittel og dokumentmal",
-      "description": "Her kan man velge tittel på dokumentet, samt om man skal bruke en dokumentmal eller ikke. Hvis mal ikke velges, starter man med et tomt dokument uten struktur.",
+      "title": "Valg av tittel og prosjektmal",
+      "description": "Her kan man velge tittel på prosjektet, samt om man skal bruke en prosjektmal eller ikke. Hvis mal ikke velges, starter man med et tomt prosjekt uten struktur.",
       "titleLabel": "Tittel",
-      "titlePlaceholder": "Tittel på dokumentet",
+      "titlePlaceholder": "Tittel på prosjekt",
       "select": {
         "label": "Velg mal (valgfritt)",
         "none": "(Ingen valgt)"
@@ -14,7 +14,7 @@
       }
     },
     "export_office_modal": {
-      "title": "Generer utskriftsdokument",
+      "title": "Generer utskriftbart dokument",
       "description": "Du må velge et format på utskriftsdokumentet. F.eks. så lister formatet 'kapitler' kapittelstrukturen med de påfølgende informasjonselementene under hvert kapittel.",
       "generate": "Generer",
       "select": {

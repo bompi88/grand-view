@@ -7,9 +7,9 @@
     "restore": "Gjenopprett",
     "remove": "Slett",
     "header": "Papirkurv",
-    "documents_header": "Slettede dokumenter",
+    "documents_header": "Slettede prosjekter",
     "templates_header": "Slettede maler",
     "is_templates_empty": "Ingen maler i papirkurven",
-    "is_documents_empty": "Ingen dokumenter i papirkurven"
+    "is_documents_empty": "Ingen prosjekter i papirkurven"
   }
 }

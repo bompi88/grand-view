@@ -2,8 +2,8 @@
   "index": {
     "header": "GrandView",
     "description": "Dette er et verktøy som hjelper deg å strukturere store informasjonsmengder. Kom i gang ved å enten:",
-    "create_document": "Opprett et nytt dokument",
-    "import_document": "Importer dokument fra disk",
+    "create_document": "Opprett et nytt prosjekt",
+    "import_document": "Importer prosjekt fra disk",
     "or": "eller"
   }
 }

@@ -2,10 +2,10 @@
   "dropdowns": {
     "document_table": {
       "select_action": "Select action",
-      "create_document": "Create new document",
-      "edit_document": "Edit document",
-      "import_document": "Import document",
-      "export_document": "Export document",
+      "create_document": "Create new project",
+      "edit_document": "Edit project",
+      "import_document": "Import project",
+      "export_document": "Export project",
       "remove_document": "Move to trash"
     },
     "template_table": {
@@ -29,7 +29,7 @@
       "expand_nodes": "Expand all elements",
       "collapse_nodes": "Collapse all elements",
       "generate_docx": "Generate printable document",
-      "export_to_file": "Export document",
+      "export_to_file": "Export project",
       "help": "Help"
     }
   }

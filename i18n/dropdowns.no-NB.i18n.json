@@ -2,10 +2,10 @@
   "dropdowns": {
     "document_table": {
       "select_action": "Velg handling",
-      "create_document": "Opprett dokument",
-      "edit_document": "Rediger dokument",
-      "import_document": "Importer dokument",
-      "export_document": "Eksporter dokument",
+      "create_document": "Opprett prosjekt",
+      "edit_document": "Rediger prosjekt",
+      "import_document": "Importer prosjekt",
+      "export_document": "Eksporter prosjekt",
       "remove_document": "Legg i papirkurv"
     },
     "template_table": {
@@ -28,8 +28,8 @@
       "create_chapter": "Opprett kapittel",
       "expand_nodes": "Utvid alle elementer",
       "collapse_nodes": "Sammentrekk alle elementer",
-      "generate_docx": "Utskrift",
-      "export_to_file": "Eksporter til fil",
+      "generate_docx": "Generer utskriftbart dokument",
+      "export_to_file": "Eksporter prosjekt",
       "help": "Hjelp"
     }
   }

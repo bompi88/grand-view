@@ -1,11 +1,11 @@
 {
   "navbar": {
     "grandview": "GrandView",
-    "my_documents": "Mine dokumenter",
+    "my_documents": "Mine prosjekter",
     "my_templates": "Mine maler",
     "trash": "Papirkurv",
     "work_area": "Arbeidsområde",
-    "work_area_tooltip": "Klikk på \"Arbeidsområde\" for å gå tilbake til dokumentet",
+    "work_area_tooltip": "Klikk på \"Arbeidsområde\" for å gå tilbake til prosjektet du jobber med",
     "concept_logo": "Logoen til Concept",
     "toggle_navigation": "Vis/skjul meny",
     "goto_home": "Til forsiden"

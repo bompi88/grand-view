@@ -1,10 +1,10 @@
 {
   "modals": {
     "create_modal": {
-      "title": "Choose title and document template",
-      "description": "Please fill in a title for your document and optionally choose a document template to begin  with. If you do not select a template, there will be no initial structure of the new document.",
+      "title": "Choose title and project template",
+      "description": "Please fill in a title for your project and optionally choose a project template to begin  with. If you do not select a template, there will be no initial structure of the new project.",
       "titleLabel": "Title",
-      "titlePlaceholder": "Document title",
+      "titlePlaceholder": "Project title",
       "select": {
         "label": "Select a template (optional)",
         "none": "(No template selected)"

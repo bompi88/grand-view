@@ -1,8 +1,8 @@
 {
   "notifications": {
     "export_document_failed": {
-      "title": "Eksportering av dokument(er) mislyktes",
-      "message": "Du må ha åpnet eller valgt et dokument i tabellen for å kunne eksportere det."
+      "title": "Eksportering av prosjekt(er) mislyktes",
+      "message": "Du må ha åpnet eller valgt et prosjekt i tabellen for å kunne eksportere det."
     },
     "export_template_failed": {
       "title": "Eksportering av mal(er) mislyktes",
@@ -10,15 +10,15 @@
     },
     "context_menu_root": {
       "title": "Sletting feilet",
-      "message": "Man kan ikke slette rotnoden. For å slette dokumentet/malen må man gjøre dette under \"Mine dokumenter\""
+      "message": "Man kan ikke slette rotnoden. For å slette prosjektet/malen må man gjøre dette under \"Mine prosjekter\" eller \"Mine maler\""
     },
     "soft_remove_document_failed": {
       "title": "Feil ved sletting",
-      "message": "Kunne ikke putte dokumentet i papirkurven. Vennligst prøv igjen."
+      "message": "Kunne ikke putte prosjektet i papirkurven. Vennligst prøv igjen."
     },
     "soft_remove_document_success": {
       "title": "Sletting fullført",
-      "message": "Dokumentet er lagt i papirkurven."
+      "message": "Prosjektet er lagt i papirkurven."
     },
     "soft_remove_template_failed": {
       "title": "Feil ved sletting",
@@ -29,12 +29,12 @@
       "message": "Malen er lagt i papirkurven."
     },
     "create_document_failed": {
-      "title": "Kunne ikke opprette dokument",
-      "message": "Kunne ikke opprette dokumentet. Vennligst prøv igjen."
+      "title": "Kunne ikke opprette prosjektet",
+      "message": "Kunne ikke opprette prosjektet. Vennligst prøv igjen."
     },
     "create_document_success": {
-      "title": "Dokument opprettet",
-      "message": "Dokumentet er nå opprettet og er klart til bruk."
+      "title": "Prosjekt opprettet",
+      "message": "Prosjektet er nå opprettet og er klart til bruk."
     },
     "create_template_failed": {
       "title": "Kunne ikke opprette mal",
@@ -46,27 +46,27 @@
     },
     "permanent_remove_failed": {
       "title": "Permanent sletting feilet",
-      "message": "Kunne ikke slette dokumentet/malen. Vennligst prøv igjen."
+      "message": "Kunne ikke slette prosjektet/malen. Vennligst prøv igjen."
     },
     "permanent_remove_success": {
       "title": "Permanent sletting fullført",
-      "message": "Dokumentet/Malen er nå slettet for godt."
+      "message": "Prosjektet/Malen er nå slettet for godt."
     },
     "restore_failed": {
       "title": "Feil ved gjenoppretting",
-      "message": "Kunne ikke gjenopprette dokumentet/malen. Vennligst prøv igjen."
+      "message": "Kunne ikke gjenopprette prosjektet/malen. Vennligst prøv igjen."
     },
     "restore_success": {
       "title": "Gjenoppretting fullført",
-      "message": "Dokumentet/Malen er nå gjenopprettet og befinner seg i \"Mine dokumenter\" eller \"Mine maler\"."
+      "message": "Prosjektet/Malen er nå gjenopprettet og befinner seg i \"Mine prosjekter\" eller \"Mine maler\"."
     },
     "empty_trash_failed": {
       "title": "Feil ved sletting",
-      "message": "Kunne ikke slette innholdet i papirkurven. Vennligst prøv igjen, eller prøv å slett hvert dokument hver for seg."
+      "message": "Kunne ikke slette innholdet i papirkurven. Vennligst prøv igjen, eller prøv å slett hvert prosjekt hver for seg."
     },
     "empty_trash_success": {
       "title": "Sletting fullført",
-      "message": "Papirkurven din er nå fri for dokumenter/maler."
+      "message": "Papirkurven din er nå fri for prosjekter/maler."
     },
     "generation_docx_failed": {
       "title": "Feil under generering av .docx fil",
@@ -78,7 +78,7 @@
     },
     "generation_must_open_document": {
       "title": "Generering av .docx fil mislyktes",
-      "message": "Du må ha åpnet et dokument for å kunne generere utskrift."
+      "message": "Du må ha åpnet et prosjekt for å kunne generere utskrift."
     },
     "max_number_of_subchapters": {
       "title": "Begrensning på antall forgreninger",
