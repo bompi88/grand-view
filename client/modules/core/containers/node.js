@@ -43,26 +43,20 @@ export const depsMapper = (context, actions) => ({
   handleClick: actions.node.handleClick,
   collapseNode: actions.node.collapseNode,
   expandNode: actions.node.expandNode,
+  setPosition: actions.node.setPosition,
   context: () => context
 });
 
 const dragSpecs = {
 
-  beginDrag(props, monitor, component) {
-    return props;
+  beginDrag(props) {
+    return props.node;
   },
 
-  endDrag(props, monitor, component) {
-    return props;
-  },
-
-  canDrag(props, monitor) {
-    return props;
-  },
-
-  isDragging(props, monitor) {
-    return props;
+  endDrag(props) {
+    return props.node;
   }
+
 };
 
 const collect = (connect, monitor) => {

@@ -29,8 +29,7 @@ export default function () {
 
   Meteor.methods({
 
-    setNodeEditable(_id, mainDocId, isInEditMode = true) {
-      check(_id, String);
+    unsetEditable(mainDocId) {
       check(mainDocId, String);
 
       Nodes.update({
@@ -41,18 +40,28 @@ export default function () {
       }, {
         multi: true
       });
-
-      Nodes.update({ _id }, { $set: { isInEditMode }});
     },
 
-    unsetEditable(mainDocId) {
+    collapseAll(mainDocId) {
+      check(mainDocId, String);
+
+      Nodes.update({
+        mainDocId
+      }, {
+        $set: { isCollapsed: true }
+      }, {
+        multi: true
+      });
+    },
+
+    expandAll(mainDocId) {
       check(mainDocId, String);
 
       Nodes.update({
         mainDocId,
-        isInEditMode: true
+        isCollapsed: true
       }, {
-        $set: { isInEditMode: false }
+        $set: { isCollapsed: false }
       }, {
         multi: true
       });
@@ -290,11 +299,12 @@ export default function () {
       });
     },
 
-    updateNodePosition(from, to, {_id, parent}) {
+    updateNodePosition({fromPos, toPos, _id, fromParent, toParent}) {
+      console.log(fromPos, toPos, _id, fromParent, toParent)
       Nodes.update({
-        parent,
+        fromParent,
         position: {
-          $gt: from
+          $gte: fromPos
         }
       }, {
         $inc: {
@@ -306,9 +316,9 @@ export default function () {
       });
 
       Nodes.update({
-        parent,
+        toParent,
         position: {
-          $gte: to
+          $gte: toPos
         }
       }, {
         $inc: {
@@ -323,7 +333,8 @@ export default function () {
         _id
       }, {
         $set: {
-          position: to
+          parent: toParent,
+          position: toPos
         }
       }, {
         upsert: false

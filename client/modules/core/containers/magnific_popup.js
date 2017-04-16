@@ -1,0 +1,14 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Magnific Popup Container
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import { useDeps, composeAll } from 'mantra-core';
+import MagnificPopup from '../components/edit_view/magnific_popup';
+
+export const depsMapper = (context) => ({
+  context: () => context
+});
+
+export default composeAll(
+  useDeps(depsMapper)
+)(MagnificPopup);

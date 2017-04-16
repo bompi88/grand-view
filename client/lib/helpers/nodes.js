@@ -21,7 +21,7 @@ export default {
     }
 
     // Insert a node at the given branch
-    Collections.Nodes.insert(doc,
+    return Collections.Nodes.insert(doc,
     (error, nodeId) => {
       if (error) {
         console.log(error);

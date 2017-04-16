@@ -44,7 +44,6 @@ ejson@1.0.13
 es5-shim@4.6.15
 fortawesome:fontawesome@4.7.0
 fourseven:scss@3.13.0
-gabrielengel:konecty-magnific-popup@0.9.9
 geojson-utils@1.0.10
 gfk:notifications@1.1.4
 hot-code-push@1.0.4
@@ -77,6 +76,8 @@ natestrauser:animate-css@3.5.1
 npm-mongo@2.2.24
 observe-sequence@1.0.16
 ordered-dict@1.0.9
+ostrio:cookies@2.2.0
+ostrio:files@1.7.13
 promise@0.8.8
 qnub:emojione@1.5.1_2
 raix:eventemitter@0.1.3

@@ -3,7 +3,7 @@ import React from 'react';
 import NodeContainer from '../../containers/node';
 import ContentEditable from 'react-contenteditable';
 import {ContextMenuLayer} from 'react-contextmenu';
-
+import DropArea from './drop_area';
 
 class NodeElement extends React.Component {
 
@@ -11,7 +11,8 @@ class NodeElement extends React.Component {
     const { context, node } = this.props;
     const { _id } = node;
     const { Collections } = context();
-    Collections.Nodes.update({ _id }, { $set: { name }});
+
+    Collections.Nodes.update({ _id }, { $set: { name: name.replace(/&nbsp;/g, '').trim() }});
   }
 
   handleKeypress(e) {
@@ -23,7 +24,6 @@ class NodeElement extends React.Component {
 
       this.updateTitle(e.target.innerHTML);
       LocalState.set('RENAME_NODE', null);
-      // parent.scrollLeft(0);
     }
   }
 
@@ -33,13 +33,18 @@ class NodeElement extends React.Component {
 
     this.updateTitle(e.target.innerHTML);
     LocalState.set('RENAME_NODE', null);
-    // parent.scrollLeft(0);
   }
 
   render() {
-    const {node, nodes = [], handleClick, sectionLabel, renameNode} = this.props;
-    const {name, nodeType, isSelected} = node;
-
+    const {
+      node,
+      nodes = [],
+      handleClick,
+      sectionLabel,
+      renameNode,
+      isDragging
+    } = this.props;
+    const {_id, name, nodeType, isSelected} = node;
     const pre = (nodeType === 'media') ? (<span className="glyphicon glyphicon-file"></span>) :
       sectionLabel;
 
@@ -48,13 +53,23 @@ class NodeElement extends React.Component {
 
     const combined = nodeTitle + countText;
 
+    let className = 'element nodes';
+    if (isSelected) {
+      className += ' selected';
+    }
+
+    if (renameNode === _id) {
+      className += ' rename';
+    }
+
     return (
       <span
-        className={isSelected ? 'element nodes selected' : 'element nodes'}
+        className={className}
         onClick={handleClick.bind(this, node)}
         title={combined}
         style={{
-          textOverflow: renameNode ? 'clip' : 'ellipsis'
+          textOverflow: renameNode === _id ? 'clip' : 'ellipsis',
+          opacity: isDragging ? 0.5 : 1
         }}
       >
         <span>{pre}{' '}</span>
@@ -123,19 +138,21 @@ class Node extends React.Component {
   }
 
   render() {
-    const {node} = this.props;
-
-    var connectDragSource = this.props.connectDragSource;
-    var isDragging = this.props.isDragging;
+    const { nodes = [], node, index, connectDragSource} = this.props;
 
     return connectDragSource(
       <li className={node.nodeType === 'chapter' ? 'node chapter' : 'node media-node'}>
         {this.renderCollapseButton()}
+        { index === 0 ? <DropArea {...this.props}/> : null }
         { node.nodeType === 'media' ? <MediaNode {...this.props} /> :
             <ChapterNode {...this.props} />}
-        <ul>
-          { node.isCollapsed ? null : this.renderNodes()}
-        </ul>
+        { nodes.length > 0 ? (
+          <ul>
+              { node.isCollapsed ? null : <DropArea {...this.props}/>}
+            { node.isCollapsed ? null : this.renderNodes()}
+          </ul>
+        ) : null }
+          <DropArea {...this.props}/>
 
       </li>
     );

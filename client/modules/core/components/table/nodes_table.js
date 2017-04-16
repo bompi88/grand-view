@@ -34,8 +34,12 @@ class NodesTableRow extends React.Component {
       toggleSelected,
       isSelected,
       tableName,
-      disablePointer
+      disablePointer,
+      editNode,
+      text
     } = this.props;
+
+    const isInEditMode = editNode === node._id;
 
     const checked = isSelected(node._id, tableName) ? 'checked' : null;
     // onChange={toggleSelected.bind(this, node._id, tableName)}
@@ -48,7 +52,9 @@ class NodesTableRow extends React.Component {
           key="checkbox"
           className="row-item"
           onClick={(e) => { e.stopPropagation(); }}
-
+          style={{
+            width: '20px'
+          }}
         >
           <input type="checkbox" className="checkbox" checked={checked}/>
         </td>
@@ -56,12 +62,13 @@ class NodesTableRow extends React.Component {
         <td
           key="informationelement"
           className="row-item"
-          onClick={setAsEditable.bind(this, node._id, node.mainDocId)}
+          onClick={isInEditMode ? null : setAsEditable.bind(this, node._id)}
         >
-          { node.isInEditMode ? (
+          { isInEditMode ? (
             <div>
-              <div className="alert alert-info">
-                <b>NB!</b> Du er nå i redigeringsmodus. Trykk på <kbd>ESC</kbd> for å gå ut.
+              <div className="alert alert-info" dangerouslySetInnerHTML={{
+                __html: text.closeFormInfo
+              }}>
               </div>
               <EditViewForm initialValues={node} nodeId={node._id} />
             </div>
@@ -70,8 +77,12 @@ class NodesTableRow extends React.Component {
               <h5 style={{ marginTop: '0' }}>{node.name ? node.name : 'No title'}</h5>
               {node.description ? (<p>{node.description}</p>) : (<p> - </p>)}
               <ul className="node-list">
-                <li className="node-list-item"><b>Kilder:</b> { node.references ? node.references.map((n) => n.label).join(', ') : null}</li>
-                <li className="node-list-item"><b>Nøkkelord:</b> { node.tags ? node.tags.map((n) => n.label).join(', ') : null}</li>
+                <li className="node-list-item">
+                  <b>{text.references}:</b> { node.references ? node.references.map((n) => n.label).join(', ') : null}
+                </li>
+                <li className="node-list-item">
+                  <b>{text.tags}:</b> { node.tags ? node.tags.map((n) => n.label).join(', ') : null}
+                  </li>
               </ul>
             </div>
           )}

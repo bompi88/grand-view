@@ -46,6 +46,10 @@ export default {
     });
   },
 
+  setPosition({ Meteor, Collections }, { fromPos, toPos, _id, fromParent, toParent }) {
+    Meteor.call('updateNodePosition', { fromPos, toPos, _id, fromParent, toParent });
+  },
+
   /**
    * NodeLevel: deleteNode
    * parameter: _id (node collection id)
@@ -491,7 +495,7 @@ export default {
     LocalState.set('RENAME_NODE', _id);
 
     Meteor.defer(() => {
-      var el = $('.tree li .element.nodes.selected div.node-text');
+      var el = $('.tree li .element.nodes.rename div.node-text');
       el.focus();
       document.execCommand('selectAll', false, null);
     });

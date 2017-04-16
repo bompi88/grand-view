@@ -65,7 +65,7 @@ class EditView extends React.Component {
   render() {
     const { node = {} } = this.props;
     const { nodeType = 'root' } = node;
-    console.log(this.props)
+
     return (
       <div className="col-xs-8" style={{ paddingRight: 0, overflow: 'hidden', height: '100%' }}>
         <div className="col-xs-12 structure-container">
@@ -74,7 +74,7 @@ class EditView extends React.Component {
             {nodeType === 'chapter' ? this.renderChapterHeader() : null }
             {nodeType === 'media' ? this.renderMediaNodeHeader() : null }
           </div>
-          <div style={styles.container}>
+          <div style={styles.container} className="edit-view-container">
             { nodeType === 'root' ? <EditRootViewForm initialValues={node} nodeId={node._id}/> : null }
             { nodeType === 'media' ? <EditViewForm initialValues={node} nodeId={node._id}/> : null }
             { nodeType === 'chapter' ? <MediaNodesTable chapterNode={node}/> : null }

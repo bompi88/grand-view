@@ -33,12 +33,14 @@ export default {
     Helpers.insertNodeOfType(context, parent, 'chapter');
   },
 
-  expandNodes({}) {
-    console.log('Expand nodes');
+  expandNodes({ Meteor, LocalState }) {
+    const docId = LocalState.get('CURRENT_DOCUMENT');
+    Meteor.call('expandAll', docId);
   },
 
-  collapseNodes({}) {
-    console.log('Collapse nodes');
+  collapseNodes({ Meteor, LocalState }) {
+    const docId = LocalState.get('CURRENT_DOCUMENT');
+    Meteor.call('collapseAll', docId);
   },
 
   generateDOCX({LocalState}) {

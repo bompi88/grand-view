@@ -15,8 +15,8 @@ class Tree extends React.Component {
   renderNodes() {
     const {nodes = []} = this.props;
     const Child = NodeContainer(Node);
-    return nodes.map((node) => {
-      return <Child key={node._id} node={node} sectionLabel={node.position} />;
+    return nodes.map((node, index) => {
+      return <Child key={node._id} node={node} index={index} sectionLabel={node.position} />;
     });
   }
 

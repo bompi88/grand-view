@@ -2,11 +2,12 @@
 // Edit View Form Container
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-import {useDeps, composeAll, compose} from 'mantra-core';
+import {useDeps, composeAll, composeWithTracker} from 'mantra-core';
 import EditViewForm from '../components/edit_view/edit_view_form';
 
 const onPropsChange = ({ context }, onData) => {
-  const { TAPi18n } = context();
+  const { TAPi18n, Meteor, Collections, LocalState } = context();
+  const nodeId = LocalState.get('EDIT_NODE');
 
   const text = {
     tagsPlaceholder: TAPi18n.__('edit_view.form.tagsPlaceholder'),
@@ -18,8 +19,14 @@ const onPropsChange = ({ context }, onData) => {
     createTag: TAPi18n.__('edit_view.form.createTag'),
     createReference: TAPi18n.__('edit_view.form.createReference'),
     removeItem: TAPi18n.__('edit_view.form.removeItem'),
-    noResultsText: TAPi18n.__('edit_view.form.noResultsText')
+    noResultsText: TAPi18n.__('edit_view.form.noResultsText'),
+    attachments: TAPi18n.__('edit_view.form.attachmentsLabel')
   };
+
+  if (Meteor.subscribe('files.byNode').ready()) {
+    const files = Collections.Files.find({ 'meta.nodeId': nodeId }).fetch();
+    return onData(null, { text, files });
+  }
 
   onData(null, { text });
 };
@@ -31,6 +38,6 @@ export const depsMapper = (context, actions) => ({
 });
 
 export default composeAll(
-  compose(onPropsChange),
+  composeWithTracker(onPropsChange),
   useDeps(depsMapper)
 )(EditViewForm);

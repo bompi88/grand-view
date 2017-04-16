@@ -3,6 +3,9 @@
     "empty": "Ingen informasjonselementer funnet under dette kapittelet.",
     "informationelement": "Legg til informasjonselement",
     "tableHeader": "Informasjonselementer i valgte kapittel",
+    "references": "Kilder",
+    "tags": "Nøkkelord",
+    "attachments": "Vedlegg",
     "form": {
       "tagsPlaceholder": "Nøkkelord",
       "tagsLabel": "Lag eller søk etter nøkkelord i listen",
@@ -13,7 +16,11 @@
       "createTag": "Klikk for å opprette nøkkelordet",
       "createReference": "Klikk for å opprette kilden",
       "removeItem": "Fjern fra nedtrekkslisten",
-      "noResultsText": "Ingen resultater, prøv å skrive inn flere bokstaver i boksen over."
+      "noResultsText": "Ingen resultater, prøv å skrive inn flere bokstaver i boksen over.",
+      "close_form_info": "<b>NB!</b> Du er nå i redigeringsmodus. Trykk på <kbd>ESC</kbd> for å gå ut.",
+      "attachmentsLabel": "Vedlegg",
+      "uploadFiles": "Slipp filer her, eller klikk for å åpne fildialogen",
+      "uploadingFile": "Behandler fil"
     },
     "root_form": {
       "title": "Tittel",

@@ -14,7 +14,14 @@ const onPropsChange = ({ context, doc }, onData) => {
     const nodes = Collections.Nodes.find({
       mainDocId,
       nodeType: 'media'
-    }).fetch();
+    }, {
+      sort: {
+        name: 1
+      }
+    }).fetch()
+    .sort((a, b) => {
+      return a.name.toLowerCase().localeCompare(b.name.toLowerCase(), 'nb');
+    });
 
     const tags = {};
 
@@ -31,6 +38,8 @@ const onPropsChange = ({ context, doc }, onData) => {
 
     const items = _.map(tags, (nds, tag) => {
       return { tag, nodes: nds };
+    }).sort((a, b) => {
+      return a.tag.toLowerCase().localeCompare(b.tag.toLowerCase(), 'nb');
     });
 
     return onData(null, { items });

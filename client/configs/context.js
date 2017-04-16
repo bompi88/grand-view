@@ -5,6 +5,7 @@ import {FlowRouter} from 'meteor/kadira:flow-router';
 import {ReactiveDict} from 'meteor/reactive-dict';
 import {Tracker} from 'meteor/tracker';
 import $ from 'jquery';
+import 'magnific-popup';
 import {_} from 'meteor/underscore';
 import {TAPi18n} from 'meteor/tap:i18n';
 import {NotificationManager} from 'react-notifications';

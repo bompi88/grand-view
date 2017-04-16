@@ -97,17 +97,26 @@ export default {
     });
   },
 
-  setAsEditable({ Meteor }, nodeId, mainDocId) {
-    Meteor.call('setNodeEditable', nodeId, mainDocId, true);
+  setAsEditable({ LocalState }, nodeId) {
+    LocalState.set('EDIT_NODE', nodeId);
   },
 
-  unsetEditable({ Meteor }, mainDocId) {
-    Meteor.call('unsetEditable', mainDocId);
+  unsetEditable({ LocalState }) {
+    LocalState.set('EDIT_NODE', null);
   },
 
   addMediaNode(context, parent) {
-    const { Helpers } = context;
-    Helpers.insertNodeOfType(context, parent, 'media');
+    const { Helpers, Meteor, LocalState, $ } = context;
+    const nodeId = Helpers.insertNodeOfType(context, parent, 'media');
+
+    LocalState.set('EDIT_NODE', nodeId);
+    Meteor.defer(() => {
+      $('.row-item form')[0].scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      $('.row-item form input[name="name"]').focus();
+    });
   },
 
   setReferences({ LocalState, Collections, Meteor }, references, _id) {

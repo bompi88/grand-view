@@ -74,7 +74,7 @@ export default function () {
 
     var files = Files.find({
       docId: { $in: fetchedDocIds }
-    });
+    }).cursor;
 
     return [ nodes, files, docs ];
   });
