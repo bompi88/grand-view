@@ -4,10 +4,11 @@ import { DropTarget } from 'react-dnd';
 class DropArea extends Component {
   render() {
     const { connectDropTarget, isOver } = this.props;
+    const className = isOver ? 'drop-target active' : 'drop-target';
 
     return connectDropTarget(
       <span
-      className="drop-target"
+      className={className}
       style={{
         height: isOver ? '30px' : '15px',
         display: 'block',

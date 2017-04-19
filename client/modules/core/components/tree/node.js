@@ -4,6 +4,7 @@ import NodeContainer from '../../containers/node';
 import ContentEditable from 'react-contenteditable';
 import {ContextMenuLayer} from 'react-contextmenu';
 import DropArea from './drop_area';
+import { DropTarget } from 'react-dnd';
 
 class NodeElement extends React.Component {
 
@@ -42,7 +43,9 @@ class NodeElement extends React.Component {
       handleClick,
       sectionLabel,
       renameNode,
-      isDragging
+      isDragging,
+      connectDropTarget,
+      isOver
     } = this.props;
     const {_id, name, nodeType, isSelected} = node;
     const pre = (nodeType === 'media') ? (<span className="glyphicon glyphicon-file"></span>) :
@@ -60,6 +63,37 @@ class NodeElement extends React.Component {
 
     if (renameNode === _id) {
       className += ' rename';
+    }
+    if (connectDropTarget) {
+      if (isOver) {
+        className = 'element nodes selected';
+      }
+
+      return connectDropTarget(
+        <span
+          className={className}
+          onClick={handleClick.bind(this, node)}
+          title={combined}
+          style={{
+            textOverflow: renameNode === _id ? 'clip' : 'ellipsis',
+            opacity: isDragging ? 0.5 : 1
+          }}
+        >
+          <span>{pre}{' '}</span>
+
+          <ContentEditable
+            className="node-text"
+            onKeyPress={this.handleKeypress.bind(this)}
+            onBlur={this.handleBlur.bind(this)}
+            html={nodeTitle}
+            disabled={!renameNode}
+            style={{
+              display: 'inline'
+            }}
+          />
+          <span>{countText}</span>
+        </span>
+      );
     }
 
     return (
@@ -98,6 +132,32 @@ const MediaNode = ContextMenuLayer('media', (props) => {
   return props.node;
 })(NodeElement);
 
+const dropSpecs = {
+
+  drop(props, monitor) {
+    console.log(monitor.getItem());
+    const { _id } = monitor.getItem();
+    const { putIntoChapterNode, node: parent } = props;
+    console.log(parent);
+    putIntoChapterNode({ parent: parent._id , _id });
+  },
+  //
+  // hover(props) {
+  //
+  // },
+  //
+  // canDrop(props) {
+  //
+  // }
+
+};
+
+const collect = (connect, monitor) => {
+  return {
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver()
+  };
+};
 
 class Node extends React.Component {
 
@@ -138,14 +198,20 @@ class Node extends React.Component {
   }
 
   render() {
-    const { nodes = [], node, index, connectDragSource} = this.props;
+    const { nodes = [], node, index, connectDragSource, isDragging} = this.props;
 
-    return connectDragSource(
-      <li className={node.nodeType === 'chapter' ? 'node chapter' : 'node media-node'}>
+    const DropTargetChapterNode = DropTarget('node', dropSpecs, collect)(ChapterNode);
+
+    return (
+      <li
+        className={node.nodeType === 'chapter' ? 'node chapter' : 'node media-node'}
+        style={{
+          display: isDragging ? 'none' : 'block'
+        }}>
         {this.renderCollapseButton()}
         { index === 0 ? <DropArea {...this.props}/> : null }
         { node.nodeType === 'media' ? <MediaNode {...this.props} /> :
-            <ChapterNode {...this.props} />}
+            connectDragSource(<div><DropTargetChapterNode {...this.props} /></div>)}
         { nodes.length > 0 ? (
           <ul>
               { node.isCollapsed ? null : <DropArea {...this.props}/>}

@@ -17,28 +17,54 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-import {FS} from 'meteor/cfs:base-package';
-import {Meteor} from 'meteor/meteor';
-import {check} from 'meteor/check';
-import {_} from 'meteor/underscore';
+import { FS } from 'meteor/cfs:base-package';
+import { Meteor } from 'meteor/meteor';
+import { check } from 'meteor/check';
+import { _ } from 'meteor/underscore';
 import path from 'path';
+import { HTTP } from 'meteor/http';
 
-import {Documents, Nodes, Files, References, Tags} from '/lib/collections';
+import { Documents, Nodes, Files, References, Tags } from '/lib/collections';
+
+const contentTypes = [
+  'image/png',
+  'image/gif',
+  'image/tif',
+  'application/pdf'
+];
 
 export default function () {
 
   Meteor.methods({
 
-    unsetEditable(mainDocId) {
-      check(mainDocId, String);
+    loadImage(url, nodeId, docId) {
+      check(url, String);
+      check(nodeId, String);
+      check(docId, String);
 
-      Nodes.update({
-        mainDocId,
-        isInEditMode: true
-      }, {
-        $set: { isInEditMode: false }
-      }, {
-        multi: true
+      HTTP.call('GET', url, {
+        npmRequestOptions: {
+          encoding: null
+        },
+        followRedirects: true
+      }, (error, response) => {
+        if (error) {
+          console.log( error );
+
+        // If the link is accessible
+        } else if (response.statusCode === 200) {
+          const contentType = response.headers['content-type'];
+          console.log(response.headers);
+          if (contentTypes.includes(contentType)) {
+            Files.load(url, {
+              fileName: 'Uten Navn',
+              meta: {
+                nodeId,
+                docId
+              }
+            });
+          }
+        }
       });
     },
 
@@ -339,7 +365,22 @@ export default function () {
       }, {
         upsert: false
       });
-    }
+    },
 
+    putIntoChapterNode({ parent, _id }) {
+
+      const position = Nodes.find({ parent }).count() || 1;
+
+      Nodes.update({
+        _id
+      }, {
+        $set: {
+          parent,
+          position
+        }
+      }, {
+        upsert: false
+      });
+    }
   });
 }

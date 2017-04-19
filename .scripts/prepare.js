@@ -60,7 +60,7 @@ cd(base + '/.bundle/bundle');
 
 echo('-----> Installing bundle npm packages...'.yellow);
 cd('./programs/server');
-exec('npm install');
+exec(meteorCommand + ' npm install');
 echo('-----> Bundle created :)\n'.green);
 
 cd(base);
@@ -94,9 +94,11 @@ function copyStartupFiles(os) {
     case 'darwin':
       cp('./.index.js', './.app/');
       cp('./.preload.js', './.app/');
-      cp('./.about.html', './.app/');
+      cp('./.about-en.html', './.app/');
+      cp('./.about-no-NB.html', './.app/');
       cp('./.splash.html', './.app/');
       cp('./app-package.json', './.app/package.json');
+      cp('./packager.json', './.app/packager.json');
       cp('-R', './node_modules', './.app/');
       break;
 

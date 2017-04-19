@@ -44,6 +44,7 @@ export const depsMapper = (context, actions) => ({
   collapseNode: actions.node.collapseNode,
   expandNode: actions.node.expandNode,
   setPosition: actions.node.setPosition,
+  putIntoChapterNode: actions.node.putIntoChapterNode,
   context: () => context
 });
 

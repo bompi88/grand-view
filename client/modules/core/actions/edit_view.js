@@ -97,12 +97,24 @@ export default {
     });
   },
 
-  setAsEditable({ LocalState }, nodeId) {
+  setAsEditable({ LocalState, Meteor, $ }, nodeId) {
+    console.log(nodeId)
     LocalState.set('EDIT_NODE', nodeId);
+    // Meteor.setTimeout(() => {
+    //   $('.row-item form')[0].scrollIntoView({
+    //     behavior: 'smooth',
+    //     block: 'start'
+    //   });
+    //   $('.row-item form input[name="name"]').focus();
+    // }, 2000);
   },
 
-  unsetEditable({ LocalState }) {
-    LocalState.set('EDIT_NODE', null);
+  unsetEditable({ LocalState }, prevNodeId) {
+    console.log(prevNodeId)
+    console.log(LocalState.get('EDIT_NODE'))
+    if (prevNodeId === LocalState.get('EDIT_NODE')) {
+      LocalState.set('EDIT_NODE', null);
+    }
   },
 
   addMediaNode(context, parent) {
@@ -110,13 +122,13 @@ export default {
     const nodeId = Helpers.insertNodeOfType(context, parent, 'media');
 
     LocalState.set('EDIT_NODE', nodeId);
-    Meteor.defer(() => {
+    Meteor.setTimeout(() => {
       $('.row-item form')[0].scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
       $('.row-item form input[name="name"]').focus();
-    });
+    }, 2000);
   },
 
   setReferences({ LocalState, Collections, Meteor }, references, _id) {

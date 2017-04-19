@@ -48,7 +48,9 @@ export default function () {
     }).cursor;
   });
 
-  Meteor.publish('files.byDocument', function (docId) { return Files.find({ docId }).cursor; });
+  Meteor.publish('files.byDocument', function (docId) {
+    return Files.find({ 'meta.docId': docId }).cursor;
+  });
 
   Meteor.publish('files.byArtificialNode', function (an) {
 

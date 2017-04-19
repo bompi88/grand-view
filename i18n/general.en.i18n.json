@@ -14,5 +14,6 @@
   "no_chapter_title": "No chapter name",
   "file_path": "File path",
   "references": "References",
-  "tags": "Tags"
+  "tags": "Tags",
+  "name": "Name"
 }

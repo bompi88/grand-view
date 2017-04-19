@@ -19,22 +19,6 @@ const styles = {
 };
 
 class EditView extends React.Component {
-
-  handleKeyPress(e) {
-    const { unsetEditable, node } = this.props;
-    if (e.keyCode === 27) {
-      unsetEditable(node.mainDocId);
-    }
-  }
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyPress.bind(this));
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyPress.bind(this));
-  }
-
   renderRootHeader() {
     return (
       <h4 className="header-text">

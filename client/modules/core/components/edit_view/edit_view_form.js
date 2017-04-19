@@ -5,6 +5,11 @@ import { Field, reduxForm } from 'redux-form';
 import { renderTextInput } from '../prototypes/form_prototypes';
 import Dropzone from '../../containers/dropzone';
 import MagnificPopup from '../../containers/magnific_popup';
+import bootbox from 'bootbox';
+
+/* globals _require */
+
+const { clipboard, shell } = _require('electron');
 
 import 'react-select/dist/react-select.css';
 
@@ -37,31 +42,94 @@ class EditViewForm extends React.Component {
     });
   }
 
+  openFile(path, e) {
+    e.preventDefault();
+    shell.openItem(path);
+  }
+
+  removeFile(file, e) {
+    e.preventDefault();
+    const { Collections, NotificationManager } = this.props.context();
+    const confirmationPrompt = {
+      title: 'Bekreftelse på sletting',
+      message: 'Er du sikker på at du vil slette Filen?',
+      buttons: {
+        cancel: {
+          label: 'Nei'
+        },
+        confirm: {
+          label: 'Ja',
+          callback(result) {
+            if (result) {
+              // Remove the file
+              Collections.Files.remove({ _id: file._id });
+              // Show sucess message
+              NotificationManager.success(
+                'Filen ble slettet fra systemet.',
+                'Sletting fullført'
+              );
+            }
+          }
+        }
+      }
+    };
+    bootbox.dialog(confirmationPrompt);
+  }
+
   renderFile(file) {
     const { Collections } = this.props.context();
     return (
-      <div>
-        {file.isImage ? (
-          <img
-            src={Collections.Files.link(file)}
-            height="100"
-            onClick={this.handleShowDialog.bind(this, file)}
-          />
-        ) : (
-          <img
-            src="/images/placeholder-icon.png"
-            height="100"
-            onClick={this.handleShowDialog.bind(this, file)}
-          />
-        )}
-      </div>
+      <li className="media">
+        <div className="media-left">
+            {file.isImage ? (
+              <a href="#" className="image-preview center-block">
+                <img
+                  src={Collections.Files.link(file)}
+                  height="70"
+                  onClick={this.handleShowDialog.bind(this, file)}
+                />
+              </a>
+            ) : (
+              <img
+                src="/images/placeholder-icon.png"
+                height="70"
+              />
+            )}
+        </div>
+        <div className="media-body">
+          <h4 className="media-heading">{file.name}</h4>
+          <button
+            className="btn btn-xs btn-primary"
+            onClick={this.openFile.bind(this, file.path)}
+            style={{ marginRight: '10px' }}
+          ><span className="glyphicon glyphicon-open-file"></span> Åpne</button>
+          <a
+            download={file.meta && file.meta.name || file.name}
+            href={Collections.Files.link(file)}
+            className="btn btn-xs btn-default"
+            style={{ marginRight: '10px' }}
+          >
+            <span className="glyphicon glyphicon-floppy-disk"></span> Lagre som
+          </a>
+          <button
+            className="btn btn-xs btn-danger"
+            onClick={this.removeFile.bind(this, file)}
+          ><span className="glyphicon glyphicon-trash"></span> Slett</button>
+        </div>
+      </li>
     );
   }
 
   renderFiles(files) {
-    return files.map((file) => {
+    const filesRendered = files.map((file) => {
       return this.renderFile(file);
     });
+
+    return (
+      <ul className="media-list">
+        {filesRendered}
+      </ul>
+    );
   }
 
   renderMagnificPopup(file) {
@@ -90,13 +158,91 @@ class EditViewForm extends React.Component {
     );
   }
 
+  uploadFile(file, type) {
+    const { Collections, LocalState } = this.props.context();
+    const { Files } = Collections;
+
+    let uploadInstance = Files.insert({
+      file,
+      fileName: 'clipboard.' + type,
+      isBase64: true,
+      meta: {
+        nodeId: LocalState.get('EDIT_NODE'),
+        docId: LocalState.get('CURRENT_DOCUMENT')
+      },
+      streams: 'dynamic',
+      chunkSize: 'dynamic',
+      allowWebWorkers: true
+    }, false);
+
+    // self.setState({
+    //   uploading: uploadInstance, // Keep track of this instance to use below
+    //   inProgress: true // Show the progress bar now
+    // });
+
+    // These are the event functions, don't need most of them, it shows where we are in the process
+    uploadInstance.on('start', () => {
+      console.log('Starting');
+    });
+
+    uploadInstance.on('end', (error, fileObj) => {
+      console.log('On end File Object: ', fileObj);
+    });
+
+    uploadInstance.on('uploaded', (error, fileObj) => {
+      console.log('uploaded: ', fileObj);
+
+      // // Remove the filename from the upload box
+      // self.refs['fileinput'].value = '';
+
+      // Reset our state for the next file
+      // self.setState({
+      //   uploading: [],
+      //   progress: 0,
+      //   inProgress: false
+      // });
+    });
+
+    uploadInstance.on('error', (error, fileObj) => {
+      console.log('Error during upload: ' + error);
+    });
+
+    uploadInstance.on('progress', (progress, fileObj) => {
+      console.log('Upload Percentage: ' + progress);
+      // Update our progress bar
+      // self.setState({
+      //   progress
+      // });
+    });
+
+    uploadInstance.start(); // Must manually start the upload
+  }
+
+  importFromClipboard() {
+    const image = clipboard.readImage();
+    const formats = clipboard.availableFormats();
+    console.log(formats);
+    let hasImage = false;
+    for (let format of formats) {
+      if (/image/.test(format)) {
+        hasImage = true;
+      }
+    }
+
+    if (hasImage) {
+      this.uploadFile(image.toDataURL(), 'png');
+    } else {
+      this.uploadFile(clipboard.readRTF(), 'rtf');
+    }
+  }
+
   render() {
     const { setDescription, setName, change, nodeId, text, files } = this.props;
 
     const file = this.state.file;
 
     return (
-      <form>
+      <form ref="target" onPaste={this.importFromClipboard.bind(this, nodeId)}>
         <Field
           name="name"
           component={renderTextInput}
@@ -147,8 +293,8 @@ class EditViewForm extends React.Component {
           noResultsText={text.noResultsText}
         />
       <label>{text.attachments}</label>
-      <Dropzone />
       { files ? this.renderFiles(files) : null }
+      <Dropzone />
       { file ? this.renderMagnificPopup(file) : null }
       </form>
     );

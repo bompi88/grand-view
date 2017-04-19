@@ -46,8 +46,12 @@ export default {
     });
   },
 
-  setPosition({ Meteor, Collections }, { fromPos, toPos, _id, fromParent, toParent }) {
+  setPosition({ Meteor }, { fromPos, toPos, _id, fromParent, toParent }) {
     Meteor.call('updateNodePosition', { fromPos, toPos, _id, fromParent, toParent });
+  },
+
+  putIntoChapterNode({ Meteor }, { parent, _id }) {
+    Meteor.call('putIntoChapterNode', { parent, _id });
   },
 
   /**

@@ -34,6 +34,7 @@ const onPropsChange = ({ context }, onData) => {
 export const depsMapper = (context, actions) => ({
   setName: actions.editView.setName,
   setDescription: actions.editView.setDescription,
+  unsetEditable: actions.editView.unsetEditable,
   context: () => context
 });
 

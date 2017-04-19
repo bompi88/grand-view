@@ -41,8 +41,8 @@ const frame = true;
 
 // -- Set up paths -------------------------------------------------------------
 
-const resourcesDir = path.join(dirname, 'resources');
-const nodeModulesDir = path.join(dirname, 'node_modules');
+const resourcesDir = path.join(dirname, '../app.asar.unpacked', 'resources');
+const nodeModulesDir = 'node_modules';
 const meteorPath = path.join(dirname, 'bundle');
 
 const platform = os.platform();
@@ -56,6 +56,7 @@ if (platform === 'darwin') {
 } else if (platform === 'linux') {
   appPath = path.join(env.HOME, '/.config/', appName, '/');
 }
+console.log('dir: ', dirname);
 
 console.log('App path: ' + appPath);
 
@@ -123,8 +124,9 @@ function startNode(options, mongoChild, callback) {
   env.DIR = dirname;
   env.NODE_ENV = 'production';
   env.NODE_PATH = nodeModulesDir;
+  env.ELECTRON_RUN_AS_NODE = 0;
 
-  const nodeChild = childProcess.execFile(nodePath, [ nodeArgs ], { env });
+  const nodeChild = childProcess.spawn(nodePath, [ nodeArgs ], { env });
 
   // listen for errors
   nodeChild.stderr.setEncoding('utf8');
@@ -325,7 +327,7 @@ app.on('ready', () => {
       frame,
       webPreferences: {
         // Meteor overrides the require method, which do not find our electron
-        // modules nor fs etc. We have to copy the require method. _require()
+        // modules nor fs etc. We have to copy the require method. require()
         // should be used on the client to access node and electron modules.
         preload: require.resolve('./.preload')
       }

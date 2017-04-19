@@ -28,10 +28,8 @@ import {TAPi18n} from 'meteor/tap:i18n';
 import Globals from '/lib/globals';
 import {Documents, Nodes, Files} from '/lib/collections';
 
-const os = _require('os');
-const cp = _require('child_process');
-
-const platform = os.platform();
+const shell = _require('electron').shell;
+const imageSize = _require('fast-image-size');
 const officegen = _require('officegen');
 const path = _require('path');
 const fs = _require('fs');
@@ -75,26 +73,19 @@ const keywordText = {
 };
 
 const openFile = (filePath, callback) => {
-  let openCMD;
-
-  if (platform === 'win32') {
-    openCMD = '"' + filePath + '"';
-  } else if (platform === 'darwin') {
-    openCMD = 'open ' + filePath;
-  } else {
-    openCMD = 'xdg-open ' + filePath;
-  }
-
-  cp.exec(openCMD, callback);
+  shell.openItem(filePath);
+  return callback();
 };
 
 
 const generationDocx = {
   renderMediaNode(node, par) {
-    const { name, tags, references, fileId, description } = node;
+    const { _id, name, tags, references, description } = node;
+
+    const files = Files.find({ 'meta.nodeId': _id }).fetch() || [];
 
     if (name || (tags && tags.length) ||
-      (references && references.length) || fileId || description) {
+      (references && references.length) || files.length || description) {
       par.addLineBreak();
       par.addText('_______________________________________________________________');
       par.addLineBreak();
@@ -117,22 +108,30 @@ const generationDocx = {
       par.addLineBreak();
     }
 
-    if (fileId) {
-      const file = Files.findOne({
-        _id: fileId
+    if (files.length) {
+      files.forEach((file) => {
+        if (file && (file.isImage)) {
+          const imgSize = imageSize(file.path);
+          const cx = 580.0;
+          const scale = cx / imgSize.width;
+          par.addImage(file.path, {
+            x: 'c',
+            cx,
+            cy: Math.floor(imgSize.height * scale)
+          });
+        } else if (file) {
+          par.addText(TAPi18n.__('name') + ': ', keywordHeaderText);
+          par.addText(file.meta && file.meta.name || file.name, keywordText);
+          par.addLineBreak();
+
+          par.addText(TAPi18n.__('file_path') + ': ', keywordHeaderText);
+          par.addText('\"' + file.path +
+            '\"', keywordText);
+        }
+
+        par.addLineBreak();
+        par.addLineBreak();
       });
-
-      if (file && (file.copies.filesStore.type.split('/')[0] === 'image')) {
-        par.addImage(Globals.basePath + 'files/' + file.copies.filesStore.key);
-      } else if (file) {
-        par.addText(TAPi18n.__('file_path') + ':', keywordHeaderText);
-        par.addText(' \"' + Globals.basePath +
-          'files/' + file.copies.filesStore.key +
-          '\"', keywordText);
-      }
-
-      par.addLineBreak();
-      par.addLineBreak();
     } else if (name || tags || references) {
       par.addLineBreak();
     }

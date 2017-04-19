@@ -18,6 +18,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 import React from 'react';
+import ReactDOM from 'react-dom';
+
 import EditViewForm from '../../containers/edit_view_form';
 
 const styles = {
@@ -27,6 +29,39 @@ const styles = {
 };
 
 class NodesTableRow extends React.Component {
+
+  handleClick(e) {
+    const { unsetEditable, nodeId } = this.props;
+    const target = ReactDOM.findDOMNode(this.refs.target);
+
+    if (!target || (e.target.className && e.target.className.indexOf('mfp') > -1)) {
+      return;
+    }
+
+    if (target.contains(e.target)) {
+      return;
+    }
+
+    unsetEditable(nodeId);
+  }
+
+  handleKeyPress(e) {
+    const { unsetEditable, nodeId } = this.props;
+    if (e.keyCode === 27) {
+      unsetEditable(nodeId);
+    }
+  }
+
+  componentWillMount() {
+    document.addEventListener('click', this.handleClick.bind(this), false);
+    document.addEventListener('keydown', this.handleKeyPress.bind(this));
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleClick.bind(this), false);
+    document.removeEventListener('keydown', this.handleKeyPress.bind(this));
+  }
+
   render() {
     const {
       node,
@@ -46,7 +81,7 @@ class NodesTableRow extends React.Component {
 
     return (
       <tr
-        className={disablePointer ? 'table-row' : 'table-row clickable-row'}
+        className={isInEditMode || disablePointer ? 'table-row' : 'table-row clickable-row'}
       >
         <td
           key="checkbox"

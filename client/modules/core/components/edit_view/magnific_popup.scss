@@ -1,5 +1,9 @@
 /* Magnific Popup CSS */
 
+.image-preview:hover {
+  cursor: zoom-in;
+}
+
 .mfp-bg {
   top: 0;
   left: 0;
@@ -330,8 +334,9 @@ img.mfp-img {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  padding: 40px 0 40px;
-  margin: 0 auto;
+  margin: 40px auto !important;
+  background: #fff;
+  padding: 0 !important;
 }
 
 
