@@ -15,6 +15,7 @@ const path = require('path');
 const net = require('net');
 const os = require('os');
 const fs = require('fs');
+// require('asar-require'); // Does not seem to work
 
 
 // Set in package.json
@@ -41,8 +42,9 @@ const frame = true;
 
 // -- Set up paths -------------------------------------------------------------
 
-const resourcesDir = path.join(dirname, '../app.asar.unpacked', 'resources');
-const nodeModulesDir = 'node_modules';
+// const resourcesDir = path.join(dirname, '..', 'app.asar.unpacked', 'resources');
+const resourcesDir = path.join(dirname, 'resources');
+const nodeModulesDir = path.join(dirname, 'bundle', 'programs', 'server', 'node_modules');
 const meteorPath = path.join(dirname, 'bundle');
 
 const platform = os.platform();
@@ -111,22 +113,24 @@ function startNode(options, mongoChild, callback) {
 
   const nodePath = path.join(resourcesDir, (platform === 'win32') ? 'node.exe' : 'node');
   const nodeArgs = path.join(meteorPath, 'main.js');
-
+  // const mainEntry = require(nodeArgs);
   let opened = false;
 
-  // Set environment variables
-  env.ROOT_URL = rootURL;
-  env.PORT = options.webPort;
-  env.BIND_IP = bindIP;
-  env.DB_PATH = dataPath;
-  env.MONGO_URL = mongoRootUrl + options.mongoPort + '/' + dbName;
-  env.METEOR_SETTINGS = readFileSync(path.join(appPath, 'settings.json'));
-  env.DIR = dirname;
-  env.NODE_ENV = 'production';
-  env.NODE_PATH = nodeModulesDir;
-  env.ELECTRON_RUN_AS_NODE = 0;
+  const nodeEnv = {
+    ROOT_URL: rootURL + ':' + options.webPort + '/',
+    PORT: options.webPort,
+    BIND_IP: bindIP,
+    DB_PATH: dataPath,
+    MONGO_URL: mongoRootUrl + options.mongoPort + '/' + dbName,
+    METEOR_SETTINGS: readFileSync(path.join(appPath, 'settings.json')),
+    DIR: dirname,
+    NODE_ENV: 'production',
+    NODE_PATH: nodeModulesDir,
+    ELECTRON_RUN_AS_NODE: 0
+  };
 
-  const nodeChild = childProcess.spawn(nodePath, [ nodeArgs ], { env });
+  // const nodeChild = childProcess.spawn(nodePath, [ mainEntry ], { env: nodeEnv });
+  const nodeChild = childProcess.spawn(nodePath, [ nodeArgs ], { env: nodeEnv });
 
   // listen for errors
   nodeChild.stderr.setEncoding('utf8');
@@ -297,8 +301,10 @@ app.on('activate-with-no-open-windows', () => {
   return false;
 });
 
+let mainWindow;
+
 // Emitted when Electron has done all of the initialization.
-app.on('ready', () => {
+function createWindow() {
 
   const splashScreen = new BrowserWindow({
     width: 400,
@@ -314,6 +320,7 @@ app.on('ready', () => {
     console.log('App occupying ', url);
 
     const cleanup = () => {
+      console.log('quit');
       app.quit();
     };
 
@@ -326,19 +333,35 @@ app.on('ready', () => {
       resizeable,
       frame,
       webPreferences: {
+        nodeIntegration: false,
         // Meteor overrides the require method, which do not find our electron
         // modules nor fs etc. We have to copy the require method. require()
         // should be used on the client to access node and electron modules.
         preload: require.resolve('./.preload')
       }
     };
-    const mainWindow = new BrowserWindow(windowOptions);
+    mainWindow = new BrowserWindow(windowOptions);
     mainWindow.focus();
     splashScreen.close();
+
     mainWindow.loadURL(url);
     global.mainWindow = mainWindow;
-
+    mainWindow.webContents.openDevTools();
     process.on('uncaughtException', cleanup);
+
+    mainWindow.on('closed', () => {
+      mainWindow = null;
+    });
+
+    mainWindow.once('did-finish-load', (e) => {
+      console.log(e);
+      console.log('finished loading.');
+    });
+
+    mainWindow.once('ready-to-show', (e) => {
+      console.log(e);
+      console.log('ready to show.');
+    });
 
     // Emitted when all windows have been closed and the application will quit.
     // Calling event.preventDefault() will prevent the default behaviour, which
@@ -362,5 +385,14 @@ app.on('ready', () => {
     app.on('window-all-closed', () => {
       cleanup();
     });
+
   });
+}
+
+app.on('ready', createWindow);
+
+app.on('activate', () => {
+  if (mainWindow === null) {
+    createWindow();
+  }
 });

@@ -13,6 +13,9 @@ require('colors');
 
 const path = require('path');
 const fs = require('fs-extra');
+const pjson = require('../package.json');
+
+const electronVersion = pjson.electron_version;
 
 // Auto-exit on errors
 config.fatal = true; // eslint-disable-line
@@ -61,6 +64,9 @@ cd(base + '/.bundle/bundle');
 echo('-----> Installing bundle npm packages...'.yellow);
 cd('./programs/server');
 exec(meteorCommand + ' npm install');
+
+// exec(base + `./node_modules/.bin/electron-rebuild --version ${electronVersion} --module-dir ./.bundle/bundle`);
+
 echo('-----> Bundle created :)\n'.green);
 
 cd(base);
@@ -97,7 +103,7 @@ function copyStartupFiles(os) {
       cp('./.about-en.html', './.app/');
       cp('./.about-no-NB.html', './.app/');
       cp('./.splash.html', './.app/');
-      cp('./app-package.json', './.app/package.json');
+      cp('./package.json', './.app/package.json');
       cp('./packager.json', './.app/packager.json');
       cp('-R', './node_modules', './.app/');
       break;
