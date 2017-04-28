@@ -78,10 +78,11 @@ export default {
     return selected > 0 && selected === len;
   },
 
-  remove({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox}, _id) {
+  remove({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox, Collections}, _id) {
+    const { title } = Collections.Documents.findOne({ _id });
     const confirmationPrompt = {
       title: 'Bekreftelse på slettingen',
-      message: 'Er du sikker på at du vil slette prosjektet?',
+      message: `Er du sikker på at du vil slette prosjektet <b>${title}</b>?`,
       buttons: {
         cancel: {
           label: 'Nei'
@@ -114,13 +115,33 @@ export default {
 
   },
 
-  removeSelected({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox}) {
-    const selected = _.union(SelectedCtrl.getSelected('trash_documents'),
-      SelectedCtrl.getSelected('trash_templates'));
+  removeSelected({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox, Collections}) {
+    const selectedDocumentIds = SelectedCtrl.getSelected('trash_documents') || [];
+    const selectedTemplateIds = SelectedCtrl.getSelected('trash_templates') || [];
+
+    const selected = _.union(selectedDocumentIds, selectedTemplateIds);
+
+    let message = 'Er du sikker på at du vil slette de valgte elementene under?';
+
+    const documentNames = Collections.Documents.find({
+      _id: { $in: selectedDocumentIds }
+    }).map(doc => `<li>${doc.title}</li>`);
+
+    const templateNames = Collections.Documents.find({
+      _id: { $in: selectedTemplateIds }
+    }).map(doc => `<li>${doc.title}</li>`);
+
+    if (documentNames.length) {
+      message += `<h5><b>Dokumenter:</b></h5><ol>${documentNames.join('')}</ol>`;
+    }
+
+    if (templateNames.length) {
+      message += `<h5><b>Maler:</b></h5><ol>${templateNames.join('')}</ol>`;
+    }
 
     const confirmationPrompt = {
       title: 'Bekreftelse på slettingen',
-      message: 'Er du sikker på at du vil slette de valgte prosjektene?',
+      message,
       buttons: {
         cancel: {
           label: 'Nei'
@@ -190,10 +211,29 @@ export default {
     });
   },
 
-  emptyTrash({Meteor, NotificationManager, TAPi18n, SelectedCtrl, bootbox}) {
+  emptyTrash({Meteor, NotificationManager, TAPi18n, SelectedCtrl, bootbox, Collections}) {
+    let message = 'Er du sikker på at du vil tømme papirkurven? Da vil følgende elementer bli slettet:';
+
+    const documentNames = Collections.Documents.find({
+      removed: true,
+      isTemplate: false
+    }).map(doc => `<li>${doc.title}</li>`);
+
+    const templateNames = Collections.Documents.find({
+      removed: true,
+      isTemplate: true
+    }).map(doc => `<li>${doc.title}</li>`);
+
+    if (documentNames.length) {
+      message += `<h5><b>Dokumenter:</b></h5><ol>${documentNames.join('')}</ol>`;
+    }
+
+    if (templateNames.length) {
+      message += `<h5><b>Maler:</b></h5><ol>${templateNames.join('')}</ol>`;
+    }
     const confirmationPrompt = {
       title: 'Bekreftelse på tømming av papirkurv',
-      message: 'Er du sikker på at du vil tømme papirkurven?',
+      message,
       buttons: {
         cancel: {
           label: 'Nei'
