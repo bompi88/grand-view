@@ -1,6 +1,7 @@
 import {Meteor} from 'meteor/meteor';
 import {check, Match} from 'meteor/check';
 import {_} from 'meteor/underscore';
+import { Random } from 'meteor/random';
 
 import * as Collections from '/lib/collections';
 
@@ -19,12 +20,57 @@ export default function () {
         lastModified: new Date(),
         createdAt: new Date()
       };
+      const updateWithTemplate = hasTemplate.length && hasTemplate !== 'none';
 
-      if (hasTemplate.length && hasTemplate !== 'none') {
+      if (updateWithTemplate) {
         doc.hasTemplate = hasTemplate;
       }
 
-      return Collections.Documents.insert(doc);
+      const mainDocId = Collections.Documents.insert(doc);
+
+      if (!updateWithTemplate) {
+        return mainDocId;
+      }
+
+      // Update with nodes from template
+
+      const idHashMap = {};
+      idHashMap[hasTemplate] = mainDocId;
+
+      const chapterNodes = Collections.Nodes.find({
+        nodeType: 'chapter',
+        mainDocId: hasTemplate
+      }).fetch().map(node => {
+        node._parent = node.parent;
+        delete node.parent;
+        const nodeId = Random.id();
+        idHashMap[node._id] = nodeId;
+        return { ...node, _id: nodeId, mainDocId, lastChanged: new Date() };
+      });
+
+      chapterNodes.forEach((node) => {
+        Collections.Nodes.insert(node);
+      });
+
+      Object.keys(idHashMap).forEach((oldParent) => {
+        const newParent = idHashMap[oldParent];
+
+        Collections.Nodes.update({
+          _parent: oldParent
+        }, {
+          $set: {
+            parent: newParent
+          },
+          $unset: {
+            _parent: ''
+          }
+        }, {
+          multi: true,
+          upsert: false
+        });
+      });
+
+      return mainDocId;
     },
 
     'documents.softRemove'(ids) {

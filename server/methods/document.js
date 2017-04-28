@@ -1,6 +1,6 @@
 import {Meteor} from 'meteor/meteor';
 import {check, Match} from 'meteor/check';
-import { Random } from 'meteor/random'
+import { Random } from 'meteor/random';
 
 import * as Collections from '/lib/collections';
 
