@@ -368,8 +368,8 @@ export default function () {
     },
 
     putIntoChapterNode({ parent, _id }) {
-
-      const position = Nodes.find({ parent }).count() || 1;
+      const nodeCount = Nodes.find({ parent }).count();
+      const position = nodeCount === 0 ? 1 : nodeCount + 1;
 
       Nodes.update({
         _id
