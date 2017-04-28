@@ -39,7 +39,7 @@ export default function ({ reducers }) {
   });
 
   const middlewares = [
-    createLogger()
+    // createLogger()
   ];
 
   const Store = createStore(reducer, applyMiddleware(...middlewares));
