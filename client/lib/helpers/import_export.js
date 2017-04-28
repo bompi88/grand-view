@@ -130,7 +130,7 @@ export default {
         this.mkdirSync(newPath);
 
         // copy over to sandbox
-        this.copyFile(originalPath, newPath + '/import.' + extension, (err) => {
+        this.copyFile(originalPath, path.join(newPath, 'import.' + extension), (err) => {
           if (err) {
             console.log(err);
 
@@ -147,7 +147,7 @@ export default {
 
             var extract = tar.extract();
 
-            var tarball = newPath + '/import.tar';
+            var tarball = path.join(newPath, 'import.tar');
             var dest = path.join(Globals.basePath, 'tmp', 'import');
 
             extract.on('entry', (header, stream, callback) => {
@@ -256,17 +256,17 @@ export default {
       }).fetch();
 
       // write the data
-      fs.writeFileSync(Globals.basePath + 'tmp/docs.json', JSON.stringify(docs, null, 4), 'utf8');
-      fs.writeFileSync(Globals.basePath + 'tmp/nodes.json', JSON.stringify(nodes, null, 4), 'utf8');
-      fs.writeFileSync(Globals.basePath + 'tmp/files.json', JSON.stringify(files, null, 4), 'utf8');
+      fs.writeFileSync(path.join(Globals.basePath, 'tmp', 'docs.json'), JSON.stringify(docs, null, 4), 'utf8');
+      fs.writeFileSync(path.join(Globals.basePath, 'tmp', 'nodes.json'), JSON.stringify(nodes, null, 4), 'utf8');
+      fs.writeFileSync(path.join(Globals.basePath, 'tmp', 'files.json'), JSON.stringify(files, null, 4), 'utf8');
 
 
       async.forEach(files, (file, callback) => {
 
         var fileName = file && file.copies && file.copies.filesStore && file.copies.filesStore.key;
 
-        var from = Globals.basePath + 'files/' + fileName;
-        var to = Globals.basePath + 'tmp/files/' + fileName;
+        var from = path.join(Globals.basePath, 'files', fileName);
+        var to = path.join(Globals.basePath, 'tmp', 'files', fileName);
 
         this.copyFile(from, to, callback);
 
@@ -274,12 +274,12 @@ export default {
 
         if (err) {
           console.log(err);
-          this.deleteFolderRecursive(Globals.basePath + 'tmp');
+          this.deleteFolderRecursive(path.join(Globals.basePath, 'tmp'));
           return;
         }
 
         // zip all contents inside this folder and retrieve the path of the zip file
-        var output = fs.createWriteStream(Globals.basePath + 'output.tar');
+        var output = fs.createWriteStream(path.join(Globals.basePath, 'output.tar'));
         var archive = archiver('tar');
 
         // Set up a write stream
@@ -300,7 +300,7 @@ export default {
             ]
           }, (filePathAndName) => {
             if (filePathAndName) {
-              fs.rename(Globals.basePath + 'output.tar', filePathAndName, (error) => {
+              fs.rename(path.join(Globals.basePath, 'output.tar'), filePathAndName, (error) => {
                 if (error) {
                   console.log(error);
                 } else {
@@ -309,16 +309,16 @@ export default {
                     'Eksportering fullført'
                   );
                 }
-                this.deleteFolderRecursive(Globals.basePath + 'tmp');
+                this.deleteFolderRecursive(path.join(Globals.basePath, 'tmp'));
               });
             } else {
-              this.deleteFolderRecursive(Globals.basePath + 'tmp');
+              this.deleteFolderRecursive(path.join(Globals.basePath, 'tmp'));
             }
           });
         });
 
         archive.on('error', (error) => {
-          this.deleteFolderRecursive(Globals.basePath + 'tmp');
+          this.deleteFolderRecursive(path.join(Globals.basePath, 'tmp'));
 
           throw error;
         });
@@ -328,11 +328,11 @@ export default {
         archive.bulk([
           {
             expand: true,
-            cwd: Globals.basePath + 'tmp',
+            cwd: path.join(Globals.basePath, 'tmp'),
             src: [ '*.json' ]
           }, {
             expand: true,
-            cwd: Globals.basePath + 'tmp/files',
+            cwd: path.join(Globals.basePath, 'tmp', 'files'),
             src: [ '**' ],
             dest: 'files'
           }

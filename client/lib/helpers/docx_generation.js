@@ -297,13 +297,13 @@ const generationDocx = {
     Meteor.subscribe('files.byDocument', _id, () => {
       this.renderDocument(doc, docx, mainParagraph, format);
 
-      const out = fs.createWriteStream(Globals.basePath + fileName);
+      const filePath = path.join(Globals.basePath, fileName);
+
+      const out = fs.createWriteStream(filePath);
 
       docx.generate(out, {
         finalize(written) {
           console.log('Finnished to write docx-file.\nBytes written: ' + written + '\n');
-
-          const filePath = path.join(Globals.basePath, fileName);
 
           openFile(filePath, (error) => {
             if (error) {
