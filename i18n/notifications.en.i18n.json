@@ -87,6 +87,10 @@
     "could_not_paste_as_file": {
       "title": "Format not supported",
       "message": "Could not store the pasted content as file. Try to either paste as regular, or attach the file manually below."
+    },
+    "make_template_success": {
+      "title": "Template created",
+      "message": "A template is generated based on the provided chapter structure. It's available in \"My templates\"."
     }
   }
 }

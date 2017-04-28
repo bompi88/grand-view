@@ -326,7 +326,6 @@ export default function () {
     },
 
     updateNodePosition({fromPos, toPos, _id, fromParent, toParent}) {
-      console.log(fromPos, toPos, _id, fromParent, toParent)
       Nodes.update({
         parent: fromParent,
         position: {

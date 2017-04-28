@@ -30,6 +30,7 @@
       "collapse_nodes": "Sammentrekk alle elementer",
       "generate_docx": "Generer utskriftbart dokument",
       "export_to_file": "Eksporter prosjekt",
+      "export_to_file": "Lag mal av kapittelstrukturen",
       "help": "Hjelp"
     }
   }

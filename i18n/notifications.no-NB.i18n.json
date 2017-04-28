@@ -87,6 +87,10 @@
     "could_not_paste_as_file": {
       "title": "Formatet er dessverre ikke støttet",
       "message": "Kunne dessverre ikke lime inn innholdet som en fil. Prøv heller og lime inn på vanlig måte eller å legge til en fil manuelt i feltet under."
+    },
+    "make_template_success": {
+      "title": "Mal opprettet",
+      "message": "En mal ble lagd basert på kapittelstrukturen du valgte. Malen kan bli funnet under fanen \"Mine maler\"."
     }
   }
 }

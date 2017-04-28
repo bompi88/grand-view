@@ -1,5 +1,6 @@
 import {Meteor} from 'meteor/meteor';
 import {check, Match} from 'meteor/check';
+import { Random } from 'meteor/random'
 
 import * as Collections from '/lib/collections';
 
@@ -84,6 +85,54 @@ export default function () {
       };
 
       removeNode({ _id, mainDocId, files });
+    },
+    'document.makeTemplate'(_id) {
+      const { _id: oldDocId, ...doc } = Collections.Documents.findOne({ _id });
+
+      const mainDocId = Collections.Documents.insert({
+        ...doc,
+        isTemplate: true,
+        lastChanged: new Date(),
+        createdAt: new Date()
+      });
+
+      const idHashMap = {};
+      idHashMap[oldDocId] = mainDocId;
+
+      const chapterNodes = Collections.Nodes.find({
+        nodeType: 'chapter',
+        mainDocId: oldDocId
+      }).fetch().map(node => {
+        node._parent = node.parent;
+        delete node.parent;
+        const nodeId = Random.id();
+        idHashMap[node._id] = nodeId;
+        return { ...node, _id: nodeId, mainDocId, lastChanged: new Date() };
+      });
+
+      chapterNodes.forEach((node) => {
+        Collections.Nodes.insert(node);
+      });
+
+      Object.keys(idHashMap).forEach((oldParent) => {
+        const newParent = idHashMap[oldParent];
+
+        Collections.Nodes.update({
+          _parent: oldParent
+        }, {
+          $set: {
+            parent: newParent
+          },
+          $unset: {
+            _parent: ''
+          }
+        }, {
+          multi: true,
+          upsert: false
+        });
+      });
+
+      return true;
     }
   });
 }

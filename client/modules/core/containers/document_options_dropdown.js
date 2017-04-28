@@ -50,6 +50,14 @@ export const composer = ({context}, onData) => {
       divider: true
     },
     {
+      icon: 'glyphicon glyphicon-duplicate',
+      label: TAPi18n.__('dropdowns.document_options.make_template'),
+      func: 'makeTemplate'
+    },
+    {
+      divider: true
+    },
+    {
       icon: 'glyphicon glyphicon-question-sign',
       label: TAPi18n.__('dropdowns.document_options.help'),
       func: 'openHelpModal'
@@ -67,6 +75,7 @@ export const depsMapper = (context, actions) => ({
   generateDOCX: actions.optionsDropdown.generateDOCX,
   exportToFile: actions.optionsDropdown.exportToFile,
   openHelpModal: actions.optionsDropdown.openHelpModal,
+  makeTemplate: actions.optionsDropdown.makeTemplate,
   context: () => context
 });
 

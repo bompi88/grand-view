@@ -53,6 +53,16 @@ export default {
     Helpers.exportDocument(context, id);
   },
 
+  makeTemplate({ Meteor, LocalState, NotificationManager, TAPi18n }) {
+    const mainDocId = LocalState.get('CURRENT_DOCUMENT');
+    Meteor.call('document.makeTemplate', mainDocId, () => {
+      NotificationManager.success(
+        TAPi18n.__('notifications.make_template_success.message'),
+        TAPi18n.__('notifications.make_template_success.title')
+      );
+    });
+  },
+
   openHelpModal({}) {
     console.log('Open help modal');
   }
