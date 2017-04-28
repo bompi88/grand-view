@@ -24,13 +24,16 @@ import { ActionCreators } from 'redux-undo';
 
 export default (context) => {
   const remote = _require('electron').remote;
+  const os = _require('os');
+  const path = require('path');
+  const platform = os.platform();
   const Menu = remote.Menu;
 
   const {LocalState, dispatch, Helpers, NotificationManager, TAPi18n, Tracker} = context;
-  const resourcesRoot = _require('fs').realpathSync(process.env.DIR || process.cwd());
+  const resourcesRoot = _require('fs').realpathSync(remote.app.getAppPath());
 
   const CommandOrCtrl = () => {
-    return (process.platform === 'darwin') ? 'Command' : 'Ctrl';
+    return (platform === 'darwin') ? 'Command' : 'Ctrl';
   };
 
   Tracker.autorun(function () {
@@ -44,9 +47,9 @@ export default (context) => {
           {
             label: TAPi18n.__('menu.about_grandview'),
             click() {
-              const file = (lang === 'no-NB') ? '/.about-no-NB.html' : '/.about-en.html';
+              const file = (lang === 'no-NB') ? '.about-no-NB.html' : '.about-en.html';
               const aboutWindow = window.open(
-                'file:' + resourcesRoot + file,
+                'file:' + path.join(resourcesRoot, file),
                 TAPi18n.__('menu.about_grandview'),
                 'width=300, ' +
                 'height=450, ' +
@@ -228,6 +231,14 @@ export default (context) => {
             label: TAPi18n.__('menu.paste'),
             accelerator: CommandOrCtrl() + '+V',
             click() {
+              remote.getCurrentWindow().webContents.paste();
+            }
+          },
+          {
+            label: TAPi18n.__('menu.paste_as_file'),
+            accelerator: CommandOrCtrl() + '+Shift+V',
+            click() {
+              LocalState.set('PASTE_FILE', true);
               remote.getCurrentWindow().webContents.paste();
             }
           },

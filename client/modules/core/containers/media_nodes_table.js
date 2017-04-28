@@ -44,6 +44,7 @@ export const composer = ({context, clearState, chapterNode}, onData) => {
 
 export const depsMapper = (context, actions) => ({
   addMediaNode: actions.editView.addMediaNode,
+  unsetEditable: actions.editView.unsetEditable,
   toggleSelected: actions.templates.toggleSelected,
   isSelected: actions.templates.isSelected,
   selectAll: actions.templates.selectAll,

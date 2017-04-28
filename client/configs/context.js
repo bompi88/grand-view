@@ -10,6 +10,8 @@ import {_} from 'meteor/underscore';
 import {TAPi18n} from 'meteor/tap:i18n';
 import {NotificationManager} from 'react-notifications';
 import {moment} from 'meteor/momentjs:moment';
+import bootbox from 'bootbox';
+
 import { reducer as formReducer } from 'redux-form';
 import {
   createStore,
@@ -62,6 +64,7 @@ export default function ({ reducers }) {
     $,
     _,
     Store,
+    bootbox,
     dispatch: Store.dispatch
   };
 }

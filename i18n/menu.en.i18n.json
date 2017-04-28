@@ -20,6 +20,7 @@
     "cut": "Cut",
     "copy": "Copy",
     "paste": "Paste",
+    "paste_as_file": "Paste as file",
     "select_all": "Select all",
     "show": "View",
     "refresh": "Refresh",

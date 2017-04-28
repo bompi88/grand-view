@@ -78,42 +78,78 @@ export default {
     return selected > 0 && selected === len;
   },
 
-  remove({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}, _id) {
-
-    Meteor.call('documents.remove', _id, (err) => {
-      if (err) {
-        NotificationManager.error(
-          TAPi18n.__('notifications.permanent_remove_failed.message'),
-          TAPi18n.__('notifications.permanent_remove_failed.title')
-        );
-      } else {
-        SelectedCtrl.resetAll();
-        NotificationManager.success(
-          TAPi18n.__('notifications.permanent_remove_success.message'),
-          TAPi18n.__('notifications.permanent_remove_success.title')
-        );
+  remove({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox}, _id) {
+    const confirmationPrompt = {
+      title: 'Bekreftelse på slettingen',
+      message: 'Er du sikker på at du vil slette prosjektet?',
+      buttons: {
+        cancel: {
+          label: 'Nei'
+        },
+        confirm: {
+          label: 'Ja',
+          callback(result) {
+            if (result) {
+              // Remove the document
+              Meteor.call('documents.remove', _id, (err) => {
+                if (err) {
+                  NotificationManager.error(
+                    TAPi18n.__('notifications.permanent_remove_failed.message'),
+                    TAPi18n.__('notifications.permanent_remove_failed.title')
+                  );
+                } else {
+                  SelectedCtrl.resetAll();
+                  NotificationManager.success(
+                    TAPi18n.__('notifications.permanent_remove_success.message'),
+                    TAPi18n.__('notifications.permanent_remove_success.title')
+                  );
+                }
+              });
+            }
+          }
+        }
       }
-    });
+    };
+    bootbox.dialog(confirmationPrompt);
+
   },
 
-  removeSelected({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}) {
+  removeSelected({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox}) {
     const selected = _.union(SelectedCtrl.getSelected('trash_documents'),
       SelectedCtrl.getSelected('trash_templates'));
 
-    Meteor.call('documents.remove', selected, (err) => {
-      if (err) {
-        NotificationManager.error(
-          TAPi18n.__('notifications.permanent_remove_failed.message'),
-          TAPi18n.__('notifications.permanent_remove_failed.title')
-        );
-      } else {
-        SelectedCtrl.resetAll();
-        NotificationManager.success(
-          TAPi18n.__('notifications.permanent_remove_success.message'),
-          TAPi18n.__('notifications.permanent_remove_success.title')
-        );
+    const confirmationPrompt = {
+      title: 'Bekreftelse på slettingen',
+      message: 'Er du sikker på at du vil slette de valgte prosjektene?',
+      buttons: {
+        cancel: {
+          label: 'Nei'
+        },
+        confirm: {
+          label: 'Ja',
+          callback(result) {
+            if (result) {
+              // Remove the document
+              Meteor.call('documents.remove', selected, (err) => {
+                if (err) {
+                  NotificationManager.error(
+                    TAPi18n.__('notifications.permanent_remove_failed.message'),
+                    TAPi18n.__('notifications.permanent_remove_failed.title')
+                  );
+                } else {
+                  SelectedCtrl.resetAll();
+                  NotificationManager.success(
+                    TAPi18n.__('notifications.permanent_remove_success.message'),
+                    TAPi18n.__('notifications.permanent_remove_success.title')
+                  );
+                }
+              });
+            }
+          }
+        }
       }
-    });
+    };
+    bootbox.dialog(confirmationPrompt);
   },
 
   restore({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}, _id) {
@@ -154,21 +190,39 @@ export default {
     });
   },
 
-  emptyTrash({Meteor, NotificationManager, TAPi18n, SelectedCtrl}) {
-    Meteor.call('documents.emptyTrash', (err) => {
-      if (err) {
-        NotificationManager.error(
-          TAPi18n.__('notifications.empty_trash_failed.message'),
-          TAPi18n.__('notifications.empty_trash_failed.title')
-        );
-      } else {
-        SelectedCtrl.resetAll();
-        NotificationManager.success(
-          TAPi18n.__('notifications.empty_trash_success.message'),
-          TAPi18n.__('notifications.empty_trash_success.title')
-        );
+  emptyTrash({Meteor, NotificationManager, TAPi18n, SelectedCtrl, bootbox}) {
+    const confirmationPrompt = {
+      title: 'Bekreftelse på tømming av papirkurv',
+      message: 'Er du sikker på at du vil tømme papirkurven?',
+      buttons: {
+        cancel: {
+          label: 'Nei'
+        },
+        confirm: {
+          label: 'Ja',
+          callback(result) {
+            if (result) {
+              // Remove the document
+              Meteor.call('documents.emptyTrash', (err) => {
+                if (err) {
+                  NotificationManager.error(
+                    TAPi18n.__('notifications.empty_trash_failed.message'),
+                    TAPi18n.__('notifications.empty_trash_failed.title')
+                  );
+                } else {
+                  SelectedCtrl.resetAll();
+                  NotificationManager.success(
+                    TAPi18n.__('notifications.empty_trash_success.message'),
+                    TAPi18n.__('notifications.empty_trash_success.title')
+                  );
+                }
+              });
+            }
+          }
+        }
       }
-    });
+    };
+    bootbox.dialog(confirmationPrompt);
   },
 
   clearState({LocalState, SelectedCtrl}) {

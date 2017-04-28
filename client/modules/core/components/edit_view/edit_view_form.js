@@ -79,14 +79,23 @@ class EditViewForm extends React.Component {
   renderFile(file) {
     const { Collections } = this.props.context();
     return (
-      <li className="media">
-        <div className="media-left">
+      <li className="media" key={file._id}>
+        <div className="media-left" style={{
+          width: '120px',
+          overflow: 'hidden',
+          minWidth: '120px',
+          maxWidth: '120px',
+          margin: '0 10px'
+        }}>
             {file.isImage ? (
-              <a href="#" className="image-preview center-block">
+              <a
+                href="#"
+                className="image-preview center-block"
+                onClick={this.handleShowDialog.bind(this, file)}
+              >
                 <img
                   src={Collections.Files.link(file)}
                   height="70"
-                  onClick={this.handleShowDialog.bind(this, file)}
                 />
               </a>
             ) : (
@@ -96,7 +105,7 @@ class EditViewForm extends React.Component {
               />
             )}
         </div>
-        <div className="media-body">
+        <div className="media-body" style={{ paddingLeft: '10px'}} >
           <h4 className="media-heading">{file.name}</h4>
           <button
             className="btn btn-xs btn-primary"
@@ -218,21 +227,34 @@ class EditViewForm extends React.Component {
     uploadInstance.start(); // Must manually start the upload
   }
 
-  importFromClipboard() {
-    const image = clipboard.readImage();
-    const formats = clipboard.availableFormats();
-    console.log(formats);
-    let hasImage = false;
-    for (let format of formats) {
-      if (/image/.test(format)) {
-        hasImage = true;
-      }
-    }
+  importFromClipboard(event) {
+    const { LocalState, NotificationManager, TAPi18n } = this.props.context();
+    if (LocalState.get('PASTE_FILE', true)) {
+      LocalState.get('PASTE_FILE', false);
+      const image = clipboard.readImage();
+      const formats = clipboard.availableFormats();
 
-    if (hasImage) {
-      this.uploadFile(image.toDataURL(), 'png');
-    } else {
-      this.uploadFile(clipboard.readRTF(), 'rtf');
+      let hasImage = false;
+      for (let format of formats) {
+        if (/image/.test(format)) {
+          hasImage = true;
+        }
+      }
+
+      try {
+        if (hasImage) {
+          this.uploadFile(image.toDataURL(), 'png');
+        } else {
+          this.uploadFile(clipboard.readRTF(), 'rtf');
+        }
+        event.stopPropagation();
+        event.preventDefault();
+      } catch (e) {
+        NotificationManager.warning(
+          TAPi18n.__('notifications.could_not_paste_as_file.message'),
+          TAPi18n.__('notifications.could_not_paste_as_file.title')
+        );
+      }
     }
   }
 
@@ -242,7 +264,7 @@ class EditViewForm extends React.Component {
     const file = this.state.file;
 
     return (
-      <form ref="target" onPaste={this.importFromClipboard.bind(this, nodeId)}>
+      <form ref="target" onPaste={this.importFromClipboard.bind(this)}>
         <Field
           name="name"
           component={renderTextInput}

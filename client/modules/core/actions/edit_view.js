@@ -98,20 +98,10 @@ export default {
   },
 
   setAsEditable({ LocalState, Meteor, $ }, nodeId) {
-    console.log(nodeId)
     LocalState.set('EDIT_NODE', nodeId);
-    // Meteor.setTimeout(() => {
-    //   $('.row-item form')[0].scrollIntoView({
-    //     behavior: 'smooth',
-    //     block: 'start'
-    //   });
-    //   $('.row-item form input[name="name"]').focus();
-    // }, 2000);
   },
 
   unsetEditable({ LocalState }, prevNodeId) {
-    console.log(prevNodeId)
-    console.log(LocalState.get('EDIT_NODE'))
     if (prevNodeId === LocalState.get('EDIT_NODE')) {
       LocalState.set('EDIT_NODE', null);
     }

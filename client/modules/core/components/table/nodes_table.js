@@ -46,7 +46,8 @@ class NodesTableRow extends React.Component {
   }
 
   handleKeyPress(e) {
-    const { unsetEditable, nodeId } = this.props;
+    const { unsetEditable, node: { _id: nodeId } } = this.props;
+
     if (e.keyCode === 27) {
       unsetEditable(nodeId);
     }
