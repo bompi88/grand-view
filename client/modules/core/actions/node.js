@@ -19,7 +19,9 @@
 
 export default {
 
-  handleClick({Meteor, LocalState}, { _id }, e) {
+  handleClick({Meteor, LocalState}, node, e) {
+    const { _id } = node;
+    console.log(node)
     if (e.nativeEvent.which === 1) {
       Meteor.call('document.setSelectedNode', LocalState.get('CURRENT_DOCUMENT'), _id);
       LocalState.set('CURRENT_NODE', _id);

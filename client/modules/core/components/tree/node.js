@@ -3,7 +3,7 @@ import React from 'react';
 import NodeContainer from '../../containers/node';
 import ContentEditable from 'react-contenteditable';
 import {ContextMenuLayer} from 'react-contextmenu';
-import DropArea from './drop_area';
+import { DropArea, DropAreaZero } from './drop_area';
 import { DropTarget } from 'react-dnd';
 
 class NodeElement extends React.Component {
@@ -135,20 +135,10 @@ const MediaNode = ContextMenuLayer('media', (props) => {
 const dropSpecs = {
 
   drop(props, monitor) {
-    console.log(monitor.getItem());
     const { _id } = monitor.getItem();
     const { putIntoChapterNode, node: parent } = props;
-    console.log(parent);
     putIntoChapterNode({ parent: parent._id , _id });
   },
-  //
-  // hover(props) {
-  //
-  // },
-  //
-  // canDrop(props) {
-  //
-  // }
 
 };
 
@@ -209,12 +199,12 @@ class Node extends React.Component {
           display: isDragging ? 'none' : 'block'
         }}>
         {this.renderCollapseButton()}
-        { index === 0 ? <DropArea {...this.props}/> : null }
+        { index === 0 ? <DropAreaZero { ...this.props} /> : null }
         { node.nodeType === 'media' ? <MediaNode {...this.props} /> :
             connectDragSource(<div><DropTargetChapterNode {...this.props} /></div>)}
         { nodes.length > 0 ? (
           <ul>
-              { node.isCollapsed ? null : <DropArea {...this.props}/>}
+              { node.isCollapsed ? null : <DropAreaZero {...this.props}/>}
             { node.isCollapsed ? null : this.renderNodes()}
           </ul>
         ) : null }

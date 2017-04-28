@@ -328,9 +328,9 @@ export default function () {
     updateNodePosition({fromPos, toPos, _id, fromParent, toParent}) {
       console.log(fromPos, toPos, _id, fromParent, toParent)
       Nodes.update({
-        fromParent,
+        parent: fromParent,
         position: {
-          $gte: fromPos
+          $gt: fromPos
         }
       }, {
         $inc: {
@@ -339,31 +339,31 @@ export default function () {
       }, {
         multi: true,
         upsert: false
-      });
-
-      Nodes.update({
-        toParent,
-        position: {
-          $gte: toPos
-        }
-      }, {
-        $inc: {
-          position: 1
-        }
-      }, {
-        multi: true,
-        upsert: false
-      });
-
-      Nodes.update({
-        _id
-      }, {
-        $set: {
+      }, () => {
+        Nodes.update({
           parent: toParent,
-          position: toPos
-        }
-      }, {
-        upsert: false
+          position: {
+            $gte: toPos
+          }
+        }, {
+          $inc: {
+            position: 1
+          }
+        }, {
+          multi: true,
+          upsert: false
+        }, () => {
+          Nodes.update({
+            _id
+          }, {
+            $set: {
+              parent: toParent,
+              position: toPos
+            }
+          }, {
+            upsert: false
+          });
+        });
       });
     },
 
