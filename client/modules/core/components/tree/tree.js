@@ -75,7 +75,8 @@ class Tree extends React.Component {
   }
 
   render() {
-    const {currentView} = this.props;
+    const {currentView, doc} = this.props;
+    const { isTemplate } = doc;
 
     return (
       <div className="col-xs-4 structure-container">
@@ -91,7 +92,7 @@ class Tree extends React.Component {
         { currentView === 'tags' ? <TagsView /> : null }
         { currentView === 'references' ? this.renderReferencesView() : null }
 
-        <TreeFooter currentState={currentView}/>
+        <TreeFooter currentState={currentView} isTemplate={isTemplate}/>
       </div>
     );
   }

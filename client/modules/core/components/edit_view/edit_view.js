@@ -49,7 +49,7 @@ class EditView extends React.Component {
   render() {
     const { node = {} } = this.props;
     const { nodeType = 'root' } = node;
-    console.log(node)
+
     return (
       <div className="col-xs-8" style={{ paddingRight: 0, overflow: 'hidden', height: '100%' }}>
         <div className="col-xs-12 structure-container">
