@@ -27,6 +27,12 @@ export default function () {
       }
 
       const mainDocId = Collections.Documents.insert(doc);
+      Collections.Documents.update({ _id: mainDocId }, {
+        $set: {
+          selectedNode: mainDocId,
+          isSelected: true
+        }
+      });
 
       if (!updateWithTemplate) {
         return mainDocId;

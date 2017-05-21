@@ -11,9 +11,9 @@ const onPropsChange = ({ context, doc }, onData) => {
   const docId = LocalState.get('CURRENT_DOCUMENT');
 
   // If the root node is selected
-  if (nodeId === docId) {
-    if (Meteor.subscribe('documents.byId', nodeId).ready()) {
-      const node = Collections.Documents.findOne({ _id: nodeId });
+  if (!nodeId || nodeId === docId) {
+    if (Meteor.subscribe('documents.byId', docId).ready()) {
+      const node = Collections.Documents.findOne({ _id: docId });
       node.nodeType = 'root';
 
       return onData(null, { node, initialValues: node });

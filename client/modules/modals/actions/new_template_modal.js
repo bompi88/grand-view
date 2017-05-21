@@ -33,6 +33,8 @@ export default {
           TAPi18n.__('notifications.create_template_success.title')
         );
         LocalState.set('CURRENT_DOCUMENT', _id);
+        LocalState.set('CURRENT_NODE', _id);
+
         FlowRouter.go('WorkArea', {_id});
       }
       if (cb) {
