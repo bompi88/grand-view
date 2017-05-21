@@ -82,7 +82,7 @@ class Tree extends React.Component {
       <div className="col-xs-4 structure-container">
         <div className="structure-header">
 
-          <DocumentOptionsDropdown />
+          <DocumentOptionsDropdown isTemplate={isTemplate} />
 
           { currentView === 'tree' ? this.renderTreeHeader() : null }
           { currentView === 'tags' ? this.renderTagsHeader() : null }
@@ -92,7 +92,7 @@ class Tree extends React.Component {
         { currentView === 'tags' ? <TagsView /> : null }
         { currentView === 'references' ? this.renderReferencesView() : null }
 
-        <TreeFooter currentState={currentView} isTemplate={isTemplate}/>
+        <TreeFooter currentState={currentView} isTemplate={isTemplate} />
       </div>
     );
   }

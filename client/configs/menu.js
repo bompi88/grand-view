@@ -29,7 +29,16 @@ export default (context) => {
   const platform = os.platform();
   const Menu = remote.Menu;
 
-  const {LocalState, dispatch, Helpers, NotificationManager, TAPi18n, Tracker} = context;
+  const {
+    LocalState,
+    dispatch,
+    Helpers,
+    NotificationManager,
+    TAPi18n,
+    Tracker,
+    Collections
+  } = context;
+
   const resourcesRoot = _require('fs').realpathSync(remote.app.getAppPath());
 
   const CommandOrCtrl = () => {
@@ -38,6 +47,7 @@ export default (context) => {
 
   Tracker.autorun(function () {
     const currentDocument = LocalState.get('CURRENT_DOCUMENT');
+    const { isTemplate } = Collections.Documents.findOne({ _id: currentDocument }) || {};
     const lang = TAPi18n.getLanguage();
 
     const template = [
@@ -128,7 +138,7 @@ export default (context) => {
           {
             label: TAPi18n.__('menu.export_document'),
             accelerator: CommandOrCtrl() + '+E',
-            enabled: Boolean(currentDocument),
+            enabled: Boolean(currentDocument) && !Boolean(isTemplate),
             click() {
               const doc = LocalState.get('CURRENT_DOCUMENT');
 
@@ -155,7 +165,7 @@ export default (context) => {
           {
             label: TAPi18n.__('menu.export_template'),
             accelerator: CommandOrCtrl() + '+Shift+E',
-            enabled: Boolean(currentDocument),
+            enabled: Boolean(isTemplate),
             click() {
               const doc = LocalState.get('CURRENT_DOCUMENT');
 
@@ -175,7 +185,7 @@ export default (context) => {
           {
             label: TAPi18n.__('menu.generate_print'),
             accelerator: CommandOrCtrl() + '+G',
-            enabled: Boolean(currentDocument),
+            enabled: Boolean(currentDocument) && !Boolean(isTemplate),
             click() {
               const doc = LocalState.get('CURRENT_DOCUMENT');
 
