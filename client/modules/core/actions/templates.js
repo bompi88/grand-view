@@ -37,6 +37,8 @@ export default {
 
   openTemplate({LocalState, Collections, FlowRouter}, _id) {
     LocalState.set('CURRENT_DOCUMENT', _id);
+    LocalState.set('TREE_VIEW_STATE', null);
+    LocalState.set('MEDIA_NODES_VISIBLE', false);
     FlowRouter.go('WorkArea');
   },
 
