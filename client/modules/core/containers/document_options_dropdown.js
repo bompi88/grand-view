@@ -32,8 +32,8 @@ export const composer = ({ context, isTemplate }, onData) => {
       },
       {
         icon: 'glyphicon glyphicon-export',
-        label: TAPi18n.__('dropdowns.document_options.export_to_file'),
-        func: 'exportToFile'
+        label: TAPi18n.__('dropdowns.document_options.export_to_template_file'),
+        func: 'exportToTemplateFile'
       }
     ];
   } else {
@@ -107,6 +107,7 @@ export const depsMapper = (context, actions) => ({
   collapseNodes: actions.optionsDropdown.collapseNodes,
   generateDOCX: actions.optionsDropdown.generateDOCX,
   exportToFile: actions.optionsDropdown.exportToFile,
+  exportToTemplateFile: actions.optionsDropdown.exportToTemplateFile,
   openHelpModal: actions.optionsDropdown.openHelpModal,
   makeTemplate: actions.optionsDropdown.makeTemplate,
   context: () => context

@@ -30,6 +30,7 @@
       "collapse_nodes": "Collapse all elements",
       "generate_docx": "Generate printable document",
       "export_to_file": "Export project",
+      "export_to_template_file": "Export template",
       "make_template": "Make as template",
       "help": "Help"
     }

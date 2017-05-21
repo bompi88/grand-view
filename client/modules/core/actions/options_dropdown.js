@@ -53,6 +53,12 @@ export default {
     Helpers.exportDocument(context, id);
   },
 
+  exportToTemplateFile(context) {
+    const {Helpers, LocalState} = context;
+    const id = LocalState.get('CURRENT_DOCUMENT');
+    Helpers.exportDocument(context, id, true);
+  },
+
   makeTemplate({ Meteor, LocalState, NotificationManager, TAPi18n }) {
     const mainDocId = LocalState.get('CURRENT_DOCUMENT');
     Meteor.call('document.makeTemplate', mainDocId, () => {
