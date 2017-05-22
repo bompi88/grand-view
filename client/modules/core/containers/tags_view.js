@@ -6,9 +6,25 @@ import {useDeps, composeAll, composeWithTracker} from 'mantra-core';
 import TagsView from '../components/tree/tags_view';
 import {_} from 'meteor/underscore';
 
+const prepareName = (name, defaultValue) => {
+  let newName = name ? name.trim() : defaultValue.trim();
+
+  if (newName === '') {
+    newName = defaultValue.trim();
+  }
+
+  return newName;
+};
+
 const onPropsChange = ({ context, doc }, onData) => {
-  const { Meteor, LocalState, Collections } = context();
+  const { Meteor, LocalState, Collections, TAPi18n } = context();
   const mainDocId = LocalState.get('CURRENT_DOCUMENT');
+
+  const text = {
+    noName: TAPi18n.__('no_title')
+  };
+
+
 
   if (Meteor.subscribe('nodes.byDoc', mainDocId, 'media').ready()) {
     const nodes = Collections.Nodes.find({
@@ -20,7 +36,10 @@ const onPropsChange = ({ context, doc }, onData) => {
       }
     }).fetch()
     .sort((a, b) => {
-      return a.name.toLowerCase().localeCompare(b.name.toLowerCase(), 'nb');
+      let nameA = prepareName(a.name, text.noName);
+      let nameB = prepareName(b.name, text.noName);
+
+      return nameA.toLowerCase().localeCompare(nameB.toLowerCase(), 'nb');
     });
 
     const tags = {};
@@ -42,10 +61,10 @@ const onPropsChange = ({ context, doc }, onData) => {
       return a.tag.toLowerCase().localeCompare(b.tag.toLowerCase(), 'nb');
     });
 
-    return onData(null, { items });
+    return onData(null, { items, text });
   }
 
-  onData(null, {});
+  onData(null, { text });
 };
 
 export default composeAll(

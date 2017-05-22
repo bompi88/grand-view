@@ -3,15 +3,16 @@ import React from 'react';
 export default class TagsView extends React.Component {
 
   renderNode(node) {
-    const active = false; // currentState === item.state ? 'active' : '';
+    const { _id, name, isSelected } = node;
+    const { text: { noName }} = this.props;
 
     return (
       <li
-        key={node._id}
+        key={_id}
         className="node"
       >
         <span draggable="false" className="element disable-select">
-          <span className="glyphicon glyphicon-file"></span> {node.name}
+          <span className="glyphicon glyphicon-file"></span> {name ? name : noName}
         </span>
       </li>
     );

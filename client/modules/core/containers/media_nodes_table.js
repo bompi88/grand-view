@@ -16,7 +16,8 @@ export const composer = ({context, clearState, chapterNode}, onData) => {
     closeFormInfo: TAPi18n.__('edit_view.form.close_form_info'),
     references: TAPi18n.__('edit_view.references'),
     tags: TAPi18n.__('edit_view.tags'),
-    attachments: TAPi18n.__('edit_view.attachments')
+    attachments: TAPi18n.__('edit_view.attachments'),
+    noName: TAPi18n.__('no_title')
   };
 
   const props = {

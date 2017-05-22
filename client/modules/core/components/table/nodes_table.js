@@ -110,7 +110,7 @@ class NodesTableRow extends React.Component {
             </div>
           ) : (
             <div>
-              <h5 style={{ marginTop: '0' }}>{node.name ? node.name : 'No title'}</h5>
+              <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
               {node.description ? (<p>{node.description}</p>) : (<p> - </p>)}
               <ul className="node-list">
                 <li className="node-list-item">
