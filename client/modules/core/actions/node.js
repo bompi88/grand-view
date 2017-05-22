@@ -380,22 +380,6 @@ export default {
     }
   },
 
-  removeNodesMultiple({LocalState, Notifications}, result, options, ids, table) {
-    if (result) {
-
-      ids.forEach((id) => {
-        this.deleteNode(id, LocalState.get('mainDocument'));
-      });
-
-      if (table) {
-        // TODO: fix actions ?
-        GV.selectedCtrl.reset(table);
-      }
-
-      Notifications.success(options.title, options.text);
-    }
-  },
-
   removeFileCallback({Files, Nodes, Documents, Notifications}, result, fileObj, options) {
     if (result) {
 
