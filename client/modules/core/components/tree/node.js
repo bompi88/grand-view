@@ -45,14 +45,15 @@ class NodeElement extends React.Component {
       renameNode,
       isDragging,
       connectDropTarget,
-      isOver
+      isOver,
+      count
     } = this.props;
     const {_id, name, nodeType, isSelected} = node;
     const pre = (nodeType === 'media') ? (<span className="glyphicon glyphicon-file"></span>) :
       sectionLabel;
 
     const nodeTitle = name && name.length ? name : 'No title';
-    const countText = nodeType === 'media' ? '' : ' (' + nodes.length + ')';
+    const countText = nodeType === 'media' ? '' : ' (' + count + ')';
 
     const combined = nodeTitle + countText;
 

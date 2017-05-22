@@ -9,7 +9,10 @@ export const composer = (t, onData) => {
   const renameNode = LocalState.get('RENAME_NODE') || false;
   const parent = node._id;
 
-  if (Meteor.subscribe('nodes.byParent', parent).ready()) {
+  const nodesReady = Meteor.subscribe('nodes.byParent', parent).ready();
+  const countsReady = Meteor.subscribe('nodes.mediaNodeCount', parent).ready();
+
+  if (nodesReady && countsReady) {
     const selector = {
       parent
     };
@@ -27,11 +30,12 @@ export const composer = (t, onData) => {
     }
 
     const nodes = Collections.Nodes.find(selector, options).fetch();
-
+    const count = Collections.Counts.findOne({ _id: 'mediaNodeCount' + parent }).count || 0;
     onData(null, {
       nodes,
       sectionLabel,
-      renameNode
+      renameNode,
+      count
     });
   } else {
     onData(null, { sectionLabel, renameNode });

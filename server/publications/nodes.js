@@ -30,6 +30,33 @@ export default function () {
     return Nodes.find({ parent });
   });
 
+  Meteor.publish('nodes.mediaNodeCount', function (parent) {
+    const collectionName = 'counts';
+    const countId = 'mediaNodeCount' + parent;
+    const cursor = Nodes.find({ parent, nodeType: 'media' });
+
+    const count = cursor.count();
+
+    this.added(collectionName, countId, { count });
+
+    const intervalID = Meteor.setInterval(
+      () => this.changed(
+        collectionName,
+        countId,
+        { count: cursor.count() || 0 }
+      ),
+      500
+    );
+
+    this.onStop(() => {
+      if (intervalID) {
+        Meteor.clearInterval(intervalID);
+      }
+    });
+
+    return this.ready();
+  });
+
   /**
    * Publish a particular node by id
    */
