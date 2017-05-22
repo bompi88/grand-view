@@ -6,6 +6,9 @@
     "references": "References",
     "tags": "Tags",
     "attachments": "Attachments",
+    "projectDescription": "Project description",
+    "chapterView": "Chapter view",
+    "mediaView": "Edit information element",
     "form": {
       "tagsPlaceholder": "Tags",
       "tagsLabel": "Select tags",
@@ -25,6 +28,14 @@
     "root_form": {
       "title": "Title",
       "description": "Description"
+    },
+    "confButton": {
+      "expandedMode": "Expanded mode",
+      "collapsedMode": "Collapsed mode"
+    },
+    "undoRedoButton": {
+      "undo": "Undo",
+      "redo": "Redo"
     }
   }
 }

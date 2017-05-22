@@ -6,6 +6,9 @@
     "references": "Kilder",
     "tags": "Nøkkelord",
     "attachments": "Vedlegg",
+    "projectDescription": "Prosjektbeskrivelse",
+    "chapterView": "Kapittelvisning",
+    "mediaView": "Rediger informasjonselement",
     "form": {
       "tagsPlaceholder": "Nøkkelord",
       "tagsLabel": "Lag eller søk etter nøkkelord i listen",
@@ -25,6 +28,14 @@
     "root_form": {
       "title": "Tittel",
       "description": "Beskrivelse"
+    },
+    "confButton": {
+      "expandedMode": "Utvidet modus",
+      "collapsedMode": "Kollapset modus"
+    },
+    "undoRedoButton": {
+      "undo": "Angre",
+      "redo": "Gjenta"
     }
   }
 }

@@ -20,6 +20,7 @@
 /* globals _require */
 
 import debounce from 'debounce';
+import { ActionCreators } from 'redux-undo';
 const sh = _require('electron').shell;
 
 export default {
@@ -39,6 +40,18 @@ export default {
       });
     });
 
+  },
+
+  changeMode({ LocalState }, mode = 'easy') {
+    LocalState.set('SELECTED_MODE', mode);
+  },
+
+  undo({ dispatch }) {
+    dispatch(ActionCreators.undo());
+  },
+
+  redo({ dispatch }) {
+    dispatch(ActionCreators.redo());
   },
 
   searchTags({ Collections, Meteor }, inputText) {

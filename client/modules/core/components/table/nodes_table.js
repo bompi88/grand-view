@@ -73,6 +73,29 @@ class NodesTableRow extends React.Component {
     );
   }
 
+  renderNode(node) {
+    const { mode, text, openLink } = this.props;
+    if (mode === 'easy') {
+      return (
+        <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
+          <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
+        <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
+        {node.description ? (
+          <Linkify properties={{ onClick: openLink }}>
+            <p>{node.description.trim()}</p>
+          </Linkify>
+        ) : null}
+        {this.renderCategorization(node)}
+      </div>
+    );
+  }
+
   renderReferences(references) {
     const { text } = this.props;
     return (
@@ -101,13 +124,11 @@ class NodesTableRow extends React.Component {
     const {
       node = {},
       setAsEditable,
-      toggleSelected,
       isSelected,
       tableName,
       disablePointer,
-      openLink,
       editNode,
-      text
+      text,
     } = this.props;
 
     const isInEditMode = editNode === node._id;
@@ -143,17 +164,7 @@ class NodesTableRow extends React.Component {
               </div>
               <EditViewForm initialValues={node} nodeId={node._id} />
             </div>
-          ) : (
-            <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
-              <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
-              {node.description ? (
-                <Linkify properties={{ onClick: openLink }}>
-                  <p>{node.description.trim()}</p>
-                </Linkify>
-              ) : null}
-              {this.renderCategorization(node)}
-            </div>
-          )}
+          ) : this.renderNode(node)}
         </td>
       </tr>
     );

@@ -2,6 +2,8 @@ import React from 'react';
 import EditViewForm from '../../containers/edit_view_form';
 import EditRootViewForm from '../../containers/edit_root_view_form';
 import MediaNodesTable from '../../containers/media_nodes_table';
+import ConfButton from '../../containers/conf_button';
+import UndoRedoButton from '../../containers/undo_redo_button';
 
 const styles = {
   header: {
@@ -20,34 +22,45 @@ const styles = {
 
 class EditView extends React.Component {
   renderRootHeader() {
+    const { text } = this.props;
+
     return (
       <h4 className="header-text">
         <span className="glyphicon glyphicon-book" style={styles.headerIcon}>
-        </span> Prosjektbeskrivelse
+        </span> {text.projectDescription}
       </h4>
     );
   }
 
   renderChapterHeader() {
+    const { text } = this.props;
+
     return (
-      <h4 className="header-text">
-        <span className="glyphicon glyphicon-grain" style={styles.headerIcon}>
-        </span> Kapittelvisning
-      </h4>
+      <div>
+        <ConfButton />
+        <UndoRedoButton isRedo={true} />
+        <UndoRedoButton />
+        <h4 className="header-text">
+          <span className="glyphicon glyphicon-grain" style={styles.headerIcon}>
+          </span> {text.chapterView}
+        </h4>
+      </div>
     );
   }
 
   renderMediaNodeHeader() {
+    const { text } = this.props;
+
     return (
       <h4 className="header-text">
         <span className="glyphicon glyphicon-leaf" style={styles.headerIcon}>
-        </span> Rediger informasjonselement
+        </span> {text.mediaView}
       </h4>
     );
   }
 
   render() {
-    const { node = {} } = this.props;
+    const { node = {}, mode } = this.props;
     const { nodeType = 'root' } = node;
 
     return (
@@ -61,7 +74,7 @@ class EditView extends React.Component {
           <div style={styles.container} className="edit-view-container">
             { nodeType === 'root' ? <EditRootViewForm initialValues={node} nodeId={node._id}/> : null }
             { nodeType === 'media' ? <EditViewForm initialValues={node} nodeId={node._id}/> : null }
-            { nodeType === 'chapter' ? <MediaNodesTable chapterNode={node}/> : null }
+            { nodeType === 'chapter' ? <MediaNodesTable chapterNode={node} mode={mode}/> : null }
           </div>
         </div>
       </div>
