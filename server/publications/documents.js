@@ -54,26 +54,14 @@ export default function () {
       _id: { $in: ids }
     });
 
-    const fetchedDocs = docs.fetch();
-
-    let children = [];
-
-    fetchedDocs.forEach((doc) => {
-      if (doc.children) {
-        children = children.concat(doc.children);
-      }
-    });
-
     var nodes = Nodes.find({
-      _id: {
-        $in: children
+      mainDocId: {
+        $in: ids
       }
     });
-
-    var fetchedDocIds = _.pluck(fetchedDocs, '_id');
 
     var files = Files.find({
-      docId: { $in: fetchedDocIds }
+      'meta.docId': { $in: ids }
     }).cursor;
 
     return [ nodes, files, docs ];

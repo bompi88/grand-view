@@ -17,12 +17,14 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-import { FS } from 'meteor/cfs:base-package';
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { _ } from 'meteor/underscore';
 import path from 'path';
 import { HTTP } from 'meteor/http';
+import Globals from '/lib/globals';
+import { Random } from 'meteor/random';
+import fs from 'fs';
 
 import { Documents, Nodes, Files, References, Tags } from '/lib/collections';
 
@@ -96,19 +98,20 @@ export default function () {
     importResources(docs = [], nodes = [], fileDocs = [], srcPath) {
 
       const idTableNodes = {};
-      const idTableFiles = {};
 
       const importDocs = _.isArray(docs) ? docs : [ docs ];
       const importNodes = _.isArray(nodes) ? nodes : [ nodes ];
       const importFileDocs = _.isArray(fileDocs) ? fileDocs : [ fileDocs ];
 
       _.each(importDocs, (doc, key, obj) => {
-        const {_id} = doc;
+        const { _id } = doc;
         const importDoc = _.omit(doc, [
           '_id',
           'restoredAt',
           'restoredBy',
-          'restored'
+          'restored',
+          'selectedNode',
+          'isSelected'
         ]);
 
         idTableNodes[_id] = Documents.insert(importDoc);
@@ -118,8 +121,10 @@ export default function () {
 
       // Import nodes
       _.each(importNodes, (node) => {
-        const {_id, tags, references} = node;
-        const newNode = _.omit(node, '_id');
+        const { _id, tags, references } = node;
+        const newNode = _.omit(node, [ '_id', 'isSelected' ]);
+        newNode.mainDocId = idTableNodes[newNode.mainDocId];
+
         idTableNodes[_id] = Nodes.insert(newNode);
 
         if (tags && tags.length) {
@@ -152,47 +157,53 @@ export default function () {
       });
 
       // import files
-      _.each(importFileDocs, ({
-        _id,
-        nodeId,
-        docId,
-        original: {name},
-        copies: {filesStore: {key}}
-      }) => {
-        const filePath = path.resolve(srcPath + '/' + key);
+      _.each(importFileDocs, (fileObj) => {
+        const {
+          _id,
+          meta: { nodeId, docId },
+          name,
+          type,
+          size,
+          ext
+        } = fileObj;
 
-        const file = new FS.File(filePath);
-        file.name(name);
+        const oldPath = path.resolve(path.join(srcPath, _id));
+        const fileId = Random.id();
+        const newPath = path.resolve(Globals.basePath, 'files', fileId + '.' + ext);
 
-        idTableFiles[_id] = Files.insert(file, () => {
-
-          Files.update({
-            _id: idTableFiles[_id]._id
-          }, {
-            $set: {
+        fs.rename(oldPath, newPath, () => {
+          Files.addFile(newPath, {
+            fileName: name,
+            meta: {
               nodeId: idTableNodes[nodeId],
               docId: idTableNodes[docId]
-            }
-          });
+            },
+            type,
+            size,
+            fileId
+          }, (error, fileRef) => {
 
-          Nodes.update({
-            _id
-          }, {
-            $set: {
-              fileId: idTableFiles[_id]._id,
-              'original.name': name,
-              'copies.filesStore.name': name
+            if (error) {
+              return console.log(error);
             }
-          }, {
-            multi: true,
-            upsert: false
+
+            Nodes.update({
+              _id
+            }, {
+              $set: {
+                fileId: fileRef._id
+              }
+            }, {
+              multi: true,
+              upsert: false
+            });
           });
         });
       });
 
 
       // Update parent refs in children
-      nodes.forEach(({_id: nodeId, parent}) => {
+      nodes.forEach(({ _id: nodeId, parent}) => {
         Nodes.update({
           _id: idTableNodes[nodeId]
         }, {
@@ -201,20 +212,6 @@ export default function () {
           }
         });
       });
-
-      // Update the children in main document
-      _.each(docs, (doc) => {
-        doc.children = _.map(doc.children, (childId) => idTableNodes[childId]);
-
-        Documents.update({
-          _id: doc._id
-        }, {
-          $set: {
-            children: doc.children
-          }
-        });
-      });
-
 
       return true;
     },
@@ -250,7 +247,7 @@ export default function () {
     /**
      * Updates a neewly created document with the data from the template
      */
-    deepCopyTemplate({_id: docId}, {_id: templateId, children: nodeIds = []}) {
+    deepCopyTemplate({ _id: docId }, { _id: templateId, children: nodeIds = [] }) {
 
       // Get all children
       const nodes = Nodes.find({

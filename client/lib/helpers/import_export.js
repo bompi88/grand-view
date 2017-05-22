@@ -230,28 +230,15 @@ export default {
         _id: { $in: ids }
       }).fetch();
 
-      var children = [];
-
-      docs.forEach((doc) => {
-        if (doc.children) {
-          children = children.concat(doc.children);
-        }
-      });
-
       var nodes = Collections.Nodes.find({
-        _id: {
-          $in: children
+        mainDocId: {
+          $in: ids
         }
       }).fetch();
 
-
-      // find all files linked to nodes and copy the files into the new folder
-      var fileIds = _.filter(_.pluck(nodes, 'fileId'), (node) => {
-        return node;
-      });
       var files = Collections.Files.find({
-        _id: {
-          $in: fileIds || []
+        'meta.docId': {
+          $in: ids
         }
       }).fetch();
 
@@ -262,11 +249,8 @@ export default {
 
 
       async.forEach(files, (file, callback) => {
-
-        var fileName = file && file.copies && file.copies.filesStore && file.copies.filesStore.key;
-
-        var from = path.join(Globals.basePath, 'files', fileName);
-        var to = path.join(Globals.basePath, 'tmp', 'files', fileName);
+        var from = file.path;
+        var to = path.join(Globals.basePath, 'tmp', 'files', file._id);
 
         this.copyFile(from, to, callback);
 
