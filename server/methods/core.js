@@ -1,8 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Server Methods
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright 2015 Concept
+// Copyright 2017 Bjørn Bråthen, Concept NTNU
 //
 // Licensed under the Apache License, Version 2.0 (the 'License');
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
@@ -203,7 +203,7 @@ export default function () {
 
 
       // Update parent refs in children
-      nodes.forEach(({ _id: nodeId, parent}) => {
+      nodes.forEach(({ _id: nodeId, parent }) => {
         Nodes.update({
           _id: idTableNodes[nodeId]
         }, {
@@ -248,7 +248,7 @@ export default function () {
       });
     },
 
-    updateNodePosition({fromPos, toPos, _id, fromParent, toParent}) {
+    updateNodePosition({ fromPos, toPos, _id, fromParent, toParent }) {
       Nodes.update({
         parent: fromParent,
         position: {

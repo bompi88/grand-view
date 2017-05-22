@@ -1,5 +1,24 @@
-import {Meteor} from 'meteor/meteor';
-import {check, Match} from 'meteor/check';
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Meteor methods operating on a single document
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright 2017 Bjørn Bråthen, Concept NTNU
+//
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import { Meteor } from 'meteor/meteor';
+import { check, Match } from 'meteor/check';
 import { Random } from 'meteor/random';
 
 import * as Collections from '/lib/collections';
@@ -86,6 +105,7 @@ export default function () {
 
       removeNode({ _id, mainDocId, files });
     },
+
     'document.makeTemplate'(_id) {
       const { _id: oldDocId, ...doc } = Collections.Documents.findOne({ _id });
 

@@ -1,8 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Initial db adds
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright 2015 Concept
+// Copyright 2017 Bjørn Bråthen, Concept NTNU
 //
 // Licensed under the Apache License, Version 2.0 (the 'License');
 // you may not use this file except in compliance with the License.
@@ -15,47 +15,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-import { Settings, Tags } from './../../lib/collections';
-
-const tags = [
-  {
-    value: 'test',
-    label: 'test'
-  },
-  {
-    value: 'test2',
-    label: 'test2'
-  },
-  {
-    value: 'test3',
-    label: 'test3'
-  },
-  {
-    value: 'test4',
-    label: 'test4'
-  },
-  {
-    value: 'kanskje1',
-    label: 'kanskje1'
-  },
-  {
-    value: 'kanskje2',
-    label: 'kanskje2'
-  }
-];
+import { Settings } from './../../lib/collections';
 
 if (Settings.find().count() === 0) {
   Settings.insert({
     _id: 'user',
     language: 'en'
-  });
-}
-
-if (!Tags.findOne()) {
-  console.log('----> Inserting tags...');
-  tags.forEach((contact) => {
-    Tags.insert(contact);
   });
 }

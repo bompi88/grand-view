@@ -1,8 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Publications for Tags Collection
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright 2015 Concept
+// Copyright 2017 Bjørn Bråthen, Concept NTNU
 //
 // Licensed under the Apache License, Version 2.0 (the 'License');
 // you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-import {Meteor} from 'meteor/meteor';
+import { Meteor } from 'meteor/meteor';
 
-import {Tags} from './../../lib/collections';
+import { Tags } from './../../lib/collections';
 
 export default function () {
 
@@ -31,10 +31,5 @@ export default function () {
       label: { $regex: queryText, $options: 'i' }
     });
   });
-
-  /**
-   * Publish all tags
-   */
-  Meteor.publish('tags.all', function () { return Tags.find(); });
 
 }

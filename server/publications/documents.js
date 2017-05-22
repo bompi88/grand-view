@@ -1,8 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Publications for Documents
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-// Copyright 2015 Concept
+// Copyright 2017 Bjørn Bråthen, Concept NTNU
 //
 // Licensed under the Apache License, Version 2.0 (the 'License');
 // you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
-import {Meteor} from 'meteor/meteor';
-import {_} from 'meteor/underscore';
+import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
 
-import {Documents, Nodes, Files} from './../../lib/collections';
+import { Documents, Nodes, Files } from './../../lib/collections';
 
 export default function () {
 
@@ -51,7 +51,9 @@ export default function () {
 
     // get the document
     const docs = Documents.find({
-      _id: { $in: ids }
+      _id: {
+        $in: ids
+      }
     });
 
     var nodes = Nodes.find({
@@ -61,7 +63,9 @@ export default function () {
     });
 
     var files = Files.find({
-      'meta.docId': { $in: ids }
+      'meta.docId': {
+        $in: ids
+      }
     }).cursor;
 
     return [ nodes, files, docs ];
