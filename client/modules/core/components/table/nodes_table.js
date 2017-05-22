@@ -19,6 +19,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Linkify from 'react-linkify';
 
 import EditViewForm from '../../containers/edit_view_form';
 
@@ -63,14 +64,48 @@ class NodesTableRow extends React.Component {
     document.removeEventListener('keydown', this.handleKeyPress.bind(this));
   }
 
+  renderTags(tags) {
+    const { text } = this.props;
+    return (
+      <li className="node-list-item">
+        <b>{text.tags}:</b> {tags.map((n) => n.label).join(', ')}
+      </li>
+    );
+  }
+
+  renderReferences(references) {
+    const { text } = this.props;
+    return (
+      <li className="node-list-item">
+        <b>{text.references}:</b> {references.map((n) => n.label).join(', ')}
+      </li>
+    );
+  }
+
+  renderCategorization(node) {
+    const { tags = [], references = []} = node;
+
+    if (!tags.length && !references.length) {
+      return null;
+    }
+
+    return (
+      <ul className="node-list">
+        {tags.length ? this.renderTags(tags) : null}
+        {references.length ? this.renderReferences(references) : null}
+      </ul>
+    );
+  }
+
   render() {
     const {
-      node,
+      node = {},
       setAsEditable,
       toggleSelected,
       isSelected,
       tableName,
       disablePointer,
+      openLink,
       editNode,
       text
     } = this.props;
@@ -109,17 +144,14 @@ class NodesTableRow extends React.Component {
               <EditViewForm initialValues={node} nodeId={node._id} />
             </div>
           ) : (
-            <div>
+            <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
               <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
-              {node.description ? (<p>{node.description}</p>) : (<p> - </p>)}
-              <ul className="node-list">
-                <li className="node-list-item">
-                  <b>{text.references}:</b> { node.references ? node.references.map((n) => n.label).join(', ') : null}
-                </li>
-                <li className="node-list-item">
-                  <b>{text.tags}:</b> { node.tags ? node.tags.map((n) => n.label).join(', ') : null}
-                  </li>
-              </ul>
+              {node.description ? (
+                <Linkify properties={{ onClick: openLink }}>
+                  <p>{node.description.trim()}</p>
+                </Linkify>
+              ) : null}
+              {this.renderCategorization(node)}
             </div>
           )}
         </td>

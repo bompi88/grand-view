@@ -53,6 +53,7 @@ export const depsMapper = (context, actions) => ({
   hasAllSelected: actions.templates.hasAllSelected,
   setAsEditable: actions.editView.setAsEditable,
   clearState: actions.templates.clearState,
+  openLink: actions.editView.openLink,
   context: () => context
 });
 

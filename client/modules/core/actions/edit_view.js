@@ -17,7 +17,10 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
+/* globals _require */
+
 import debounce from 'debounce';
+const sh = _require('electron').shell;
 
 export default {
 
@@ -127,6 +130,14 @@ export default {
     }});
 
     Meteor.call('insertReferences', references);
+  },
+
+  openLink({}, e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const link = e.target.getAttribute('href');
+    sh.openExternal(link);
   },
 
   setDescription: debounce(({LocalState, Collections}, description, _id) => {
