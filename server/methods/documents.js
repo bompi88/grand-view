@@ -83,9 +83,9 @@ export default function () {
       check(ids, Match.OneOf(String, [ String ]));
 
       if (_.isArray(ids)) {
-        Collections.Documents.softRemove({_id: { $in: ids }});
+        Collections.Documents.softRemove({ _id: { $in: ids } });
       } else {
-        Collections.Documents.softRemove({_id: ids});
+        Collections.Documents.softRemove({ _id: ids });
       }
     },
 
@@ -93,9 +93,13 @@ export default function () {
       check(ids, Match.OneOf(String, [ String ]));
 
       if (_.isArray(ids)) {
-        Collections.Documents.remove({_id: { $in: ids }});
+        Collections.Documents.remove({ _id: { $in: ids } });
+        Collections.Nodes.remove({ mainDocId: { $in: ids }});
+        Collections.Files.remove({ 'meta.docId': { $in: ids }});
       } else {
-        Collections.Documents.remove({_id: ids});
+        Collections.Documents.remove({ _id: ids });
+        Collections.Nodes.remove({ mainDocId: ids });
+        Collections.Files.remove({ 'meta.docId': ids });
       }
     },
 
