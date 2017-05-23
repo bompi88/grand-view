@@ -94,13 +94,18 @@ class NodesTable extends React.Component {
       hasAllSelected,
       selectAll,
       deselectAll,
-      tableName
+      tableName,
+      text,
+      removeSelectedNodes,
+      isDisabledOnNone
     } = this.props;
 
     const {_} = this.props.context();
 
     const checked = hasAllSelected(nodes && nodes.length || 0, tableName);
     const ids = _.pluck(nodes, '_id');
+
+    const disabled = isDisabledOnNone(tableName) ? 'disabled' : '';
 
     return (
       <table className="table table-hover">
@@ -116,6 +121,34 @@ class NodesTable extends React.Component {
               />
             </th>
             <th>
+              <div className="dropup pull-right" style={{ marginRight: '10px' }}>
+                <button
+                  className="btn btn-default btn-xs dropdown-toggle"
+                  type="button"
+                  data-toggle="dropdown"
+                  aria-expanded="true"
+                >
+                  {text.chooseAction} <span className="caret"></span>
+                </button>
+                <ul
+                  className="dropdown-menu dropdown-menu-right"
+                  role="menu"
+                  aria-labelledby="media-node-dropdown"
+                >
+                  <li
+                    role="presentation"
+                    className={disabled}
+                    onClick={disabled === 'disabled' ? null : removeSelectedNodes.bind(this, tableName)}>
+                    <a
+                      role="menuitem"
+                      tabIndex="-1"
+                      href="#"
+                    >
+                      <span className="glyphicon glyphicon-remove"></span> {text.removeSelected}
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </th>
           </tr>
         </thead>

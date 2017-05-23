@@ -17,7 +17,9 @@ export const composer = ({context, clearState, chapterNode}, onData) => {
     references: TAPi18n.__('edit_view.references'),
     tags: TAPi18n.__('edit_view.tags'),
     attachments: TAPi18n.__('edit_view.attachments'),
-    noName: TAPi18n.__('no_title')
+    noName: TAPi18n.__('no_title'),
+    chooseAction: TAPi18n.__('chooseAction'),
+    removeSelected: TAPi18n.__('removeSelected')
   };
 
   const props = {
@@ -55,10 +57,12 @@ export const depsMapper = (context, actions) => ({
   selectAll: actions.templates.selectAll,
   deselectAll: actions.templates.deselectAll,
   hasAllSelected: actions.templates.hasAllSelected,
+  isDisabledOnNone: actions.templates.isDisabledOnNone,
   setAsEditable: actions.editView.setAsEditable,
   clearState: actions.templates.clearState,
   openLink: actions.editView.openLink,
   updateMediaNodePosition: actions.editView.updateMediaNodePosition,
+  removeSelectedNodes: actions.contextMenus.removeSelectedNodes,
   context: () => context
 });
 

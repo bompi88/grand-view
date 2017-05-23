@@ -15,5 +15,7 @@
   "file_path": "File path",
   "references": "References",
   "tags": "Tags",
-  "name": "Name"
+  "name": "Name",
+  "removeSelected": "Remove selected",
+  "chooseAction": "Choose action"
 }

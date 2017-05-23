@@ -17,7 +17,7 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-export default {
+const actions = {
 
   addChapter(context, e, data) {
     const { node } = data;
@@ -66,4 +66,62 @@ export default {
     Meteor.call('document.setSelectedNode', LocalState.get('CURRENT_DOCUMENT'), _id);
     LocalState.set('CURRENT_NODE', _id);
   },
+
+  removeSelectedNodes(context, tableName, e) {
+    const {
+      NotificationManager,
+      SelectedCtrl,
+      Collections,
+      TAPi18n,
+      bootbox
+    } = context;
+
+    const selectedIds = SelectedCtrl.getSelected(tableName);
+
+    const nodes = Collections.Nodes.find({
+      _id: {
+        $in: selectedIds
+      }
+    });
+
+
+    let message = 'Er du sikker på at du vil slette informasjonselementene? NB: ' +
+      'Dette vil slette alle filer og data knyttet til disse informasjonselementene</br></br>';
+
+    const nodeList = nodes.map((node, i) => {
+      const name = (!node.name || node.name.trim() === '') ? TAPi18n.__('no_title') : node.name;
+      return `${i + 1}. ${name}`;
+    });
+
+    message += nodeList.join('</br>');
+    const confirmationPrompt = {
+      title: 'Bekreftelse på slettingen',
+      message,
+      buttons: {
+        cancel: {
+          label: 'Nei'
+        },
+        confirm: {
+          label: 'Ja',
+          callback(result) {
+            if (result) {
+              // Remove the media nodes
+              nodes.forEach((node) => {
+                actions.removeMediaNode(context, e, node);
+              });
+              SelectedCtrl.reset(tableName);
+              // Show sucess message
+              NotificationManager.success(
+                'Informasjonselementene ble slettet fra systemet.',
+                'Sletting fullført'
+              );
+            }
+          }
+        }
+      }
+    };
+    bootbox.dialog(confirmationPrompt);
+  }
 };
+
+export default actions;

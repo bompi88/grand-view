@@ -107,7 +107,8 @@ export default class NodesTableRow extends React.Component {
       text,
       isDragging,
       connectDragSource,
-      connectDropTarget
+      connectDropTarget,
+      toggleSelected
     } = this.props;
 
     const opacity = isDragging ? 0 : 1;
@@ -125,7 +126,7 @@ export default class NodesTableRow extends React.Component {
         <td
           key="checkbox"
           className="row-item"
-          onClick={(e) => { e.stopPropagation(); }}
+          onClick={toggleSelected.bind(this, node._id, tableName)}
           style={{
             width: '20px'
           }}

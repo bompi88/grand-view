@@ -15,5 +15,7 @@
   "file_path": "Filbane",
   "references": "Kilder",
   "tags": "Nøkkelord",
-  "name": "Navn"
+  "name": "Navn",
+  "removeSelected": "Slett markerte",
+  "chooseAction": "Velg handling"
 }

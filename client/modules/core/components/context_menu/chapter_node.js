@@ -4,7 +4,7 @@ import React from 'react';
 export default class ChapterNode extends React.Component {
 
   showAddMediaNode() {
-    const {showMediaNodes} = this.props;
+    const { showMediaNodes } = this.props;
 
     if (showMediaNodes) {
       return (

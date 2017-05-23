@@ -19,7 +19,7 @@
 
 export default {
 
-  handleClick({Meteor, LocalState}, node, e) {
+  handleClick({ Meteor, LocalState }, node, e) {
     const { _id } = node;
     console.log(node)
     if (e.nativeEvent.which === 1) {
@@ -28,7 +28,7 @@ export default {
     }
   },
 
-  collapseNode({Meteor, LocalState, Collections}, { _id }) {
+  collapseNode({ Meteor, LocalState, Collections }, { _id }) {
     Collections.Nodes.update({
       _id
     }, {
@@ -38,7 +38,7 @@ export default {
     });
   },
 
-  expandNode({Meteor, LocalState, Collections}, { _id }) {
+  expandNode({ Meteor, LocalState, Collections }, { _id }) {
     Collections.Nodes.update({
       _id
     }, {
@@ -250,7 +250,7 @@ export default {
     });
   },
 
-  insertNodeOfType({LocalState, Meteor, Nodes, Documents, $},
+  insertNodeOfType({ LocalState, Meteor, Nodes, Documents, $ },
     input, type, t, noRedirect, mainDocId) {
 
     let data = input;
