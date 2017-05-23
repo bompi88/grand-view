@@ -7,9 +7,6 @@ import Node from './node';
 import TagsView from '../../containers/tags_view';
 import RootNode from '../../containers/root_node';
 
-import HTML5Backend from 'react-dnd-html5-backend';
-import { DragDropContext } from 'react-dnd';
-
 class Tree extends React.Component {
 
   renderNodes() {
@@ -98,4 +95,4 @@ class Tree extends React.Component {
   }
 }
 
-export default DragDropContext(HTML5Backend)(Tree);
+export default Tree;

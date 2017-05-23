@@ -248,12 +248,72 @@ export default function () {
       });
     },
 
+    updateMediaNodePosition({ toPos, _id, toParent}) {
+
+      let newParent;
+
+      const node = Nodes.findOne({ _id });
+
+      const {
+        parent: oldParent,
+        position: fromPos
+      } = node;
+
+      if (!toParent) {
+        newParent = oldParent;
+      }
+
+      Nodes.update({
+        parent: oldParent,
+        position: {
+          $gt: fromPos
+        },
+        nodeType: 'media',
+        _id: { $ne: _id }
+      }, {
+        $inc: {
+          position: -1
+        }
+      }, {
+        multi: true,
+        upsert: false
+      }, () => {
+        Nodes.update({
+          parent: newParent,
+          position: {
+            $gte: toPos + 1
+          },
+          nodeType: 'media',
+          _id: { $ne: _id }
+        }, {
+          $inc: {
+            position: 1
+          }
+        }, {
+          multi: true,
+          upsert: false
+        }, () => {
+          Nodes.update({
+            _id
+          }, {
+            $set: {
+              parent: newParent,
+              position: toPos + 1
+            }
+          }, {
+            upsert: false
+          });
+        });
+      });
+    },
+
     updateNodePosition({ fromPos, toPos, _id, fromParent, toParent }) {
       Nodes.update({
         parent: fromParent,
         position: {
           $gt: fromPos
-        }
+        },
+        nodeType: 'chapter'
       }, {
         $inc: {
           position: -1
@@ -266,7 +326,9 @@ export default function () {
           parent: toParent,
           position: {
             $gte: toPos
-          }
+          },
+          nodeType: 'chapter',
+          _id: { $not: _id }
         }, {
           $inc: {
             position: 1

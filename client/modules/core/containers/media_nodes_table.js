@@ -30,6 +30,10 @@ export const composer = ({context, clearState, chapterNode}, onData) => {
     const nodes = Collections.Nodes.find({
       parent,
       nodeType: 'media'
+    }, {
+      sort: {
+        position: 1
+      }
     }).fetch();
 
     onData(null, {
@@ -54,6 +58,7 @@ export const depsMapper = (context, actions) => ({
   setAsEditable: actions.editView.setAsEditable,
   clearState: actions.templates.clearState,
   openLink: actions.editView.openLink,
+  updateMediaNodePosition: actions.editView.updateMediaNodePosition,
   context: () => context
 });
 

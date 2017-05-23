@@ -1,0 +1,85 @@
+import { composeAll } from 'mantra-core';
+import { findDOMNode } from 'react-dom';
+import { DragSource, DropTarget } from 'react-dnd';
+import NodesTableRow from '../components/table/nodes_table_row';
+
+const dragSource = {
+  beginDrag(props) {
+    const { node, index } = props;
+    const { _id } = node;
+
+    return {
+      _id,
+      index
+    };
+  },
+};
+
+const dropTarget = {
+  hover(props, monitor, component) {
+    const { index } = props;
+    const hoverIndex = index;
+    const dragIndex = monitor.getItem().index;
+
+    // Don't replace items with themselves
+    if (dragIndex === hoverIndex) {
+      return;
+    }
+
+    // Determine rectangle on screen
+    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
+
+    // Get vertical middle
+    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+
+    // Determine mouse position
+    const clientOffset = monitor.getClientOffset();
+
+    // Get pixels to the top
+    const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+    // Dragging downwards
+    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
+      return;
+    }
+
+    // Dragging upwards
+    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
+      return;
+    }
+
+    // Time to actually perform the action
+    props.moveNode(dragIndex, hoverIndex);
+
+    monitor.getItem().index = hoverIndex;
+  },
+
+  drop(props, monitor) {
+    const { _id } = monitor.getItem();
+    const { index } = props;
+    const dropIndex = index;
+
+    props.updateMediaNodePosition({
+      toPos: dropIndex,
+      _id
+    });
+  }
+};
+const collectDrop = (connect) => {
+  return {
+    connectDropTarget: connect.dropTarget()
+  };
+};
+
+const collectDrag = (connect, monitor) => {
+  return {
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  };
+};
+
+
+export default composeAll(
+  DropTarget('media-node', dropTarget, collectDrop),
+  DragSource('media-node', dragSource, collectDrag)
+)(NodesTableRow);

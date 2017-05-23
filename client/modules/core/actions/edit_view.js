@@ -54,6 +54,10 @@ export default {
     dispatch(ActionCreators.redo());
   },
 
+  updateMediaNodePosition({ Meteor }, { toPos, _id, toParent }) {
+    Meteor.call('updateMediaNodePosition', { toPos, _id, toParent });
+  },
+
   searchTags({ Collections, Meteor }, inputText) {
     if (!inputText) {
       return Promise.resolve();

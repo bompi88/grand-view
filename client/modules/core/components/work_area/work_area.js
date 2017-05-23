@@ -3,7 +3,10 @@ import React from 'react';
 import Tree from '../../containers/tree_view';
 import EditView from '../../containers/edit_view';
 
-export default class WorkArea extends React.Component {
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DragDropContext } from 'react-dnd';
+
+class WorkArea extends React.Component {
 
   render() {
     const {text, gotoDocuments, createNewDocument, doc} = this.props;
@@ -56,3 +59,5 @@ export default class WorkArea extends React.Component {
     );
   }
 }
+
+export default DragDropContext(HTML5Backend)(WorkArea);
