@@ -7,6 +7,15 @@ import EditViewForm from '../../containers/edit_view_form';
 
 export default class NodesTableRow extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.setDragable = this.setDragable.bind(this);
+    this.unsetDragable = this.unsetDragable.bind(this);
+    this.state = {
+      dragable: true
+    };
+  }
+
   handleClick(e) {
     const { unsetEditable, nodeId } = this.props;
     const target = ReactDOM.findDOMNode(this.refs.target);
@@ -96,6 +105,18 @@ export default class NodesTableRow extends React.Component {
     );
   }
 
+  setDragable() {
+    this.setState({
+      dragable: true
+    });
+  }
+
+  unsetDragable() {
+    this.setState({
+      dragable: false
+    });
+  }
+
   render() {
     const {
       node = {},
@@ -119,7 +140,7 @@ export default class NodesTableRow extends React.Component {
     const checked = isSelected(node._id, tableName) ? 'checked' : '';
     // onChange={toggleSelected.bind(this, node._id, tableName)}
 
-    if (sortable) {
+    if (this.state.dragable && sortable) {
       return (connectDragSource(connectDropTarget(
         <tr
           className={isInEditMode || disablePointer ? 'table-row' : 'table-row clickable-row'}
@@ -147,7 +168,12 @@ export default class NodesTableRow extends React.Component {
                   __html: text.closeFormInfo
                 }}>
                 </div>
-                <EditViewForm initialValues={node} nodeId={node._id} />
+                <EditViewForm
+                  initialValues={node}
+                  nodeId={node._id}
+                  setDragable={this.setDragable}
+                  unsetDragable={this.unsetDragable}
+                />
               </div>
             ) : this.renderNode(node)}
           </td>
@@ -182,7 +208,12 @@ export default class NodesTableRow extends React.Component {
                 __html: text.closeFormInfo
               }}>
               </div>
-              <EditViewForm initialValues={node} nodeId={node._id} />
+              <EditViewForm
+                initialValues={node}
+                nodeId={node._id}
+                setDragable={this.setDragable}
+                unsetDragable={this.unsetDragable}
+              />
             </div>
           ) : this.renderNode(node)}
         </td>

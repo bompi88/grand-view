@@ -259,7 +259,16 @@ class EditViewForm extends React.Component {
   }
 
   render() {
-    const { setDescription, setName, change, nodeId, text, files } = this.props;
+    const {
+      setDescription,
+      setName,
+      change,
+      nodeId,
+      text,
+      files,
+      setDragable,
+      unsetDragable
+    } = this.props;
 
     const file = this.state.file;
 
@@ -276,6 +285,8 @@ class EditViewForm extends React.Component {
             change('name', e.target.value);
             setName(e.target.value, nodeId);
           }}
+          onMouseEnter={unsetDragable}
+          onMouseLeave={setDragable}
         />
         <Field
           name="description"
@@ -289,6 +300,8 @@ class EditViewForm extends React.Component {
             change('description', e.target.value);
             setDescription(e.target.value, nodeId);
           }}
+          onMouseEnter={unsetDragable}
+          onMouseLeave={setDragable}
         />
         <Field
           name="tags"
@@ -301,6 +314,8 @@ class EditViewForm extends React.Component {
           promptTextCreator={(i) => { return text.createTag + ' \"' + i + '\"'; }}
           removeText={text.removeItem}
           noResultsText={text.noResultsText}
+          onMouseEnter={unsetDragable}
+          onMouseLeave={setDragable}
         />
         <Field
           name="references"
@@ -313,6 +328,8 @@ class EditViewForm extends React.Component {
           promptTextCreator={(i) => { return text.createReference + ' \"' + i + '\"'; }}
           removeText={text.removeItem}
           noResultsText={text.noResultsText}
+          onMouseEnter={unsetDragable}
+          onMouseLeave={setDragable}
         />
       <label>{text.attachments}</label>
       { files ? this.renderFiles(files) : null }

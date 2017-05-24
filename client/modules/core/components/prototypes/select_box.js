@@ -63,7 +63,9 @@ class SelectBox extends Component {
       style,
       promptTextCreator,
       removeText,
-      noResultsText
+      noResultsText,
+      onMouseEnter,
+      onMouseLeave
     } = this.props;
 
     let SelectComponent;
@@ -95,6 +97,8 @@ class SelectBox extends Component {
           isLoading={this.state.isLoading}
           promptTextCreator={promptTextCreator}
           noResultsText={noResultsText}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
           optionRenderer={(option) => {
             return (
               <div>

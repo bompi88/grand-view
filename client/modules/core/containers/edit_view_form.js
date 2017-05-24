@@ -5,7 +5,7 @@
 import {useDeps, composeAll, composeWithTracker} from 'mantra-core';
 import EditViewForm from '../components/edit_view/edit_view_form';
 
-const onPropsChange = ({ context }, onData) => {
+const onPropsChange = ({ context, setDragable, unsetDragable }, onData) => {
   const { TAPi18n, Meteor, Collections, LocalState } = context();
   const nodeId = LocalState.get('EDIT_NODE');
 
@@ -25,10 +25,10 @@ const onPropsChange = ({ context }, onData) => {
 
   if (Meteor.subscribe('files.byNode').ready()) {
     const files = Collections.Files.find({ 'meta.nodeId': nodeId }).fetch();
-    return onData(null, { text, files });
+    return onData(null, { text, files, setDragable, unsetDragable });
   }
 
-  onData(null, { text });
+  onData(null, { text, setDragable, unsetDragable });
 };
 
 export const depsMapper = (context, actions) => ({

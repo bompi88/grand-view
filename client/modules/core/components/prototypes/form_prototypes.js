@@ -16,7 +16,9 @@ export const renderTextInput = (field) => {
     type,
     input,
     label,
-    onChange
+    onChange,
+    onMouseEnter,
+    onMouseLeave
   } = field;
 
   let customInput;
@@ -42,6 +44,8 @@ export const renderTextInput = (field) => {
         autoComplete={autoComplete}
         rows={rows}
         type={type}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
         {...customInput}
       />
       <FormControl.Feedback className="form-control-feedback-default"/>
