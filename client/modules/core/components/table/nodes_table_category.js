@@ -166,7 +166,7 @@ class NodesTableCateory extends React.Component {
     return (
       <div className="row default-table">
         <div className="col-xs-12">
-            <h4>{category}</h4>
+            <h4>{category !== 'undefined' ? category : null}</h4>
             <div className="panel panel-default">
               <div className="panel-heading" style={styles.heading}>
                 <b>{text.tableHeader}</b>
