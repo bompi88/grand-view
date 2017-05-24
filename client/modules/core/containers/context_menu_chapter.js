@@ -1,11 +1,10 @@
 import ContextMenu from '../components/context_menu/context_menu';
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
-export const composer = ({context, actions}, onData) => {
-  const {TAPi18n, LocalState} = context();
+export const composer = ({ context, actions }, onData) => {
+  const { TAPi18n } = context();
   const a = actions();
 
-  const showNodes = LocalState.get('MEDIA_NODES_VISIBLE');
   const identifier = 'chapter';
 
   const menuItems = [
@@ -32,16 +31,7 @@ export const composer = ({context, actions}, onData) => {
     }
   ];
 
-  if (showNodes) {
-    menuItems.splice(1, 0, {
-      id: 'add-node',
-      label: TAPi18n.__('context_menus.add_media_node'),
-      icon: 'glyphicon glyphicon-plus',
-      handleClick: a.contextMenus.addMediaNode
-    });
-  }
-
-  onData(null, {menuItems, identifier});
+  onData(null, { menuItems, identifier });
 };
 
 export default composeAll(

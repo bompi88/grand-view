@@ -5,7 +5,6 @@ export const composer = (t, onData) => {
   const {context, node, sectionLabel} = t;
   const {Meteor, Collections, LocalState} = context();
 
-  const showMediaNodes = LocalState.get('MEDIA_NODES_VISIBLE') || false;
   const renameNode = LocalState.get('RENAME_NODE') || false;
   const parent = node._id;
 
@@ -14,20 +13,13 @@ export const composer = (t, onData) => {
 
   if (nodesReady && countsReady) {
     const selector = {
-      parent
+      parent,
+      nodeType: 'chapter'
     };
 
-    const options = {};
-
-    if (showMediaNodes) {
-      options.sort = [
-        [ 'nodeType', 'asc' ],
-        [ 'position', 'asc' ]
-      ];
-    } else {
-      options.sort = { position: 1 };
-      selector.nodeType = 'chapter';
-    }
+    const options = {
+      sort: { position: 1 }
+    };
 
     const nodes = Collections.Nodes.find(selector, options).fetch();
     const count = Collections.Counts.findOne({ _id: 'mediaNodeCount' + parent }).count || 0;
@@ -38,7 +30,7 @@ export const composer = (t, onData) => {
       count
     });
   } else {
-    onData(null, { sectionLabel, renameNode });
+    onData(null, { sectionLabel, renameNode, count: 0 });
   }
 
 };

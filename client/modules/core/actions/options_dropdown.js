@@ -19,12 +19,6 @@
 
 export default {
 
-  toggleMediaNodes({LocalState}) {
-    const showMediaNodes = LocalState.get('MEDIA_NODES_VISIBLE') || false;
-
-    return LocalState.set('MEDIA_NODES_VISIBLE', !showMediaNodes);
-  },
-
   createNewChapter(context) {
     const {Helpers, Collections, LocalState} = context;
     const _id = LocalState.get('CURRENT_DOCUMENT');

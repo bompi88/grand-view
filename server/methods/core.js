@@ -130,10 +130,10 @@ export default function () {
         if (tags && tags.length) {
           _.each(tags, (tag) => {
             Tags.update({
-              value: tag.toLowerCase()
+              value: tag.value.toLowerCase()
             }, {
               $setOnInsert: {
-                text: tag
+                text: tag.label
               }
             }, {
               upsert: true
@@ -144,10 +144,10 @@ export default function () {
         if (references && references.length) {
           _.each(references, (reference) => {
             References.update({
-              value: reference.toLowerCase()
+              value: reference.value.toLowerCase()
             }, {
               $setOnInsert: {
-                text: reference
+                text: reference.label
               }
             }, {
               upsert: true

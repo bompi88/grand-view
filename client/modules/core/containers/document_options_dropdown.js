@@ -2,8 +2,7 @@ import OptionsDropdown from '../components/options_dropdown/options_dropdown';
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
 export const composer = ({ context, isTemplate }, onData) => {
-  const {TAPi18n, LocalState} = context();
-  const showMediaNodes = LocalState.get('MEDIA_NODES_VISIBLE');
+  const { TAPi18n } = context();
 
   let items;
 
@@ -38,15 +37,6 @@ export const composer = ({ context, isTemplate }, onData) => {
     ];
   } else {
     items = [
-      {
-        icon: showMediaNodes ? 'glyphicon glyphicon-eye-close' : 'glyphicon glyphicon-eye-open',
-        label: showMediaNodes ? TAPi18n.__('dropdowns.document_options.hide_media_nodes') :
-          TAPi18n.__('dropdowns.document_options.show_media_nodes'),
-        func: 'toggleMediaNodes'
-      },
-      {
-        divider: true
-      },
       {
         icon: 'glyphicon glyphicon-plus',
         label: TAPi18n.__('dropdowns.document_options.create_chapter'),
@@ -85,15 +75,7 @@ export const composer = ({ context, isTemplate }, onData) => {
         icon: 'glyphicon glyphicon-duplicate',
         label: TAPi18n.__('dropdowns.document_options.make_template'),
         func: 'makeTemplate'
-      },
-      {
-        divider: true
-      },
-      {
-        icon: 'glyphicon glyphicon-question-sign',
-        label: TAPi18n.__('dropdowns.document_options.help'),
-        func: 'openHelpModal'
-      },
+      }
     ];
   }
 
@@ -101,7 +83,6 @@ export const composer = ({ context, isTemplate }, onData) => {
 };
 
 export const depsMapper = (context, actions) => ({
-  toggleMediaNodes: actions.optionsDropdown.toggleMediaNodes,
   createNewChapter: actions.optionsDropdown.createNewChapter,
   expandNodes: actions.optionsDropdown.expandNodes,
   collapseNodes: actions.optionsDropdown.collapseNodes,

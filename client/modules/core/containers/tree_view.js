@@ -1,11 +1,10 @@
 import Tree from '../components/tree/tree';
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
-export const composer = ({context}, onData) => {
-  const {Meteor, LocalState, Collections, TAPi18n} = context();
+export const composer = ({ context }, onData) => {
+  const { Meteor, LocalState, Collections, TAPi18n } = context();
 
   const _id = LocalState.get('CURRENT_DOCUMENT');
-  const showMediaNodes = LocalState.get('MEDIA_NODES_VISIBLE') || false;
   const currentView = LocalState.get('TREE_VIEW_STATE') || 'tree';
 
   const text = {
@@ -21,20 +20,13 @@ export const composer = ({context}, onData) => {
 
   if (Meteor.subscribe('nodes.byParent', _id)) {
     const selector = {
-      parent: _id
+      parent: _id,
+      nodeType: 'chapter'
     };
 
-    const options = {};
-
-    if (showMediaNodes) {
-      options.sort = [
-        [ 'nodeType', 'asc' ],
-        [ 'position', 'asc' ]
-      ];
-    } else {
-      options.sort = { position: 1 };
-      selector.nodeType = 'chapter';
-    }
+    const options = {
+      sort: { position: 1 }
+    };
 
     const nodes = Collections.Nodes.find(selector, options).fetch();
 
@@ -47,7 +39,7 @@ export const composer = ({context}, onData) => {
   }
 };
 
-export const depsMapper = (context, actions) => ({
+export const depsMapper = (context) => ({
   context: () => context
 });
 
