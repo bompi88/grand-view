@@ -361,7 +361,7 @@ function createWindow() {
 
     mainWindow.loadURL(url);
     global.mainWindow = mainWindow;
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
     process.on('uncaughtException', cleanup);
 
     mainWindow.on('closed', () => {
