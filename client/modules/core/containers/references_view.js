@@ -1,5 +1,5 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// Tags View Container
+// References View Container
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import {useDeps, composeAll, composeWithTracker} from 'mantra-core';
@@ -22,8 +22,8 @@ const onPropsChange = ({ context, doc }, onData) => {
 
   const text = {
     noName: TAPi18n.__('no_title'),
-    emptySet: TAPi18n.__('tree_view.no_tags'),
-    header: TAPi18n.__('edit_view.tableHeaderTags'),
+    emptySet: TAPi18n.__('tree_view.no_references'),
+    header: TAPi18n.__('edit_view.tableHeaderReferences'),
     uncategorized: TAPi18n.__('uncategorized')
   };
 
@@ -43,26 +43,26 @@ const onPropsChange = ({ context, doc }, onData) => {
       return nameA.toLowerCase().localeCompare(nameB.toLowerCase(), 'nb');
     });
 
-    const tags = {};
+    const references = {};
     const emptyId = undefined;
 
     nodes.forEach((node) => {
-      if (node.tags && node.tags.length) {
-        node.tags.forEach((tag) => {
-          if (!tags[tag.value]) {
-            tags[tag.value] = [];
+      if (node.references && node.references.length) {
+        node.references.forEach((reference) => {
+          if (!references[reference.value]) {
+            references[reference.value] = [];
           }
-          tags[tag.value].push(node);
+          references[reference.value].push(node);
         });
       } else {
-        if (!tags[emptyId]) {
-          tags[emptyId] = [];
+        if (!references[emptyId]) {
+          references[emptyId] = [];
         }
-        tags[emptyId].push(node);
+        references[emptyId].push(node);
       }
     });
 
-    const items = _.map(tags, (nds, category = 'undefined') => {
+    const items = _.map(references, (nds, category) => {
       return { category, nodes: nds, count: nds.length };
     }).sort((a, b) => {
       if (a.category === 'undefined') {
@@ -78,8 +78,8 @@ const onPropsChange = ({ context, doc }, onData) => {
 };
 
 export const depsMapper = (context, actions) => ({
-  setCurrentCategory: actions.editView.setCurrentTag,
-  getCurrentCategory: actions.editView.getCurrentTag,
+  setCurrentCategory: actions.editView.setCurrentReference,
+  getCurrentCategory: actions.editView.getCurrentReference,
   context: () => context
 });
 

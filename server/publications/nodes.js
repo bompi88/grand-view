@@ -62,6 +62,32 @@ export default function () {
    */
   Meteor.publish('nodes.byId', function (_id) { return Nodes.find({ _id }); });
 
+  Meteor.publish('nodes.byTag', function (docId, tag) {
+
+    if (tag === 'undefined') {
+      return Nodes.find({
+        mainDocId: docId,
+        $or: [ { tags: { $exists: false } }, { tags: { $size: 0 } } ],
+        nodeType: 'media'
+      });
+    }
+
+    return Nodes.find({ mainDocId: docId, 'tags.label': tag });
+  });
+
+  Meteor.publish('nodes.byReference', function (docId, reference) {
+
+    if (reference === 'undefined') {
+      return Nodes.find({
+        mainDocId: docId,
+        $or: [ { references: { $exists: false } }, { references: { $size: 0 } } ],
+        nodeType: 'media'
+      });
+    }
+
+    return Nodes.find({ mainDocId: docId, 'references.label': reference });
+  });
+
   Meteor.publish('nodes.byDoc', function (mainDocId, nodeType) {
     return Nodes.find({
       mainDocId,

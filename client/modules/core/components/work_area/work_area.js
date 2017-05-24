@@ -2,6 +2,8 @@ import React from 'react';
 
 import Tree from '../../containers/tree_view';
 import EditView from '../../containers/edit_view';
+import EditViewTags from '../../containers/edit_view_tags';
+import EditViewReferences from '../../containers/edit_view_references';
 
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
@@ -9,14 +11,17 @@ import { DragDropContext } from 'react-dnd';
 class WorkArea extends React.Component {
 
   render() {
-    const {text, gotoDocuments, createNewDocument, doc} = this.props;
+    const {text, gotoDocuments, createNewDocument, doc, treeState} = this.props;
 
     if (doc) {
       return (
         <div className="container container-media-nodes default-container animated fadeIn">
           <div className="row row-wrapper">
             <Tree doc={doc}/>
-            <EditView doc={doc} />
+            {treeState === 'tree' ? <EditView doc={doc} /> : null}
+            {treeState === 'tags' ? <EditViewTags doc={doc} /> : null}
+            {treeState === 'references' ? <EditViewReferences doc={doc} /> : null}
+
           </div>
         </div>
       );

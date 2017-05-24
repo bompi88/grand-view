@@ -108,7 +108,8 @@ export default class NodesTableRow extends React.Component {
       isDragging,
       connectDragSource,
       connectDropTarget,
-      toggleSelected
+      toggleSelected,
+      sortable = true
     } = this.props;
 
     const opacity = isDragging ? 0 : 1;
@@ -118,7 +119,43 @@ export default class NodesTableRow extends React.Component {
     const checked = isSelected(node._id, tableName) ? 'checked' : null;
     // onChange={toggleSelected.bind(this, node._id, tableName)}
 
-    return (connectDragSource(connectDropTarget(
+    if (sortable) {
+      return (connectDragSource(connectDropTarget(
+        <tr
+          className={isInEditMode || disablePointer ? 'table-row' : 'table-row clickable-row'}
+          style={{ opacity }}
+        >
+          <td
+            key="checkbox"
+            className="row-item"
+            onClick={toggleSelected.bind(this, node._id, tableName)}
+            style={{
+              width: '20px'
+            }}
+          >
+            <input type="checkbox" className="checkbox" checked={checked}/>
+          </td>
+
+          <td
+            key="informationelement"
+            className="row-item"
+            onClick={isInEditMode ? null : setAsEditable.bind(this, node._id)}
+          >
+            { isInEditMode ? (
+              <div>
+                <div className="alert alert-info" dangerouslySetInnerHTML={{
+                  __html: text.closeFormInfo
+                }}>
+                </div>
+                <EditViewForm initialValues={node} nodeId={node._id} />
+              </div>
+            ) : this.renderNode(node)}
+          </td>
+        </tr>
+      )));
+    }
+
+    return (
       <tr
         className={isInEditMode || disablePointer ? 'table-row' : 'table-row clickable-row'}
         style={{ opacity }}
@@ -150,6 +187,6 @@ export default class NodesTableRow extends React.Component {
           ) : this.renderNode(node)}
         </td>
       </tr>
-    )));
+    );
   }
 }

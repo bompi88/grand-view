@@ -10,12 +10,13 @@
   },
   "no_title": "Uten navn",
   "without_tags": "Uten nøkkelord",
-  "without_references": "Uten referanser",
+  "without_references": "Uten kilder",
   "no_chapter_title": "Uten kapitteltittel",
   "file_path": "Filbane",
   "references": "Kilder",
   "tags": "Nøkkelord",
   "name": "Navn",
   "removeSelected": "Slett markerte",
-  "chooseAction": "Velg handling"
+  "chooseAction": "Velg handling",
+  "uncategorized": "Ikke kategorisert"
 }

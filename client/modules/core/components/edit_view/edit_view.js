@@ -41,7 +41,7 @@ class EditView extends React.Component {
         <UndoRedoButton isRedo={true} />
         <UndoRedoButton />
         <h4 className="header-text">
-          <span className="glyphicon glyphicon-grain" style={styles.headerIcon}>
+          <span className="glyphicon glyphicon-list" style={styles.headerIcon}>
           </span> {text.chapterView}
         </h4>
       </div>

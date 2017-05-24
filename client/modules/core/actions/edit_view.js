@@ -42,6 +42,22 @@ export default {
 
   },
 
+  setCurrentTag({ LocalState }, tag) {
+    LocalState.set('CURRENT_TAG', tag);
+  },
+
+  getCurrentTag({ LocalState }) {
+    return LocalState.get('CURRENT_TAG');
+  },
+
+  setCurrentReference({ LocalState }, reference) {
+    LocalState.set('CURRENT_REFERENCE', reference);
+  },
+
+  getCurrentReference({ LocalState }) {
+    return LocalState.get('CURRENT_REFERENCE');
+  },
+
   changeMode({ LocalState }, mode = 'easy') {
     LocalState.set('SELECTED_MODE', mode);
   },

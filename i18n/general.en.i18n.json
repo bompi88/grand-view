@@ -17,5 +17,6 @@
   "tags": "Tags",
   "name": "Name",
   "removeSelected": "Remove selected",
-  "chooseAction": "Choose action"
+  "chooseAction": "Choose action",
+  "uncategorized": "Not categorized"
 }

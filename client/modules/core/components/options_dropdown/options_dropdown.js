@@ -32,13 +32,15 @@ class OptionsDropdown extends React.Component {
       return <li key={index} role="presentation" className="divider"></li>;
     }
 
+    const disabled = item.disabled;
+
     return (
-      <li role="presentation" key={index}>
+      <li role="presentation" key={index} className={disabled ? 'disabled' : null}>
         <a
           role="menuitem"
           tabIndex="-1"
           href="#"
-          onClick={this.handleClick.bind(this, item.func)}
+          onClick={disabled ? null : this.handleClick.bind(this, item.func)}
         >
           <span className={item.icon} aria-hidden="true"></span> {item.label}
         </a>

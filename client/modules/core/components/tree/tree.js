@@ -1,10 +1,12 @@
 import React from 'react';
 
 import DocumentOptionsDropdown from '../../containers/document_options_dropdown';
+import DocumentOptionsDropdownCategory from '../../containers/document_options_dropdown_category';
 import TreeFooter from '../../containers/tree_footer';
 import NodeContainer from '../../containers/node';
 import Node from './node';
 import TagsView from '../../containers/tags_view';
+import ReferencesView from '../../containers/references_view';
 import RootNode from '../../containers/root_node';
 
 class Tree extends React.Component {
@@ -33,21 +35,16 @@ class Tree extends React.Component {
     );
   }
 
-  renderReferencesView() {
-    return (
-      <div className="tree structure disable-select">
-        references
-      </div>
-    );
-  }
-
   renderTreeHeader() {
-    const { text } = this.props;
+    const { text, isTemplate } = this.props;
 
     return (
-      <h4 className="header-text">
-        <span className="glyphicon glyphicon-tree-conifer"></span> {text.tree}
-      </h4>
+      <div className="structure-header">
+        <DocumentOptionsDropdown isTemplate={isTemplate} />
+        <h4 className="header-text">
+          <span className="glyphicon glyphicon-tree-conifer"></span> {text.tree}
+        </h4>
+      </div>
     );
   }
 
@@ -55,9 +52,12 @@ class Tree extends React.Component {
     const { text } = this.props;
 
     return (
-      <h4 className="header-text">
-        <span className="glyphicon glyphicon-tags"></span> {text.tags}
-      </h4>
+      <div className="structure-header">
+        <DocumentOptionsDropdownCategory />
+        <h4 className="header-text">
+          <span className="glyphicon glyphicon-tags"></span> {text.tags}
+        </h4>
+      </div>
     );
   }
 
@@ -65,9 +65,12 @@ class Tree extends React.Component {
     const { text } = this.props;
 
     return (
-      <h4 className="header-text">
-        <span className="glyphicon glyphicon-bookmark"></span> {text.references}
-      </h4>
+      <div className="structure-header">
+        <DocumentOptionsDropdownCategory />
+        <h4 className="header-text">
+          <span className="glyphicon glyphicon-bookmark"></span> {text.references}
+        </h4>
+      </div>
     );
   }
 
@@ -77,17 +80,13 @@ class Tree extends React.Component {
 
     return (
       <div className="col-xs-4 structure-container">
-        <div className="structure-header">
+        { currentView === 'tree' ? this.renderTreeHeader() : null }
+        { currentView === 'tags' ? this.renderTagsHeader() : null }
+        { currentView === 'references' ? this.renderReferencesHeader() : null }
 
-          <DocumentOptionsDropdown isTemplate={isTemplate} />
-
-          { currentView === 'tree' ? this.renderTreeHeader() : null }
-          { currentView === 'tags' ? this.renderTagsHeader() : null }
-          { currentView === 'references' ? this.renderReferencesHeader() : null }
-        </div>
         { currentView === 'tree' ? this.renderTreeView() : null }
         { currentView === 'tags' ? <TagsView /> : null }
-        { currentView === 'references' ? this.renderReferencesView() : null }
+        { currentView === 'references' ? <ReferencesView /> : null }
 
         <TreeFooter currentState={currentView} isTemplate={isTemplate} />
       </div>

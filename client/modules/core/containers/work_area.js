@@ -5,6 +5,7 @@ export const composer = ({context}, onData) => {
   const {Meteor, TAPi18n, LocalState, Collections} = context();
 
   const _id = LocalState.get('CURRENT_DOCUMENT');
+  const treeState = LocalState.get('TREE_VIEW_STATE') || 'tree';
 
   const text = {
     title: TAPi18n.__('work_area.title'),
@@ -17,9 +18,9 @@ export const composer = ({context}, onData) => {
   if (_id && Meteor.subscribe('documents.allByDocs', _id)) {
     const doc = Collections.Documents.findOne({_id});
 
-    onData(null, {text, doc});
+    onData(null, {text, doc, treeState});
   } else {
-    onData(null, {text});
+    onData(null, {text, treeState});
   }
 };
 

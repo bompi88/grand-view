@@ -313,7 +313,8 @@ export default function () {
         position: {
           $gt: fromPos
         },
-        nodeType: 'chapter'
+        nodeType: 'chapter',
+        _id: { $ne: _id }
       }, {
         $inc: {
           position: -1
@@ -328,7 +329,7 @@ export default function () {
             $gte: toPos
           },
           nodeType: 'chapter',
-          _id: { $not: _id }
+          _id: { $ne: _id }
         }, {
           $inc: {
             position: 1
