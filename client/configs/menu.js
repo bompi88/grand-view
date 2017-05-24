@@ -241,6 +241,7 @@ export default (context) => {
             label: TAPi18n.__('menu.paste'),
             accelerator: CommandOrCtrl() + '+V',
             click() {
+              LocalState.set('PASTE_FILE', false);
               remote.getCurrentWindow().webContents.paste();
             }
           },
