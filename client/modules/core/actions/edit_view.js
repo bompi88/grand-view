@@ -175,7 +175,7 @@ export default {
     Collections.Nodes.update({ _id }, { $set: {
       name
     }});
-  }, 200),
+  }, 20),
 
   setRootDescription: debounce(({LocalState, Collections}, description, _id) => {
     Collections.Documents.update({ _id }, { $set: {
