@@ -20,8 +20,8 @@
 /* globals _require */
 
 import debounce from 'debounce';
-import { ActionCreators } from 'redux-undo';
-const sh = _require('electron').shell;
+// import { ActionCreators } from 'redux-undo';
+const { sh } = _require('electron');
 
 export default {
 
@@ -60,14 +60,6 @@ export default {
 
   changeMode({ LocalState }, mode = 'easy') {
     LocalState.set('SELECTED_MODE', mode);
-  },
-
-  undo({ dispatch }) {
-    dispatch(ActionCreators.undo());
-  },
-
-  redo({ dispatch }) {
-    dispatch(ActionCreators.redo());
   },
 
   updateMediaNodePosition({ Meteor }, { toPos, _id, toParent }) {

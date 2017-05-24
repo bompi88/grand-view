@@ -38,8 +38,8 @@ class EditView extends React.Component {
     return (
       <div>
         <ConfButton />
-        <UndoRedoButton isRedo={true} />
-        <UndoRedoButton />
+        {/* <UndoRedoButton isRedo={true} />
+        <UndoRedoButton /> */}
         <h4 className="header-text">
           <span className="glyphicon glyphicon-list" style={styles.headerIcon}>
           </span> {text.chapterView}

@@ -20,7 +20,7 @@
 /* globals _require */
 /* eslint no-sync: 0 */
 
-import { ActionCreators } from 'redux-undo';
+// import { ActionCreators } from 'redux-undo';
 
 export default (context) => {
   const remote = _require('electron').remote;
@@ -31,7 +31,7 @@ export default (context) => {
 
   const {
     LocalState,
-    dispatch,
+    // dispatch,
     Helpers,
     NotificationManager,
     TAPi18n,
@@ -208,16 +208,16 @@ export default (context) => {
             label: TAPi18n.__('menu.undo'),
             accelerator: CommandOrCtrl() + '+Z',
             click() {
-              dispatch(ActionCreators.undo());
-              // remote.getCurrentWindow().webContents.undo();
+              // dispatch(ActionCreators.undo());
+              remote.getCurrentWindow().webContents.undo();
             }
           },
           {
             label: TAPi18n.__('menu.redo'),
             accelerator: 'Shift+' + CommandOrCtrl() + '+Z',
             click() {
-              dispatch(ActionCreators.redo());
-              // remote.getCurrentWindow().webContents.redo();
+              // dispatch(ActionCreators.redo());
+              remote.getCurrentWindow().webContents.redo();
             }
           },
           {
