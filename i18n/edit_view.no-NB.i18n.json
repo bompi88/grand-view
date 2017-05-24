@@ -17,6 +17,10 @@
     "isEmptyReferences": "Ingen informasjonselementer funnet under denne kilden.",
     "selectToProceedTags": "Nøkkelord er ikke valgt. Velg et nøkkelord i listen til venstre for å gå videre.",
     "selectToProceedReferences": "Kilde er ikke valgt. Velg en kilde i listen til venstre for å gå videre.",
+    "template_form": {
+      "name": "Navn på kapittel",
+      "description": "Beskrivelse av kapittel"
+    },
     "form": {
       "tagsPlaceholder": "Nøkkelord",
       "tagsLabel": "Lag eller søk etter nøkkelord i listen",

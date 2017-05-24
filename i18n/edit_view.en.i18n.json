@@ -17,6 +17,10 @@
     "isEmptyReferences": "No information elements linked to selected reference.",
     "selectToProceedTags": "No tag selected. Select a tag in the list on the left to proceed.",
     "selectToProceedReferences": "No reference selected. Select a reference in the list on the left to proceed.",
+    "template_form": {
+      "name": "Name of chapter",
+      "description": "Chapter description"
+    },
     "form": {
       "tagsPlaceholder": "Tags",
       "tagsLabel": "Select tags",

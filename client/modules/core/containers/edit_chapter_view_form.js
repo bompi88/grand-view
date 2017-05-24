@@ -9,8 +9,8 @@ const onPropsChange = ({ context }, onData) => {
   const { TAPi18n } = context();
 
   const text = {
-    name: TAPi18n.__('edit_view.form.name'),
-    description: TAPi18n.__('edit_view.form.description')
+    name: TAPi18n.__('edit_view.template_form.name'),
+    description: TAPi18n.__('edit_view.template_form.description')
   };
 
   onData(null, { text });

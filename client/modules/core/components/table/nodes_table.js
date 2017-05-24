@@ -161,12 +161,13 @@ class NodesTable extends React.Component {
 
   render() {
 
-    const { chapterNode, text, addMediaNode } = this.props;
+    const { chapterNode = {}, text, addMediaNode } = this.props;
 
     return (
       <div className="row default-table">
         <div className="col-xs-12">
             <h4>{chapterNode.name}</h4>
+            {chapterNode.description ? (<p>{chapterNode.description}</p>) : null}
             <div className="panel panel-default">
               <div className="panel-heading" style={styles.heading}>
                 <b>{text.header}</b>
