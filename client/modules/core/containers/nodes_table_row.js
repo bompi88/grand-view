@@ -6,11 +6,12 @@ import NodesTableRow from '../components/table/nodes_table_row';
 const dragSource = {
   beginDrag(props) {
     const { node, index } = props;
-    const { _id } = node;
+    const { _id, nodeType } = node;
 
     return {
       _id,
-      index
+      index,
+      nodeType
     };
   },
 };
@@ -80,6 +81,6 @@ const collectDrag = (connect, monitor) => {
 
 
 export default composeAll(
-  DropTarget('media-node', dropTarget, collectDrop),
-  DragSource('media-node', dragSource, collectDrag)
+  DropTarget('node', dropTarget, collectDrop),
+  DragSource('node', dragSource, collectDrag)
 )(NodesTableRow);
