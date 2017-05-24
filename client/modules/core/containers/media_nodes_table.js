@@ -6,7 +6,7 @@ export const composer = ({ context, clearState, chapterNode }, onData) => {
   const { Meteor, Collections, TAPi18n, LocalState } = context();
 
   const { _id: parent } = chapterNode;
-  const tableName = 'mediaNodes';
+  const tableName = 'mediaNodes' + parent;
   const editNode = LocalState.get('EDIT_NODE');
 
   const text = {

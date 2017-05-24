@@ -116,7 +116,7 @@ export default class NodesTableRow extends React.Component {
 
     const isInEditMode = editNode === node._id;
 
-    const checked = isSelected(node._id, tableName) ? 'checked' : null;
+    const checked = isSelected(node._id, tableName) ? 'checked' : '';
     // onChange={toggleSelected.bind(this, node._id, tableName)}
 
     if (sortable) {

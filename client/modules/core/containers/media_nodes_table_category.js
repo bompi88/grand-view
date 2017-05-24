@@ -2,10 +2,17 @@ import NodesTable from '../components/table/nodes_table_category';
 
 import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
 
-export const composer = ({context, clearState, nodes, text: { tableHeader, isEmpty }}, onData) => {
+export const composer = ({
+  context,
+  clearState,
+  nodes,
+  category,
+  type,
+  text: { tableHeader, isEmpty }
+}, onData) => {
   const { TAPi18n, LocalState } = context();
 
-  const tableName = 'mediaNodes';
+  const tableName = 'mediaNodes' + type + category;
   const editNode = LocalState.get('EDIT_NODE');
   const text = {
     informationelement: TAPi18n.__('edit_view.informationelement'),

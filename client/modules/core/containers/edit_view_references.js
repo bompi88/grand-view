@@ -57,7 +57,7 @@ const onPropsChange = ({ context, doc }, onData) => {
       return nameA.toLowerCase().localeCompare(nameB.toLowerCase(), 'nb');
     });
 
-    return onData(null, { nodes, mode, text });
+    return onData(null, { nodes, mode, text, category: reference, type: 'reference' });
   }
   onData(null, { text, mode });
 };
