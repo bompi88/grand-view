@@ -141,6 +141,11 @@ const dropSpecs = {
     putIntoChapterNode({ parent: parent._id , _id });
   },
 
+  canDrop(props) {
+    const { node: { level } } = props;
+    return level < 5;
+  }
+
 };
 
 const collect = (connect, monitor) => {
@@ -188,6 +193,32 @@ class Node extends React.Component {
     );
   }
 
+  renderFirstDropArea() {
+    const {
+      node: {
+        level,
+        parent
+      },
+      connectDropTarget,
+      isOver,
+      setPosition
+    } = this.props;
+
+    if (level === 1) {
+      const node = {
+        _id: parent
+      };
+      return <DropAreaZero
+        connectDropTarget={connectDropTarget}
+        isOver={isOver}
+        setPosition={setPosition}
+        node={node}
+       />;
+    }
+
+    return <DropAreaZero { ...this.props} />;
+  }
+
   render() {
     const { nodes = [], node, index, connectDragSource, isDragging} = this.props;
 
@@ -200,7 +231,7 @@ class Node extends React.Component {
           display: isDragging ? 'none' : 'block'
         }}>
         {this.renderCollapseButton()}
-        { index === 0 ? <DropAreaZero { ...this.props} /> : null }
+        { index === 0 ? this.renderFirstDropArea() : null }
         { node.nodeType === 'media' ? <MediaNode {...this.props} /> :
             connectDragSource(<div><DropTargetChapterNode {...this.props} /></div>)}
         { nodes.length > 0 ? (

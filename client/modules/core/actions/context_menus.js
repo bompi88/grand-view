@@ -52,9 +52,33 @@ const actions = {
     Helpers.insertNodeOfType(context, parent, 'media');
   },
 
-  removeChapter(context, e, { _id, mainDocId }) {
-    const { Helpers } = context;
-    Helpers.removeNode(context, {_id, mainDocId});
+  removeChapter(context, e, { _id, name, mainDocId }) {
+    const { Helpers, bootbox, NotificationManager } = context;
+
+    const confirmationPrompt = {
+      title: 'Bekreftelse på slettingen',
+      message: `Er du sikker på at du vil slette kapittelet "${name ? name : 'Uten navn'}", sammen med alle underkapitler og informasjonselement? NB! Du kan ikke angre på dette valget.`,
+      buttons: {
+        cancel: {
+          label: 'Nei'
+        },
+        confirm: {
+          label: 'Ja',
+          callback(result) {
+            if (result) {
+              // Remove the media nodes
+              Helpers.removeNode(context, { _id, mainDocId });
+              // Show sucess message
+              NotificationManager.success(
+                'Kapittelet ble slettet fra systemet.',
+                'Sletting fullført'
+              );
+            }
+          }
+        }
+      }
+    };
+    bootbox.dialog(confirmationPrompt);
   },
 
   removeMediaNode(context, e, { _id, mainDocId }) {

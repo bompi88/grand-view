@@ -308,6 +308,9 @@ export default function () {
     },
 
     updateNodePosition({ fromPos, toPos, _id, fromParent, toParent }) {
+
+      const newParent = Nodes.findOne({ _id: toParent });
+
       Nodes.update({
         parent: fromParent,
         position: {
@@ -343,7 +346,8 @@ export default function () {
           }, {
             $set: {
               parent: toParent,
-              position: toPos
+              position: toPos,
+              level: newParent.level + 1
             }
           }, {
             upsert: false
@@ -353,18 +357,38 @@ export default function () {
     },
 
     putIntoChapterNode({ parent, _id }) {
-      const nodeCount = Nodes.find({ parent }).count();
+      const droppedNode = Nodes.findOne({ _id });
+      const parentNode = Nodes.findOne({ _id: parent });
+
+      const nodeCount = Nodes.find({ parent, nodeType: 'chapter', _id: { $ne: _id } }).count();
       const position = nodeCount === 0 ? 1 : nodeCount + 1;
 
       Nodes.update({
-        _id
+        parent,
+        position: {
+          $gt: droppedNode.position
+        },
+        nodeType: 'chapter',
+        _id: { $ne: _id }
       }, {
-        $set: {
-          parent,
-          position
+        $inc: {
+          position: -1
         }
       }, {
+        multi: true,
         upsert: false
+      }, () => {
+        Nodes.update({
+          _id
+        }, {
+          $set: {
+            parent,
+            position,
+            level: parentNode.level + 1
+          }
+        }, {
+          upsert: false
+        });
       });
     }
   });

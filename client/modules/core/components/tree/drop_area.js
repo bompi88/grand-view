@@ -61,7 +61,7 @@ const dropSpecsZero = {
 
   drop(props, monitor) {
     const { _id, position: fromPos, parent: fromParent, nodeType } = monitor.getItem();
-
+    console.log(props);
     if (nodeType === 'media') {
       return;
     }
