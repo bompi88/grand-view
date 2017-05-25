@@ -37,12 +37,12 @@ const actions = {
   addSubchapter(context, e, parent) {
     const { Helpers, NotificationManager, TAPi18n } = context;
 
-    if (parent.level >= 5) {
-      return NotificationManager.warning(
-        TAPi18n.__('notifications.max_number_of_subchapters.message'),
-        TAPi18n.__('notifications.max_number_of_subchapters.title')
-      );
-    }
+    // if (parent.level >= 4) {
+    //   return NotificationManager.warning(
+    //     TAPi18n.__('notifications.max_number_of_subchapters.message'),
+    //     TAPi18n.__('notifications.max_number_of_subchapters.title')
+    //   );
+    // }
 
     Helpers.insertNodeOfType(context, parent, 'chapter');
   },

@@ -141,10 +141,10 @@ const dropSpecs = {
     putIntoChapterNode({ parent: parent._id , _id });
   },
 
-  canDrop(props) {
-    const { node: { level } } = props;
-    return level < 5;
-  }
+  // canDrop(props) {
+  //   const { node: { level } } = props;
+  //   return level < 4;
+  // }
 
 };
 

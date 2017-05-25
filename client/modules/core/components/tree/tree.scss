@@ -80,8 +80,8 @@ $plus-minus-color: $white;
     }
   }
 
-  li.node.root > ul:first-of-type {
-    .icon-minus, .icon-plus {
+  li.node.root > ul:first-of-type > li:first-of-type {
+    > .icon-minus:first-of-type, > .icon-plus:first-of-type {
       top: 20px;
     }
   }

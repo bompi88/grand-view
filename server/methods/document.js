@@ -83,6 +83,8 @@ export default function () {
       check(mainDocId, String);
       check(undefined, Match.Maybe([ String ]));
 
+      const node2beRemoved = Collections.Nodes.findOne({ _id });
+
       const removeFile = (file) => {
         console.log('SHOULD REMOVE FILE', file);
       };
@@ -103,7 +105,23 @@ export default function () {
         Collections.Nodes.remove({ _id: node._id, mainDocId });
       };
 
-      removeNode({ _id, mainDocId, files });
+
+      Collections.Nodes.update({
+        parent: node2beRemoved.parent,
+        position: {
+          $gt: node2beRemoved.position
+        },
+        _id: { $ne: node2beRemoved._id }
+      }, {
+        $inc: {
+          position: -1
+        }
+      }, {
+        multi: true,
+        upsert: false
+      }, () => {
+        removeNode({ _id, mainDocId, files });
+      });
     },
 
     'document.makeTemplate'(_id) {

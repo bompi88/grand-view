@@ -308,7 +308,6 @@ export default function () {
     },
 
     updateNodePosition({ fromPos, toPos, _id, fromParent, toParent }) {
-
       const newParent = Nodes.findOne({ _id: toParent });
 
       Nodes.update({
@@ -347,7 +346,7 @@ export default function () {
             $set: {
               parent: toParent,
               position: toPos,
-              level: newParent.level + 1
+              level: newParent && newParent.level + 1 || 1
             }
           }, {
             upsert: false
@@ -364,7 +363,7 @@ export default function () {
       const position = nodeCount === 0 ? 1 : nodeCount + 1;
 
       Nodes.update({
-        parent,
+        parent: droppedNode.parent,
         position: {
           $gt: droppedNode.position
         },
