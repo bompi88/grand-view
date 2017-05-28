@@ -1,12 +1,11 @@
 {
   "asarUnpack": [
-    "resources/mongod",
-    "resources/node"
+    "resources/mongod"
   ],
   "appId": "no.conceptntnu.grandview",
-  "asar": false,
-  "electronVersion": "1.4.16",
+  "electronVersion": "1.5.0",
   "npmRebuild": true,
+  "asar": true,
   "files": [
     "**/*",
     "**/.*"

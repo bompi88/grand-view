@@ -30,18 +30,14 @@ const path = require('path');
 const net = require('net');
 const os = require('os');
 const fs = require('fs');
-// require('asar-require'); // Does not seem to work
-
 
 // Set in package.json
 const appName = pjson.name;
-const dirname = __dirname;
 const env = process.env;
 
 // -- Some mongo and node variables --------------------------------------------
 
-const rootURL = 'http://localhost';
-const bindIP = '127.0.0.1';
+const domain = 'http://localhost';
 const mongoRootUrl = 'mongodb://localhost:';
 const dbName = 'meteor';
 
@@ -57,32 +53,33 @@ const frame = true;
 
 // -- Set up paths -------------------------------------------------------------
 
-// const resourcesDir = path.join(dirname, '..', 'app.asar.unpacked', 'resources');
-const resourcesDir = path.join(dirname, 'resources');
-const nodeModulesDir = path.join(dirname, 'bundle', 'programs', 'server', 'node_modules');
-const meteorPath = path.join(dirname, 'bundle');
+const resourcesDir = path.join(__dirname, '..', 'app.asar.unpacked', 'resources');
+const meteorServerPath = path.join(__dirname, 'bundle', 'programs', 'server');
+const mongodPath = path.join(resourcesDir, 'mongod');
 
 const platform = os.platform();
 
 let appPath = '';
 
 if (platform === 'darwin') {
-  appPath = path.join(env.HOME, 'Library/Application Support/', appName, '/');
+  appPath = path.join(env.HOME, 'Library', 'Application Support', appName);
 } else if (platform === 'win32') {
-  appPath = path.join(env.HOMEPATH, 'AppData/Local/', appName, '/');
+  appPath = path.join(env.HOMEPATH, 'AppData', 'Local', appName);
 } else if (platform === 'linux') {
-  appPath = path.join(env.HOME, '/.config/', appName, '/');
+  appPath = path.join(env.HOME, '.config', appName);
 }
-console.log('dir: ', dirname);
-
-console.log('App path: ' + appPath);
 
 const dataPath = path.join(appPath, 'data');
 
-// -- Helpers ------------------------------------------------------------------
+console.log('Root dir:', __dirname);
+console.log('App directory path:', appPath);
+console.log('DB path:', dataPath);
+console.log('Mongod path:', mongodPath);
+
+// -- Helper functions -----------------------------------------------------------------------------
 
 /**
- * Determine an occupied port
+ * Determine an unoccupied port
  */
 function freePort(callback) {
   const server = net.createServer();
@@ -116,7 +113,6 @@ function readFileSync(p) {
   if (fs.existsSync(p)) {
     return fs.readFileSync(path.join(p), 'utf8');
   }
-  return '';
 }
 
 /**
@@ -124,28 +120,30 @@ function readFileSync(p) {
  */
 function startNode(options, mongoChild, callback) {
 
-  console.log('Starting node child...');
+  console.log('Starting meteor instance...');
 
-  const nodePath = path.join(resourcesDir, (platform === 'win32') ? 'node.exe' : 'node');
-  const nodeArgs = path.join(meteorPath, 'main.js');
-  // const mainEntry = require(nodeArgs);
+  const nodeArgs = path.join(meteorServerPath, 'boot.js');
+  const rootUrl = `${domain}:${options.webPort}/`;
   let opened = false;
 
   const nodeEnv = {
-    ROOT_URL: rootURL + ':' + options.webPort + '/',
+    ROOT_URL: rootUrl,
     PORT: options.webPort,
-    BIND_IP: bindIP,
     DB_PATH: dataPath,
-    MONGO_URL: mongoRootUrl + options.mongoPort + '/' + dbName,
-    METEOR_SETTINGS: readFileSync(path.join(appPath, 'settings.json')),
-    DIR: dirname,
+    MONGO_URL: `${mongoRootUrl}${options.mongoPort}/${dbName}`,
+    METEOR_SETTINGS: readFileSync(path.join(__dirname, 'settings.json')),
     NODE_ENV: 'production',
-    NODE_PATH: nodeModulesDir,
-    ELECTRON_RUN_AS_NODE: 0
+    ELECTRON_RUN_AS_NODE: 1
   };
 
-  // const nodeChild = childProcess.spawn(nodePath, [ mainEntry ], { env: nodeEnv });
-  const nodeChild = childProcess.spawn(nodePath, [ nodeArgs ], { env: nodeEnv });
+  const nodeChild = childProcess.fork(nodeArgs,
+    [
+      path.join(meteorServerPath, 'program.json')
+    ], {
+      env: nodeEnv,
+      silent: true // to be able to listen to stdout and stderr
+    }
+  );
 
   // listen for errors
   nodeChild.stderr.setEncoding('utf8');
@@ -153,64 +151,50 @@ function startNode(options, mongoChild, callback) {
     console.log('stderr: ', nodeData);
   });
 
-  // Listen on meteor events
+  // Listen on stdout from our meteor instance
   nodeChild.stdout.setEncoding('utf8');
   nodeChild.stdout.on('data', (nodeData) => {
 
     console.log(nodeData);
 
-    if (nodeData.indexOf('Meteor app started.' !== -1)) {
+    // If meteor tells it's ready
+    if (nodeData.indexOf('Meteor app started.') !== -1) {
       if (!opened) {
         opened = true;
       } else {
         return;
       }
 
-      setTimeout(() => {
-        const fullURL = rootURL + ':' + options.webPort;
-        callback(fullURL, nodeChild, mongoChild);
-      }, 100);
+      setTimeout(() => callback(rootUrl, nodeChild, mongoChild), 100);
     }
   });
 }
 
 /**
- * Starts mongo on specified port and starts Node on finish
+ * Starts mongo on specified port and trigger start of meteor instance on finish
  */
 function startMongo(options, callback) {
-  // Path to mongod
-  const mongodPath = path.join(resourcesDir, 'mongod');
+
+  console.log('Starting mongodb...');
+
   let started = false;
-  let mongodArgs;
-  console.log('Starting mongo...');
+
+  const mongodArgs = [
+    '--storageEngine',
+    'mmapv1',
+    '--bind_ip',
+    '127.0.0.1',
+    '--dbpath',
+    dataPath,
+    '--port',
+    options.mongoPort,
+    '--smallfiles'
+  ];
 
   // Arguments passed to mongod
-  if (platform === 'win32') {
-    mongodArgs = [
-      '--storageEngine',
-      'mmapv1',
-      '--bind_ip',
-      '127.0.0.1',
-      '--dbpath',
-      dataPath,
-      '--port',
-      options.mongoPort,
-      '--smallfiles'
-    ];
-  } else {
-    mongodArgs = [
-      '--storageEngine',
-      'mmapv1',
-      '--bind_ip',
-      '127.0.0.1',
-      '--dbpath',
-      dataPath,
-      '--port',
-      options.mongoPort,
-      '--unixSocketPrefix',
-      dataPath,
-      '--smallfiles'
-    ];
+  if (platform !== 'win32') {
+    mongodArgs.push('--unixSocketPrefix');
+    mongodArgs.push(dataPath);
   }
 
   // Start the Mongo process.
@@ -222,24 +206,18 @@ function startMongo(options, callback) {
 
   // Listen on mongod errors
   mongoChild.stderr.setEncoding('utf8');
-  mongoChild.stderr.on('data', (data) => {
-    console.log(data);
-  });
+  mongoChild.stderr.on('data', (data) => console.log(data));
 
-  // Listen on mongo events
+  // Listen on mongod stdout
   mongoChild.stdout.setEncoding('utf8');
   mongoChild.stdout.on('data', (data) => {
-    // console.log(data);
     const err = data.toLowerCase().indexOf('assertion');
 
     if (err !== -1) {
       throw new Error(data);
     }
 
-    const mongoRunnning = data.indexOf(
-      'waiting for connections on port ' +
-      options.mongoPort
-    );
+    const mongoRunnning = data.indexOf(`waiting for connections on port ${options.mongoPort}`);
 
     // If mongo is up and running
     if (mongoRunnning !== -1) {
@@ -249,6 +227,7 @@ function startMongo(options, callback) {
         return;
       }
       console.log('Mongo started...');
+
       // Start node child
       startNode({
         mongoPort: options.mongoPort,
@@ -324,7 +303,13 @@ function createWindow() {
   const splashScreen = new BrowserWindow({
     width: 400,
     height: 300,
-    resizeable: false,
+    resizable: false,
+    movable: false,
+    minimizable: false,
+    maximizable: false,
+    closable: true,
+    fullscreenable: false,
+    center: true,
     frame: false
   });
 
@@ -335,7 +320,18 @@ function createWindow() {
     console.log('App occupying ', url);
 
     const cleanup = () => {
-      console.log('quit');
+      console.log('Cleaning up children.');
+
+      if (nodeChild) {
+        console.log('cleaning up node child');
+        nodeChild.kill('SIGTERM');
+      }
+
+      if (mongoChild) {
+        console.log('cleaning up mongo child');
+        mongoChild.kill('SIGTERM');
+      }
+
       app.quit();
     };
 
@@ -350,18 +346,23 @@ function createWindow() {
       webPreferences: {
         nodeIntegration: false,
         // Meteor overrides the require method, which do not find our electron
-        // modules nor fs etc. We have to copy the require method. require()
+        // modules etc. We have to copy the require method. _require()
         // should be used on the client to access node and electron modules.
         preload: require.resolve('./.preload')
       }
     };
+
     mainWindow = new BrowserWindow(windowOptions);
     mainWindow.focus();
     splashScreen.close();
 
     mainWindow.loadURL(url);
     global.mainWindow = mainWindow;
-    // mainWindow.webContents.openDevTools();
+
+    if (process.env.NODE_ENV === 'development') {
+      mainWindow.webContents.openDevTools();
+    }
+
     process.on('uncaughtException', cleanup);
 
     mainWindow.on('closed', () => {
@@ -378,23 +379,8 @@ function createWindow() {
       console.log('ready to show.');
     });
 
-    // Emitted when all windows have been closed and the application will quit.
-    // Calling event.preventDefault() will prevent the default behaviour, which
-    // is terminating the application.
-    app.on('will-quit', (event) => {
-      console.log(event);
-      console.log('Cleaning up children.');
-
-      if (nodeChild) {
-        console.log('cleaning up node child');
-        nodeChild.kill('SIGTERM');
-      }
-
-      if (mongoChild) {
-        console.log('cleaning up mongo child');
-        mongoChild.kill('SIGTERM');
-      }
-
+    app.on('will-quit', () => {
+      cleanup();
     });
 
     app.on('window-all-closed', () => {

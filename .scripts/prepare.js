@@ -14,9 +14,6 @@ require('colors');
 const path = require('path');
 const fs = require('fs-extra');
 const pjson = require('../package.json');
-
-const electronVersion = pjson.electron_version;
-
 // Auto-exit on errors
 config.fatal = true; // eslint-disable-line
 
@@ -47,6 +44,7 @@ console.log('Target architecture: '.bold.white, arch);
 
 const dir = __dirname;
 const base = path.normalize(path.join(dir, '..'));
+const appPath = '.app';
 
 // -- Build the meteor app -----------------------------------------------------
 
@@ -57,15 +55,12 @@ cd(base);
 const meteorCommand = (onWindows === true) ? 'meteor.bat' : 'meteor';
 exec(meteorCommand + ' build --directory .bundle');
 
-cd(base + '/.bundle/bundle');
 
-// -- Install Meteor Npm package dependencies ----------------------------------
+// -- Remove node_modules inside meteor bundle -----------------------------------------------------
 
-echo('-----> Installing bundle npm packages...'.yellow);
-cd('./programs/server');
-exec(meteorCommand + ' npm install');
+cd(base + '/.bundle/bundle/programs/server');
 
-// exec(base + `./node_modules/.bin/electron-rebuild --version ${electronVersion} --module-dir ./.bundle/bundle`);
+fs.removeSync('node_modules');
 
 echo('-----> Bundle created :)\n'.green);
 
@@ -73,18 +68,19 @@ cd(base);
 
 // -- Copy all necessary stuff into ./app directory ----------------------------
 
-fs.removeSync('./.app');
+fs.removeSync(appPath);
 
-mkdir('./.app');
+mkdir(appPath);
 
 function copyMeteorBundle(os) {
+  const appBundlePath = path.join(appPath, 'bundle');
   switch (os) {
 
     case 'win32':
     case 'linux':
     case 'darwin':
-      mkdir('./.app/bundle');
-      cp('-R', '.bundle/bundle/*', './.app/bundle');
+      mkdir(appBundlePath);
+      cp('-R', '.bundle/bundle/*', appBundlePath);
       break;
 
     default:
@@ -93,24 +89,43 @@ function copyMeteorBundle(os) {
 }
 
 function copyStartupFiles(os) {
-  switch (os) {
+  // Remove unnecessary fields in package.json
+  delete pjson.devDependencies;
+  delete pjson.scripts;
+  delete pjson.private;
+  delete pjson.mongo_version;
 
-    case 'win32':
-    case 'linux':
-    case 'darwin':
-      cp('./.index.js', './.app/');
-      cp('./.preload.js', './.app/');
-      cp('./.about-en.html', './.app/');
-      cp('./.about-no-NB.html', './.app/');
-      cp('./.splash.html', './.app/');
-      cp('./package.json', './.app/package.json');
-      cp('./packager.json', './.app/packager.json');
-      cp('-R', './node_modules', './.app/');
-      break;
+  const bundlePjson = require('../.bundle/bundle/programs/server/package.json');
+  const bundleDependencies = bundlePjson.dependencies;
 
-    default:
-      throw new Error('Unrecognized Operating System. Exiting...'.bold.red);
-  }
+  // Add meteor dependencies like fibers and so on
+  Object.keys(bundleDependencies).forEach((key) => {
+    pjson.dependencies[key] = bundleDependencies[key];
+  });
+
+  // Write the new package.json file
+  fs.writeFile(path.join(appPath, 'package.json'), JSON.stringify(pjson), 'utf8', (error) => {
+    if (error) {
+      throw new Error('Could not create package.json file. Exiting...'.bold.red);
+    }
+
+    switch (os) {
+      case 'win32':
+      case 'linux':
+      case 'darwin':
+        cp('.index.js', appPath);
+        cp('.preload.js', appPath);
+        cp('.splash.html', appPath);
+        cp('packager.json', appPath);
+        cp('settings.json', appPath);
+        cp('.about-en.html', appPath);
+        cp('.about-no-NB.html', appPath);
+        break;
+
+      default:
+        throw new Error('Unrecognized Operating System. Exiting...'.bold.red);
+    }
+  });
 }
 
 function copyBinaryFiles(os, architecture) {
@@ -119,19 +134,14 @@ function copyBinaryFiles(os, architecture) {
     case 'win32':
     case 'linux':
     case 'darwin':
-      mkdir('./.app/resources');
-      const nodePostfix = (platform === 'win32') ? 'node.exe' : 'bin/node';
-      const mongodbPostfix = (platform === 'win32') ? 'mongod.exe' : 'mongod';
-      const np = './.cache/' + 'node-' + os + '-' + architecture + '/';
-      const mp = './.cache/' + 'mongodb-' + os + '-' + architecture + '/';
-      cp(np + nodePostfix, './.app/resources/');
+      const resourceDir = path.join(appPath, 'resources');
+      mkdir(resourceDir);
 
-      if (platform !== 'win32') {
-        cp(np + 'LICENSE', './.app/resources/');
-      }
+      const mongodbPostfix = (os === 'win32') ? 'mongod.exe' : 'mongod';
+      const mp = path.join('.cache', `mongodb-${os}-${architecture}`);
 
-      cp(mp + 'bin/' + mongodbPostfix, './.app/resources/');
-      cp(mp + 'GNU-AGPL-3.0', './.app/resources/');
+      cp(path.join(mp, 'bin', mongodbPostfix), resourceDir);
+      cp(path.join(mp, 'GNU-AGPL-3.0'), resourceDir);
       break;
 
     default:
@@ -139,13 +149,12 @@ function copyBinaryFiles(os, architecture) {
   }
 }
 
-// Move necessary files
-
-echo('-----> Copying Meteor bundle into ./.app ...'.yellow);
+// Copy necessary files
+echo('-----> Copying Meteor bundle into .app directory...'.yellow);
 copyMeteorBundle(platform, arch);
 
-echo('-----> Copying startup files into ./.app ...'.yellow);
+echo('-----> Copying startup files into .app directory...'.yellow);
 copyStartupFiles(platform, arch);
 
-echo('-----> Copying binary files into ./.app ...'.yellow);
+echo('-----> Copying binary files into .app directory...'.yellow);
 copyBinaryFiles(platform, arch);

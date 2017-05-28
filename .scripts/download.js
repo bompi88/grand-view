@@ -18,7 +18,6 @@ const AdmZip = require('adm-zip');
 const gunzip = require('gunzip-maybe');
 const pjson = require('../package.json');
 
-const nodeVersion = pjson.node_version;
 const mongoVersion = pjson.mongo_version;
 
 // Auto-exit on errors
@@ -79,18 +78,15 @@ const unzip = function (file, unzipPath, message, zip) {
 // -- Determine the files to fetch ---------------------------------------------
 
 let mongoFile = '';
-let nodeFile = '';
 
 if (platform === 'win32') {
   const archName = (arch === 'x86') ? '-i386-' : '-x86_64-2008plus-';
 
   mongoFile = 'mongodb-' + platform + archName + mongoVersion + '.zip';
-  nodeFile = 'node.exe';
 } else {
   const archName = (arch === 'x86') ? '-i686-' : '-x86_64-';
 
   mongoFile = 'mongodb-' + platform + archName + mongoVersion + '.tgz';
-  nodeFile = 'node-v' + nodeVersion + '-' + platform + '-' + arch + '.tar.gz';
 
   if (platform === 'darwin') {
     mongoFile = 'mongodb-osx-x86_64-' + mongoVersion + '.tgz';
@@ -140,38 +136,6 @@ if (!test('-f', mongoFile)) {
 
 } else {
   echo('MongoDB already downloaded.');
-}
-
-// -- Download Node ------------------------------------------------------------
-
-if (!test('-f', nodeFile)) {
-  echo('-----> Downloading Node...'.yellow + ' (version: ' + nodeVersion + ')');
-  let winPath = '';
-
-  if (platform === 'win32') {
-    winPath = 'win-' + arch + '/';
-  }
-
-  const nodeCurl = 'curl -L -o ' +
-    nodeFile +
-    ' http://nodejs.org/dist/' +
-    'v' + nodeVersion +
-    '/' + winPath + nodeFile;
-
-  exec(nodeCurl);
-
-  const p = 'node-' + platform + '-' + arch;
-  if (!test('-d', p)) {
-    mkdir(p);
-  }
-
-  if (platform === 'win32') {
-    mv(base + '/.cache/node.exe', base + '/.cache/' + p + '/node.exe');
-  } else {
-    unzip(nodeFile, p, 'Node unzipped.'.green);
-  }
-} else {
-  echo('Node already downloaded.');
 }
 
 echo('Finished downloading!'.green);

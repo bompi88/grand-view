@@ -69,13 +69,9 @@ meteor.stdout.on('close', function () {
 function startElectron() {
   console.log('-----> Starting Electron...'.yellow);
 
-  let electronPath = '';
-  if (platform === 'darwin') {
-    electronPath = '/.cache/electron/electron.app/contents/MacOS/Electron';
-  } else {
-    electronPath = '/.cache/electron/electron';
-  }
-  electron = exec(base + electronPath + ' ' + base, { async: true });
+  let electronPath = path.join(base, 'node_modules', '.bin', 'electron');
+
+  electron = exec(electronPath + ' ' + base, { async: true });
 
   electron.stdout.setEncoding('utf8');
   electron.stdout.on('data', function (data) {
