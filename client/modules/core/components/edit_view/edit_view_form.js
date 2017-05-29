@@ -233,7 +233,7 @@ class EditViewForm extends React.Component {
       LocalState.get('PASTE_FILE', false);
       const image = clipboard.readImage();
       const formats = clipboard.availableFormats();
-
+      console.log(formats);
       let hasImage = false;
       for (let format of formats) {
         if (/image/.test(format)) {

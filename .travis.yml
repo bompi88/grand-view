@@ -1,55 +1,41 @@
 language: node_js
 node_js:
-  - "0.10.41"
+  - "7.10.0"
 
 sudo: required
+dist: trusty
 
 # multiple oses when nodejs env comes to osx on travis
-#os:
-#  - linux
-#  - osx
+os:
+ - linux
+ - osx
 
 env:
   - ARCH=x64 ARCH_NAME=x64
-  # - ARCH=x86 ARCH_NAME=ia32
+  - ARCH=x86 ARCH_NAME=ia32
 
 branches:
   only:
-    # only tags on the form vx.x.x or vx.x.xxx and so on
-    - /v\d+\.\d+\.\d+/
+    - /v\d+\.\d+\.\d+(-beta.\d+)?/
 
-# Install scripts.
 install:
   # Install meteor
   - curl https://install.meteor.com/ | /bin/sh
-  # Install correct node version
-  # - NVER=`node -v`
-  # - wget http://nodejs.org/dist/${NVER}/node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz
-  # - tar xf node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz
-  # - export PATH=$(pwd)/node-${NVER}-${TRAVIS_OS_NAME}-${ARCH}/bin:$PATH
-  # - if [[ "${ARCH}" == 'x86' ]]; then sudo apt-get update && sudo apt-get -y install gcc-multilib g++-multilib; fi
-  # - if [[ "${ARCH}" == 'x86' ]]; then CC=gcc-4.6 CXX=g++-4.6 npm install --build-from-source; else npm install; fi
-  # setup GrandView
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y g++ build-essential icnsutils graphicsmagick xz-utils; fi
+  # Install modules
   - npm install
 
 script:
-  # avoid the scss error
-  - node scripts/scss
-  # Pack and build
-  - npm run build:linux:$ARCH
-  # - npm run build:osx
-  # - nvm install 0.12.7
-  # - nvm use 0.12.7
-  # - npm run pack:osx
-  # zip it up
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build:$TRAVIS_OS_NAME:$ARCH_NAME; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build:$TRAVIS_OS_NAME; fi
   # Linux
-  - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C dist/linux/${ARCH}/GrandView-${TRAVIS_OS_NAME}-${ARCH_NAME} .
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux/${ARCH}/GrandView-${TRAVIS_OS_NAME}-${ARCH_NAME} .; fi
   # Mac
-  # - tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz dist/linux/x64/GrandView.dmg
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz .dist/mac/GrandView-${TRAVIS_TAG}.dmg; fi
 
 cache:
   directories:
-  - cache
+  - .cache
 
 # deploy:
 #   provider: releases

@@ -1,6 +1,7 @@
 {
   "asarUnpack": [
-    "resources/mongod"
+    "resources/mongod",
+    "resources/mongod.exe"
   ],
   "appId": "no.conceptntnu.grandview",
   "electronVersion": "1.5.0",
