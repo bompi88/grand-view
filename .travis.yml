@@ -21,16 +21,18 @@ branches:
 install:
   # Install meteor
   - curl https://install.meteor.com/ | /bin/sh
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y g++ build-essential icnsutils graphicsmagick xz-utils; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y g++ build-essential gcc-multilib g++-multilib icnsutils graphicsmagick xz-utils; fi
   # Install modules
   - npm install
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build:$TRAVIS_OS_NAME:$ARCH_NAME; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build:$TRAVIS_OS_NAME; fi
-  # Linux
+  # Build app for Linux
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build:$TRAVIS_OS_NAME:$ARCH; fi
+  - ls .dist
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux/${ARCH}/GrandView-${TRAVIS_OS_NAME}-${ARCH_NAME} .; fi
-  # Mac
+
+  # Build app for Mac
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build:$TRAVIS_OS_NAME; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz .dist/mac/GrandView-${TRAVIS_TAG}.dmg; fi
 
 cache:

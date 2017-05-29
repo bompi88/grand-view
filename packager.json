@@ -38,6 +38,7 @@
     "icon": ".assets/win/grandview.ico"
   },
   "linux": {
+    "icon": ".assets/linux",
     "target": [
       "deb",
       "AppImage"

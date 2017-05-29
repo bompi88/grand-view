@@ -6,7 +6,9 @@
   "company": "Concept NTNU",
   "homepage": "https://github.com/bompi88/grand-view",
   "author": {
-    "name": "Bjørn Bråthen"
+    "name": "Bjørn Bråthen",
+    "email": "bjorbrat88@gmail.com",
+    "url": "https://github.com/bompi88"
   },
   "contributors": [
     {
