@@ -29,23 +29,23 @@ build_script:
   - npm run build:win:%platform%
 
 after_build:
-  - 7z a GrandView-%APP_VERSION%-win32-%platform%-installer.zip "%APPVEYOR_BUILD_FOLDER%\.dist\GrandView Setup $(APP_VERSION).exe"
-  - IF "%platform%" == "x64" (7z a GrandView-%APP_VERSION%-win32-%platform%-unpacked.zip "%APPVEYOR_BUILD_FOLDER%\.dist\win-unpacked)"
-  - IF "%platform%" == "x86" (7z a GrandView-%APP_VERSION%-win32-%platform%-unpacked.zip "%APPVEYOR_BUILD_FOLDER%\.dist\win-ia32-unpacked)"
+  - 7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-installer.zip "%APPVEYOR_BUILD_FOLDER%\.dist\GrandView Setup $(APP_VERSION).exe"
+  - IF "%platform%" == "x64" (7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-unpacked.zip "%APPVEYOR_BUILD_FOLDER%\.dist\win-unpacked)"
+  - IF "%platform%" == "x86" (7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-unpacked.zip "%APPVEYOR_BUILD_FOLDER%\.dist\win-ia32-unpacked)"
 
 deploy:
   provider: GitHub
   auth_token:
     secure: tNMKx8kVItLg0Henj9BJJNB+IUTkaa1ScGiJ7WBq6/TxST6l7MhHGe4k0omB6H5V
-  artifact: "GrandView-$(APP_VERSION)-win32-$(platform)-unpacked,GrandView-$(APP_VERSION)-win32-$(platform)-installer"
+  artifact: "GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-unpacked,GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer"
   draft: false
   prerelease: false
   on:
     appveyor_repo_tag: true
 
 artifacts:
-  - path: GrandView-$(APP_VERSION)-win32-$(platform)-unpacked.zip
-    name: GrandView-$(APP_VERSION)-win32-$(platform)-unpacked
+  - path: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-unpacked.zip
+    name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-unpacked
 
-  - path: GrandView-$(APP_VERSION)-win32-$(platform)-installer.zip
-    name: GrandView-$(APP_VERSION)-win32-$(platform)-installer
+  - path: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer.zip
+    name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer
