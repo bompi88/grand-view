@@ -1,0 +1,29 @@
+{
+  "menu": {
+    "grandview": "GrandView",
+    "about_grandview": "About GrandView",
+    "change_language": "Change language",
+    "hide_grandview": "Hide GrandView",
+    "show_grandview": "Show GrandView",
+    "close_grandview": "Close GrandView",
+    "file": "File",
+    "new_document": "New project",
+    "new_template": "New template",
+    "import_document": "Import project",
+    "export_document": "Export project",
+    "import_template": "Import template",
+    "export_template": "Export template",
+    "generate_print": "Generate printable document",
+    "edit": "Edit",
+    "undo": "Undo",
+    "redo": "Redo",
+    "cut": "Cut",
+    "copy": "Copy",
+    "paste": "Paste",
+    "paste_as_file": "Paste as file",
+    "select_all": "Select all",
+    "show": "View",
+    "refresh": "Refresh",
+    "developer_tools": "Toggle developer tools"
+  }
+}

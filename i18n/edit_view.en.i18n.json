@@ -1,0 +1,53 @@
+{
+  "edit_view": {
+    "empty": "No information elements under this chapter node.",
+    "informationelement": "Information element",
+    "tableHeader": "Information elements in selected chapter",
+    "references": "References",
+    "tags": "Tags",
+    "attachments": "Attachments",
+    "projectDescription": "Project description",
+    "chapterView": "Chapter view",
+    "mediaView": "Edit information element",
+    "tagHeader": "Tag view",
+    "referenceHeader": "Reference view",
+    "tableHeaderTags": "Information elements in selected tag",
+    "tableHeaderReferences": "Information elements in selected reference",
+    "isEmptyTags": "No information elements linked to selected tag.",
+    "isEmptyReferences": "No information elements linked to selected reference.",
+    "selectToProceedTags": "No tag selected. Select a tag in the list on the left to proceed.",
+    "selectToProceedReferences": "No reference selected. Select a reference in the list on the left to proceed.",
+    "template_form": {
+      "name": "Name of chapter",
+      "description": "Chapter description"
+    },
+    "form": {
+      "tagsPlaceholder": "Tags",
+      "tagsLabel": "Select tags",
+      "referencesPlaceholder": "References",
+      "referencesLabel": "Select references",
+      "name": "Name (Optional)",
+      "description": "Information element",
+      "createTag": "Click to create the tag",
+      "createReference": "Click to create the reference",
+      "removeItem": "Remove from dropdown list",
+      "noResultsText": "No results, try to input more letters in the box above.",
+      "close_form_info": "<b>NB!</b> You are in edit mode. Click on <kbd>ESC</kbd> to exit.",
+      "attachmentsLabel": "Attachments",
+      "uploadFiles": "Drop files here, or click to open the file dialog",
+      "uploadingFile": "Preparing file"
+    },
+    "root_form": {
+      "title": "Title",
+      "description": "Description"
+    },
+    "confButton": {
+      "expandedMode": "Expanded mode",
+      "collapsedMode": "Collapsed mode"
+    },
+    "undoRedoButton": {
+      "undo": "Undo",
+      "redo": "Redo"
+    }
+  }
+}

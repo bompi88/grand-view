@@ -1,0 +1,9 @@
+{
+  "tree_view": {
+    "tree": "Kapitler",
+    "references": "Kilder",
+    "tags": "Nøkkelord",
+    "no_tags": "Ingen nøkkelord er tilbundet informasjonselementene enda. Legg til nøkkelord under redigering av informasjonselement.",
+    "no_references": "Ingen kilder er tilbundet informasjonselementene enda. Legg til kilder under redigering av informasjonselement."
+  }
+}

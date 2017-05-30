@@ -1,0 +1,6 @@
+{
+  "clippy": {
+    "welcome_message": "Welcome to GrandView! Click on me to select a different language.",
+    "hide_me": "Turn me on and off by using the following key combination: Ctrl+Shift+H."
+  }
+}

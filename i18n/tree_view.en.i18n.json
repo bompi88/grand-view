@@ -1,0 +1,9 @@
+{
+  "tree_view": {
+    "tree": "Chapters",
+    "references": "References",
+    "tags": "Tags",
+    "no_tags": "No tags seems to be linked to information elements yet. Try to add tags to an information element while editing it.",
+    "no_references": "No references seems to be linked to information elements yet. Try to add references to an information element while editing it."
+  }
+}

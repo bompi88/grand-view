@@ -1,12 +1,11 @@
 .meteor/local
 .meteor/meteorite
 node_modules/*
-app/*
-cache/*
-dist
+.app/*
+.cache/*
+.dist
 .DS_Store
 .idea/
 *.iml
-meteor/scss_index.scss
-bundle/*
+.bundle/*
 npm-debug.log

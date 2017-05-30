@@ -1,0 +1,96 @@
+{
+  "notifications": {
+    "export_document_failed": {
+      "title": "Exporting project(s) failed",
+      "message": "You must open a project before exporting it."
+    },
+    "export_template_failed": {
+      "title": "Exporting template(s) failed",
+      "message": "You must open a template before exporting it."
+    },
+    "context_menu_root": {
+      "title": "Error while removing",
+      "message": "You cannot delete the root node. To remove a project, do this in \"My projects\"."
+    },
+    "soft_remove_document_failed": {
+      "title": "Error while removing",
+      "message": "Could not move the project to the trash. Please try again."
+    },
+    "soft_remove_document_success": {
+      "title": "Successfully removed",
+      "message": "The project is now in the trash."
+    },
+    "soft_remove_template_failed": {
+      "title": "Error while removing",
+      "message": "Could not move the template to the trash. Please try again."
+    },
+    "soft_remove_template_success": {
+      "title": "Successfully removed",
+      "message": "The template is now in the trash."
+    },
+    "create_document_failed": {
+      "title": "Failed creating new project",
+      "message": "Could not create the new project. Please try again."
+    },
+    "create_document_success": {
+      "title": "Project created",
+      "message": "The project is ready to be used."
+    },
+    "create_template_failed": {
+      "title": "Failed creating new template",
+      "message": "Could not create the new template. Please try again."
+    },
+    "create_template_success": {
+      "title": "Template created",
+      "message": "The template is ready to be used."
+    },
+    "permanent_remove_failed": {
+      "title": "Permanent deletion failed",
+      "message": "Could not delete the project/template. Please try again."
+    },
+    "permanent_remove_success": {
+      "title": "Permanent deletion successful",
+      "message": "The project/template is now permanently deleted."
+    },
+    "restore_failed": {
+      "title": "Failed restoring from trash",
+      "message": "Could not restore the project/template. Please try again."
+    },
+    "restore_success": {
+      "title": "Successfully restored",
+      "message": "The project/template is now restored and can be found in \"My projects\" or \"My templates\", respectively."
+    },
+    "empty_trash_failed": {
+      "title": "Error while removing",
+      "message": "Could not empty the trash. Please try again, or try to delete one project at the time."
+    },
+    "empty_trash_success": {
+      "title": "Successfully removed",
+      "message": "The trash is now empty."
+    },
+    "generation_docx_failed": {
+      "title": "Failed to generate .docx file",
+      "message": "Something unexpected happened while generating the .docx file. Please try again."
+    },
+    "generation_docx_success": {
+      "title": "Generation was successful",
+      "message": "The file is now assembled and gets opened in a new window. If you want to save the file to your desktop, click on \"File->Save as\" in the newly opened window."
+    },
+    "generation_must_open_document": {
+      "title": "Generation of .docx file failed",
+      "message": "You must open a project to be able to generate the printable version."
+    },
+    "max_number_of_subchapters": {
+      "title": "Limit of maximum nested subchapters",
+      "message": "You can have a maximum depth of 5 subchapters per chapter."
+    },
+    "could_not_paste_as_file": {
+      "title": "Format not supported",
+      "message": "Could not store the pasted content as file. Try to either paste as regular, or attach the file manually below."
+    },
+    "make_template_success": {
+      "title": "Template created",
+      "message": "A template is generated based on the provided chapter structure. It's available in \"My templates\"."
+    }
+  }
+}

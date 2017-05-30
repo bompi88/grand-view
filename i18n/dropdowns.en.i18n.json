@@ -1,0 +1,38 @@
+{
+  "dropdowns": {
+    "document_table": {
+      "select_action": "Select action",
+      "create_document": "Create new project",
+      "edit_document": "Edit project",
+      "import_document": "Import project",
+      "export_document": "Export project",
+      "remove_document": "Move to trash"
+    },
+    "template_table": {
+      "select_action": "Select action",
+      "create_template": "Create new template",
+      "edit_template": "Edit template",
+      "import_template": "Import template",
+      "export_template": "Export template",
+      "remove_template": "Move to trash"
+    },
+    "trash_table": {
+      "select_action": "Select action",
+      "restore": "Restore",
+      "remove": "Delete",
+      "empty_trash": "Empty trash"
+    },
+    "document_options": {
+      "hide_media_nodes": "Hide media elements",
+      "show_media_nodes": "Show media elements",
+      "create_chapter": "Create new chapter",
+      "expand_nodes": "Expand all elements",
+      "collapse_nodes": "Collapse all elements",
+      "generate_docx": "Generate printable document",
+      "export_to_file": "Export project",
+      "export_to_template_file": "Export template",
+      "make_template": "Make as template",
+      "help": "Help"
+    }
+  }
+}

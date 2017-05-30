@@ -1,0 +1,22 @@
+{
+  "languages": {
+    "en": "English",
+    "no-NB": "Norwegian (Bokmål)"
+  },
+  "forms": {
+    "ok": "OK",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "no_title": "Untitled",
+  "without_tags": "No tags",
+  "without_references": "No references",
+  "no_chapter_title": "No chapter name",
+  "file_path": "File path",
+  "references": "References",
+  "tags": "Tags",
+  "name": "Name",
+  "removeSelected": "Remove selected",
+  "chooseAction": "Choose action",
+  "uncategorized": "Not categorized"
+}
