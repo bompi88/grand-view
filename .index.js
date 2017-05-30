@@ -188,7 +188,8 @@ function startMongo(options, callback) {
     dataPath,
     '--port',
     options.mongoPort,
-    '--smallfiles'
+    '--smallfiles',
+    '--journal'
   ];
 
   // Arguments passed to mongod

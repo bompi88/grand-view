@@ -11,8 +11,12 @@ os:
  - osx
 
 env:
-  - ARCH=x64 ARCH_NAME=x64
-  - ARCH=x86 ARCH_NAME=ia32
+  global:
+    - |
+      APP_VERSION="$(node -p 'require("./package.json").version')"
+  matrix:
+    - ARCH=x64 ARCH_NAME=x64
+    - ARCH=x86 ARCH_NAME=ia32
 
 branches:
   only:
@@ -28,36 +32,40 @@ install:
 script:
   # Build app for Linux
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build:$TRAVIS_OS_NAME:$ARCH; fi
-  - ls .dist
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux/${ARCH}/GrandView-${TRAVIS_OS_NAME}-${ARCH_NAME} .; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then tar -zcf GrandView-${APP_VERSION}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-unpacked .; fi
 
   # Build app for Mac
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build:$TRAVIS_OS_NAME; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH}.tar.gz .dist/mac/GrandView-${TRAVIS_TAG}.dmg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar -zcf GrandView-${APP_VERSION}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .dist/GrandView-${APP_VERSION}.dmg; fi
 
 cache:
   directories:
   - .cache
 
-# deploy:
-#   provider: releases
-#   api-key:
-#     secure: "HvFmSEsiOIFXpOTwCAd7bIReM45XjL90pq1WDiFOPtkTPv1CvvZFCbuY9+Hwp5QAiASEbdCZIucq3q3rBNmmGhOB9D+wQ+Rj+AciJDtB0WP72sVrGZLM2nPk1+hbn402SpH6WOLUygw1NxZqO9FfjcOMZwida8KLLDp/SDP3OtBYm5Jk+9Nh1cRht73wXd+LRqhuVdCh7GRCgg182L8cfIMq0NztKE297bXMjhk/teV9984bHf1BKXWgwQ5DhSgEtW7xMat2eWFaIGGCjZ3e5gQkSOk1an7QG1NRq1ehYwWa3uuzTeUKxCYwqI6jnbzCX+FzEUuV7Lgr6xPWyukF4faZqDzhsnkqiExZLaqQ4QYWURf5kgT1L7/kkAJdpX3utXM7ElQnou1AzG/jL70kquqgUCCBpEOJcS//hbMHy/VT6BfaH4HkdUrej0geaIdFjV0y6nTC3VIeRYah2VBH/L11UfLc5kOnPu5I86xHFmxiQ/DSMQmuFYTV5/hEkvSh8JqW8nlwdqFzbmw080ZveUogUIn/3ARJgV3HcgJW2rEeCjqut2uNVEkCC9gO5cAjCfIB+Bkao5A0IsdxjguhqdTGnZlMKYz9i/+Wef0H0nMfoRyZS3D4U/NARuFxZXc35wQx8EDwAlhRewgehZmgKtjqV9tBE26L24l6t4xer/8="
-#   file:
-#     - "GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz"
-#   skip_cleanup: true
-#   on:
-#     tags: true
+deploy:
+  provider: releases
+  api_key:
+    secure: vHqlOdMB9CCg9iRfWyFj3l4DoBH5EbXewa050i0BrzESFZOFaLYEmIUd9bo8p+c/xkHdIWL4c3mgK4LsWV23DMB153rPfhP9OmFZ9hXnQmk2zsfQqod07qxY7kdlvINR9Y3+9wjkRBDW8SsRX4vrFAHhYV2NHZW2P1Zz/MJ0sTfL/U3XTUvuXBXi9Qkeiq2lfF7c6xuaIbCGjxmAoWiPZi/cvsT9hbjbiiEgRZv7+HhzcvBf83E7scbuNO2HJ0tePe39ml7++7GZaBRf7x4b/j/CdsPjwO5cxCirKQyDn+3Fz63ss0KoXiW/WkmyAjDMpg6p5I/IER/hWldeXEHKItZcg1N2apM1N4zIaOsBW13ydWY21+O51HDYgNS4JqguAw0OI7fhPgtQjLdEmlKpaqg4envd08n3n7sqLUfThL0Tn0rchF80xyHU9miULqK+xH1FNae+tDRfp76t7GX/ZV3Xpu0LYKAv3sWzo/JF0VQohWd++K9KiauApqGMTd+MLcwFsB0JELz2beyTUKgqrHQzmRJCeCZQqLvDg+YUPzZuMwTKP/n2rK1E4VXt/0q0erZ8K+dSav2/2eqZvoi+byzQuhloQxCk+REeBScAy5MTAqiFuKoA/3FcOcb8T5vX962wBndf+PL7wEbkPnnaX3Rq14dHdtcYrfNWxDcERCA=
+  file: GrandView-${APP_VERSION}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz
+  skip_cleanup: true
+  on:
+    repo: bompi88/grand-view
+    tags: true
+    condition: $TRAVIS_OS_NAME = "osx"
 
 deploy:
   provider: releases
   api_key:
     secure: vHqlOdMB9CCg9iRfWyFj3l4DoBH5EbXewa050i0BrzESFZOFaLYEmIUd9bo8p+c/xkHdIWL4c3mgK4LsWV23DMB153rPfhP9OmFZ9hXnQmk2zsfQqod07qxY7kdlvINR9Y3+9wjkRBDW8SsRX4vrFAHhYV2NHZW2P1Zz/MJ0sTfL/U3XTUvuXBXi9Qkeiq2lfF7c6xuaIbCGjxmAoWiPZi/cvsT9hbjbiiEgRZv7+HhzcvBf83E7scbuNO2HJ0tePe39ml7++7GZaBRf7x4b/j/CdsPjwO5cxCirKQyDn+3Fz63ss0KoXiW/WkmyAjDMpg6p5I/IER/hWldeXEHKItZcg1N2apM1N4zIaOsBW13ydWY21+O51HDYgNS4JqguAw0OI7fhPgtQjLdEmlKpaqg4envd08n3n7sqLUfThL0Tn0rchF80xyHU9miULqK+xH1FNae+tDRfp76t7GX/ZV3Xpu0LYKAv3sWzo/JF0VQohWd++K9KiauApqGMTd+MLcwFsB0JELz2beyTUKgqrHQzmRJCeCZQqLvDg+YUPzZuMwTKP/n2rK1E4VXt/0q0erZ8K+dSav2/2eqZvoi+byzQuhloQxCk+REeBScAy5MTAqiFuKoA/3FcOcb8T5vX962wBndf+PL7wEbkPnnaX3Rq14dHdtcYrfNWxDcERCA=
-  file: GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz
+  file:
+    - GrandView-${APP_VERSION}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz
+    - GrandView_${APP_VERSION}_amd64.deb
+    - GrandView-${APP_VERSION}-x86_64.AppImage
   skip_cleanup: true
   on:
     repo: bompi88/grand-view
     tags: true
+    condition: $TRAVIS_OS_NAME = "linux"
 
 notifications:
   email:
