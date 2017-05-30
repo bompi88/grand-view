@@ -1,65 +1,51 @@
 environment:
-  nodejs_version: "0.10.36"
+  nodejs_version: "7.10.0"
 
 branches:
   only:
-    - prod
-    - /v\d+\.\d+\.\d+/
+    - /v\d+\.\d+\.\d+(-beta.\d+)?/
 
 platform:
   - x86
-  #- x64
+  - x64
 
 install:
+  - ps: $env:APP_VERSION = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
   - ps: Install-Product node $env:nodejs_version $env:platform
-  # Setup
-  - SET PATH=C:\Program Files (x86)\MSBuild\12.0\bin\;%PATH%
-  - SET PATH=c:\python27;%PATH%
-  - npm install -g node-gyp
-  # - npm install --build-from-source --msvs_version=2012
+  # Install modules
   - npm install
-  # download Meteor
+  # Install build tools
+  - npm install --global --production windows-build-tools
+  # Download Meteor
   - ps: Start-FileDownload 'https://s3.amazonaws.com/meteor-windows/InstallMeteor.exe'
-  # install meteor
+  # Install meteor
   - .\installMeteor.exe /passive
-  # download NSIS
-  - ps: choco install -y nsis -pre
   # Restart
   - ps: Start-Sleep -s 5
   - ps: Restart-Computer -Force
 
 build_script:
-  - ps: Start-Sleep -s 5
-  - set PATH=C:\Program Files (x86)\NSIS;%PATH%
-  # Supress SCSS error
-  - node scripts/scss
-  # For some reason it is necessary to split up the commands
-  # - node scripts/download --platform=win32 --arch=x64
-  # - node scripts/prepare --platform=win32 --arch=x64
-  # - npm run clean:win:x64
   - echo %platform%
   - npm run build:win:%platform%
-  # Update node
-  - ps: Install-Product node 0.12.7 $env:platform
-  - node --version
-  - npm run pack:win:%platform%
 
 after_build:
-  - 7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-installer.zip "%APPVEYOR_BUILD_FOLDER%\dist\windows\%platform%\GrandView Setup.exe"
+  - 7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-installer.zip "%APPVEYOR_BUILD_FOLDER%\.dist\GrandView Setup $(APP_VERSION).exe"
+  - IF "%platform%" == "x64" (7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-unpacked.zip "%APPVEYOR_BUILD_FOLDER%\.dist\win-unpacked)"
+  - IF "%platform%" == "x86" (7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-unpacked.zip "%APPVEYOR_BUILD_FOLDER%\.dist\win-ia32-unpacked)"
 
 deploy:
   provider: GitHub
   auth_token:
     secure: tNMKx8kVItLg0Henj9BJJNB+IUTkaa1ScGiJ7WBq6/TxST6l7MhHGe4k0omB6H5V
-  artifact: "GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform),GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer"
+  artifact: "GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-unpacked,GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer"
   draft: false
   prerelease: false
   on:
     appveyor_repo_tag: true
 
 artifacts:
-  - path: dist\windows\x86\GrandView-win32-ia32
-    name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)
+  - path: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-unpacked.zip
+    name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-unpacked
 
   - path: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer.zip
     name: GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer

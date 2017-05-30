@@ -1,0 +1,9 @@
+{
+  "work_area": {
+    "title": "Welcome to the work desk",
+    "description": "This is the place where you can edit projects and templates. No project nor template is selected for editing, thus this page is empty. To get started you can:",
+    "create_document": "Create a new project",
+    "or": "or",
+    "goto_documents": "Go to My projects"
+  }
+}

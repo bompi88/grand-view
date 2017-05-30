@@ -1,0 +1,9 @@
+{
+  "index": {
+    "header": "GrandView",
+    "description": "This is a tool that helps you to structure large sets of data. To get started:",
+    "create_document": "Create a new project",
+    "import_document": "Import project from disk",
+    "or": "or"
+  }
+}

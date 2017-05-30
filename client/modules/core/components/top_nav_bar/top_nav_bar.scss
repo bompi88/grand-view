@@ -1,0 +1,151 @@
+////////////////////////////////////////////////////////////////////////////////
+// TopNavbar SCSS Styles
+////////////////////////////////////////////////////////////////////////////////
+//
+// Copyright 2015 Concept
+//
+// Licensed under the Apache License, Version 2.0 (the 'License');
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an 'AS IS' BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+////////////////////////////////////////////////////////////////////////////////
+
+$nav-bg-default: #fff;
+$nav-bg-highlight: #ff9700;
+$nav-col-default: #767676;
+$nav-col-highlight: #444;
+
+.navbar-brand {
+  img {
+    margin-top: -10px;
+    max-height: 40px;
+  }
+
+  span {
+    padding-left: 10px;
+    position: relative;
+    top: -3px;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+// -- Bootstrap overrides ------------------------------------------------------
+
+.navbar-default {
+  box-shadow: 0 0 30px darken(#fff, 40%);
+}
+
+.navbar-fixed-top {
+  border-width: 0 0 3px !important;
+}
+
+.navbar.navbar-default.navbar-fixed-top {
+  z-index: 1000;
+}
+
+body .navbar-default {
+  background-color: $nav-bg-default;
+  border-color: $nav-bg-highlight;
+
+  .navbar-brand {
+    color: $nav-col-default;
+
+    &:hover,
+    &:focus {
+      color: $nav-col-highlight;
+    }
+  }
+
+  .navbar-text {
+    color: $nav-col-default;
+  }
+
+  .navbar-nav {
+    > li {
+      > a {
+        color: $nav-col-default;
+
+        &:hover,
+        &:focus {
+          color: $nav-col-highlight;
+        }
+      }
+    }
+    > .active {
+      > a,
+      > a:hover,
+      > a:focus {
+        color: $nav-col-highlight;
+        background-color: lighten($nav-bg-highlight,10%);
+      }
+    }
+
+    > .open {
+      > a,
+      > a:hover,
+      > a:focus {
+        color: $nav-col-highlight;
+        background-color: $nav-bg-highlight;
+      }
+    }
+  }
+
+  .navbar-toggle {
+    border-color: $nav-bg-highlight;
+
+    &:hover,
+    &:focus {
+      background-color: $nav-bg-highlight;
+    }
+
+    .icon-bar {
+      background-color: $nav-col-default;
+    }
+  }
+
+  .navbar-collapse,
+  .navbar-form {
+    border-color: $nav-col-default;
+  }
+
+  .navbar-link {
+    color: $nav-col-default;
+
+    &:hover {
+      color: $nav-col-highlight;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu {
+    > li > a {
+      color: $nav-col-default;
+
+      &:hover,
+      &:focus {
+        color: $nav-col-highlight;
+      }
+    }
+
+    > .active {
+      > a,
+      > a:hover,
+      > a:focus,
+       {
+        background-color: $nav-bg-highlight;
+        color: $nav-col-highlight;
+      }
+    }
+  }
+}

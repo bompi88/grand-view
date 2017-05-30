@@ -1,0 +1,53 @@
+{
+  "edit_view": {
+    "empty": "Ingen informasjonselementer funnet under dette kapittelet.",
+    "informationelement": "Legg til informasjonselement",
+    "tableHeader": "Informasjonselementer i valgte kapittel",
+    "references": "Kilder",
+    "tags": "Nøkkelord",
+    "attachments": "Vedlegg",
+    "projectDescription": "Prosjektbeskrivelse",
+    "chapterView": "Kapittelvisning",
+    "mediaView": "Rediger informasjonselement",
+    "tagHeader": "Nøkkelordvisning",
+    "referenceHeader": "Kildevisning",
+    "tableHeaderTags": "Informasjonselementer med valgt nøkkelord",
+    "tableHeaderReferences": "Informasjonselementer med valgt kilde",
+    "isEmptyTags": "Ingen informasjonselementer funnet under dette nøkkelordet.",
+    "isEmptyReferences": "Ingen informasjonselementer funnet under denne kilden.",
+    "selectToProceedTags": "Nøkkelord er ikke valgt. Velg et nøkkelord i listen til venstre for å gå videre.",
+    "selectToProceedReferences": "Kilde er ikke valgt. Velg en kilde i listen til venstre for å gå videre.",
+    "template_form": {
+      "name": "Navn på kapittel",
+      "description": "Beskrivelse av kapittel"
+    },
+    "form": {
+      "tagsPlaceholder": "Nøkkelord",
+      "tagsLabel": "Lag eller søk etter nøkkelord i listen",
+      "referencesPlaceholder": "Kilder",
+      "referencesLabel": "Lag eller søk etter kilder i listen",
+      "name": "Navn på informasjonselement (valgfritt)",
+      "description": "Informasjonselement",
+      "createTag": "Klikk for å opprette nøkkelordet",
+      "createReference": "Klikk for å opprette kilden",
+      "removeItem": "Fjern fra nedtrekkslisten",
+      "noResultsText": "Ingen resultater, prøv å skrive inn flere bokstaver i boksen over.",
+      "close_form_info": "<b>NB!</b> Du er nå i redigeringsmodus. Trykk på <kbd>ESC</kbd> for å gå ut.",
+      "attachmentsLabel": "Vedlegg",
+      "uploadFiles": "Slipp filer her, eller klikk for å åpne fildialogen",
+      "uploadingFile": "Behandler fil"
+    },
+    "root_form": {
+      "title": "Tittel",
+      "description": "Beskrivelse"
+    },
+    "confButton": {
+      "expandedMode": "Utvidet modus",
+      "collapsedMode": "Kollapset modus"
+    },
+    "undoRedoButton": {
+      "undo": "Angre",
+      "redo": "Gjenta"
+    }
+  }
+}

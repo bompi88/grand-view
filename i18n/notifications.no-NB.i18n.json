@@ -1,0 +1,96 @@
+{
+  "notifications": {
+    "export_document_failed": {
+      "title": "Eksportering av prosjekt(er) mislyktes",
+      "message": "Du må ha åpnet eller valgt et prosjekt i tabellen for å kunne eksportere det."
+    },
+    "export_template_failed": {
+      "title": "Eksportering av mal(er) mislyktes",
+      "message": "Du må ha åpnet eller valgt en mal i tabellen for å kunne eksportere det."
+    },
+    "context_menu_root": {
+      "title": "Sletting feilet",
+      "message": "Man kan ikke slette rotnoden. For å slette prosjektet/malen må man gjøre dette under \"Mine prosjekter\" eller \"Mine maler\""
+    },
+    "soft_remove_document_failed": {
+      "title": "Feil ved sletting",
+      "message": "Kunne ikke putte prosjektet i papirkurven. Vennligst prøv igjen."
+    },
+    "soft_remove_document_success": {
+      "title": "Sletting fullført",
+      "message": "Prosjektet er lagt i papirkurven."
+    },
+    "soft_remove_template_failed": {
+      "title": "Feil ved sletting",
+      "message": "Kunne ikke putte malen i papirkurven. Vennligst prøv igjen."
+    },
+    "soft_remove_template_success": {
+      "title": "Sletting fullført",
+      "message": "Malen er lagt i papirkurven."
+    },
+    "create_document_failed": {
+      "title": "Kunne ikke opprette prosjektet",
+      "message": "Kunne ikke opprette prosjektet. Vennligst prøv igjen."
+    },
+    "create_document_success": {
+      "title": "Prosjekt opprettet",
+      "message": "Prosjektet er nå opprettet og er klart til bruk."
+    },
+    "create_template_failed": {
+      "title": "Kunne ikke opprette mal",
+      "message": "Kunne ikke opprette malen. Vennligst prøv igjen."
+    },
+    "create_template_success": {
+      "title": "Mal opprettet",
+      "message": "Malen er nå opprettet og er klar til bruk."
+    },
+    "permanent_remove_failed": {
+      "title": "Permanent sletting feilet",
+      "message": "Kunne ikke slette prosjektet/malen. Vennligst prøv igjen."
+    },
+    "permanent_remove_success": {
+      "title": "Permanent sletting fullført",
+      "message": "Prosjektet/Malen er nå slettet for godt."
+    },
+    "restore_failed": {
+      "title": "Feil ved gjenoppretting",
+      "message": "Kunne ikke gjenopprette prosjektet/malen. Vennligst prøv igjen."
+    },
+    "restore_success": {
+      "title": "Gjenoppretting fullført",
+      "message": "Prosjektet/Malen er nå gjenopprettet og befinner seg i \"Mine prosjekter\" eller \"Mine maler\"."
+    },
+    "empty_trash_failed": {
+      "title": "Feil ved sletting",
+      "message": "Kunne ikke slette innholdet i papirkurven. Vennligst prøv igjen, eller prøv å slett hvert prosjekt hver for seg."
+    },
+    "empty_trash_success": {
+      "title": "Sletting fullført",
+      "message": "Papirkurven din er nå fri for prosjekter/maler."
+    },
+    "generation_docx_failed": {
+      "title": "Feil under generering av .docx fil",
+      "message": "Noe uforberedt skjedde under generering av .docx fil. Vennligst prøv igjen."
+    },
+    "generation_docx_success": {
+      "title": "Generering lyktes",
+      "message": "Filen ble ferdigstilt og åpnes opp i et nytt vindu. Hvis du vil ta vare på filen klikker du på \"Fil->Lagre som\" i det nye vinduet."
+    },
+    "generation_must_open_document": {
+      "title": "Generering av .docx fil mislyktes",
+      "message": "Du må ha åpnet et prosjekt for å kunne generere utskrift."
+    },
+    "max_number_of_subchapters": {
+      "title": "Begrensning på antall forgreninger",
+      "message": "Man kan maksimalt ha en dybde på 5 underkapitler under hvert kapittel."
+    },
+    "could_not_paste_as_file": {
+      "title": "Formatet er dessverre ikke støttet",
+      "message": "Kunne dessverre ikke lime inn innholdet som en fil. Prøv heller og lime inn på vanlig måte eller å legge til en fil manuelt i feltet under."
+    },
+    "make_template_success": {
+      "title": "Mal opprettet",
+      "message": "En mal ble lagd basert på kapittelstrukturen du valgte. Malen kan bli funnet under fanen \"Mine maler\"."
+    }
+  }
+}

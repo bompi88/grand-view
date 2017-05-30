@@ -1,0 +1,15 @@
+{
+  "trash": {
+    "title": "Title",
+    "created_at": "Created at",
+    "last_modified": "Last modified",
+    "removed_at": "Removed at",
+    "restore": "Restore",
+    "remove": "Delete",
+    "header": "Trash",
+    "documents_header": "Deleted projects",
+    "templates_header": "Deleted templates",
+    "is_templates_empty": "No templates in trash",
+    "is_documents_empty": "No projects in trash"
+  }
+}

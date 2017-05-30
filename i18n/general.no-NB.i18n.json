@@ -1,0 +1,22 @@
+{
+  "languages": {
+    "en": "Engelsk",
+    "no-NB": "Norsk (Bokmål)"
+  },
+  "forms": {
+    "ok": "OK",
+    "save": "Lagre",
+    "cancel": "Avbryt"
+  },
+  "no_title": "Uten navn",
+  "without_tags": "Uten nøkkelord",
+  "without_references": "Uten kilder",
+  "no_chapter_title": "Uten kapitteltittel",
+  "file_path": "Filbane",
+  "references": "Kilder",
+  "tags": "Nøkkelord",
+  "name": "Navn",
+  "removeSelected": "Slett markerte",
+  "chooseAction": "Velg handling",
+  "uncategorized": "Ikke kategorisert"
+}

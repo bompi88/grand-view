@@ -1,0 +1,38 @@
+{
+  "dropdowns": {
+    "document_table": {
+      "select_action": "Velg handling",
+      "create_document": "Opprett prosjekt",
+      "edit_document": "Rediger prosjekt",
+      "import_document": "Importer prosjekt",
+      "export_document": "Eksporter prosjekt",
+      "remove_document": "Legg i papirkurv"
+    },
+    "template_table": {
+      "select_action": "Velg handling",
+      "create_template": "Opprett mal",
+      "edit_template": "Rediger mal",
+      "import_template": "Importer mal",
+      "export_template": "Eksporter mal",
+      "remove_template": "Legg i papirkurv"
+    },
+    "trash_table": {
+      "select_action": "Velg handling",
+      "restore": "Gjenopprett",
+      "remove": "Slett",
+      "empty_trash": "Tøm papirkurven"
+    },
+    "document_options": {
+      "hide_media_nodes": "Skjul informasjonselementer",
+      "show_media_nodes": "Vis informasjonselementer",
+      "create_chapter": "Opprett kapittel",
+      "expand_nodes": "Utvid alle elementer",
+      "collapse_nodes": "Sammentrekk alle elementer",
+      "generate_docx": "Generer utskriftbart dokument",
+      "export_to_file": "Eksporter prosjekt",
+      "export_to_template_file": "Eksporter mal",
+      "make_template": "Lag mal av kapittelstrukturen",
+      "help": "Hjelp"
+    }
+  }
+}

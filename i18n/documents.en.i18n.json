@@ -1,0 +1,13 @@
+{
+  "documents": {
+    "title": "Title",
+    "created_at": "Created at",
+    "last_modified": "Last modified",
+    "template_used": "Template used",
+    "is_empty": "No projects found",
+    "by": "by",
+    "remove": "Remove",
+    "export": "Export",
+    "header": "My Projects"
+  }
+}

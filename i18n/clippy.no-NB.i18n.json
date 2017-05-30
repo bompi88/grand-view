@@ -1,0 +1,6 @@
+{
+  "clippy": {
+    "welcome_message": "Hei og velkommen! Du kan velge språk ved å klikke på meg.",
+    "hide_me": "Du kan skru meg av og på ved å trykke Ctrl+Shift+H."
+  }
+}

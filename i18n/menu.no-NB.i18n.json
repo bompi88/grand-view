@@ -1,0 +1,29 @@
+{
+  "menu": {
+    "grandview": "GrandView",
+    "about_grandview": "Om GrandView",
+    "change_language": "Bytt språk",
+    "hide_grandview": "Skjul GrandView",
+    "show_grandview": "Vis GrandView",
+    "close_grandview": "Lukk GrandView",
+    "file": "Fil",
+    "new_document": "Nytt prosjekt",
+    "new_template": "Ny mal",
+    "import_document": "Importer prosjekt",
+    "export_document": "Eksporter prosjekt",
+    "import_template": "Importer mal",
+    "export_template": "Eksporter mal",
+    "generate_print": "Generer utskriftbart dokument",
+    "edit": "Rediger",
+    "undo": "Angre",
+    "redo": "Gjenta",
+    "cut": "Klipp ut",
+    "copy": "Kopier",
+    "paste": "Lim inn",
+    "paste_as_file": "Lim inn som fil",
+    "select_all": "Merk Alt",
+    "show": "Vis",
+    "refresh": "Oppfrisk",
+    "developer_tools": "Slå på/av utviklerverktøy"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "documents": {
+    "title": "Tittel",
+    "created_at": "Opprettet",
+    "last_modified": "Sist endret",
+    "template_used": "Mal brukt",
+    "is_empty": "Ingen prosjekter funnet",
+    "by": "av",
+    "remove": "Fjern",
+    "export": "Eksporter",
+    "header": "Mine Prosjekter"
+  }
+}

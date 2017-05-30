@@ -1,0 +1,11 @@
+{
+  "templates": {
+    "title": "Title",
+    "created_at": "Created at",
+    "last_modified": "Last modified",
+    "is_empty": "No templates found",
+    "remove": "Remove",
+    "export": "Export",
+    "header": "My Templates"
+  }
+}
