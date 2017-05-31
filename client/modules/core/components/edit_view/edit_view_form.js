@@ -47,6 +47,11 @@ class EditViewForm extends React.Component {
     shell.openItem(path);
   }
 
+  componentWillUnmount() {
+    const { setDragable } = this.props;
+    setDragable();
+  }
+
   removeFile(file, e) {
     e.preventDefault();
     const { Collections, NotificationManager } = this.props.context();

@@ -146,7 +146,7 @@ export default {
         block: 'start'
       });
       $('.row-item form input[name="name"]').focus();
-    }, 2000);
+    }, 500);
   },
 
   setReferences({ LocalState, Collections, Meteor }, references, _id) {

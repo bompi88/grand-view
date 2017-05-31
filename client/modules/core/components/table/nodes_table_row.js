@@ -63,7 +63,7 @@ export default class NodesTableRow extends React.Component {
     if (mode === 'easy') {
       return (
         <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
-          <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
+          <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName} {node.position}</h5>
         </div>
       );
     }

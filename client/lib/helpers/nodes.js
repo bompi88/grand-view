@@ -3,7 +3,7 @@ export default {
   insertNodeOfType({Collections, LocalState}, parentNode, nodeType) {
     const {_id: parent, level, userId} = parentNode;
 
-    const children = Collections.Nodes.find({ parent, nodeType: 'chapter' }).fetch();
+    const children = Collections.Nodes.find({ parent, nodeType }).fetch();
     const position = children.length + 1;
 
     const doc = {
