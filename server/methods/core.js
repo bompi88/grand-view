@@ -307,7 +307,7 @@ export default function () {
       });
     },
 
-    updateNodePosition({ fromPos, toPos, _id, fromParent, toParent }) {
+    updateNodePosition({ fromPos, toPos, nodeAboveId, _id, fromParent, toParent }) {
       const newParent = Nodes.findOne({ _id: toParent });
 
       Nodes.update({
@@ -325,10 +325,15 @@ export default function () {
         multi: true,
         upsert: false
       }, () => {
+        let toPosOriginal;
+        if (nodeAboveId) {
+          toPosOriginal = Nodes.findOne({ _id: nodeAboveId }).position;
+        }
+
         Nodes.update({
           parent: toParent,
           position: {
-            $gte: toPos
+            $gte: toPos || toPosOriginal + 1
           },
           nodeType: 'chapter',
           _id: { $ne: _id }
@@ -345,7 +350,7 @@ export default function () {
           }, {
             $set: {
               parent: toParent,
-              position: toPos,
+              position: toPos || toPosOriginal + 1,
               level: newParent && newParent.level + 1 || 1
             }
           }, {

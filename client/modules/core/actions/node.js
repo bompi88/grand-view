@@ -48,8 +48,8 @@ export default {
     });
   },
 
-  setPosition({ Meteor }, { fromPos, toPos, _id, fromParent, toParent }) {
-    Meteor.call('updateNodePosition', { fromPos, toPos, _id, fromParent, toParent });
+  setPosition({ Meteor }, { fromPos, toPos, nodeAboveId, _id, fromParent, toParent }) {
+    Meteor.call('updateNodePosition', { fromPos, toPos, nodeAboveId, _id, fromParent, toParent });
   },
 
   putIntoChapterNode({ Meteor }, { parent, _id }) {

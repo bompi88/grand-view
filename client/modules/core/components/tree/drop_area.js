@@ -32,8 +32,9 @@ const dropSpecs = {
     }
 
     const { node: nodeAbove, setPosition } = props;
-    const { parent: toParent, position } = nodeAbove;
-    setPosition({ fromPos, toPos: position + 1, _id, fromParent, toParent });
+    const { parent: toParent, _id: nodeAboveId } = nodeAbove;
+
+    setPosition({ fromPos, nodeAboveId, _id, fromParent, toParent });
   },
   //
   // hover(props) {
