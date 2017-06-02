@@ -222,11 +222,17 @@ export default function () {
     },
 
     insertTags(tags) {
-      tags.forEach((tag) => {
-        if (!Tags.findOne({ value: tag.value })) {
+      tags.forEach(({ value, label }) => {
+        if (!Tags.findOne({ value })) {
           Tags.insert({
-            value: tag.value,
-            label: tag.label
+            value,
+            label
+          });
+        } else {
+          Tags.update({
+            value
+          }, {
+            $inc: { count: 1 }
           });
         }
       });
@@ -238,11 +244,17 @@ export default function () {
     },
 
     insertReferences(references) {
-      references.forEach((reference) => {
-        if (!References.findOne({ value: reference.value })) {
+      references.forEach(({ value, label }) => {
+        if (!References.findOne({ value })) {
           References.insert({
-            value: reference.value,
-            label: reference.label
+            value,
+            label
+          });
+        } else {
+          References.update({
+            value
+          }, {
+            $inc: { count: 1 }
           });
         }
       });
