@@ -49,6 +49,16 @@ class SelectBox extends Component {
     return onChange(val);
   }
 
+  shouldCreateNewOption({ keyCode: number }) {
+    switch (number) {
+      case 9:
+      case 13:
+        return true;
+      default:
+        return false;
+    }
+  }
+
   render() {
     const {
       input: { value},
@@ -99,6 +109,7 @@ class SelectBox extends Component {
           noResultsText={noResultsText}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
+          shouldKeyDownEventCreateNewOption={this.shouldCreateNewOption.bind(this)}
           optionRenderer={(option) => {
             return (
               <div>
