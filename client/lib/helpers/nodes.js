@@ -26,18 +26,19 @@ export default {
       if (error) {
         return console.log(error);
       }
+      if (nodeType === 'chapter') {
+        Collections.Nodes.update({
+          _id: doc.parent
+        }, {
+          $set: { isCollapsed: false }
+        }, (err) => {
+          if (err) {
+            return console.log(error);
+          }
 
-      Collections.Nodes.update({
-        _id: doc.parent
-      }, {
-        $set: { isCollapsed: false }
-      }, (err) => {
-        if (err) {
-          return console.log(error);
-        }
-
-        LocalState.set('RENAME_NODE', nodeId);
-      });
+          LocalState.set('RENAME_NODE', nodeId);
+        });
+      }
     });
   },
 

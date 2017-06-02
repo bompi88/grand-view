@@ -28,6 +28,7 @@ $str-height: 77vh;
   overflow: hidden;
   padding-top: 80px;
   width: auto;
+  background-color: #f1f1f1;
 
   .row.row-wrapper {
     height: 100%;
@@ -175,7 +176,7 @@ div.structure-container {
   overflow: hidden;
   padding: 0;
   position: relative;
-  // background-color: #fcfcfc;
+  background-color: #fff;
 
   .nav.nav-pills.nav-justified {
     bottom: 0;
