@@ -32,4 +32,8 @@ export default function () {
     });
   });
 
+  Meteor.publish('references', function () {
+    return References.find({}, { sort: { count: -1 }, limit: 20 });
+  });
+
 }

@@ -24,7 +24,7 @@ class SelectBox extends Component {
     const { search } = this.props;
     this.setState({ isLoading: true, options: [], text });
     search(text).then((result) => {
-      this.setState({ options: result, isLoading: false });
+      this.setState({ options: result || [], isLoading: false });
     });
   }
 
@@ -45,7 +45,6 @@ class SelectBox extends Component {
       }
       updateOnChange(adjustedValue, nodeId);
     }
-
     return onChange(val);
   }
 
@@ -61,7 +60,7 @@ class SelectBox extends Component {
 
   render() {
     const {
-      input: { value},
+      input: { value },
       meta: { touched, error },
       multi,
       creatable,
@@ -75,7 +74,8 @@ class SelectBox extends Component {
       removeText,
       noResultsText,
       onMouseEnter,
-      onMouseLeave
+      onMouseLeave,
+      options
     } = this.props;
 
     let SelectComponent;
@@ -102,13 +102,14 @@ class SelectBox extends Component {
           placeholder={placeholder}
           onChange={this.updateValue.bind(this)}
           multi={multi}
-          options={this.state.options}
+          options={this.state.options.length && this.state.options || options}
           onInputChange={this.onInputChange.bind(this)}
           isLoading={this.state.isLoading}
           promptTextCreator={promptTextCreator}
           noResultsText={noResultsText}
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
+          autoBlur={false}
           shouldKeyDownEventCreateNewOption={this.shouldCreateNewOption.bind(this)}
           optionRenderer={(option) => {
             return (
@@ -139,15 +140,9 @@ class SelectBox extends Component {
               <div>{option.label}</div>
             );
           }}
-          filterOption={(option, filter) => {
-            if (!filter) {
-              return true;
-            }
-
-            const l = String(option['label']).toLowerCase();
-
-            return l.indexOf(filter) >= 0;
-          }}
+          ignoreCase={true}
+          ignoreAccents={true}
+          matchProp='label'
           />
       </div>
     );

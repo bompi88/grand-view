@@ -226,7 +226,8 @@ export default function () {
         if (!Tags.findOne({ value })) {
           Tags.insert({
             value,
-            label
+            label,
+            count: 1
           });
         } else {
           Tags.update({
@@ -248,7 +249,8 @@ export default function () {
         if (!References.findOne({ value })) {
           References.insert({
             value,
-            label
+            label,
+            count: 1
           });
         } else {
           References.update({

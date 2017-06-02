@@ -32,4 +32,8 @@ export default function () {
     });
   });
 
+  Meteor.publish('tags', function () {
+    return Tags.find({}, { sort: { count: -1 }, limit: 20 });
+  });
+
 }
