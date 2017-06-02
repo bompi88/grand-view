@@ -2,21 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Modal, FormGroup, ControlLabel, FormControl, Button} from 'react-bootstrap';
 
-const CreateModal = React.createClass({
-  propTypes: {
-    isOpen: React.PropTypes.bool.isRequired,
-    close: React.PropTypes.func.isRequired,
-    generate: React.PropTypes.func.isRequired,
-    title: React.PropTypes.string.isRequired,
-    description: React.PropTypes.string,
-    cancelBtn: React.PropTypes.string,
-    generateBtn: React.PropTypes.string,
-    selectLabel: React.PropTypes.string,
-    selectOptions: React.PropTypes.arrayOf(React.PropTypes.shape({
-      value: React.PropTypes.string,
-      label: React.PropTypes.string
-    })).isRequired
-  },
+class CreateModal extends React.Component {
 
   renderSelectOptions() {
     const {selectOptions} = this.props;
@@ -24,13 +10,13 @@ const CreateModal = React.createClass({
     return selectOptions.map((option) => {
       return <option key={option.value} value={option.value}>{option.label}</option>;
     });
-  },
+  }
 
   generate() {
     const {generate} = this.props;
     const format = ReactDOM.findDOMNode(this.refs.format).value;
     generate(format);
-  },
+  }
 
   render() {
     const {
@@ -64,13 +50,31 @@ const CreateModal = React.createClass({
 
           <Modal.Footer>
             <Button onClick={close}>{cancelBtn || 'Cancel'}</Button>
-            <Button onClick={this.generate} bsStyle="primary">{generateBtn || 'OK'}</Button>
+            <Button
+              onClick={this.generate.bind(this)}
+              bsStyle="primary"
+            >{generateBtn || 'OK'}</Button>
           </Modal.Footer>
 
         </Modal>
       </div>
     );
   }
-});
+}
+
+CreateModal.propTypes = {
+  isOpen: React.PropTypes.bool.isRequired,
+  close: React.PropTypes.func.isRequired,
+  generate: React.PropTypes.func.isRequired,
+  title: React.PropTypes.string.isRequired,
+  description: React.PropTypes.string,
+  cancelBtn: React.PropTypes.string,
+  generateBtn: React.PropTypes.string,
+  selectLabel: React.PropTypes.string,
+  selectOptions: React.PropTypes.arrayOf(React.PropTypes.shape({
+    value: React.PropTypes.string,
+    label: React.PropTypes.string
+  })).isRequired
+};
 
 export default CreateModal;
