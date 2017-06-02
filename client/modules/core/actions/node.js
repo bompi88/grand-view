@@ -21,7 +21,6 @@ export default {
 
   handleClick({ Meteor, LocalState }, node, e) {
     const { _id } = node;
-    console.log(node)
     if (e.nativeEvent.which === 1) {
       Meteor.call('document.setSelectedNode', LocalState.get('CURRENT_DOCUMENT'), _id);
       LocalState.set('CURRENT_NODE', _id);
@@ -315,7 +314,7 @@ export default {
                 if (el && el.length) {
                   el.addClass('selected');
                 }
-
+                console.log(type)
                 if (type === 'chapter') {
                   this.renameNode(nodeId);
                 }

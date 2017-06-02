@@ -1,6 +1,6 @@
 export default {
 
-  insertNodeOfType({Collections, LocalState}, parentNode, nodeType) {
+  insertNodeOfType({Collections, LocalState, Meteor, $}, parentNode, nodeType) {
     const {_id: parent, level, userId} = parentNode;
 
     const children = Collections.Nodes.find({ parent, nodeType }).fetch();
@@ -24,10 +24,20 @@ export default {
     return Collections.Nodes.insert(doc,
     (error, nodeId) => {
       if (error) {
-        console.log(error);
+        return console.log(error);
       }
 
+      Collections.Nodes.update({
+        _id: doc.parent
+      }, {
+        $set: { isCollapsed: false }
+      }, (err) => {
+        if (err) {
+          return console.log(error);
+        }
 
+        LocalState.set('RENAME_NODE', nodeId);
+      });
     });
   },
 

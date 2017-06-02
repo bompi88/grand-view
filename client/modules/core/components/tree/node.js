@@ -28,6 +28,17 @@ class NodeElement extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const { context } = this.props;
+    const { $, LocalState } = context();
+
+    if (LocalState.get('RENAME_NODE')) {
+      var el = $('.tree li .element.nodes.rename div.node-text');
+      el.focus();
+      document.execCommand('selectAll', false, null);
+    }
+  }
+
   handleBlur(e) {
     const { context } = this.props;
     const { LocalState } = context();
