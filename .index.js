@@ -46,7 +46,7 @@ const dbName = 'meteor';
 const width = 1200;
 const height = 800;
 const minWidth = 1000;
-const minHeight = 800;
+const minHeight = 700;
 
 const resizeable = true;
 const frame = true;
@@ -340,8 +340,8 @@ function createWindow() {
     const windowOptions = {
       width,
       height,
-      'min-width': minWidth,
-      'min-height': minHeight,
+      minWidth,
+      minHeight,
       resizeable,
       frame,
       webPreferences: {
