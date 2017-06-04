@@ -45,6 +45,7 @@ class SelectBox extends Component {
       }
       updateOnChange(adjustedValue, nodeId);
     }
+    this.setState({ text: '' });
     return onChange(val);
   }
 
@@ -92,6 +93,8 @@ class SelectBox extends Component {
       className = 'has-feedback has-error';
     }
 
+    const showSearchOptions = this.state.text && this.state.text.length || 0;
+
     return (
       <div className={className} style={style}>
         {label ? (<ControlLabel htmlFor={name}>{label}</ControlLabel>) : null}
@@ -102,7 +105,7 @@ class SelectBox extends Component {
           placeholder={placeholder}
           onChange={this.updateValue.bind(this)}
           multi={multi}
-          options={this.state.options.length && this.state.options || options}
+          options={showSearchOptions && this.state.options || options}
           onInputChange={this.onInputChange.bind(this)}
           isLoading={this.state.isLoading}
           promptTextCreator={promptTextCreator}
