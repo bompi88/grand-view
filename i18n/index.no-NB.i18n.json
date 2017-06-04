@@ -1,9 +1,12 @@
 {
   "index": {
     "header": "GrandView",
-    "description": "Dette er et verktøy som hjelper deg å strukturere store informasjonsmengder. Kom i gang ved å enten:",
+    "description": "GrandView er et verktøy for å skaffe seg oversikt over og analysere store mengder informasjon. Det kan brukes av forskere, forfattere, studenter, og folk flest.",
+    "get_started": "Kom i gang ved å enten:",
     "create_document": "Opprett et nytt prosjekt",
     "import_document": "Importer prosjekt fra disk",
+    "manual": "Brukerveiledning kan åpnes",
+    "here": "her",
     "or": "eller"
   }
 }

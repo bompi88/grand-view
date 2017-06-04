@@ -1,9 +1,12 @@
 {
   "index": {
     "header": "GrandView",
-    "description": "This is a tool that helps you to structure large sets of data. To get started:",
+    "description": "GrandView is a tool that helps you to get an overview of, and analyzing large amounts of information. It can be used by researchers, authors, students, and others.",
+    "get_started": "To get started:",
     "create_document": "Create a new project",
     "import_document": "Import project from disk",
+    "manual": "User manual available",
+    "here": "here",
     "or": "or"
   }
 }

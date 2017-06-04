@@ -24,6 +24,8 @@
     "select_all": "Merk Alt",
     "show": "Vis",
     "refresh": "Oppfrisk",
-    "developer_tools": "Slå på/av utviklerverktøy"
+    "developer_tools": "Slå på/av utviklerverktøy",
+    "help": "Hjelp",
+    "user_manual": "Brukerveiledning"
   }
 }

@@ -24,6 +24,8 @@
     "select_all": "Select all",
     "show": "View",
     "refresh": "Refresh",
-    "developer_tools": "Toggle developer tools"
+    "developer_tools": "Toggle developer tools",
+    "help": "Help",
+    "user_manual": "User manual"
   }
 }

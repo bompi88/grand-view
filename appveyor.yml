@@ -23,6 +23,7 @@ install:
   # Restart
   - ps: Start-Sleep -s 5
   - ps: Restart-Computer -Force
+  - ps: Start-Sleep -s 5
 
 build_script:
   - echo %platform%

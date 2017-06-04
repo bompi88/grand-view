@@ -21,7 +21,34 @@ import React from 'react';
 import ImportButton from '/client/modules/core/components/prototypes/import_button';
 import Clippy from '../../containers/clippy';
 
+/* globals _require, __appPath */
+
+const sh = _require('electron').shell;
+const path = _require('path');
+
 class Index extends React.Component {
+
+  openUserManual(e) {
+    e.preventDefault();
+    if (process.env.NODE_ENV === 'production') {
+      sh.openItem(
+        path.join(
+          __appPath,
+          '..',
+          'app.asar.unpacked',
+          'bundle',
+          'programs',
+          'server',
+          'assets',
+          'app',
+          'grandview-user-manual.pdf'
+        )
+      );
+    } else {
+      sh.openItem(path.resolve(path.join('private', 'grandview-user-manual.pdf')));
+    }
+  }
+
   render() {
     const {openCreateModal, importFile, text} = this.props;
 
@@ -30,9 +57,13 @@ class Index extends React.Component {
         <Clippy />
         <div className="row animated bounceInRight">
           <div className="col-sm-6 col-md-6 outer">
-            <div className="jumbotron">
+            <div className="jumbotron" style={{ padding: '40px' }}>
               <h1>{text.header}</h1>
               <p className="lead">{text.description}</p>
+              <p className="lead">
+                {text.manual} <a href="" onClick={this.openUserManual.bind(this)}>{text.here}</a>.
+              </p>
+              <div style={{ fontWeight: 400, fontSize: '18px' }}>{text.getStarted}</div>
               <br />
               <div className="text-center">
                 <button

@@ -1,5 +1,6 @@
 {
   "asarUnpack": [
+    "**/programs/server/assets/app/*",
     "resources/mongod",
     "resources/mongod.exe"
   ],

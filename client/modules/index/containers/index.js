@@ -29,6 +29,9 @@ export const composer = ({context, clearStates}, onData) => {
     description: TAPi18n.__('index.description'),
     createDocument: TAPi18n.__('index.create_document'),
     importDocuments: TAPi18n.__('index.import_document'),
+    getStarted: TAPi18n.__('index.get_started'),
+    manual: TAPi18n.__('index.manual'),
+    here: TAPi18n.__('index.here'),
     or: TAPi18n.__('index.or')
   };
 
