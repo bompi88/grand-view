@@ -108,6 +108,7 @@ class SelectBox extends Component {
           options={showSearchOptions && this.state.options || options}
           onInputChange={this.onInputChange.bind(this)}
           isLoading={this.state.isLoading}
+          clearable={false}
           promptTextCreator={promptTextCreator}
           noResultsText={noResultsText}
           onMouseEnter={onMouseEnter}
