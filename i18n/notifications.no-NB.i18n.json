@@ -74,7 +74,7 @@
     },
     "generation_docx_success": {
       "title": "Generering lyktes",
-      "message": "Filen ble ferdigstilt og åpnes opp i et nytt vindu. Hvis du vil ta vare på filen klikker du på \"Fil->Lagre som\" i det nye vinduet."
+      "message": "Filen ble ferdigstilt og laget. Vennligst vent på at filen åpnes opp i et nytt vindu."
     },
     "generation_must_open_document": {
       "title": "Generering av .docx fil mislyktes",

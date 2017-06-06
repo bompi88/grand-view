@@ -28,7 +28,8 @@ import {TAPi18n} from 'meteor/tap:i18n';
 import Globals from '/lib/globals';
 import {Documents, Nodes, Files} from '/lib/collections';
 
-const shell = _require('electron').shell;
+const { shell, remote } = _require('electron');
+const { dialog } = remote;
 const imageSize = _require('fast-image-size');
 const officegen = _require('officegen');
 const path = _require('path');
@@ -297,28 +298,42 @@ const generationDocx = {
     Meteor.subscribe('files.byDocument', _id, () => {
       this.renderDocument(doc, docx, mainParagraph, format, compact);
 
-      const filePath = path.join(Globals.basePath, fileName);
+      // rewrite to a GrandView file (.gvf)
+      dialog.showSaveDialog({
+        title: 'Lagre utskriftsdokument',
+        filters: [
+          {
+            name: 'Microsoft Office (.docx)',
+            extensions: [ 'docx' ]
+          }
+        ]
+      }, (filePath) => {
+        if (filePath) {
+          console.log(filePath);
+          const out = fs.createWriteStream(filePath);
 
-      const out = fs.createWriteStream(filePath);
+          docx.generate(out, {
+            finalize(written) {
+              console.log('Finnished to write docx-file.\nBytes written: ' + written + '\n');
 
-      docx.generate(out, {
-        finalize(written) {
-          console.log('Finnished to write docx-file.\nBytes written: ' + written + '\n');
+              openFile(filePath, (error) => {
+                if (error) {
+                  console.log(error);
+                  return cb(true);
+                }
 
-          openFile(filePath, (error) => {
-            if (error) {
-              console.log(error);
+                return cb(null);
+              });
+            },
+            error(err) {
+              console.log(err);
               return cb(true);
             }
-
-            return cb(null);
           });
-        },
-        error(err) {
-          console.log(err);
-          return cb(true);
         }
       });
+
+
     });
   }
 };

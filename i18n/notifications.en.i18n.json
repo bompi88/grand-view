@@ -74,7 +74,7 @@
     },
     "generation_docx_success": {
       "title": "Generation was successful",
-      "message": "The file is now assembled and gets opened in a new window. If you want to save the file to your desktop, click on \"File->Save as\" in the newly opened window."
+      "message": "The file is now assembled and saved. Please wait while it opens in a new window."
     },
     "generation_must_open_document": {
       "title": "Generation of .docx file failed",
