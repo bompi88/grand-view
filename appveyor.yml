@@ -37,7 +37,7 @@ after_build:
 deploy:
   provider: GitHub
   auth_token:
-    secure: tNMKx8kVItLg0Henj9BJJNB+IUTkaa1ScGiJ7WBq6/TxST6l7MhHGe4k0omB6H5V
+    secure: YjCiFVikmwXzHjASnaAIXVyIif6hdfhnc9UiYZEHemiDGbFAiONuozyxwHRGrVIr
   artifact: "GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-unpacked,GrandView-$(APPVEYOR_REPO_TAG_NAME)-win32-$(platform)-installer"
   draft: false
   prerelease: false
