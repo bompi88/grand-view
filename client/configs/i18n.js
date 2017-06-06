@@ -18,8 +18,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 /* eslint no-console: 0 */
+/* globals _require */
 
 import {Settings} from './../../lib/collections';
+const { app } = _require('electron').remote;
 
 const getUserLanguage = function () {
   const {language} = Settings.findOne({ _id: 'user' });
@@ -27,6 +29,10 @@ const getUserLanguage = function () {
 };
 
 export default function ({Meteor, TAPi18n, Tracker, moment}) {
+
+  // Set langugae based on system locale
+  Meteor.call('setLocale', app.getLocale());
+
   Meteor.startup(() => {
     Tracker.autorun(() => {
       if (Meteor.subscribe('settings').ready()) {

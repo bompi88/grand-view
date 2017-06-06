@@ -26,7 +26,7 @@ import Globals from '/lib/globals';
 import { Random } from 'meteor/random';
 import fs from 'fs';
 
-import { Documents, Nodes, Files, References, Tags } from '/lib/collections';
+import { Documents, Nodes, Files, References, Tags, Settings } from '/lib/collections';
 
 const contentTypes = [
   'image/png',
@@ -35,9 +35,30 @@ const contentTypes = [
   'application/pdf'
 ];
 
+const getSupportedLocaleFromElectron = (locale) => {
+  switch (locale) {
+    case 'no':
+    case 'nb':
+    case 'nn':
+      return 'no-NB';
+    default:
+      return 'en';
+  }
+};
+
 export default function () {
 
   Meteor.methods({
+
+    setLocale(locale = 'en') {
+      console.log(getSupportedLocaleFromElectron(locale))
+      if (Settings.find().count() === 0) {
+        Settings.insert({
+          _id: 'user',
+          language: getSupportedLocaleFromElectron(locale)
+        });
+      }
+    },
 
     loadImage(url, nodeId, docId) {
       check(url, String);
