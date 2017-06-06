@@ -315,16 +315,17 @@ const generationDocx = {
           docx.generate(out, {
             finalize(written) {
               console.log('Finnished to write docx-file.\nBytes written: ' + written + '\n');
+
+              // TODO: maybe remove this, and let the user open itself.
               Meteor.setTimeout(() => {
                 openFile(filePath, (error) => {
                   if (error) {
                     console.log(error);
-                    return cb(true);
                   }
-
-                  return cb(null);
                 });
               }, 2000);
+
+              return cb();
             },
             error(err) {
               console.log(err);
