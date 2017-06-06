@@ -84,7 +84,7 @@ const generationDocx = {
     const { _id, name, tags, references, description } = node;
 
     const files = Files.find({ 'meta.nodeId': _id }).fetch() || [];
-    console.log(compact)
+
     if (compact === false && (name || (tags && tags.length) ||
       (references && references.length) || files.length || description)) {
       par.addLineBreak();
@@ -150,7 +150,7 @@ const generationDocx = {
 
   renderChapterNode(node, docx, posLabel, compact = false) {
     const par = docx.createP();
-    const { _id, name, nodeType, position } = node;
+    const { _id, name, position } = node;
     let numbering;
 
     if (posLabel) {
@@ -179,7 +179,7 @@ const generationDocx = {
     });
   },
 
-  renderListFormat(doc, docx, format) {
+  renderListFormat(doc, docx, format, compact = false) {
     const undefinedPropertyLabel = 'kkkjasdjnajkcziow782392ujinydsdfs';
 
     const nodes = Nodes.find({
@@ -222,7 +222,7 @@ const generationDocx = {
             par.addText(tag, header2Text);
 
             ns.forEach((n) => {
-              this.renderMediaNode(n, par);
+              this.renderMediaNode(n, par, compact);
             });
           }
         });
@@ -239,7 +239,7 @@ const generationDocx = {
         notDefinedPar.addText(undefinedLabel, header2Text);
 
         notDefined.forEach((n) => {
-          this.renderMediaNode(n, notDefinedPar);
+          this.renderMediaNode(n, notDefinedPar, compact);
         });
       }
     }
@@ -265,13 +265,11 @@ const generationDocx = {
         }
       });
     } else {
-      this.renderListFormat(doc, docx, format);
+      this.renderListFormat(doc, docx, format, compact);
     }
   },
 
   generateDOCX(_id, format, compact, cb) {
-
-    const fileName = _id + '_' + format + '.docx';
 
     const docx = officegen('docx');
     const doc = Documents.findOne({_id});
