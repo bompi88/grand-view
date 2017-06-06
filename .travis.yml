@@ -18,6 +18,7 @@ branches:
     - /v\d+\.\d+\.\d+(-beta.\d+)?/
 
 install:
+  - rvm get stable
   - APP_VERSION=$(echo $TRAVIS_TAG | cut -d 'v' -f 2)
   # Install meteor
   - curl https://install.meteor.com/ | /bin/sh
@@ -34,41 +35,32 @@ script:
   # Build app for Mac
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build:osx:verbose; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .dist/GrandView-${APP_VERSION}.dmg; fi
+  -
 
 cache:
   directories:
   - .cache
 
-
 before_deploy:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x64" ]; then mv .dist/GrandView_${APP_VERSION}_amd64.deb .dist/GrandView_${TRAVIS_TAG}_amd64.deb; DEPLOY_FILE_1=".dist/GrandView_${TRAVIS_TAG}_amd64.deb"; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x64" ]; then mv .dist/GrandView-${APP_VERSION}-x86_64.AppImage .dist/GrandView-${TRAVIS_TAG}-x86_64.AppImage; DEPLOY_FILE_2=".dist/GrandView-${TRAVIS_TAG}-x86_64.AppImage"; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x86" ]; then mv .dist/GrandView_${APP_VERSION}_i386.deb .dist/GrandView_${TRAVIS_TAG}_i386.deb; DEPLOY_FILE_1=".dist/GrandView_${TRAVIS_TAG}_i386.deb"; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x86" ]; then mv .dist/GrandView-${APP_VERSION}-ia32.AppImage .dist/GrandView-${TRAVIS_TAG}-ia32.AppImage; DEPLOY_FILE_2=".dist/GrandView-${TRAVIS_TAG}-ia32.AppImage"; fi
-deploy:
-  provider: releases
-  api_key:
-    secure:  RVS2+TbbMDWOjS+wTxcwvtp6/oiz8mgIiarODGrgY/Nf2wxNy04dFIAt+mrj05c8dUopfihVFZZRjRTGzAhzpmkFhUSvhknikdhR9DOQrWmYgUPXbHjbGEluF4BcPhcIrj5J0wXG7RO4GHiT7+RVMhNBcHEzzw1qevWVB9Lnevk+4SKeNHJoNSXRq3nk2eD289zOccLW/pwVW5rPL9AfRtpJq5YnlPHGXxWJ9udcSXYZGpHi/yzsinTE9TuAxNvq75eV0HDQgA6bCe+m0fc3+x/TGWE6E+fulGhyjd42XV0i7abdbINj4yMFaVhS/H6PU7rtp7MXbaJrjks0uBs7wEowgHXHIFqHbFuZeZE3yMJbluWuNWmMjra+NvWezG3kMZycVsNN51AUm8GqP25q8YpoQKiJ0ZfZBtoKfLo4Cj38w7TEptyBFsSxPT2kOYRK8we6t+PbDsgNAo9fQmJc5NU4Y6sRvgPWP5CglBvIKRFNpTv+ISai+bYX2DwE4yD8TFQ9CZ9ykFjEmHFC7+XUCSsjeoVQtCNvN2Jk0oQNX7E+oHO1qvhQ3tgJI4dP94WQfGoG/G+z0VESd6J0iAECoB7d7Lt0K3mBvdl/e7epS7wa2a3eG8GOboxfiqJOzHEV34uPBXIS/EPp4uq3NxnugH9OIa5mHM0Fxw8iWoBbnoA=
-  file: GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz
-  skip_cleanup: true
-  on:
-    repo: bompi88/grand-view
-    tags: true
-    condition: $TRAVIS_OS_NAME = "osx"
+  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x64" ]; then mv .dist/GrandView_${APP_VERSION}_amd64.deb .dist/GrandView_${TRAVIS_TAG}_amd64.deb; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x64" ]; then mv .dist/GrandView-${APP_VERSION}-x86_64.AppImage .dist/GrandView-${TRAVIS_TAG}-x86_64.AppImage; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x86" ]; then mv .dist/GrandView_${APP_VERSION}_i386.deb .dist/GrandView_${TRAVIS_TAG}_i386.deb; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x86" ]; then mv .dist/GrandView-${APP_VERSION}-ia32.AppImage .dist/GrandView-${TRAVIS_TAG}-ia32.AppImage; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mv .dist/GrandView-${APP_VERSION}.dmg .dist/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.dmg; fi
 
 deploy:
   provider: releases
   api_key:
     secure:  RVS2+TbbMDWOjS+wTxcwvtp6/oiz8mgIiarODGrgY/Nf2wxNy04dFIAt+mrj05c8dUopfihVFZZRjRTGzAhzpmkFhUSvhknikdhR9DOQrWmYgUPXbHjbGEluF4BcPhcIrj5J0wXG7RO4GHiT7+RVMhNBcHEzzw1qevWVB9Lnevk+4SKeNHJoNSXRq3nk2eD289zOccLW/pwVW5rPL9AfRtpJq5YnlPHGXxWJ9udcSXYZGpHi/yzsinTE9TuAxNvq75eV0HDQgA6bCe+m0fc3+x/TGWE6E+fulGhyjd42XV0i7abdbINj4yMFaVhS/H6PU7rtp7MXbaJrjks0uBs7wEowgHXHIFqHbFuZeZE3yMJbluWuNWmMjra+NvWezG3kMZycVsNN51AUm8GqP25q8YpoQKiJ0ZfZBtoKfLo4Cj38w7TEptyBFsSxPT2kOYRK8we6t+PbDsgNAo9fQmJc5NU4Y6sRvgPWP5CglBvIKRFNpTv+ISai+bYX2DwE4yD8TFQ9CZ9ykFjEmHFC7+XUCSsjeoVQtCNvN2Jk0oQNX7E+oHO1qvhQ3tgJI4dP94WQfGoG/G+z0VESd6J0iAECoB7d7Lt0K3mBvdl/e7epS7wa2a3eG8GOboxfiqJOzHEV34uPBXIS/EPp4uq3NxnugH9OIa5mHM0Fxw8iWoBbnoA=
   file:
-    - GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz
-    - $DEPLOY_FILE_1
-    - $DEPLOY_FILE_2
+    - ./*.tar.gz
+    - .dist/*.dmg
+    - .dist/*.AppImage
+    - .dist/*.deb
   skip_cleanup: true
   on:
     repo: bompi88/grand-view
     tags: true
-    condition: $TRAVIS_OS_NAME = "linux"
 
 notifications:
   email:
