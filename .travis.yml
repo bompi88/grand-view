@@ -2,17 +2,16 @@ language: node_js
 node_js:
   - "7.10.0"
 
-sudo: required
-dist: trusty
-
-# multiple oses when nodejs env comes to osx on travis
-os:
- - linux
- - osx
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+    - os: osx
 
 env:
   - ARCH=x64 ARCH_NAME=x64
-  - ARCH=x86 ARCH_NAME=ia32
+  # - ARCH=x86 ARCH_NAME=ia32
 
 branches:
   only:
