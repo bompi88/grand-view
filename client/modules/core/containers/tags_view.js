@@ -68,6 +68,9 @@ const onPropsChange = ({ context, doc }, onData) => {
       if (a.category === 'undefined') {
         return 1;
       }
+      if (b.category === 'undefined') {
+        return -1;
+      }
       return a.category.toLowerCase().localeCompare(b.category.toLowerCase(), 'nb');
     });
 
