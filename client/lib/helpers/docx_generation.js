@@ -315,15 +315,16 @@ const generationDocx = {
           docx.generate(out, {
             finalize(written) {
               console.log('Finnished to write docx-file.\nBytes written: ' + written + '\n');
+              Meteor.setTimeout(() => {
+                openFile(filePath, (error) => {
+                  if (error) {
+                    console.log(error);
+                    return cb(true);
+                  }
 
-              openFile(filePath, (error) => {
-                if (error) {
-                  console.log(error);
-                  return cb(true);
-                }
-
-                return cb(null);
-              });
+                  return cb(null);
+                });
+              }, 2000);
             },
             error(err) {
               console.log(err);
