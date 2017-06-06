@@ -1,9 +1,8 @@
 environment:
   nodejs_version: "7.10.0"
 
-branches:
-  only:
-    - /v\d+\.\d+\.\d+(-beta.\d+)?/
+on:
+  appveyor_repo_tag: true
 
 platform:
   - x86
