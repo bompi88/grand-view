@@ -50,6 +50,8 @@ before_deploy:
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x86" ]; then mv GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .releases/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mv .dist/GrandView-${APP_VERSION}.dmg .releases/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.dmg; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mv GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .releases/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz; fi
+  - ls .releases
+  - ls
 
 deploy:
   provider: releases
