@@ -2,7 +2,7 @@
   "name": "GrandView",
   "productName": "GrandView",
   "description": "Helps you structure a large set of information units. Can be used as a tool to plan and gather resources for reports/theses and so on.",
-  "version": "0.1.0-beta.8",
+  "version": "0.1.0-beta.9",
   "company": "Concept NTNU",
   "homepage": "https://github.com/bompi88/grand-view",
   "author": {
@@ -83,6 +83,7 @@
     "dev": "node .scripts/run",
     "reset": "meteor reset",
     "build:osx": "node .scripts/download --platform=darwin --arch=x64 && node .scripts/prepare --platform=darwin --arch=x64 && build --mac --config ./packager.json",
+    "build:osx:verbose": "node .scripts/download --platform=darwin --arch=x64 && METEOR_DEBUG_BUILD=1 node .scripts/prepare --platform=darwin --arch=x64 && DEBUG=electron-builder build --mac --config ./packager.json",
     "build:linux:x86": "node .scripts/download --platform=linux --arch=x86 && node .scripts/prepare --platform=linux --arch=x86 && build --linux --ia32 --config ./packager.json",
     "build:linux:x64": "node .scripts/download --platform=linux --arch=x64 && node .scripts/prepare --platform=linux --arch=x64 && build --linux --x64 --config ./packager.json",
     "build:win:x86": "node .scripts/download --platform=win32 --arch=x86 && node .scripts/prepare --platform=win32 --arch=x86 && build --win --ia32 --config ./packager.json",

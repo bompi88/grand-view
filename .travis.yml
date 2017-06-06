@@ -28,12 +28,12 @@ install:
 
 script:
   # Build app for Linux
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build:$TRAVIS_OS_NAME:$ARCH; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build:linux:$ARCH; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x64" ]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-unpacked .; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x86" ]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-ia32-unpacked .; fi
 
   # Build app for Mac
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then travis_wait 70 npm run build:$TRAVIS_OS_NAME; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then travis_wait 70 npm run build:osx:verbose; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .dist/GrandView-${APP_VERSION}.dmg; fi
 
 cache:
