@@ -38,7 +38,8 @@ const onPropsChange = ({ context, doc }, onData) => {
         $or: [ { references: { $exists: false } }, { references: { $size: 0 } } ],
         nodeType: 'media'
       }, {
-        sort: { name: 1 }
+        sort: { name: 1 },
+        reactive: false
       }).fetch();
     } else {
       fetchedNodes = Collections.Nodes.find({
@@ -46,7 +47,8 @@ const onPropsChange = ({ context, doc }, onData) => {
         'references.label': reference,
         nodeType: 'media'
       }, {
-        sort: { name: 1 }
+        sort: { name: 1 },
+        reactive: false
       }).fetch();
     }
 

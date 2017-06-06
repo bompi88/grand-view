@@ -19,7 +19,7 @@
 
 import React from 'react';
 import update from 'react/lib/update';
-import NodesTableRow from '../../containers/nodes_table_row';
+import NodesTableRow from '../../containers/nodes_table_category_row';
 
 const styles = {
   heading: {
