@@ -22,7 +22,8 @@
         "chapters": "Kapitler",
         "tags": "Nøkkelord",
         "references": "Kilder"
-      }
+      },
+      "compact_mode": "Kompakt modus"
     },
     "language_modal": {
       "title": "Valg av språk",

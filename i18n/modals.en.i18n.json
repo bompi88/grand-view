@@ -22,7 +22,8 @@
         "chapters": "Chapters",
         "tags": "Tags",
         "references": "References"
-      }
+      },
+      "compact_mode": "Compact mode"
     },
     "language_modal": {
       "title": "Choose a language",

@@ -51,7 +51,6 @@ export default function () {
   Meteor.methods({
 
     setLocale(locale = 'en') {
-      console.log(getSupportedLocaleFromElectron(locale))
       if (Settings.find().count() === 0) {
         Settings.insert({
           _id: 'user',

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Modal, FormGroup, ControlLabel, FormControl, Button} from 'react-bootstrap';
+import { Modal, FormGroup, ControlLabel, FormControl, Button, Checkbox } from 'react-bootstrap';
 
 class CreateModal extends React.Component {
 
@@ -15,7 +15,8 @@ class CreateModal extends React.Component {
   generate() {
     const {generate} = this.props;
     const format = ReactDOM.findDOMNode(this.refs.format).value;
-    generate(format);
+    const compact = this.compact.checked;
+    generate(format, compact);
   }
 
   render() {
@@ -26,7 +27,8 @@ class CreateModal extends React.Component {
       description,
       cancelBtn,
       generateBtn,
-      selectLabel
+      selectLabel,
+      compactMode
     } = this.props;
 
     return (
@@ -45,6 +47,9 @@ class CreateModal extends React.Component {
               <FormControl ref="format" componentClass="select" placeholder="select">
                 {this.renderSelectOptions()}
               </FormControl>
+              <Checkbox inputRef={ref => { this.compact = ref; }}>
+                {compactMode}
+              </Checkbox>
             </FormGroup>
           </Modal.Body>
 

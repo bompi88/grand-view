@@ -19,11 +19,11 @@
 
 export default {
 
-  generate({Helpers, NotificationManager, TAPi18n, LocalState}, format) {
+  generate({Helpers, NotificationManager, TAPi18n, LocalState}, format, compact = false) {
     const _id = LocalState.get('CURRENT_DOCUMENT');
 
     if (_id) {
-      Helpers.generateDOCX(_id, format, (err) => {
+      Helpers.generateDOCX(_id, format, compact, (err) => {
         if (err) {
           NotificationManager.error(
             TAPi18n.__('notifications.generation_docx_failed.message'),

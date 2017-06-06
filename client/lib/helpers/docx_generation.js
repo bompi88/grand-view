@@ -83,15 +83,15 @@ const generationDocx = {
     const { _id, name, tags, references, description } = node;
 
     const files = Files.find({ 'meta.nodeId': _id }).fetch() || [];
-
+    console.log(compact)
     if (compact === false && (name || (tags && tags.length) ||
       (references && references.length) || files.length || description)) {
       par.addLineBreak();
       par.addText('_______________________________________________________________');
-      par.addLineBreak();
     }
 
     if (name) {
+      par.addLineBreak();
       par.addText(name || '', header3Text);
       par.addLineBreak();
     }
@@ -173,7 +173,7 @@ const generationDocx = {
       if (type === 'chapter') {
         this.renderChapterNode(elNode, docx, numbering, compact);
       } else {
-        this.renderMediaNode(elNode, par, numbering, compact);
+        this.renderMediaNode(elNode, par, compact);
       }
     });
   },
@@ -244,9 +244,9 @@ const generationDocx = {
     }
   },
 
-  renderDocument(doc, docx, mainPar, format) {
+  renderDocument(doc, docx, mainPar, format, compact) {
 
-    if (format === 'chapters' || format === 'chapters_compact') {
+    if (format === 'chapters') {
       const nodes = Nodes.find({
         parent: doc._id
       }, {
@@ -257,7 +257,6 @@ const generationDocx = {
 
       nodes.forEach((node) => {
         const {nodeType} = node;
-        const compact = format === 'chapters_compact';
         if (nodeType === 'chapter') {
           this.renderChapterNode(node, docx, 0, compact);
         } else {
@@ -269,7 +268,7 @@ const generationDocx = {
     }
   },
 
-  generateDOCX(_id, format, cb) {
+  generateDOCX(_id, format, compact, cb) {
 
     const fileName = _id + '_' + format + '.docx';
 
@@ -296,7 +295,7 @@ const generationDocx = {
     }
 
     Meteor.subscribe('files.byDocument', _id, () => {
-      this.renderDocument(doc, docx, mainParagraph, format);
+      this.renderDocument(doc, docx, mainParagraph, format, compact);
 
       const filePath = path.join(Globals.basePath, fileName);
 

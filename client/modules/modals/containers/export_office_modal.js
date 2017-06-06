@@ -12,14 +12,11 @@ export const composer = ({context}, onData) => {
   const generateBtn = TAPi18n.__('modals.export_office_modal.generate');
   const cancelBtn = TAPi18n.__('forms.cancel');
   const selectLabel = TAPi18n.__('modals.export_office_modal.select.label');
+  const compactMode = TAPi18n.__('modals.export_office_modal.compact_mode');
 
   const selectOptions = [
     {
       value: 'chapters',
-      label: TAPi18n.__('modals.export_office_modal.select.chapters')
-    },
-    {
-      value: 'chapters_compact',
       label: TAPi18n.__('modals.export_office_modal.select.chapters')
     },
     {
@@ -32,7 +29,16 @@ export const composer = ({context}, onData) => {
     }
   ];
 
-  onData(null, {isOpen, title, description, generateBtn, cancelBtn, selectOptions, selectLabel});
+  onData(null, {
+    isOpen,
+    title,
+    description,
+    generateBtn,
+    cancelBtn,
+    selectOptions,
+    selectLabel,
+    compactMode
+  });
 };
 
 export const depsMapper = (context, actions) => ({
