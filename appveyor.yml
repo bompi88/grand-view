@@ -30,12 +30,9 @@ build_script:
   - npm run build:win:%platform%
 
 after_build:
-  - dir
-  - cd .dist
-  - dir
   - 7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-installer.zip "%APPVEYOR_BUILD_FOLDER%\.dist\GrandView Setup %APP_VERSION%.exe"
-  - IF "%platform%" == "x64" (7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-unpacked.zip "%APPVEYOR_BUILD_FOLDER%\.dist\win-unpacked)"
-  - IF "%platform%" == "x86" (7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-unpacked.zip "%APPVEYOR_BUILD_FOLDER%\.dist\win-ia32-unpacked)"
+  - IF "%platform%" == "x64" (7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-unpacked.zip "%APPVEYOR_BUILD_FOLDER%\.dist\win-unpacked")
+  - IF "%platform%" == "x86" (7z a GrandView-%APPVEYOR_REPO_TAG_NAME%-win32-%platform%-unpacked.zip "%APPVEYOR_BUILD_FOLDER%\.dist\win-ia32-unpacked")
 
 deploy:
   provider: GitHub

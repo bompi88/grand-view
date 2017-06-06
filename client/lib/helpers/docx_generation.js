@@ -79,13 +79,13 @@ const openFile = (filePath, callback) => {
 
 
 const generationDocx = {
-  renderMediaNode(node, par) {
+  renderMediaNode(node, par, compact = false) {
     const { _id, name, tags, references, description } = node;
 
     const files = Files.find({ 'meta.nodeId': _id }).fetch() || [];
 
-    if (name || (tags && tags.length) ||
-      (references && references.length) || files.length || description) {
+    if (compact === false && (name || (tags && tags.length) ||
+      (references && references.length) || files.length || description)) {
       par.addLineBreak();
       par.addText('_______________________________________________________________');
       par.addLineBreak();
@@ -96,7 +96,7 @@ const generationDocx = {
       par.addLineBreak();
     }
 
-    if (tags) {
+    if (compact === false && tags) {
       par.addText(TAPi18n.__('tags') + ':', keywordHeaderText);
       par.addText(' ' + tags.map(t => t.label).join(', '), keywordText);
       par.addLineBreak();
@@ -147,7 +147,7 @@ const generationDocx = {
     });
   },
 
-  renderChapterNode(node, docx, posLabel) {
+  renderChapterNode(node, docx, posLabel, compact = false) {
     const par = docx.createP();
     const { _id, name, nodeType, position } = node;
     let numbering;
@@ -171,9 +171,9 @@ const generationDocx = {
     nodes.forEach((elNode) => {
       const { nodeType: type } = elNode;
       if (type === 'chapter') {
-        this.renderChapterNode(elNode, docx, numbering);
+        this.renderChapterNode(elNode, docx, numbering, compact);
       } else {
-        this.renderMediaNode(elNode, par, numbering);
+        this.renderMediaNode(elNode, par, numbering, compact);
       }
     });
   },
@@ -246,7 +246,7 @@ const generationDocx = {
 
   renderDocument(doc, docx, mainPar, format) {
 
-    if (format === 'chapters') {
+    if (format === 'chapters' || format === 'chapters_compact') {
       const nodes = Nodes.find({
         parent: doc._id
       }, {
@@ -257,10 +257,11 @@ const generationDocx = {
 
       nodes.forEach((node) => {
         const {nodeType} = node;
+        const compact = format === 'chapters_compact';
         if (nodeType === 'chapter') {
-          this.renderChapterNode(node, docx, 0);
+          this.renderChapterNode(node, docx, 0, compact);
         } else {
-          this.renderMediaNode(node, mainPar, 0);
+          this.renderMediaNode(node, mainPar, 0, compact);
         }
       });
     } else {

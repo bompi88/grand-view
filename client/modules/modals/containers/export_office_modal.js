@@ -19,6 +19,10 @@ export const composer = ({context}, onData) => {
       label: TAPi18n.__('modals.export_office_modal.select.chapters')
     },
     {
+      value: 'chapters_compact',
+      label: TAPi18n.__('modals.export_office_modal.select.chapters')
+    },
+    {
       value: 'tags',
       label: TAPi18n.__('modals.export_office_modal.select.tags')
     },

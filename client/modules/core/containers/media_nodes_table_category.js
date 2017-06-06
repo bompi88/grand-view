@@ -1,6 +1,6 @@
 import NodesTable from '../components/table/nodes_table_category';
 
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import {useDeps, compose, composeAll} from 'mantra-core';
 
 export const composer = ({
   context,
@@ -63,6 +63,6 @@ export const depsMapper = (context, actions) => ({
 });
 
 export default composeAll(
-  composeWithTracker(composer),
+  compose(composer),
   useDeps(depsMapper)
 )(NodesTable);
