@@ -172,14 +172,15 @@ class EditViewForm extends React.Component {
     );
   }
 
-  uploadFile(file, type) {
+  uploadFile(file, type, ext) {
     const { Collections, LocalState } = this.props.context();
     const { Files } = Collections;
 
     let uploadInstance = Files.insert({
       file,
-      fileName: 'clipboard.' + type,
+      fileName: 'clipboard.' + ext,
       isBase64: true,
+      type,
       meta: {
         nodeId: LocalState.get('EDIT_NODE'),
         docId: LocalState.get('CURRENT_DOCUMENT')
@@ -232,29 +233,62 @@ class EditViewForm extends React.Component {
     uploadInstance.start(); // Must manually start the upload
   }
 
+  uploadImage(type, ext) {
+    const image = clipboard.readImage();
+    if (image.isEmpty()) {
+      return;
+    }
+
+    this.uploadFile(image.toDataURL(), type, ext);
+  }
+
+  uploadText(type, ext) {
+    const text = type === 'text/rtf' ? clipboard.readRTF() : clipboard.readText();
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.uploadFile(e.target.result, type, ext);
+    };
+
+    reader.readAsDataURL(new Blob([ text ]));
+  }
+
   importFromClipboard(event) {
     const { LocalState, NotificationManager, TAPi18n } = this.props.context();
     if (LocalState.get('PASTE_FILE', true)) {
+      event.stopPropagation();
+      event.preventDefault();
       LocalState.get('PASTE_FILE', false);
-      const image = clipboard.readImage();
       const formats = clipboard.availableFormats();
       console.log(formats);
-      let hasImage = false;
-      for (let format of formats) {
-        if (/image/.test(format)) {
-          hasImage = true;
-        }
+
+      const bmp = formats.indexOf('image/bmp') > -1;
+      const png = formats.indexOf('image/png') > -1;
+      const rtf = formats.indexOf('text/rtf') > -1;
+      const html = formats.indexOf('text/html') > -1;
+      const txt = formats.indexOf('text/plain') > -1;
+
+      if (png) {
+        this.uploadImage('image/png', 'png');
       }
 
-      try {
-        if (hasImage) {
-          this.uploadFile(image.toDataURL(), 'png');
-        } else {
-          this.uploadFile(clipboard.readRTF(), 'rtf');
-        }
-        event.stopPropagation();
-        event.preventDefault();
-      } catch (e) {
+      if (!png && bmp) {
+        this.uploadImage('image/bmp', 'bmp');
+      }
+
+      if (rtf) {
+        this.uploadText('text/rtf', 'rtf');
+      }
+
+      if (!rtf && txt) {
+        this.uploadText('text/plain', 'txt');
+      }
+
+
+      if (!rtf && !txt && html) {
+        this.uploadText('text/html', 'html');
+      }
+
+      if (!png && !bmp && !rtf && !txt && !html) {
         NotificationManager.warning(
           TAPi18n.__('notifications.could_not_paste_as_file.message'),
           TAPi18n.__('notifications.could_not_paste_as_file.title')
