@@ -25,7 +25,7 @@ import Globals from '/lib/globals';
 
 const {remote} = _require('electron');
 const {dialog} = remote;
-const fs = _require('fs');
+const fs = _require('fs-extra');
 const path = _require('path');
 const async = _require('async');
 const archiver = _require('archiver');
@@ -309,18 +309,9 @@ export default {
 
         archive.pipe(output);
 
-        archive.bulk([
-          {
-            expand: true,
-            cwd: path.join(Globals.basePath, 'tmp'),
-            src: [ '*.json' ]
-          }, {
-            expand: true,
-            cwd: path.join(Globals.basePath, 'tmp', 'files'),
-            src: [ '**' ],
-            dest: 'files'
-          }
-        ]);
+        archive.glob('**/*', {
+          cwd: path.join(Globals.basePath, 'tmp')
+        });
 
         archive.finalize();
 
