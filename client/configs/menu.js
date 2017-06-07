@@ -17,7 +17,7 @@
 // limitations under the License.
 ////////////////////////////////////////////////////////////////////////////////
 
-/* globals _require, __appPath */
+/* globals _require */
 /* eslint no-sync: 0 */
 
 // import { ActionCreators } from 'redux-undo';
@@ -28,7 +28,7 @@ export default (context) => {
   const path = _require('path');
   const platform = os.platform();
   const Menu = remote.Menu;
-  const sh = _require('electron').shell;
+  const { BrowserWindow } = _require('electron').remote;
 
   const {
     LocalState,
@@ -284,23 +284,11 @@ export default (context) => {
           {
             label: TAPi18n.__('menu.user_manual'),
             click() {
-              if (process.env.NODE_ENV === 'production') {
-                sh.openItem(
-                  path.join(
-                    __appPath,
-                    '..',
-                    'app.asar.unpacked',
-                    'bundle',
-                    'programs',
-                    'server',
-                    'assets',
-                    'app',
-                    'grandview-user-manual.pdf'
-                  )
-                );
-              } else {
-                sh.openItem(path.resolve(path.join('private', 'grandview-user-manual.pdf')));
-              }
+              let win = new BrowserWindow({width: 800, height: 600});
+              win.on('closed', () => {
+                win = null;
+              });
+              win.loadURL(location.origin + '/grandview-user-manual.pdf');
             }
           }
         ]

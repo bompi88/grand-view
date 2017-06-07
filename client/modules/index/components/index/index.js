@@ -21,32 +21,19 @@ import React from 'react';
 import ImportButton from '/client/modules/core/components/prototypes/import_button';
 import Clippy from '../../containers/clippy';
 
-/* globals _require, __appPath */
+/* globals _require */
 
-const sh = _require('electron').shell;
-const path = _require('path');
+const { BrowserWindow } = _require('electron').remote;
 
 class Index extends React.Component {
 
   openUserManual(e) {
     e.preventDefault();
-    if (process.env.NODE_ENV === 'production') {
-      sh.openItem(
-        path.join(
-          __appPath,
-          '..',
-          'app.asar.unpacked',
-          'bundle',
-          'programs',
-          'server',
-          'assets',
-          'app',
-          'grandview-user-manual.pdf'
-        )
-      );
-    } else {
-      sh.openItem(path.resolve(path.join('private', 'grandview-user-manual.pdf')));
-    }
+    let win = new BrowserWindow({width: 800, height: 600});
+    win.on('closed', () => {
+      win = null;
+    });
+    win.loadURL(location.origin + '/grandview-user-manual.pdf');
   }
 
   render() {
