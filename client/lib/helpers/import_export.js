@@ -284,7 +284,7 @@ export default {
             ]
           }, (filePathAndName) => {
             if (filePathAndName) {
-              fs.rename(path.join(Globals.basePath, 'output.tar'), filePathAndName, (error) => {
+              fs.copy(path.join(Globals.basePath, 'output.tar'), filePathAndName, { overwrite: true }, (error) => {
                 if (error) {
                   console.log(error);
                 } else {
