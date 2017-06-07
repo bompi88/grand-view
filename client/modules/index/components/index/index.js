@@ -34,6 +34,7 @@ class Index extends React.Component {
       win = null;
     });
     win.loadURL(location.origin + '/grandview-user-manual.pdf');
+    win.setMenu(null);
   }
 
   render() {

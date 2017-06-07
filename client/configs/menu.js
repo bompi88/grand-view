@@ -289,6 +289,7 @@ export default (context) => {
                 win = null;
               });
               win.loadURL(location.origin + '/grandview-user-manual.pdf');
+              win.setMenu(null);
             }
           }
         ]
