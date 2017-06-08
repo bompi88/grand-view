@@ -95,8 +95,9 @@ function copyStartupFiles(os) {
   delete pjson.private;
   delete pjson.mongo_version;
 
+  const rebuildPath = path.join('..', 'node_modules', '.bin', 'electron-rebuild');
   pjson.scripts = {
-    postinstall: `../node_modules/.bin/electron-rebuild --arch ${arch === 'x64' ? arch : 'ia32'} --version ${pjson.electron_version} --module-dir ./`
+    postinstall: `${rebuildPath} --arch ${arch === 'x64' ? arch : 'ia32'} --version ${pjson.electron_version} --module-dir ./`
   };
 
   const bundlePjson = require('../.bundle/bundle/programs/server/package.json');
