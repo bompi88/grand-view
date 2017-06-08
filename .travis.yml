@@ -11,7 +11,7 @@ matrix:
 
 env:
   - ARCH=x64 ARCH_NAME=x64
-  # - ARCH=x86 ARCH_NAME=ia32
+  - ARCH=x86 ARCH_NAME=ia32
 
 branches:
   only:

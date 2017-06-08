@@ -12,8 +12,13 @@ import bootbox from 'bootbox';
 const { clipboard, shell } = _require('electron');
 const fs = _require('fs-extra');
 const mime = require('mime-types');
-const winClipboard = _require('win-clipboard');
-const Jimp = _require('jimp');
+const platform = _require('os').platform();
+let winClipboard = {};
+
+if (platform === 'win32') {
+  winClipboard = _require('win-clipboard');
+}
+
 
 import 'react-select/dist/react-select.css';
 
@@ -21,6 +26,22 @@ const styles = {
   marginBottom: {
     marginBottom: '15px'
   }
+};
+
+const uint8Tobase64 = (uint8) => {
+  let binary = '';
+  for (let i = 0; i < uint8.byteLength; i++) {
+    binary += String.fromCharCode(uint8[i]);
+  }
+  return window.btoa(binary);
+};
+
+const str2uint8 = (str) => {
+  const uint = new Uint8Array(str.length);
+  for (let i = 0, j = str.length; i < j; ++i) {
+    uint[i] = str.charCodeAt(i);
+  }
+  return uint;
 };
 
 class EditViewForm extends React.Component {
@@ -176,7 +197,7 @@ class EditViewForm extends React.Component {
     );
   }
 
-  uploadFile(file, type, ext) {
+  uploadFile(file, type, ext, cb) {
     const { Collections, LocalState } = this.props.context();
     const { Files } = Collections;
 
@@ -220,10 +241,12 @@ class EditViewForm extends React.Component {
       //   progress: 0,
       //   inProgress: false
       // });
+      cb(true);
     });
 
     uploadInstance.on('error', (error, fileObj) => {
       console.log('Error during upload: ' + error);
+      cb(false);
     });
 
     uploadInstance.on('progress', (progress, fileObj) => {
@@ -237,141 +260,156 @@ class EditViewForm extends React.Component {
     uploadInstance.start(); // Must manually start the upload
   }
 
-  uploadText(type, ext) {
-    const text = type === 'text/rtf' ? clipboard.readRTF() : clipboard.readText();
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.uploadFile(e.target.result, type, ext);
+  handlePasteMac(cb) {
+
+    if (clipboard.has('public.file-url')) {
+      const rawFilePath = clipboard.read('public.file-url');
+      const filePath = rawFilePath.replace('file://', '');
+      const contentType = mime.lookup(filePath);
+
+      if (contentType) {
+        return fs.readFile(filePath, (err, buffer) => {
+          const blob = buffer.toString('base64');
+          return this.uploadFile(blob, contentType, mime.extension(contentType), cb);
+        });
+      }
+    }
+
+    if (clipboard.has('public.png')) {
+      const buffer = clipboard.readBuffer('public.png');
+      const blob = buffer.toString('base64');
+      return this.uploadFile(blob, 'image/png', 'png', cb);
+    }
+
+    if (clipboard.has('com.adobe.pdf')) {
+      const buffer = clipboard.readBuffer('com.adobe.pdf');
+      const blob = buffer.toString('base64');
+      return this.uploadFile(blob, 'application/pdf', 'pdf', cb);
+    }
+
+    if (clipboard.has('public.tiff')) {
+      const buffer = clipboard.readBuffer('public.tiff');
+      const blob = buffer.toString('base64');
+      return this.uploadFile(blob, 'image/tif', 'tiff', cb);
+    }
+
+    // if (clipboard.has('com.apple.flat-rtfd')) {
+    //   const buffer = clipboard.readBuffer('com.apple.flat-rtfd');
+    //   console.log(buffer.toString('hex'));
+    //   const blob = buffer.toString('base64');
+    //   return this.uploadFile(blob, 'application/x-apple-disk', 'rtfd');
+    // }
+
+    if (clipboard.has('public.rtf')) {
+      const buffer = clipboard.readBuffer('public.rtf');
+      const blob = buffer.toString('base64');
+      return this.uploadFile(blob, 'text/rtf', 'rtf', cb);
+    }
+
+    if (clipboard.has('public.utf8-plain-text')) {
+      const buffer = clipboard.readBuffer('public.utf8-plain-text');
+      const blob = buffer.toString('base64');
+      return this.uploadFile(blob, 'text/plain', 'txt', cb);
+    }
+
+    cb(false);
+  }
+
+  handlePasteWin(cb) {
+    const hasFormat = (format) => {
+      const formats = winClipboard.getFormats();
+      return formats.indexOf(format) > -1;
     };
 
-    reader.readAsDataURL(new Blob([ text ]));
+    if (hasFormat('FileNameW')) {
+      const filePath = winClipboard.getText('FileNameW');
+      const contentType = mime.lookup(filePath);
+
+      if (contentType) {
+        return fs.readFile(filePath, (err, buffer) => {
+          const blob = buffer.toString('base64');
+          this.uploadFile(blob, contentType, mime.extension(contentType), cb);
+        });
+      }
+    }
+
+    if (hasFormat('PNG')) {
+      const uint8 = winClipboard.getData('PNG');
+      if (uint8) {
+        const blob = uint8Tobase64(uint8);
+        return this.uploadFile(blob, 'image/png', 'png', cb);
+      }
+    }
+
+    if (hasFormat('CF_BITMAP') && hasFormat('CF_DIB')) {
+      const uint8 = winClipboard.getData('CF_DIB');
+
+      var bmpHeader = new Buffer(14);
+      bmpHeader.writeUInt16LE(0x4d42, 0);
+      bmpHeader.writeUInt32LE(uint8.byteLength + 14, 2); // size of BMP
+      bmpHeader.writeUInt16LE(0, 6); // bfreserved1
+      bmpHeader.writeUInt16LE(0, 8); // bfreserved2
+      bmpHeader.writeUInt32LE(36, 10); // offset bitmap image data
+
+      const f = new Uint8Array(bmpHeader.byteLength + uint8.length);
+      f.set(new Uint8Array(bmpHeader));
+      f.set(uint8, bmpHeader.byteLength);
+
+      const blob = uint8Tobase64(f);
+      return this.uploadFile(blob, 'image/bmp', 'bmp', cb);
+    }
+
+    if (hasFormat('GIF')) {
+      const uint8 = winClipboard.getData('GIF');
+      if (uint8) {
+        const blob = uint8Tobase64(uint8);
+        return this.uploadFile(blob, 'image/gif', 'gif', cb);
+      }
+    }
+
+    if (hasFormat('Rich Text Format')) {
+      const uint8 = winClipboard.getData('Rich Text Format');
+      const blob = uint8Tobase64(uint8);
+      return this.uploadFile(blob, 'text/rtf', 'rtf', cb);
+    }
   }
 
-  handlePasteMac() {
-
-          if (clipboard.has('public.file-url')) {
-            const rawFilePath = clipboard.read('public.file-url');
-            const filePath = rawFilePath.replace('file://', '');
-            const contentType = mime.lookup(filePath);
-
-            if (contentType) {
-              return fs.readFile(filePath, (err, buffer) => {
-                const blob = buffer.toString('base64');
-                return this.uploadFile(blob, contentType, mime.extension(contentType));
-              });
-            }
-          }
-
-          if (clipboard.has('public.png')) {
-            const buffer = clipboard.readBuffer('public.png');
-            const blob = buffer.toString('base64');
-            return this.uploadFile(blob, 'image/png', 'png');
-          }
-
-          if (clipboard.has('com.adobe.pdf')) {
-            const buffer = clipboard.readBuffer('com.adobe.pdf');
-            const blob = buffer.toString('base64');
-            return this.uploadFile(blob, 'application/pdf', 'pdf');
-          }
-
-          if (clipboard.has('public.tiff')) {
-            const buffer = clipboard.readBuffer('public.tiff');
-            const blob = buffer.toString('base64');
-            return this.uploadFile(blob, 'image/tif', 'tiff');
-          }
-
-          // if (clipboard.has('com.apple.flat-rtfd')) {
-          //   const buffer = clipboard.readBuffer('com.apple.flat-rtfd');
-          //   console.log(buffer.toString('hex'));
-          //   const blob = buffer.toString('base64');
-          //   return this.uploadFile(blob, 'application/x-apple-disk', 'rtfd');
-          // }
-
-          if (clipboard.has('public.rtf')) {
-            const buffer = clipboard.readBuffer('public.rtf');
-            const blob = buffer.toString('base64');
-            return this.uploadFile(blob, 'text/rtf', 'rtf');
-          }
-  }
-
-  importFromClipboard(clipEvent, event) {
-    event.stopPropagation();
-    event.preventDefault();
+  importFromClipboard(clipEvent) {
+    clipEvent.stopPropagation();
+    clipEvent.preventDefault();
 
     const { LocalState, NotificationManager, TAPi18n } = this.props.context();
 
     if (LocalState.get('PASTE_FILE', true)) {
       LocalState.get('PASTE_FILE', false);
-
-      const hasFormat = (format) => {
-        const formats = winClipboard.getFormats();
-        return formats.indexOf(format) > -1;
+      if (platform === 'win32') {
+        this.handlePasteWin((pasted) => {
+          if (!pasted) {
+            NotificationManager.warning(
+              TAPi18n.__('notifications.could_not_paste_as_file.message'),
+              TAPi18n.__('notifications.could_not_paste_as_file.title')
+            );
+          }
+        });
       }
 
-      const uint8Tobase64 = (uint8) => {
-        let binary = '';
-        for (let i = 0; i < uint8.byteLength; i++) {
-          binary += String.fromCharCode(uint8[i]);
-        }
-        return window.btoa(binary);
+      if (platform === 'darwin') {
+        this.handlePasteMac((pasted) => {
+          if (!pasted) {
+            NotificationManager.warning(
+              TAPi18n.__('notifications.could_not_paste_as_file.message'),
+              TAPi18n.__('notifications.could_not_paste_as_file.title')
+            );
+          }
+        });
       }
 
-      if (hasFormat('FileNameW')) {
-        const filePath = winClipboard.getText('FileNameW');
-        const contentType = mime.lookup(filePath);
-
-        if (contentType) {
-          return fs.readFile(filePath, (err, buffer) => {
-            const blob = buffer.toString('base64');
-            return this.uploadFile(blob, contentType, mime.extension(contentType));
-          });
-        }
+      if (platform === 'linux') {
+        NotificationManager.warning(
+          'Lim inn som fil er dessverre ikke støttet på Linux-plattformer enda.',
+          TAPi18n.__('notifications.could_not_paste_as_file.title')
+        );
       }
-
-      if (hasFormat('PNG')) {
-        const uint8 = winClipboard.getData('PNG');
-        if (uint8) {
-          const blob = uint8Tobase64(uint8);
-          return this.uploadFile(blob, 'image/png', 'png');
-        }
-      }
-
-      if (hasFormat('CF_BITMAP') && hasFormat('CF_DIB')) {
-        const uint8 = winClipboard.getData('CF_DIB');
-
-        var bmpHeader = new Buffer(14);
-        bmpHeader.writeUInt16LE(0x4d42, 0);
-        bmpHeader.writeUInt32LE(uint8.byteLength + 14, 2); // size of BMP
-        bmpHeader.writeUInt16LE(0, 6); // bfreserved1
-        bmpHeader.writeUInt16LE(0, 8); // bfreserved2
-        bmpHeader.writeUInt32LE(36, 10); // offset bitmap image data
-
-        const f = new Uint8Array(bmpHeader.byteLength + uint8.length);
-        f.set(new Uint8Array(bmpHeader));
-        f.set(uint8, bmpHeader.byteLength);
-
-        const blob = uint8Tobase64(f);
-        return this.uploadFile(blob, 'image/bmp', 'bmp');
-      }
-
-      if (hasFormat('GIF')) {
-        const uint8 = winClipboard.getData('GIF');
-        if (uint8) {
-          const blob = uint8Tobase64(uint8);
-          return this.uploadFile(blob, 'image/gif', 'gif');
-        }
-      }
-
-      if (hasFormat('Rich Text Format')) {
-        const uint8 = winClipboard.getData('Rich Text Format');
-        const blob = uint8Tobase64(uint8);
-        return this.uploadFile(blob, 'text/rtf', 'rtf');
-      }
-
-      NotificationManager.warning(
-        TAPi18n.__('notifications.could_not_paste_as_file.message'),
-        TAPi18n.__('notifications.could_not_paste_as_file.title')
-      );
     }
   }
 
