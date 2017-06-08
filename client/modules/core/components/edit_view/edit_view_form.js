@@ -10,6 +10,8 @@ import bootbox from 'bootbox';
 /* globals _require */
 
 const { clipboard, shell } = _require('electron');
+const fs = _require('fs-extra');
+var mime = require('mime-types');
 
 import 'react-select/dist/react-select.css';
 
@@ -233,15 +235,6 @@ class EditViewForm extends React.Component {
     uploadInstance.start(); // Must manually start the upload
   }
 
-  uploadImage(type, ext) {
-    const image = clipboard.readImage();
-    if (image.isEmpty()) {
-      return;
-    }
-
-    this.uploadFile(image.toDataURL(), type, ext);
-  }
-
   uploadText(type, ext) {
     const text = type === 'text/rtf' ? clipboard.readRTF() : clipboard.readText();
     const reader = new FileReader();
@@ -252,48 +245,64 @@ class EditViewForm extends React.Component {
     reader.readAsDataURL(new Blob([ text ]));
   }
 
-  importFromClipboard(event) {
+  importFromClipboard(clipEvent, event) {
+    event.stopPropagation();
+    event.preventDefault();
+
     const { LocalState, NotificationManager, TAPi18n } = this.props.context();
+
     if (LocalState.get('PASTE_FILE', true)) {
-      event.stopPropagation();
-      event.preventDefault();
       LocalState.get('PASTE_FILE', false);
-      const formats = clipboard.availableFormats();
-      console.log(formats);
 
-      const bmp = formats.indexOf('image/bmp') > -1;
-      const png = formats.indexOf('image/png') > -1;
-      const rtf = formats.indexOf('text/rtf') > -1;
-      const html = formats.indexOf('text/html') > -1;
-      const txt = formats.indexOf('text/plain') > -1;
 
-      if (png) {
-        this.uploadImage('image/png', 'png');
+      if (clipboard.has('public.file-url')) {
+        const rawFilePath = clipboard.read('public.file-url');
+        const filePath = rawFilePath.replace('file://', '');
+        const contentType = mime.lookup(filePath);
+
+        if (contentType) {
+          return fs.readFile(filePath, (err, buffer) => {
+            const blob = buffer.toString('base64');
+            return this.uploadFile(blob, contentType, mime.extension(contentType));
+          });
+        }
       }
 
-      if (!png && bmp) {
-        this.uploadImage('image/bmp', 'bmp');
+      if (clipboard.has('public.png')) {
+        const buffer = clipboard.readBuffer('public.png');
+        const blob = buffer.toString('base64');
+        return this.uploadFile(blob, 'image/png', 'png');
       }
 
-      if (rtf) {
-        this.uploadText('text/rtf', 'rtf');
+      if (clipboard.has('com.adobe.pdf')) {
+        const buffer = clipboard.readBuffer('com.adobe.pdf');
+        const blob = buffer.toString('base64');
+        return this.uploadFile(blob, 'application/pdf', 'pdf');
       }
 
-      if (!rtf && txt) {
-        this.uploadText('text/plain', 'txt');
+      if (clipboard.has('public.tiff')) {
+        const buffer = clipboard.readBuffer('public.tiff');
+        const blob = buffer.toString('base64');
+        return this.uploadFile(blob, 'image/tif', 'tiff');
       }
 
+      // if (clipboard.has('com.apple.flat-rtfd')) {
+      //   const buffer = clipboard.readBuffer('com.apple.flat-rtfd');
+      //   console.log(buffer.toString('hex'));
+      //   const blob = buffer.toString('base64');
+      //   return this.uploadFile(blob, 'application/x-apple-disk', 'rtfd');
+      // }
 
-      if (!rtf && !txt && html) {
-        this.uploadText('text/html', 'html');
+      if (clipboard.has('public.rtf')) {
+        const buffer = clipboard.readBuffer('public.rtf');
+        const blob = buffer.toString('base64');
+        return this.uploadFile(blob, 'text/rtf', 'rtf');
       }
 
-      if (!png && !bmp && !rtf && !txt && !html) {
-        NotificationManager.warning(
-          TAPi18n.__('notifications.could_not_paste_as_file.message'),
-          TAPi18n.__('notifications.could_not_paste_as_file.title')
-        );
-      }
+      NotificationManager.warning(
+        TAPi18n.__('notifications.could_not_paste_as_file.message'),
+        TAPi18n.__('notifications.could_not_paste_as_file.title')
+      );
     }
   }
 
