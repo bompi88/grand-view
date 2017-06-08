@@ -7,11 +7,45 @@ matrix:
     - os: linux
       dist: trusty
       sudo: required
+      env:
+        - ARCH=x86
+        - ARCH_NAME=ia32
+      compiler: "g++-5 -m32"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+            - g++-5
+            - gcc-5-multilib
+            - g++-5-multilib
+            - icnsutils
+            - graphicsmagick
+            - xz-utils
+    - os: linux
+      dist: trusty
+      sudo: required
+      env:
+        - ARCH=x64
+        - ARCH_NAME=x64
+      compiler: "g++-5 -m64"
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+            - g++-5
+            - gcc-5-multilib
+            - g++-5-multilib
+            - icnsutils
+            - graphicsmagick
+            - xz-utils
     - os: osx
-
-env:
-  - ARCH=x64 ARCH_NAME=x64
-  - ARCH=x86 ARCH_NAME=ia32
+      env:
+        - ARCH=x64
+        - ARCH_NAME=x64
 
 branches:
   only:
@@ -22,9 +56,6 @@ install:
   - APP_VERSION=$(echo $TRAVIS_TAG | cut -d 'v' -f 2)
   # Install meteor
   - curl https://install.meteor.com/ | /bin/sh
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install --no-install-recommends -y g++ build-essential gcc-multilib g++-multilib icnsutils graphicsmagick xz-utils; fi
-  # Install modules
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm install -g node-gyp; fi
   - npm install
 
 script:
