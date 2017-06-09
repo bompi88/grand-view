@@ -69,7 +69,7 @@ cache:
   - .cache
 
 before_deploy:
-  - ./.scripts/travis_script.sh
+  - ./.scripts/travis_before_deploy.sh
 
 deploy:
   provider: releases
