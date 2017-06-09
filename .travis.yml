@@ -59,29 +59,44 @@ install:
   - npm install
 
 script:
-  # Build app for Linux
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then npm run build:linux:$ARCH; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x64" ]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-unpacked .; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x86" ]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-ia32-unpacked .; fi
-
-  # Build app for Mac
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then npm run build:osx:verbose; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .dist/GrandView-${APP_VERSION}.dmg; fi
-  -
+  - if [ `uname` = "Linux" ]; then
+      ln -s /usr/bin/gcc-5 $HOME/bin/gcc;
+      ln -s /usr/bin/g++-5 $HOME/bin/g++;
+      ln -s /usr/bin/gfortran-5 $HOME/bin/gfortran;
+      ln -s /usr/bin/gcc-5 $HOME/bin/x86_64-linux-gnu-gcc;
+      ln -s /usr/bin/g++-5 $HOME/bin/x86_64-linux-gnu-g++;
+      gcc --version;
+      npm run build:linux:$ARCH;
+      if [ "$ARCH" == "x64" ]; then
+        GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-unpacked .;
+      elif [ "$ARCH" == "x86" ]; then
+        GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-ia32-unpacked .;
+      fi
+    elif [ `uname` = "Darwin" ]; then
+      npm run build:osx:verbose;
+      GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .dist/GrandView-${APP_VERSION}.dmg;
+    fi
 
 cache:
   directories:
   - .cache
-
+# see: https://github.com/JuliaLang/julia/blob/master/.travis.yml
 before_deploy:
   - mkdir .releases
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x64" ]; then mv .dist/GrandView_${APP_VERSION}_amd64.deb .releases/GrandView_${TRAVIS_TAG}_amd64.deb; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x64" ]; then mv .dist/GrandView-${APP_VERSION}-x86_64.AppImage .releases/GrandView-${TRAVIS_TAG}-x86_64.AppImage; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x86" ]; then mv .dist/GrandView_${APP_VERSION}_i386.deb .releases/GrandView_${TRAVIS_TAG}_i386.deb; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ] && [ "$ARCH" == "x86" ]; then mv .dist/GrandView-${APP_VERSION}-ia32.AppImage .releases/GrandView-${TRAVIS_TAG}-ia32.AppImage; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then mv GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .releases/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mv .dist/GrandView-${APP_VERSION}.dmg .releases/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.dmg; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mv GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .releases/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz; fi
+  - if [ `uname` = "Linux" ]; then
+      mv GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .releases/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz;
+      if [ "$ARCH" == "x64" ]; then
+        mv .dist/GrandView_${APP_VERSION}_amd64.deb .releases/GrandView_${TRAVIS_TAG}_amd64.deb;
+        mv .dist/GrandView-${APP_VERSION}-x86_64.AppImage .releases/GrandView-${TRAVIS_TAG}-x86_64.AppImage;
+      elif [ "$ARCH" == "x86" ]; then
+        mv .dist/GrandView_${APP_VERSION}_i386.deb .releases/GrandView_${TRAVIS_TAG}_i386.deb;
+        mv .dist/GrandView-${APP_VERSION}-ia32.AppImage .releases/GrandView-${TRAVIS_TAG}-ia32.AppImage;
+      fi
+    elif [ `uname` = "Darwin" ]; then
+      mv .dist/GrandView-${APP_VERSION}.dmg .releases/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.dmg;
+      mv GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .releases/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz;
+    fi
+  - ls .releases
 
 deploy:
   provider: releases
