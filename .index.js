@@ -300,24 +300,32 @@ let mainWindow;
 
 // Emitted when Electron has done all of the initialization.
 function createWindow() {
+  let splashScreen;
 
-  const splashScreen = new BrowserWindow({
-    width: 400,
-    height: 300,
-    resizable: false,
-    movable: false,
-    minimizable: false,
-    maximizable: false,
-    closable: true,
-    fullscreenable: false,
-    center: true,
-    frame: false
-  });
+  const testBuild = process.argv[1] && process.argv[1] === 'test-build';
 
-  splashScreen.focus();
-  splashScreen.loadURL('file://' + app.getAppPath() + '/.splash.html');
+  if (!testBuild) {
+    const splashScreen = new BrowserWindow({
+      width: 400,
+      height: 300,
+      resizable: false,
+      movable: false,
+      minimizable: false,
+      maximizable: false,
+      closable: true,
+      fullscreenable: false,
+      center: true,
+      frame: false
+    });
+
+    splashScreen.focus();
+    splashScreen.loadURL('file://' + app.getAppPath() + '/.splash.html');
+  }
 
   start((url, nodeChild, mongoChild) => {
+    if (testBuild) {
+      return;
+    }
     console.log('App occupying ', url);
 
     const cleanup = () => {

@@ -2,7 +2,7 @@
   "name": "GrandView",
   "productName": "GrandView",
   "description": "Helps you structure a large set of information units. Can be used as a tool to plan and gather resources for reports/theses and so on.",
-  "version": "0.1.0-beta.34",
+  "version": "0.1.0-beta.35",
   "company": "Concept NTNU",
   "homepage": "https://github.com/bompi88/grand-view",
   "author": {
@@ -94,6 +94,7 @@
     "lint": "eslint ./lib ./client ./server --ext .js --ext .jsx",
     "lintfix": "npm run lint -- --fix",
     "testonly": "mocha meteor/client/**/tests/**/*.js --compilers js:babel-core/register",
+    "test:build": "node .scripts/test_build",
     "test": "npm run lint && npm run testonly",
     "test-watch": "npm run testonly -- --watch --watch-extensions js,jsx"
   },

@@ -139,7 +139,6 @@ class SelectBox extends Component {
             );
           }}
           valueRenderer={(option) => {
-            console.log(option)
             return (
               <div>{option.text}</div>
             );
