@@ -77,7 +77,7 @@ export default {
           return reject(err);
         }
         return resolve(Collections.Tags.find({
-          label: { $regex: inputText, $options: 'i' }
+          text: { $regex: inputText, $options: 'i' }
         }).fetch() || []);
       });
     });
@@ -119,7 +119,7 @@ export default {
           return reject(err);
         }
         return resolve(Collections.References.find({
-          label: { $regex: inputText, $options: 'i' }
+          text: { $regex: inputText, $options: 'i' }
         }).fetch() || []);
       });
     });

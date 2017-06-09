@@ -38,7 +38,7 @@ class SelectBox extends Component {
 
       if (_.isArray(val)) {
         adjustedValue = _.map(val, (i) => {
-          return { value: i.value, label: i.label };
+          return { value: i.value, text: i.text };
         });
       } else {
         adjustedValue = [ _.omit(val, 'className') ];
@@ -94,7 +94,6 @@ class SelectBox extends Component {
     }
 
     const showSearchOptions = this.state.text && this.state.text.length || 0;
-
     return (
       <div className={className} style={style}>
         {label ? (<ControlLabel htmlFor={name}>{label}</ControlLabel>) : null}
@@ -118,7 +117,7 @@ class SelectBox extends Component {
           optionRenderer={(option) => {
             return (
               <div>
-                {option.label}
+                {option.text}
                 {
                   option.className !== 'Select-create-option-placeholder' ? (
                     <button
@@ -140,13 +139,15 @@ class SelectBox extends Component {
             );
           }}
           valueRenderer={(option) => {
+            console.log(option)
             return (
-              <div>{option.label}</div>
+              <div>{option.text}</div>
             );
           }}
           ignoreCase={true}
           ignoreAccents={true}
-          matchProp='label'
+          matchProp='text'
+          labelKey='text'
           />
       </div>
     );
