@@ -17,6 +17,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - build-essential
+            - gcc-multilib
             - gcc-5
             - g++-5
             - gcc-5-multilib
@@ -37,6 +38,7 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - build-essential
+            - gcc-multilib
             - gcc-5
             - g++-5
             - gcc-5-multilib
