@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+printenv
 mkdir .releases
 
 if [ `uname` = "Linux" ]; then

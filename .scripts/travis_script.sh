@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+printenv
 if [ `uname` = "Linux" ]; then
   mkdir -p $HOME/bin;
   # symlink to get gcc5 and g++ to work
