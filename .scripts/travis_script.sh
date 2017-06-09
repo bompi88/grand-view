@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-printenv
+
+set -e
+
 if [ `uname` = "Linux" ]; then
   mkdir -p $HOME/bin;
   # symlink to get gcc5 and g++ to work
@@ -20,3 +22,5 @@ elif [ `uname` = "Darwin" ]; then
   npm run build:osx:verbose;
   tar -zcf GrandView-${TAG}-${OS}-${ARCH_NAME}.tar.gz .dist/GrandView-${VERSION}.dmg;
 fi
+
+set +e

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-printenv
+
 mkdir .releases
+
+set -e
 
 if [ `uname` = "Linux" ]; then
   if [ "$ARCH" == "x64" ]; then
@@ -18,3 +20,5 @@ elif [ `uname` = "Darwin" ]; then
   mv .dist/${APP}-${VERSION}.dmg .releases/${APP}-${TAG}-${OS}-${ARCH_NAME}.dmg;
   mv ${APP}-${TAG}-${OS}-${ARCH_NAME}.tar.gz .releases/${APP}-${TAG}-${OS}-${ARCH_NAME}.tar.gz;
 fi
+
+set +e
