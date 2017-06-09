@@ -56,7 +56,7 @@ child.stdout.on('data', (data) => {
   }
 });
 
-child.stdout.setEncoding('utf8');
+child.stderr.setEncoding('utf8');
 child.stderr.on('data', (err) => {
   console.log(err);
   child.kill('SIGINT');
