@@ -54,10 +54,10 @@ branches:
 
 install:
   - rvm get stable
-  - APP="GrandView"
-  - TAG="${TRAVIS_TAG}"
-  - OS="$TRAVIS_OS_NAME"
-  - VERSION=$(echo $TRAVIS_TAG | cut -d 'v' -f 2)
+  - export APP="GrandView"
+  - export TAG="$TRAVIS_TAG"
+  - export OS="$TRAVIS_OS_NAME"
+  - export VERSION=$(echo $TRAVIS_TAG | cut -d 'v' -f 2)
   - curl https://install.meteor.com/ | /bin/sh
   - npm install
   - printenv
