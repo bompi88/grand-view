@@ -85,6 +85,7 @@ cache:
   - .cache
 # see: https://github.com/JuliaLang/julia/blob/master/.travis.yml
 before_deploy:
+  - ls .dist
   - mkdir .releases
   - if [ `uname` = "Linux" ]; then
       mv GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .releases/GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz;
