@@ -71,13 +71,13 @@ script:
       gcc --version;
       npm run build:linux:$ARCH;
       if [ "$ARCH" == "x64" ]; then
-        GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-unpacked .;
+        tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-unpacked .;
       elif [ "$ARCH" == "x86" ]; then
-        GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-ia32-unpacked .;
+        tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz -C .dist/linux-ia32-unpacked .;
       fi
     elif [ `uname` = "Darwin" ]; then
       npm run build:osx:verbose;
-      GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .dist/GrandView-${APP_VERSION}.dmg;
+      tar -zcf GrandView-${TRAVIS_TAG}-${TRAVIS_OS_NAME}-${ARCH_NAME}.tar.gz .dist/GrandView-${APP_VERSION}.dmg;
     fi
 
 cache:
