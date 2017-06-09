@@ -10,7 +10,7 @@ if [ `uname` = "Linux" ]; then
   ln -s /usr/bin/gfortran-5 $HOME/bin/gfortran;
   ln -s /usr/bin/gcc-5 $HOME/bin/x86_64-linux-gnu-gcc;
   ln -s /usr/bin/g++-5 $HOME/bin/x86_64-linux-gnu-g++;
-  ln -s /usr/include/asm /usr/include/asm-generic;
+  # ln -s /usr/include/asm /usr/include/asm-generic;
   gcc --version;
   npm run build:linux:$ARCH;
   if [ "$ARCH" == "x64" ]; then
