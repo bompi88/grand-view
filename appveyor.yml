@@ -4,6 +4,7 @@ environment:
 branches:
   only:
     - /v\d+\.\d+\.\d+((-beta.\d+)|(-\d+))?/
+    - devel
 
 platform:
   - x86
