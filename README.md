@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/bompi88/grand-view.svg?branch=devel)](https://travis-ci.org/bompi88/grand-view)[![Coverage Status](https://coveralls.io/repos/github/bompi88/grand-view/badge.svg)](https://coveralls.io/github/bompi88/grand-view)[![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/codeclimate/codeclimate)[![Test Coverage](https://codeclimate.com/github/codeclimate/codeclimate/badges/coverage.svg)](https://codeclimate.com/github/codeclimate/codeclimate/coverage)
+
+
 # Grand View
 
 Helps you structure a large set of information units. Can be used as a tool to plan and gather resources for reports/theses and so on.
