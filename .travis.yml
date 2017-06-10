@@ -27,6 +27,7 @@ matrix:
             - libx11-xcb-dev:i386
             - libxtst6:i386
             - libxkbfile-dev
+            - libxss1:i386
             - icnsutils
             - graphicsmagick
             - xz-utils
