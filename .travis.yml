@@ -24,7 +24,7 @@ matrix:
             - g++-5-multilib
             - libgtk2.0-0:i386
             - libx11-dev
-            - libx11-xcb-dev
+            - libx11-xcb-dev:i386
             - libxkbfile-dev
             - icnsutils
             - graphicsmagick
