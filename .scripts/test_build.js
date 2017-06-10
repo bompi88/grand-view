@@ -37,7 +37,7 @@ let meteorStarted = false;
 
 child.stdout.setEncoding('utf8');
 child.stdout.on('data', (data) => {
-  console.log(data);
+  echo(data);
   if (data.indexOf('Meteor app started') > -1) {
     meteorStarted = true;
   }
@@ -58,7 +58,7 @@ child.stdout.on('data', (data) => {
 
 child.stderr.setEncoding('utf8');
 child.stderr.on('data', (err) => {
-  console.log(err);
+  echo(err);
   child.kill('SIGINT');
   process.exit(1);
 });
