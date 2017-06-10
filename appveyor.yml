@@ -1,9 +1,9 @@
 environment:
   nodejs_version: "8.1.0"
 
-# branches:
-#   only:
-#     - devel
+branches:
+  only:
+    - /v\d+\.\d+\.\d+(-beta.\d+)?/
 
 platform:
   - x86
