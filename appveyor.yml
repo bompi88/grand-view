@@ -3,7 +3,7 @@ environment:
 
 branches:
   only:
-    - /v\d+\.\d+\.\d+(-beta.\d+)?/
+    - /v\d+\.\d+\.\d+((-beta.\d+)|(-\d+))?/
 
 platform:
   - x86

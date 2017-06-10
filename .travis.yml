@@ -67,7 +67,7 @@ matrix:
 
 branches:
   only:
-    - /v\d+\.\d+\.\d+(-beta.\d+)?/
+    - /v\d+\.\d+\.\d+((-beta.\d+)|(-\d+))?/
 
 install:
   - rvm get stable
