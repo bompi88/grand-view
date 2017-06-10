@@ -25,7 +25,7 @@ matrix:
             - libgtk2.0-0:i386
             - libx11-dev
             - libx11-xcb-dev:i386
-            - libxext-dev:i386
+            - libxtst6:i386
             - libxkbfile-dev
             - icnsutils
             - graphicsmagick
