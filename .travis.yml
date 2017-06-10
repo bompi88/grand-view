@@ -37,6 +37,7 @@ matrix:
             - icnsutils
             - graphicsmagick
             - xz-utils
+            - tree
     - os: linux
       dist: trusty
       sudo: required
@@ -58,6 +59,7 @@ matrix:
             - icnsutils
             - graphicsmagick
             - xz-utils
+            - tree
     - os: osx
       env:
         - ARCH=x64
@@ -69,6 +71,9 @@ branches:
 
 install:
   - rvm get stable
+  - if [ `uname` = "Darwin" ]; then
+      brew install tree;
+    fi
   - export APP="GrandView"
   - export TAG="$TRAVIS_TAG"
   - export OS="$TRAVIS_OS_NAME"
