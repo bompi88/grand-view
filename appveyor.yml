@@ -1,9 +1,9 @@
 environment:
   nodejs_version: "8.1.0"
 
-branches:
-  only:
-    - devel
+# branches:
+#   only:
+#     - devel
 
 platform:
   - x86
