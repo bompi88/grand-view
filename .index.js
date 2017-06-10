@@ -305,7 +305,7 @@ function createWindow() {
   const testBuild = process.argv[1] && process.argv[1] === 'test-build';
 
   if (!testBuild) {
-    const splashScreen = new BrowserWindow({
+    splashScreen = new BrowserWindow({
       width: 400,
       height: 300,
       resizable: false,
