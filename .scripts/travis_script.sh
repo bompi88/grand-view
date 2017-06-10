@@ -13,14 +13,8 @@ if [ `uname` = "Linux" ]; then
   # ln -s /usr/include/asm /usr/include/asm-generic;
   gcc --version;
   npm run build:linux:$ARCH;
-  if [ "$ARCH" == "x64" ]; then
-    tar -zcf GrandView-${TAG}-${OS}-${ARCH_NAME}.tar.gz -C .dist/linux-unpacked .;
-  elif [ "$ARCH" == "x86" ]; then
-    tar -zcf GrandView-${TAG}-${OS}-${ARCH_NAME}.tar.gz -C .dist/linux-ia32-unpacked .;
-  fi
 elif [ `uname` = "Darwin" ]; then
   npm run build:osx:verbose;
-  tar -zcf GrandView-${TAG}-${OS}-${ARCH_NAME}.tar.gz .dist/GrandView-${VERSION}.dmg;
 fi
 
 set +e
