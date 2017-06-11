@@ -1,25 +1,8 @@
-// //////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------------------------------------
 // Import and export helpers
-// //////////////////////////////////////////////////////////////////////////////
-//
-// Copyright 2015 Concept
-//
-// Licensed under the Apache License, Version 2.0 (the 'License');
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an 'AS IS' BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// //////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------------------------------------
 
-/* eslint no-sync: 0 */
 /* eslint no-console: 0 */
-/* global _require */
 
 import Globals from '/lib/globals';
 
@@ -69,6 +52,14 @@ export default {
   copyFile(source, target, cb) {
     let cbCalled = false;
 
+    function done(err) {
+      if (!cbCalled) {
+        cbCalled = true;
+        return cb(err);
+      }
+      return false;
+    }
+
     const rd = fs.createReadStream(source);
     rd.on('error', (err) => {
       done(err);
@@ -81,13 +72,6 @@ export default {
       done();
     });
     rd.pipe(wr);
-
-    function done(err) {
-      if (!cbCalled) {
-        cbCalled = true;
-        return cb(err);
-      }
-    }
   },
 
   mkdirSync(p) {

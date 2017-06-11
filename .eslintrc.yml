@@ -27,7 +27,7 @@ rules:
     - 0
   no-underscore-dangle:
     - 'error'
-    - { allow: [ '_id', '_ensureIndex', '__'] }
+    - { allow: [ '_id', '_ensureIndex', '__', '_getProjectLanguages'] }
   object-shorthand:
     - 'error'
     - 'always'
@@ -40,3 +40,6 @@ rules:
     - 0
   prefer-arrow-callback:
     - 0
+globals:
+  _require: true
+  require: true

@@ -36,7 +36,7 @@ export default {
             return console.log(error);
           }
 
-          LocalState.set('RENAME_NODE', nodeId);
+          return LocalState.set('RENAME_NODE', nodeId);
         });
       }
     });
@@ -44,7 +44,7 @@ export default {
 
   removeNode({ Meteor }, node) {
     Meteor.call('document.removeNode', node, (err) => {
-      console.log('removed');
+      console.log('Removed');
     });
   },
 };
