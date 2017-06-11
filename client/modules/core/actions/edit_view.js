@@ -165,25 +165,25 @@ export default {
     sh.openExternal(link);
   },
 
-  setDescription: debounce(({LocalState, Collections}, description, _id) => {
+  setDescription: debounce(({ LocalState, Collections }, description, _id) => {
     Collections.Nodes.update({ _id }, { $set: {
       description
     }});
   }, 200),
 
-  setName: debounce(({LocalState, Collections}, name, _id) => {
+  setName: debounce(({ LocalState, Collections }, name, _id) => {
     Collections.Nodes.update({ _id }, { $set: {
       name
     }});
   }, 20),
 
-  setRootDescription: debounce(({LocalState, Collections}, description, _id) => {
+  setRootDescription: debounce(({ LocalState, Collections }, description, _id) => {
     Collections.Documents.update({ _id }, { $set: {
       description
     }});
   }, 200),
 
-  setTitle: debounce(({LocalState, Collections}, title, _id) => {
+  setTitle: debounce(({ LocalState, Collections }, title, _id) => {
     Collections.Documents.update({ _id }, { $set: {
       title
     }});

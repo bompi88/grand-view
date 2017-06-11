@@ -25,14 +25,12 @@ import {_} from 'meteor/underscore';
 import {Meteor} from 'meteor/meteor';
 import {TAPi18n} from 'meteor/tap:i18n';
 
-import Globals from '/lib/globals';
 import {Documents, Nodes, Files} from '/lib/collections';
 
 const { shell, remote } = _require('electron');
 const { dialog } = remote;
 const imageSize = _require('fast-image-size');
 const officegen = _require('officegen');
-const path = _require('path');
 const fs = _require('fs');
 
 const header1Text = {

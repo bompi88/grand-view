@@ -44,7 +44,7 @@ export default {
 
   removeNode({Meteor}, node) {
     Meteor.call('document.removeNode', node, (err) => {
-      console.log('removed')
+      console.log('removed');
     });
   }
 };

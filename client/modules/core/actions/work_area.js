@@ -19,11 +19,11 @@
 
 export default {
 
-  createNewDocument({LocalState}) {
+  createNewDocument({ LocalState }) {
     return LocalState.set('NEW_DOCUMENT_MODAL_VISIBLE', true);
   },
 
-  gotoDocuments({FlowRouter}) {
+  gotoDocuments({ FlowRouter }) {
     FlowRouter.go('Documents');
   }
 

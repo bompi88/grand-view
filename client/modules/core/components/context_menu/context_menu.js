@@ -1,11 +1,11 @@
 import React from 'react';
-import {ContextMenu, MenuItem} from 'react-contextmenu';
+import { ContextMenu, MenuItem } from 'react-contextmenu';
 
 /* The menu items for right click of root node */
 export default class CtxMenu extends React.Component {
 
   renderMenuItems() {
-    const {menuItems} = this.props;
+    const { menuItems } = this.props;
 
     return menuItems.map((item) => {
       const data = { node: item.data };
@@ -18,7 +18,7 @@ export default class CtxMenu extends React.Component {
   }
 
   render() {
-    const {identifier} = this.props;
+    const { identifier } = this.props;
 
     return (
       <ContextMenu identifier={identifier} currentItem={this.currentItem}>

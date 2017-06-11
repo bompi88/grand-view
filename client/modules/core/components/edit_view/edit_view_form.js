@@ -36,14 +36,6 @@ const uint8Tobase64 = (uint8) => {
   return window.btoa(binary);
 };
 
-const str2uint8 = (str) => {
-  const uint = new Uint8Array(str.length);
-  for (let i = 0, j = str.length; i < j; ++i) {
-    uint[i] = str.charCodeAt(i);
-  }
-  return uint;
-};
-
 class EditViewForm extends React.Component {
 
   constructor(props) {

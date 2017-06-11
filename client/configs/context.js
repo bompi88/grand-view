@@ -18,7 +18,7 @@ import {
   applyMiddleware,
   combineReducers
 } from 'redux';
-import createLogger from 'redux-logger';
+// import createLogger from 'redux-logger';
 import undoable from 'redux-undo';
 
 import Helpers from './../lib/helpers';

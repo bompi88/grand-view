@@ -19,7 +19,7 @@
 
 export default {
 
-  changeState({LocalState}, newState) {
+  changeState({ LocalState }, newState) {
     return LocalState.set('TREE_VIEW_STATE', newState);
   }
 
