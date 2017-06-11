@@ -67,6 +67,7 @@
     "meteor-node-stubs": "^0.2.3",
     "mime-types": "^2.1.15",
     "officegen": "^0.2.10",
+    "prop-types": "^15.5.10",
     "react": "^15.x.x",
     "react-addons-css-transition-group": "^15.2.1",
     "react-bootstrap": "^0.30.0-rc.2",

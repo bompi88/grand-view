@@ -21,6 +21,7 @@
 /* globals _require */
 
 import { Settings } from './../../lib/collections';
+
 const { app } = _require('electron').remote;
 
 const getUserLanguage = function () {
