@@ -1,22 +1,22 @@
-import { Meteor } from 'meteor/meteor';
-import { Match } from 'meteor/check';
+import { NotificationManager } from 'react-notifications';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { ReactiveDict } from 'meteor/reactive-dict';
-import { Tracker } from 'meteor/tracker';
-import { _ } from 'meteor/underscore';
-import { TAPi18n } from 'meteor/tap:i18n';
+import { reducer as formReducer } from 'redux-form';
 import { moment } from 'meteor/momentjs:moment';
-import { NotificationManager } from 'react-notifications';
+// import createLogger from 'redux-logger';
+import { TAPi18n } from 'meteor/tap:i18n';
+import { Tracker } from 'meteor/tracker';
+import { Meteor } from 'meteor/meteor';
+import { _ } from 'meteor/underscore';
+import { Match } from 'meteor/check';
 import $ from 'jquery';
 import 'magnific-popup';
 import bootbox from 'bootbox';
-import { reducer as formReducer } from 'redux-form';
 import {
   createStore,
   applyMiddleware,
   combineReducers,
 } from 'redux';
-// import createLogger from 'redux-logger';
 import undoable from 'redux-undo';
 
 import * as Collections from './../../lib/collections';
@@ -28,10 +28,6 @@ import ShowMoreCtrl from './../lib/controllers/show_more';
 import TagsCtrl from './../lib/controllers/tags';
 
 const LocalState = new ReactiveDict();
-
-// // Init local state
-// // TODO: remove this
-// LocalState.set('CURRENT_DOCUMENT', 'pXK96LKA7h8Ekggim');
 
 export default function ({ reducers }) {
   const reducer = combineReducers({

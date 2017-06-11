@@ -23,7 +23,7 @@ const onPropsChange = ({ context, setDragable, unsetDragable }, onData) => {
     attachments: TAPi18n.__('edit_view.form.attachmentsLabel'),
   };
 
-  if (Meteor.subscribe('files.byNode').ready()) {
+  if (Meteor.subscribe('files.byNode', nodeId).ready()) {
     const files = Collections.Files.find({ 'meta.nodeId': nodeId }).fetch();
     return onData(null, { text, files, setDragable, unsetDragable });
   }

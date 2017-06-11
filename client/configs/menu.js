@@ -1,26 +1,9 @@
-// //////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------------------------------------
 // Electron Menu configuration
-// //////////////////////////////////////////////////////////////////////////////
-//
-// Copyright 2015 Concept
-//
-// Licensed under the Apache License, Version 2.0 (the 'License');
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an 'AS IS' BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// //////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------------------------------------
 
 /* globals _require */
 /* eslint no-sync: 0 */
-
-// import { ActionCreators } from 'redux-undo';
 
 export default (context) => {
   const remote = _require('electron').remote;
@@ -42,7 +25,7 @@ export default (context) => {
 
   const resourcesRoot = _require('fs').realpathSync(remote.app.getAppPath());
 
-  const CommandOrCtrl = () => (platform === 'darwin') ? 'Command' : 'Ctrl';
+  const CommandOrCtrl = () => { return platform === 'darwin' ? 'Command' : 'Ctrl'; };
 
   Tracker.autorun(function () {
     const currentDocument = LocalState.get('CURRENT_DOCUMENT');
