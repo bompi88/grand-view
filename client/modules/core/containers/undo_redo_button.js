@@ -7,7 +7,7 @@ export const composer = ({ context, clearState }, onData) => {
 
   const text = {
     undo: TAPi18n.__('edit_view.undoRedoButton.undo'),
-    redo: TAPi18n.__('edit_view.undoRedoButton.redo')
+    redo: TAPi18n.__('edit_view.undoRedoButton.redo'),
   };
 
   onData(null, { text });
@@ -18,10 +18,10 @@ export const composer = ({ context, clearState }, onData) => {
 export const depsMapper = (context, actions) => ({
   undo: actions.editView.undo,
   redo: actions.editView.redo,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(UndoRedoButton);

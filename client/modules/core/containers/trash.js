@@ -1,10 +1,10 @@
 import Trash from '../components/trash/trash';
 import TrashColumn from '../components/table/trash_column';
 
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
-export const composer = ({context, clearState}, onData) => {
-  const {Meteor, Collections, LocalState, TAPi18n} = context();
+export const composer = ({ context, clearState }, onData) => {
+  const { Meteor, Collections, LocalState, TAPi18n } = context();
 
   const sortDocs = LocalState.get('TABLE_SORT_TRASH_DOCUMENTS') || { title: 1 };
   const sortTemplates = LocalState.get('TABLE_SORT_TRASH_TEMPLATES') || { title: 1 };
@@ -19,7 +19,7 @@ export const composer = ({context, clearState}, onData) => {
     remove: TAPi18n.__('trash.remove'),
     restore: TAPi18n.__('trash.restore'),
     docsTableHeader: TAPi18n.__('trash.documents_header'),
-    templatesTableHeader: TAPi18n.__('trash.templates_header')
+    templatesTableHeader: TAPi18n.__('trash.templates_header'),
   };
 
   const columns = [
@@ -27,58 +27,58 @@ export const composer = ({context, clearState}, onData) => {
       label: TAPi18n.__('trash.title'),
       field: 'title',
       key: 'title',
-      sortable: true
+      sortable: true,
     },
     {
       label: TAPi18n.__('trash.created_at'),
       field: 'createdAt',
       key: 'created-at',
       sortable: true,
-      transform: 'formatDateRelative'
+      transform: 'formatDateRelative',
     },
     {
       label: TAPi18n.__('trash.last_modified'),
       field: 'lastModified',
       key: 'last-modified',
       sortable: true,
-      transform: 'formatDateRelative'
+      transform: 'formatDateRelative',
     },
     {
       label: TAPi18n.__('trash.removed_at'),
       field: 'removedAt',
       key: 'removed-at',
       sortable: true,
-      transform: 'formatDateRelative'
+      transform: 'formatDateRelative',
     },
     {
       component: TrashColumn,
-      key: 'trash-column'
-    }
+      key: 'trash-column',
+    },
   ];
 
   const props = {
     text,
     disablePointer: true,
-    columns
+    columns,
   };
 
   if (Meteor.subscribe('documents.removed').ready() &&
     Meteor.subscribe('templates.removed').ready()) {
     const docs = Collections.Documents.find({
       isTemplate: false,
-      removed: true
+      removed: true,
     }, { sort: sortDocs }).fetch();
 
     const templates = Collections.Documents.find({
       isTemplate: true,
-      removed: true
+      removed: true,
     }, { sort: sortTemplates }).fetch();
 
 
     onData(null, {
       docs,
       templates,
-      ...props
+      ...props,
     });
   } else {
     onData(null, props);
@@ -99,10 +99,10 @@ export const depsMapper = (context, actions) => ({
   toggleSort: actions.trash.toggleSort,
   getSort: actions.trash.getSort,
   clearState: actions.trash.clearState,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(Trash);

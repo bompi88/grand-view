@@ -1,8 +1,8 @@
 import DocumentTableDropdown from '../components/table_dropdown/table_dropdown';
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
-export const composer = ({context}, onData) => {
-  const {TAPi18n} = context();
+export const composer = ({ context }, onData) => {
+  const { TAPi18n } = context();
 
   const items = [
     {
@@ -14,38 +14,38 @@ export const composer = ({context}, onData) => {
       func: 'openSelectedDocument',
       icon: 'glyphicon glyphicon-edit',
       label: TAPi18n.__('dropdowns.document_table.edit_document'),
-      disabledOn: 'MANY_AND_NONE'
+      disabledOn: 'MANY_AND_NONE',
     },
     {
-      divider: true
+      divider: true,
     },
     {
       func: 'importDocuments',
       icon: 'glyphicon glyphicon-import',
-      label: TAPi18n.__('dropdowns.document_table.import_document')
+      label: TAPi18n.__('dropdowns.document_table.import_document'),
     },
     {
       func: 'exportSelectedDocuments',
       icon: 'glyphicon glyphicon-export',
       label: TAPi18n.__('dropdowns.document_table.export_document'),
-      disabledOn: 'NONE'
+      disabledOn: 'NONE',
     },
     {
-      divider: true
+      divider: true,
     },
     {
       func: 'removeSelectedDocuments',
       icon: 'glyphicon glyphicon-trash',
       label: TAPi18n.__('dropdowns.document_table.remove_document'),
-      disabledOn: 'NONE'
-    }
+      disabledOn: 'NONE',
+    },
   ];
 
   const text = {
-    selectAction: TAPi18n.__('dropdowns.template_table.select_action')
+    selectAction: TAPi18n.__('dropdowns.template_table.select_action'),
   };
 
-  onData(null, {items, text});
+  onData(null, { items, text });
 };
 
 export const depsMapper = (context, actions) => ({
@@ -59,10 +59,10 @@ export const depsMapper = (context, actions) => ({
   removeSelectedDocuments: actions.documents.removeSelectedDocuments,
   isDisabledOnManyAndNone: actions.documents.isDisabledOnManyAndNone,
   isDisabledOnNone: actions.documents.isDisabledOnNone,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(DocumentTableDropdown);

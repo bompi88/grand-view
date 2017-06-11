@@ -31,9 +31,9 @@ export default function () {
       () => this.changed(
         collectionName,
         countId,
-        { count: cursor.count() || 0 }
+        { count: cursor.count() || 0 },
       ),
-      500
+      500,
     );
 
     this.onStop(() => {

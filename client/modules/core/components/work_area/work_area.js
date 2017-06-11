@@ -35,7 +35,7 @@ class WorkArea extends React.Component {
       return (
         <div className="container container-media-nodes default-container animated fadeIn">
           <div className="row row-wrapper">
-            <Tree doc={doc}/>
+            <Tree doc={doc} />
             {doc.isTemplate ? this.renderTemplateEditView() : this.renderDocumentEditView()}
           </div>
         </div>
@@ -57,7 +57,7 @@ class WorkArea extends React.Component {
                   onClick={createNewDocument}
                 >
 
-                  <span className="glyphicon glyphicon-plus"></span> {text.createDocument}
+                  <span className="glyphicon glyphicon-plus" /> {text.createDocument}
                 </button>
                 <br /><span className="or-separator">{text.or}</span><br />
                 <button
@@ -71,8 +71,7 @@ class WorkArea extends React.Component {
             </div>
           </div>
           <div className="col-lg-12 ball">
-            <div className="ball-loader">
-            </div>
+            <div className="ball-loader" />
           </div>
         </div>
       </div>

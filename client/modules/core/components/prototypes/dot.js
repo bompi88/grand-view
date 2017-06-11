@@ -5,12 +5,12 @@ class Dot extends React.Component {
 
   componentDidMount() {
     $(this.refs.dot).tooltip({
-      container: 'body'
+      container: 'body',
     });
   }
 
   render() {
-    const {label} = this.props;
+    const { label } = this.props;
     return (
       <span
         ref="dot"
@@ -24,7 +24,7 @@ class Dot extends React.Component {
 }
 
 Dot.defaultProps = {
-  label: 'Tooltip text here'
+  label: 'Tooltip text here',
 };
 
 export default Dot;

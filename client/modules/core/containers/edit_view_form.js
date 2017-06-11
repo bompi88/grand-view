@@ -1,8 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 // Edit View Form Container
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
-import {useDeps, composeAll, composeWithTracker} from 'mantra-core';
+import { useDeps, composeAll, composeWithTracker } from 'mantra-core';
 import EditViewForm from '../components/edit_view/edit_view_form';
 
 const onPropsChange = ({ context, setDragable, unsetDragable }, onData) => {
@@ -20,7 +20,7 @@ const onPropsChange = ({ context, setDragable, unsetDragable }, onData) => {
     createReference: TAPi18n.__('edit_view.form.createReference'),
     removeItem: TAPi18n.__('edit_view.form.removeItem'),
     noResultsText: TAPi18n.__('edit_view.form.noResultsText'),
-    attachments: TAPi18n.__('edit_view.form.attachmentsLabel')
+    attachments: TAPi18n.__('edit_view.form.attachmentsLabel'),
   };
 
   if (Meteor.subscribe('files.byNode').ready()) {
@@ -35,10 +35,10 @@ export const depsMapper = (context, actions) => ({
   setName: actions.editView.setName,
   setDescription: actions.editView.setDescription,
   unsetEditable: actions.editView.unsetEditable,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(onPropsChange),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(EditViewForm);

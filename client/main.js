@@ -1,4 +1,4 @@
-import {createApp} from 'mantra-core';
+import { createApp } from 'mantra-core';
 import initContext from './configs/context';
 import initMenu from './configs/menu';
 import initi18n from './configs/i18n';
@@ -13,7 +13,7 @@ import modalsModule from './modules/modals';
 const coreReducers = coreModule.reducers;
 
 const reducers = {
-  ...coreReducers
+  ...coreReducers,
 };
 
 // Init context

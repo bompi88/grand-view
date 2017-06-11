@@ -1,15 +1,15 @@
 import {
-  useDeps, composeWithTracker, composeAll
+  useDeps, composeWithTracker, composeAll,
 } from 'mantra-core';
 import CreateModal from '../components/create_modal/create_modal';
 
-export const composer = ({context}, onData) => {
-  const {Meteor, LocalState, TAPi18n, _, Collections} = context();
+export const composer = ({ context }, onData) => {
+  const { Meteor, LocalState, TAPi18n, _, Collections } = context();
 
   const isOpen = LocalState.get('NEW_DOCUMENT_MODAL_VISIBLE') || false;
 
   const helperTexts = {
-    minLengthString: TAPi18n.__('modals.create_modal.helperTexts.minLengthString', 3)
+    minLengthString: TAPi18n.__('modals.create_modal.helperTexts.minLengthString', 3),
   };
 
   const text = {
@@ -19,24 +19,22 @@ export const composer = ({context}, onData) => {
     cancelBtn: TAPi18n.__('forms.cancel'),
     selectLabel: TAPi18n.__('modals.create_modal.select.label'),
     titleLabel: TAPi18n.__('modals.create_modal.titleLabel'),
-    titlePlaceholder: TAPi18n.__('modals.create_modal.titlePlaceholder')
+    titlePlaceholder: TAPi18n.__('modals.create_modal.titlePlaceholder'),
   };
 
   let selectOptions = [
     {
       value: 'none',
-      label: TAPi18n.__('modals.create_modal.select.none')
-    }
+      label: TAPi18n.__('modals.create_modal.select.none'),
+    },
   ];
 
   if (Meteor.subscribe('templates.all').ready()) {
     const templates = Collections.Documents.find({ isTemplate: true }).fetch();
-    selectOptions = _.union(selectOptions, _.map(templates, (template) => {
-      return {
-        value: template._id,
-        label: template.title
-      };
-    }));
+    selectOptions = _.union(selectOptions, _.map(templates, template => ({
+      value: template._id,
+      label: template.title,
+    })));
   }
 
   onData(null, {
@@ -44,17 +42,17 @@ export const composer = ({context}, onData) => {
     text,
     selectOptions,
     helperTexts,
-    isTemplate: false
+    isTemplate: false,
   });
 };
 
 export const depsMapper = (context, actions) => ({
   create: actions.newDocumentModal.createDocument,
   close: actions.newDocumentModal.close,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(CreateModal);

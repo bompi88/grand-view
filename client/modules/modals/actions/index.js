@@ -7,5 +7,5 @@ export default {
   newDocumentModal,
   newTemplateModal,
   exportOfficeModal,
-  languageModal
+  languageModal,
 };

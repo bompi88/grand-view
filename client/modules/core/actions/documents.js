@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Document Actions
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 const actions = {
 
@@ -28,7 +28,6 @@ const actions = {
   },
 
   renderTemplateTitle({ Collections, moment }, _id, o) {
-
     if (!_id) {
       return '-';
     }
@@ -41,7 +40,7 @@ const actions = {
     }
 
     const title = template.title;
-    return title + ' (' + text.by + ' ' + moment(doc.createdAt).format('L') + ')';
+    return `${title} (${text.by} ${moment(doc.createdAt).format('L')})`;
   },
 
   isDisabledOnManyAndNone({ SelectedCtrl }, tableName) {
@@ -85,7 +84,7 @@ const actions = {
   },
 
   toggleSort({ LocalState }, field, tableName) {
-    let curSort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase());
+    let curSort = LocalState.get(`TABLE_SORT_${tableName.toUpperCase()}`);
 
     if (curSort && curSort[field]) {
       curSort[field] *= -1;
@@ -94,11 +93,11 @@ const actions = {
       sortObj[field] = 1;
       curSort = sortObj;
     }
-    LocalState.set('TABLE_SORT_' + tableName.toUpperCase(), curSort);
+    LocalState.set(`TABLE_SORT_${tableName.toUpperCase()}`, curSort);
   },
 
   getSort({ LocalState }, field, tableName) {
-    const sort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase()) || { title: 1 };
+    const sort = LocalState.get(`TABLE_SORT_${tableName.toUpperCase()}`) || { title: 1 };
     return sort[field];
   },
 
@@ -147,7 +146,7 @@ const actions = {
       if (err) {
         NotificationManager.error(
           TAPi18n.__('notifications.soft_remove_document_failed.message'),
-          TAPi18n.__('notifications.soft_remove_document_failed.title')
+          TAPi18n.__('notifications.soft_remove_document_failed.title'),
         );
       } else {
         SelectedCtrl.remove('documents', id);
@@ -158,7 +157,7 @@ const actions = {
 
         NotificationManager.success(
           TAPi18n.__('notifications.soft_remove_document_success.message'),
-          TAPi18n.__('notifications.soft_remove_document_success.title')
+          TAPi18n.__('notifications.soft_remove_document_success.title'),
         );
       }
     });
@@ -171,7 +170,7 @@ const actions = {
       TAPi18n,
       LocalState,
       SelectedCtrl,
-      NotificationManager
+      NotificationManager,
     } = context;
     const selectedIds = SelectedCtrl.getSelected(tableName);
 
@@ -179,7 +178,7 @@ const actions = {
       if (err) {
         NotificationManager.error(
           TAPi18n.__('notifications.soft_remove_document_failed.message'),
-          TAPi18n.__('notifications.soft_remove_document_failed.title')
+          TAPi18n.__('notifications.soft_remove_document_failed.title'),
         );
       } else {
         SelectedCtrl.reset(tableName);
@@ -190,7 +189,7 @@ const actions = {
 
         NotificationManager.success(
           TAPi18n.__('notifications.soft_remove_document_success.message'),
-          TAPi18n.__('notifications.soft_remove_document_success.title')
+          TAPi18n.__('notifications.soft_remove_document_success.title'),
         );
       }
     });
@@ -199,7 +198,7 @@ const actions = {
   clearState({ LocalState, SelectedCtrl }) {
     LocalState.set('TABLE_SORT_DOCUMENTS', { title: 1 });
     SelectedCtrl.reset('documents');
-  }
+  },
 
 };
 

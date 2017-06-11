@@ -1,5 +1,5 @@
 import React from 'react';
-import {Modal, HelpBlock, FormGroup, ControlLabel, FormControl, Button} from 'react-bootstrap';
+import { Modal, HelpBlock, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 
 class CreateModal extends React.Component {
 
@@ -7,21 +7,19 @@ class CreateModal extends React.Component {
     super(props);
     this.state = {
       title: '',
-      template: ''
+      template: '',
     };
   }
 
   renderSelectOptions() {
-    const {selectOptions} = this.props;
+    const { selectOptions } = this.props;
 
-    return selectOptions.map((option) => {
-      return (
-        <option
-          key={option.value}
-          value={option.value}
-        >{option.label}</option>
-      );
-    });
+    return selectOptions.map(option => (
+      <option
+        key={option.value}
+        value={option.value}
+      >{option.label}</option>
+      ));
   }
 
   getValidationState() {
@@ -38,13 +36,13 @@ class CreateModal extends React.Component {
   reset() {
     this.setState({
       title: '',
-      template: ''
+      template: '',
     });
   }
 
   onSubmit(e) {
     e.preventDefault();
-    const {create, isTemplate} = this.props;
+    const { create, isTemplate } = this.props;
     const title = this.state.title;
     const hasTemplate = this.state.template;
 
@@ -69,10 +67,10 @@ class CreateModal extends React.Component {
       close,
       text,
       helperTexts,
-      isTemplate
+      isTemplate,
     } = this.props;
 
-    const {minLengthString} = helperTexts || {};
+    const { minLengthString } = helperTexts || {};
 
     return (
       <div className="create-modal">
@@ -121,7 +119,8 @@ class CreateModal extends React.Component {
               <Button
                 type="submit"
                 bsStyle="primary"
-                disabled={this.getValidationState() !== 'success'}>{text.okBtn}</Button>
+                disabled={this.getValidationState() !== 'success'}
+              >{text.okBtn}</Button>
             </Modal.Footer>
           </form>
 
@@ -139,7 +138,7 @@ CreateModal.propTypes = {
     okBtn: React.PropTypes.string,
     selectLabel: React.PropTypes.string,
     titleLabel: React.PropTypes.string,
-    titlePlaceholder: React.PropTypes.string
+    titlePlaceholder: React.PropTypes.string,
   }),
 
   helperTexts: React.PropTypes.shape({
@@ -148,14 +147,14 @@ CreateModal.propTypes = {
 
   selectOptions: React.PropTypes.arrayOf(React.PropTypes.shape({
     value: React.PropTypes.string,
-    label: React.PropTypes.string
+    label: React.PropTypes.string,
   })),
 
   isOpen: React.PropTypes.bool.isRequired,
   isTemplate: React.PropTypes.bool.isRequired,
 
   close: React.PropTypes.func.isRequired,
-  create: React.PropTypes.func.isRequired
+  create: React.PropTypes.func.isRequired,
 };
 
 CreateModal.defaultProps = {
@@ -166,8 +165,8 @@ CreateModal.defaultProps = {
     okBtn: 'OK',
     selectLabel: 'Select',
     titleLabel: 'Title',
-    titlePlaceholder: 'Title'
-  }
+    titlePlaceholder: 'Title',
+  },
 };
 
 export default CreateModal;

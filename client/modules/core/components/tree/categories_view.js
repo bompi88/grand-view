@@ -30,9 +30,7 @@ export default class CategoriesView extends React.Component {
   renderTags(items) {
     return (
       <ul>
-        { items.map((item) => {
-          return this.renderTag(item);
-        })}
+        { items.map(item => this.renderTag(item))}
       </ul>
     );
   }

@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Options dropdown Actions
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,14 +15,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 export default {
 
   createNewChapter(context) {
-    const {Helpers, Collections, LocalState} = context;
+    const { Helpers, Collections, LocalState } = context;
     const _id = LocalState.get('CURRENT_DOCUMENT');
-    const parent = Collections.Documents.findOne({_id});
+    const parent = Collections.Documents.findOne({ _id });
 
     Helpers.insertNodeOfType(context, parent, 'chapter');
   },
@@ -37,18 +37,18 @@ export default {
     Meteor.call('collapseAll', docId);
   },
 
-  generateDOCX({LocalState}) {
+  generateDOCX({ LocalState }) {
     LocalState.set('EXPORT_OFFICE_MODAL_VISIBLE', true);
   },
 
   exportToFile(context) {
-    const {Helpers, LocalState} = context;
+    const { Helpers, LocalState } = context;
     const id = LocalState.get('CURRENT_DOCUMENT');
     Helpers.exportDocument(context, id);
   },
 
   exportToTemplateFile(context) {
-    const {Helpers, LocalState} = context;
+    const { Helpers, LocalState } = context;
     const id = LocalState.get('CURRENT_DOCUMENT');
     Helpers.exportDocument(context, id, true);
   },
@@ -58,13 +58,13 @@ export default {
     Meteor.call('document.makeTemplate', mainDocId, () => {
       NotificationManager.success(
         TAPi18n.__('notifications.make_template_success.message'),
-        TAPi18n.__('notifications.make_template_success.title')
+        TAPi18n.__('notifications.make_template_success.title'),
       );
     });
   },
 
   openHelpModal({}) {
     console.log('Open help modal');
-  }
+  },
 
 };

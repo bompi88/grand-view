@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Modal, FormGroup, ControlLabel, FormControl, Button} from 'react-bootstrap';
+import { Modal, FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap';
 
 class LanguageModal extends React.Component {
 
@@ -9,21 +9,19 @@ class LanguageModal extends React.Component {
   }
 
   renderSelectOptions() {
-    const {selectOptions} = this.props;
+    const { selectOptions } = this.props;
 
-    return selectOptions.map((option) => {
-      return (
-        <option
-          key={option.value}
-          value={option.value}
-        >{option.label}</option>
-      );
-    });
+    return selectOptions.map(option => (
+      <option
+        key={option.value}
+        value={option.value}
+      >{option.label}</option>
+      ));
   }
 
   onSubmit(e) {
     e.preventDefault();
-    const {save} = this.props;
+    const { save } = this.props;
     const language = ReactDOM.findDOMNode(this.refs.language).value;
     save(language);
   }
@@ -33,7 +31,7 @@ class LanguageModal extends React.Component {
       isOpen,
       close,
       selected,
-      text
+      text,
     } = this.props;
 
     return (
@@ -53,7 +51,7 @@ class LanguageModal extends React.Component {
                 <FormControl
                   componentClass="select"
                   placeholder="select"
-                  ref='language'
+                  ref="language"
                   defaultValue={selected}
                 >
                   {this.renderSelectOptions()}
@@ -79,15 +77,15 @@ LanguageModal.propTypes = {
     description: React.PropTypes.string,
     cancelBtn: React.PropTypes.string,
     saveBtn: React.PropTypes.string,
-    selectLabel: React.PropTypes.string
+    selectLabel: React.PropTypes.string,
   }),
   isOpen: React.PropTypes.bool.isRequired,
   close: React.PropTypes.func.isRequired,
   save: React.PropTypes.func.isRequired,
   selectOptions: React.PropTypes.arrayOf(React.PropTypes.shape({
     value: React.PropTypes.string,
-    label: React.PropTypes.string
-  })).isRequired
+    label: React.PropTypes.string,
+  })).isRequired,
 };
 
 
@@ -97,8 +95,8 @@ LanguageModal.defaultProps = {
     description: 'Select language below.',
     cancelBtn: 'Cancel',
     saveBtn: 'Save',
-    selectLabel: 'Select'
-  }
+    selectLabel: 'Select',
+  },
 };
 
 export default LanguageModal;

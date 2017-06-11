@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Index Actions
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,11 +15,11 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 export default {
 
-  generate({Helpers, NotificationManager, TAPi18n, LocalState}, format, compact = false) {
+  generate({ Helpers, NotificationManager, TAPi18n, LocalState }, format, compact = false) {
     const _id = LocalState.get('CURRENT_DOCUMENT');
 
     if (_id) {
@@ -27,25 +27,25 @@ export default {
         if (err) {
           NotificationManager.error(
             TAPi18n.__('notifications.generation_docx_failed.message'),
-            TAPi18n.__('notifications.generation_docx_failed.title')
+            TAPi18n.__('notifications.generation_docx_failed.title'),
           );
         } else {
           LocalState.set('EXPORT_OFFICE_MODAL_VISIBLE', false);
           NotificationManager.success(
             TAPi18n.__('notifications.generation_docx_success.message'),
-            TAPi18n.__('notifications.generation_docx_success.title')
+            TAPi18n.__('notifications.generation_docx_success.title'),
           );
         }
       });
     } else {
       NotificationManager.error(
         TAPi18n.__('notifications.generation_must_open_document.message'),
-        TAPi18n.__('notifications.generation_must_open_document.title')
+        TAPi18n.__('notifications.generation_must_open_document.title'),
       );
     }
   },
 
-  close({LocalState}) {
+  close({ LocalState }) {
     return LocalState.set('EXPORT_OFFICE_MODAL_VISIBLE', false);
-  }
+  },
 };

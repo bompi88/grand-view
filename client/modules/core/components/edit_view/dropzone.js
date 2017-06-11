@@ -19,11 +19,11 @@ export default class EditRootViewForm extends React.Component {
       file,
       meta: {
         nodeId,
-        docId
+        docId,
       },
       streams: 'dynamic',
       chunkSize: 'dynamic',
-      allowWebWorkers: true
+      allowWebWorkers: true,
     }, false);
 
 
@@ -56,11 +56,11 @@ export default class EditRootViewForm extends React.Component {
     });
 
     uploadInstance.on('error', (error, fileObj) => {
-      console.log('Error during upload: ' + error);
+      console.log(`Error during upload: ${error}`);
     });
 
     uploadInstance.on('progress', (progress, fileObj) => {
-      console.log('Upload Percentage: ' + progress);
+      console.log(`Upload Percentage: ${progress}`);
       // Update our progress bar
       // self.setState({
       //   progress
@@ -102,13 +102,14 @@ export default class EditRootViewForm extends React.Component {
     const { text } = this.props;
 
     return (
-      <Dropzone disablePreview={true} onDrop={this.onDrop.bind(this)} className="upload-field">
+      <Dropzone disablePreview onDrop={this.onDrop.bind(this)} className="upload-field">
         <div style={{
           width: '100%',
           height: '25px',
-          marginTop: '20px'
-        }}>
-          <span className="glyphicon glyphicon-upload" style={{ fontSize: '1.9em' }}></span>
+          marginTop: '20px',
+        }}
+        >
+          <span className="glyphicon glyphicon-upload" style={{ fontSize: '1.9em' }} />
         </div>
         <div className="drop-text">{text.uploadFiles}</div>
       </Dropzone>

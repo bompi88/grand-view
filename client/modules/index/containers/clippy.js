@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Clippy Container
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,28 +15,28 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 import Clippy from '../components/clippy/clippy';
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
-export const composer = ({context}, onData) => {
-  const {TAPi18n} = context();
+export const composer = ({ context }, onData) => {
+  const { TAPi18n } = context();
 
   const text = {
     welcome: TAPi18n.__('clippy.welcome_message'),
-    hideMe: TAPi18n.__('clippy.hide_me')
+    hideMe: TAPi18n.__('clippy.hide_me'),
   };
 
-  onData(null, {text});
+  onData(null, { text });
 };
 
 export const depsMapper = (context, actions) => ({
   openLanguageModal: actions.clippy.openLanguageModal,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(Clippy);

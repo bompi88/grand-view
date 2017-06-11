@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Node Actions
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 export default {
 
@@ -29,21 +29,21 @@ export default {
 
   collapseNode({ Meteor, LocalState, Collections }, { _id }) {
     Collections.Nodes.update({
-      _id
+      _id,
     }, {
       $set: {
-        isCollapsed: true
-      }
+        isCollapsed: true,
+      },
     });
   },
 
   expandNode({ Meteor, LocalState, Collections }, { _id }) {
     Collections.Nodes.update({
-      _id
+      _id,
     }, {
       $set: {
-        isCollapsed: false
-      }
+        isCollapsed: false,
+      },
     });
   },
 
@@ -56,13 +56,12 @@ export default {
   },
 
   renameNode({ LocalState, Meteor, $ }, _id) {
-
     LocalState.set('RENAME_NODE', _id);
 
     Meteor.defer(() => {
-      var el = $('.tree li .element.nodes.rename div.node-text');
+      const el = $('.tree li .element.nodes.rename div.node-text');
       el.focus();
       document.execCommand('selectAll', false, null);
     });
-  }
+  },
 };

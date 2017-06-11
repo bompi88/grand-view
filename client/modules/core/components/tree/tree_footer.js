@@ -3,7 +3,7 @@ import React from 'react';
 export default class Tree extends React.Component {
 
   renderItem(item) {
-    const {currentState, changeState} = this.props;
+    const { currentState, changeState } = this.props;
 
     const active = currentState === item.state ? 'active' : '';
     return (
@@ -17,11 +17,9 @@ export default class Tree extends React.Component {
   }
 
   renderItems() {
-    const {items} = this.props;
+    const { items } = this.props;
 
-    return items.map((item) => {
-      return this.renderItem(item);
-    });
+    return items.map(item => this.renderItem(item));
   }
 
   render() {

@@ -44,5 +44,5 @@ export default reduxForm({
     return state.form && state.form.present;
   },
   enableReinitialize: true,
-  destroyOnUnmount: false
+  destroyOnUnmount: false,
 })(EditRootViewForm);

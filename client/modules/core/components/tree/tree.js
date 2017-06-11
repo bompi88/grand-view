@@ -12,15 +12,13 @@ import RootNode from '../../containers/root_node';
 class Tree extends React.Component {
 
   renderNodes() {
-    const {nodes = []} = this.props;
+    const { nodes = [] } = this.props;
     const Child = NodeContainer(Node);
-    return nodes.map((node, index) => {
-      return <Child key={node._id} node={node} index={index} sectionLabel={node.position} />;
-    });
+    return nodes.map((node, index) => <Child key={node._id} node={node} index={index} sectionLabel={node.position} />);
   }
 
   renderTreeView() {
-    const {doc = {}, nodes = []} = this.props;
+    const { doc = {}, nodes = [] } = this.props;
     const count = nodes.length;
 
     return (
@@ -42,7 +40,7 @@ class Tree extends React.Component {
       <div className="structure-header">
         <DocumentOptionsDropdown isTemplate={isTemplate} />
         <h4 className="header-text">
-          <span className="glyphicon glyphicon-tree-conifer"></span> {text.tree}
+          <span className="glyphicon glyphicon-tree-conifer" /> {text.tree}
         </h4>
       </div>
     );
@@ -55,7 +53,7 @@ class Tree extends React.Component {
       <div className="structure-header">
         <DocumentOptionsDropdownCategory />
         <h4 className="header-text">
-          <span className="glyphicon glyphicon-tags"></span> {text.tags}
+          <span className="glyphicon glyphicon-tags" /> {text.tags}
         </h4>
       </div>
     );
@@ -68,14 +66,14 @@ class Tree extends React.Component {
       <div className="structure-header">
         <DocumentOptionsDropdownCategory />
         <h4 className="header-text">
-          <span className="glyphicon glyphicon-bookmark"></span> {text.references}
+          <span className="glyphicon glyphicon-bookmark" /> {text.references}
         </h4>
       </div>
     );
   }
 
   render() {
-    const {currentView, doc} = this.props;
+    const { currentView, doc } = this.props;
     const { isTemplate } = doc;
 
     return (

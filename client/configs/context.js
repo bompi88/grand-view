@@ -1,22 +1,22 @@
 import * as Collections from './../../lib/collections';
-import {Meteor} from 'meteor/meteor';
-import {Match} from 'meteor/check';
-import {FlowRouter} from 'meteor/kadira:flow-router';
-import {ReactiveDict} from 'meteor/reactive-dict';
-import {Tracker} from 'meteor/tracker';
+import { Meteor } from 'meteor/meteor';
+import { Match } from 'meteor/check';
+import { FlowRouter } from 'meteor/kadira:flow-router';
+import { ReactiveDict } from 'meteor/reactive-dict';
+import { Tracker } from 'meteor/tracker';
 import $ from 'jquery';
 import 'magnific-popup';
-import {_} from 'meteor/underscore';
-import {TAPi18n} from 'meteor/tap:i18n';
-import {NotificationManager} from 'react-notifications';
-import {moment} from 'meteor/momentjs:moment';
+import { _ } from 'meteor/underscore';
+import { TAPi18n } from 'meteor/tap:i18n';
+import { NotificationManager } from 'react-notifications';
+import { moment } from 'meteor/momentjs:moment';
 import bootbox from 'bootbox';
 
 import { reducer as formReducer } from 'redux-form';
 import {
   createStore,
   applyMiddleware,
-  combineReducers
+  combineReducers,
 } from 'redux';
 // import createLogger from 'redux-logger';
 import undoable from 'redux-undo';
@@ -34,10 +34,9 @@ const LocalState = new ReactiveDict();
 // LocalState.set('CURRENT_DOCUMENT', 'pXK96LKA7h8Ekggim');
 
 export default function ({ reducers }) {
-
   const reducer = combineReducers({
     ...reducers,
-    form: undoable(formReducer)
+    form: undoable(formReducer),
   });
 
   const middlewares = [
@@ -65,6 +64,6 @@ export default function ({ reducers }) {
     _,
     Store,
     bootbox,
-    dispatch: Store.dispatch
+    dispatch: Store.dispatch,
   };
 }

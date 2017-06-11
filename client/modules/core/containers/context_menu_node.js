@@ -1,5 +1,5 @@
 import ContextMenu from '../components/context_menu/context_menu';
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 import bootbox from 'bootbox';
 
 export const composer = ({ context, actions }, onData) => {
@@ -18,7 +18,7 @@ export const composer = ({ context, actions }, onData) => {
       handleClick: (e, data) => {
         const { _id } = data;
         a.contextMenus.editMediaNode(_id);
-      }
+      },
     },
     {
       data: { node },
@@ -33,7 +33,7 @@ export const composer = ({ context, actions }, onData) => {
                     'Dette vil slette alle filer og data knyttet til dette informasjonselementet',
           buttons: {
             cancel: {
-              label: 'Nei'
+              label: 'Nei',
             },
             confirm: {
               label: 'Ja',
@@ -46,23 +46,23 @@ export const composer = ({ context, actions }, onData) => {
                   Meteor.call(
                     'document.setSelectedNode',
                     LocalState.get('CURRENT_DOCUMENT'),
-                    parent
+                    parent,
                   );
                   LocalState.set('CURRENT_NODE', parent);
 
                   // Show sucess message
                   NotificationManager.success(
                     'Informasjonselementet ble slettet fra systemet.',
-                    'Sletting fullført'
+                    'Sletting fullført',
                   );
                 }
-              }
-            }
-          }
+              },
+            },
+          },
         };
         bootbox.dialog(confirmationPrompt);
-      }
-    }
+      },
+    },
   ];
 
   onData(null, { menuItems, identifier });
@@ -70,5 +70,5 @@ export const composer = ({ context, actions }, onData) => {
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps()
+  useDeps(),
 )(ContextMenu);

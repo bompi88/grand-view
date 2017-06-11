@@ -1,9 +1,9 @@
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 import { DragSource } from 'react-dnd';
 
 export const composer = (t, onData) => {
-  const {context, node, sectionLabel} = t;
-  const {Meteor, Collections, LocalState} = context();
+  const { context, node, sectionLabel } = t;
+  const { Meteor, Collections, LocalState } = context();
 
   const renameNode = LocalState.get('RENAME_NODE') || false;
   const parent = node._id;
@@ -14,25 +14,24 @@ export const composer = (t, onData) => {
   if (nodesReady && countsReady) {
     const selector = {
       parent,
-      nodeType: 'chapter'
+      nodeType: 'chapter',
     };
 
     const options = {
-      sort: { position: 1 }
+      sort: { position: 1 },
     };
 
     const nodes = Collections.Nodes.find(selector, options).fetch();
-    const count = Collections.Counts.findOne({ _id: 'mediaNodeCount' + parent }).count || 0;
+    const count = Collections.Counts.findOne({ _id: `mediaNodeCount${parent}` }).count || 0;
     onData(null, {
       nodes,
       sectionLabel,
       renameNode,
-      count
+      count,
     });
   } else {
     onData(null, { sectionLabel, renameNode, count: 0 });
   }
-
 };
 
 export const depsMapper = (context, actions) => ({
@@ -41,7 +40,7 @@ export const depsMapper = (context, actions) => ({
   expandNode: actions.node.expandNode,
   setPosition: actions.node.setPosition,
   putIntoChapterNode: actions.node.putIntoChapterNode,
-  context: () => context
+  context: () => context,
 });
 
 const dragSpecs = {
@@ -52,19 +51,17 @@ const dragSpecs = {
 
   endDrag(props) {
     return props.node;
-  }
+  },
 
 };
 
-const collect = (connect, monitor) => {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  };
-};
+const collect = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging(),
+});
 
 export default composeAll(
   DragSource('node', dragSpecs, collect),
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 );

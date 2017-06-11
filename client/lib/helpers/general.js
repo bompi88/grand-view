@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // General helpers
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,10 +15,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
-import {$} from 'jquery';
-import {moment} from 'meteor/momentjs:moment';
+import { $ } from 'jquery';
+import { moment } from 'meteor/momentjs:moment';
 import bootbox from 'bootbox';
 
 export default {
@@ -35,8 +35,7 @@ export default {
   },
 
   showConfirmationPrompt(options, callbackYes, callbackNo) {
-
-    const {title, message} = options;
+    const { title, message } = options;
 
     $('div.tooltip').hide();
 
@@ -47,18 +46,18 @@ export default {
       buttons: {
         cancel: {
           label: 'Nei',
-          callback: callbackNo
+          callback: callbackNo,
         },
         confirm: {
           label: 'Ja',
-          callback: callbackYes
-        }
-      }
+          callback: callbackYes,
+        },
+      },
     };
     bootbox.dialog(confirmationPrompt);
   },
 
-  goto({FlowRouter}, id, template = false) {
+  goto({ FlowRouter }, id, template = false) {
     const route = template ? 'Template' : 'Document';
 
     FlowRouter.go(FlowRouter.path(route, { _id: id }));
@@ -70,5 +69,5 @@ export default {
 
   goToTemplate({}, id) {
     this.goto(id, true);
-  }
+  },
 };

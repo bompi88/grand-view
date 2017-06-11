@@ -12,7 +12,7 @@ export default class NodesTableRow extends React.Component {
     this.setDragable = this.setDragable.bind(this);
     this.unsetDragable = this.unsetDragable.bind(this);
     this.state = {
-      dragable: true
+      dragable: true,
     };
   }
 
@@ -53,7 +53,7 @@ export default class NodesTableRow extends React.Component {
     const { text } = this.props;
     return (
       <li className="node-list-item">
-        <b>{text.tags}:</b> {tags.map((n) => n.label).join(', ')}
+        <b>{text.tags}:</b> {tags.map(n => n.label).join(', ')}
       </li>
     );
   }
@@ -85,13 +85,13 @@ export default class NodesTableRow extends React.Component {
     const { text } = this.props;
     return (
       <li className="node-list-item">
-        <b>{text.references}:</b> {references.map((n) => n.label).join(', ')}
+        <b>{text.references}:</b> {references.map(n => n.label).join(', ')}
       </li>
     );
   }
 
   renderCategorization(node) {
-    const { tags = [], references = []} = node;
+    const { tags = [], references = [] } = node;
 
     if (!tags.length && !references.length) {
       return null;
@@ -107,13 +107,13 @@ export default class NodesTableRow extends React.Component {
 
   setDragable() {
     this.setState({
-      dragable: true
+      dragable: true,
     });
   }
 
   unsetDragable() {
     this.setState({
-      dragable: false
+      dragable: false,
     });
   }
 
@@ -130,7 +130,7 @@ export default class NodesTableRow extends React.Component {
       connectDragSource,
       connectDropTarget,
       toggleSelected,
-      sortable = true
+      sortable = true,
     } = this.props;
 
     const opacity = isDragging ? 0 : 1;
@@ -151,10 +151,10 @@ export default class NodesTableRow extends React.Component {
             className="row-item"
             onClick={toggleSelected.bind(this, node._id, tableName)}
             style={{
-              width: '20px'
+              width: '20px',
             }}
           >
-            <input type="checkbox" className="checkbox" checked={checked}/>
+            <input type="checkbox" className="checkbox" checked={checked} />
           </td>
 
           <td
@@ -164,10 +164,11 @@ export default class NodesTableRow extends React.Component {
           >
             { isInEditMode ? (
               <div>
-                <div className="alert alert-info" dangerouslySetInnerHTML={{
-                  __html: text.closeFormInfo
-                }}>
-                </div>
+                <div
+                  className="alert alert-info" dangerouslySetInnerHTML={{
+                    __html: text.closeFormInfo,
+                  }}
+                />
                 <EditViewForm
                   initialValues={node}
                   nodeId={node._id}
@@ -177,7 +178,7 @@ export default class NodesTableRow extends React.Component {
               </div>
             ) : this.renderNode(node)}
           </td>
-        </tr>
+        </tr>,
       )));
     }
 
@@ -191,10 +192,10 @@ export default class NodesTableRow extends React.Component {
           className="row-item"
           onClick={toggleSelected.bind(this, node._id, tableName)}
           style={{
-            width: '20px'
+            width: '20px',
           }}
         >
-          <input type="checkbox" className="checkbox" checked={checked}/>
+          <input type="checkbox" className="checkbox" checked={checked} />
         </td>
 
         <td
@@ -204,10 +205,11 @@ export default class NodesTableRow extends React.Component {
         >
           { isInEditMode ? (
             <div>
-              <div className="alert alert-info" dangerouslySetInnerHTML={{
-                __html: text.closeFormInfo
-              }}>
-              </div>
+              <div
+                className="alert alert-info" dangerouslySetInnerHTML={{
+                  __html: text.closeFormInfo,
+                }}
+              />
               <EditViewForm
                 initialValues={node}
                 nodeId={node._id}

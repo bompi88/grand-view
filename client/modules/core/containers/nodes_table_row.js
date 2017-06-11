@@ -11,7 +11,7 @@ const dragSource = {
     return {
       _id,
       index,
-      nodeType
+      nodeType,
     };
   },
 };
@@ -62,25 +62,21 @@ const dropTarget = {
 
     props.updateMediaNodePosition({
       toPos: dropIndex,
-      _id
+      _id,
     });
-  }
+  },
 };
-const collectDrop = (connect) => {
-  return {
-    connectDropTarget: connect.dropTarget()
-  };
-};
+const collectDrop = connect => ({
+  connectDropTarget: connect.dropTarget(),
+});
 
-const collectDrag = (connect, monitor) => {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  };
-};
+const collectDrag = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging(),
+});
 
 
 export default composeAll(
   DropTarget('node', dropTarget, collectDrop),
-  DragSource('node', dragSource, collectDrag)
+  DragSource('node', dragSource, collectDrag),
 )(NodesTableRow);

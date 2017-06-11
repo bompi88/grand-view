@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Office Word Document Generation
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,17 +15,17 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 /* eslint camelcase: 0 */
 /* eslint no-console: 0 */
 /* globals _require */
 
-import {_} from 'meteor/underscore';
-import {Meteor} from 'meteor/meteor';
-import {TAPi18n} from 'meteor/tap:i18n';
+import { _ } from 'meteor/underscore';
+import { Meteor } from 'meteor/meteor';
+import { TAPi18n } from 'meteor/tap:i18n';
 
-import {Documents, Nodes, Files} from '/lib/collections';
+import { Documents, Nodes, Files } from '/lib/collections';
 
 const { shell, remote } = _require('electron');
 const { dialog } = remote;
@@ -36,39 +36,39 @@ const fs = _require('fs');
 const header1Text = {
   color: '000088',
   font_face: 'Arial',
-  font_size: 25
+  font_size: 25,
 };
 
 const header2Text = {
   color: '000088',
   font_face: 'Arial',
-  font_size: 18
+  font_size: 18,
 };
 
 const header3Text = {
   color: '000000',
   font_face: 'Arial',
-  font_size: 16
+  font_size: 16,
 };
 
 const descText = {
   color: '000000',
   font_face: 'Arial',
-  font_size: 12
+  font_size: 12,
 };
 
 const keywordHeaderText = {
   color: '000000',
   font_face: 'Arial',
   font_size: 12,
-  bold: true
+  bold: true,
 };
 
 const keywordText = {
   color: '000000',
   font_face: 'Arial',
   font_size: 12,
-  italic: true
+  italic: true,
 };
 
 const openFile = (filePath, callback) => {
@@ -96,14 +96,14 @@ const generationDocx = {
     }
 
     if (compact === false && tags) {
-      par.addText(TAPi18n.__('tags') + ':', keywordHeaderText);
-      par.addText(' ' + tags.map(t => t.label).join(', '), keywordText);
+      par.addText(`${TAPi18n.__('tags')}:`, keywordHeaderText);
+      par.addText(` ${tags.map(t => t.label).join(', ')}`, keywordText);
       par.addLineBreak();
     }
 
     if (references) {
-      par.addText(TAPi18n.__('references') + ':', keywordHeaderText);
-      par.addText(' ' + references.map(r => r.label).join(', '), keywordText);
+      par.addText(`${TAPi18n.__('references')}:`, keywordHeaderText);
+      par.addText(` ${references.map(r => r.label).join(', ')}`, keywordText);
       par.addLineBreak();
     }
 
@@ -116,16 +116,16 @@ const generationDocx = {
           par.addImage(file.path, {
             x: 'c',
             cx,
-            cy: Math.floor(imgSize.height * scale)
+            cy: Math.floor(imgSize.height * scale),
           });
         } else if (file) {
-          par.addText(TAPi18n.__('name') + ': ', keywordHeaderText);
+          par.addText(`${TAPi18n.__('name')}: `, keywordHeaderText);
           par.addText(file.meta && file.meta.name || file.name, keywordText);
           par.addLineBreak();
 
-          par.addText(TAPi18n.__('file_path') + ': ', keywordHeaderText);
-          par.addText('\"' + file.path +
-            '\"', keywordText);
+          par.addText(`${TAPi18n.__('file_path')}: `, keywordHeaderText);
+          par.addText(`\"${file.path
+            }\"`, keywordText);
         }
 
         par.addLineBreak();
@@ -152,19 +152,19 @@ const generationDocx = {
     let numbering;
 
     if (posLabel) {
-      numbering = posLabel + '.' + position;
+      numbering = `${posLabel}.${position}`;
     } else {
       numbering = position;
     }
 
-    par.addText(numbering + ' ' + (name || TAPi18n.__('no_chapter_title')), header2Text);
+    par.addText(`${numbering} ${name || TAPi18n.__('no_chapter_title')}`, header2Text);
 
     const nodes = Nodes.find({
-      parent: _id
+      parent: _id,
     }, {
       sort: {
-        position: 1
-      }
+        position: 1,
+      },
     }).fetch();
 
     nodes.forEach((elNode) => {
@@ -182,7 +182,7 @@ const generationDocx = {
 
     const nodes = Nodes.find({
       mainDocId: doc._id,
-      nodeType: 'media'
+      nodeType: 'media',
     }).fetch();
 
     const tagsList = {};
@@ -210,7 +210,7 @@ const generationDocx = {
       Object.keys(tagsList)
         .sort((a, b) => {
           const lccomp = a.toLowerCase().localeCompare(b.toLowerCase(), 'nb');
-          return lccomp ? lccomp : a > b ? 1 : a < b ? -1 : 0;
+          return lccomp || a > b ? 1 : a < b ? -1 : 0;
         })
         .forEach((tag) => {
           if (tagsList.hasOwnProperty(tag) && (tag !== undefinedPropertyLabel)) {
@@ -244,18 +244,17 @@ const generationDocx = {
   },
 
   renderDocument(doc, docx, mainPar, format, compact) {
-
     if (format === 'chapters') {
       const nodes = Nodes.find({
-        parent: doc._id
+        parent: doc._id,
       }, {
         sort: {
-          position: 1
-        }
+          position: 1,
+        },
       }).fetch();
 
       nodes.forEach((node) => {
-        const {nodeType} = node;
+        const { nodeType } = node;
         if (nodeType === 'chapter') {
           this.renderChapterNode(node, docx, 0, compact);
         } else {
@@ -268,10 +267,9 @@ const generationDocx = {
   },
 
   generateDOCX(_id, format, compact, cb) {
-
     const docx = officegen('docx');
-    const doc = Documents.findOne({_id});
-    const {title, description} = doc;
+    const doc = Documents.findOne({ _id });
+    const { title, description } = doc;
 
     docx.setDocTitle(title || TAPi18n.__('no_title'));
     docx.setDescription(description || '');
@@ -300,9 +298,9 @@ const generationDocx = {
         filters: [
           {
             name: 'Microsoft Office (.docx)',
-            extensions: [ 'docx' ]
-          }
-        ]
+            extensions: ['docx'],
+          },
+        ],
       }, (filePath) => {
         if (filePath) {
           console.log(filePath);
@@ -310,7 +308,7 @@ const generationDocx = {
 
           docx.generate(out, {
             finalize(written) {
-              console.log('Finnished to write docx-file.\nBytes written: ' + written + '\n');
+              console.log(`Finnished to write docx-file.\nBytes written: ${written}\n`);
 
               // TODO: maybe remove this, and let the user open itself.
               Meteor.setTimeout(() => {
@@ -326,14 +324,12 @@ const generationDocx = {
             error(err) {
               console.log(err);
               return cb(true);
-            }
+            },
           });
         }
       });
-
-
     });
-  }
+  },
 };
 
 export default generationDocx;

@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // TopNavbar SCSS Styles
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,15 +15,15 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 /* globals _require */
 
 import React from 'react';
-import {FlowRouter} from 'meteor/kadira:flow-router';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 import NavBarButton from './nav_bar_button';
 
-const {shell} = _require('electron');
+const { shell } = _require('electron');
 
 export default class TopNavBar extends React.Component {
 
@@ -49,15 +49,13 @@ export default class TopNavBar extends React.Component {
   }
 
   renderButtons() {
-    const {buttons} = this.props;
+    const { buttons } = this.props;
 
-    return buttons.map((button) => {
-      return this.renderButton(button);
-    });
+    return buttons.map(button => this.renderButton(button));
   }
 
   render() {
-    const {text} = this.props;
+    const { text } = this.props;
 
     return (
       <div className="navbar navbar-default navbar-fixed-top animated fadeInDown" role="navigation">
@@ -77,12 +75,13 @@ export default class TopNavBar extends React.Component {
               data-toggle="collapse"
               data-target=".navbar-collapse"
               aria-expanded="false"
-              aria-controls="navbar">
+              aria-controls="navbar"
+            >
 
               <span className="sr-only">{text.toggleNavigation}</span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
+              <span className="icon-bar" />
+              <span className="icon-bar" />
+              <span className="icon-bar" />
             </button>
 
             <a

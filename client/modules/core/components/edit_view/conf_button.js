@@ -14,14 +14,14 @@ export default class ConfButton extends React.Component {
           data-toggle="dropdown"
           type="button"
         >
-          <span className="glyphicon glyphicon-cog"></span>
+          <span className="glyphicon glyphicon-cog" />
         </button>
 
         <ul className="dropdown-menu toggle-advanced-mode">
           { mode === 'easy' ? (
             <li className="disabled">
               <a href="#" className="easy-mode">
-                <span className="glyphicon glyphicon-ok green"></span> {text.collapsedMode}
+                <span className="glyphicon glyphicon-ok green" /> {text.collapsedMode}
               </a>
             </li>
           ) : (
@@ -37,7 +37,7 @@ export default class ConfButton extends React.Component {
           { mode === 'advanced' ? (
             <li className="disabled">
               <a href="#" className="advanced-mode">
-                <span className="glyphicon glyphicon-ok green"></span> {text.expandedMode}
+                <span className="glyphicon glyphicon-ok green" /> {text.expandedMode}
               </a>
             </li>
           ) : (

@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // NavBar Button Component
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,10 +15,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 import React from 'react';
-import {FlowRouter} from 'meteor/kadira:flow-router';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 import Dot from '../prototypes/dot';
 
@@ -30,8 +30,7 @@ class NavBarButton extends React.Component {
   }
 
   render() {
-
-    const {name, route, hasDot, dotTooltip} = this.props;
+    const { name, route, hasDot, dotTooltip } = this.props;
 
     return (
       <li
@@ -49,7 +48,7 @@ class NavBarButton extends React.Component {
 
 NavBarButton.propTypes = {
   route: React.PropTypes.string.isRequired,
-  name: React.PropTypes.string.isRequired
+  name: React.PropTypes.string.isRequired,
 };
 
 export default NavBarButton;

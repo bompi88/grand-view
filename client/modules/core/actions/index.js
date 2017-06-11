@@ -17,5 +17,5 @@ export default {
   treeView,
   optionsDropdown,
   contextMenus,
-  editView
+  editView,
 };

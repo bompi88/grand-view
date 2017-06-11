@@ -8,7 +8,7 @@ export const composer = ({ context, node }, onData) => {
   if (Meteor.subscribe('nodes.byId', node._id).ready()) {
     const n = Collections.Nodes.findOne({ _id: node._id }, { reactive: false });
     return onData(null, {
-      node: n
+      node: n,
     });
   }
   return onData(null, {});
@@ -22,7 +22,7 @@ const dragSource = {
     return {
       _id,
       index,
-      nodeType
+      nodeType,
     };
   },
 };
@@ -73,26 +73,22 @@ const dropTarget = {
 
     props.updateMediaNodePosition({
       toPos: dropIndex,
-      _id
+      _id,
     });
-  }
+  },
 };
-const collectDrop = (connect) => {
-  return {
-    connectDropTarget: connect.dropTarget()
-  };
-};
+const collectDrop = connect => ({
+  connectDropTarget: connect.dropTarget(),
+});
 
-const collectDrag = (connect, monitor) => {
-  return {
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  };
-};
+const collectDrag = (connect, monitor) => ({
+  connectDragSource: connect.dragSource(),
+  isDragging: monitor.isDragging(),
+});
 
 
 export default composeAll(
   compose(composer),
   DropTarget('node', dropTarget, collectDrop),
-  DragSource('node', dragSource, collectDrag)
+  DragSource('node', dragSource, collectDrag),
 )(NodesTableRow);

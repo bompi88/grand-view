@@ -7,5 +7,5 @@ export default {
   ...general,
   ...importAndExport,
   ...docxGeneration,
-  ...nodes
+  ...nodes,
 };

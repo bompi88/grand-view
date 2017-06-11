@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Index Container
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,14 +15,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 
 import Index from '../components/index/index';
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
-export const composer = ({context, clearStates}, onData) => {
-  const {TAPi18n} = context();
+export const composer = ({ context, clearStates }, onData) => {
+  const { TAPi18n } = context();
 
   const text = {
     header: TAPi18n.__('index.header'),
@@ -32,10 +32,10 @@ export const composer = ({context, clearStates}, onData) => {
     getStarted: TAPi18n.__('index.get_started'),
     manual: TAPi18n.__('index.manual'),
     here: TAPi18n.__('index.here'),
-    or: TAPi18n.__('index.or')
+    or: TAPi18n.__('index.or'),
   };
 
-  onData(null, {text});
+  onData(null, { text });
 
   return clearStates;
 };
@@ -43,10 +43,10 @@ export const composer = ({context, clearStates}, onData) => {
 export const depsMapper = (context, actions) => ({
   openCreateModal: actions.index.openCreateModal,
   importFile: actions.index.importFile,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(Index);

@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Document Table Dropdown Component
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 
 import React from 'react';
@@ -23,17 +23,17 @@ import React from 'react';
 class DocumentTableDropdown extends React.Component {
 
   handleClick(func, e) {
-    const {tableName} = this.props;
+    const { tableName } = this.props;
     const f = this.props[func];
     f(tableName, e);
   }
 
   renderItem(item, index) {
     let disabled = '';
-    const {isDisabledOnManyAndNone, isDisabledOnNone, isDisabledNoDocs, tableName} = this.props;
+    const { isDisabledOnManyAndNone, isDisabledOnNone, isDisabledNoDocs, tableName } = this.props;
 
     if (item.divider) {
-      return <li className="divider" key={index}></li>;
+      return <li className="divider" key={index} />;
     }
 
     if (item.disabledOn === 'NONE') {
@@ -51,24 +51,22 @@ class DocumentTableDropdown extends React.Component {
         key={index}
       >
         <a href="#">
-          <span className={item.icon}></span> {item.label}
+          <span className={item.icon} /> {item.label}
         </a>
       </li>
     );
   }
 
   renderItems() {
-    const {items} = this.props;
+    const { items } = this.props;
 
-    return items.map((item, index) => {
-      return this.renderItem(item, index);
-    });
+    return items.map((item, index) => this.renderItem(item, index));
   }
 
   render() {
-    const {text} = this.props;
+    const { text } = this.props;
     const classNames = this.props.dropdownClasses ?
-      'btn-group dropdown ' + this.props.dropdownClasses : 'btn-group dropdown';
+      `btn-group dropdown ${this.props.dropdownClasses}` : 'btn-group dropdown';
 
     return (
       <div className={classNames}>
@@ -76,9 +74,10 @@ class DocumentTableDropdown extends React.Component {
           type="button"
           className="btn btn-default dropdown-toggle"
           data-toggle="dropdown"
-          aria-expanded="false">
+          aria-expanded="false"
+        >
 
-          {text.selectAction} <span className="caret"></span>
+          {text.selectAction} <span className="caret" />
         </button>
 
         <ul className="dropdown-menu" role="menu">
@@ -95,20 +94,20 @@ DocumentTableDropdown.propTypes = {
     icon: React.PropTypes.string,
     func: React.PropTypes.string,
     disabledOn: React.PropTypes.string,
-    divider: React.PropTypes.bool
+    divider: React.PropTypes.bool,
   })),
   text: React.PropTypes.shape({
-    selectAction: React.PropTypes.string
+    selectAction: React.PropTypes.string,
   }),
   isDisabledOnManyAndNone: React.PropTypes.func,
   isDisabledOnNone: React.PropTypes.func,
-  tableName: React.PropTypes.string
+  tableName: React.PropTypes.string,
 };
 
 DocumentTableDropdown.defaultProps = {
   text: {
-    selectAction: 'Select action'
-  }
+    selectAction: 'Select action',
+  },
 };
 
 export default DocumentTableDropdown;

@@ -1,5 +1,5 @@
 import React from 'react';
-import {ContextMenuLayer} from 'react-contextmenu';
+import { ContextMenuLayer } from 'react-contextmenu';
 
 class Root extends React.Component {
   render() {
@@ -11,7 +11,7 @@ class Root extends React.Component {
         className={isSelected ? 'element root selected' : 'element root'}
         onClick={handleClick.bind(this, node)}
       >
-        <span className="glyphicon glyphicon-book"></span> {(title === '' ? 'No title' : title)}
+        <span className="glyphicon glyphicon-book" /> {(title === '' ? 'No title' : title)}
       </span>
     );
   }

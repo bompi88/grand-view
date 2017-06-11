@@ -2,10 +2,10 @@ import Documents from '../components/documents/documents';
 import EditColumn from '../components/table/edit_column';
 import TemplateColumn from '../components/table/template_column';
 
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
-export const composer = ({context, clearState}, onData) => {
-  const {Meteor, Collections, TAPi18n, LocalState} = context();
+export const composer = ({ context, clearState }, onData) => {
+  const { Meteor, Collections, TAPi18n, LocalState } = context();
 
   const tableName = 'documents';
   const sort = LocalState.get('TABLE_SORT_DOCUMENTS') || { title: 1 };
@@ -15,7 +15,7 @@ export const composer = ({context, clearState}, onData) => {
     isEmpty: TAPi18n.__('documents.is_empty'),
     remove: TAPi18n.__('documents.remove'),
     export: TAPi18n.__('documents.export'),
-    by: TAPi18n.__('documents.by')
+    by: TAPi18n.__('documents.by'),
   };
 
   const columns = [
@@ -23,21 +23,21 @@ export const composer = ({context, clearState}, onData) => {
       label: TAPi18n.__('documents.title'),
       field: 'title',
       key: 'title',
-      sortable: true
+      sortable: true,
     },
     {
       label: TAPi18n.__('documents.created_at'),
       field: 'createdAt',
       key: 'created-at',
       sortable: true,
-      transform: 'formatDateRelative'
+      transform: 'formatDateRelative',
     },
     {
       label: TAPi18n.__('documents.last_modified'),
       field: 'lastModified',
       key: 'last-modified',
       sortable: true,
-      transform: 'formatDateRelative'
+      transform: 'formatDateRelative',
     },
     {
       label: TAPi18n.__('documents.template_used'),
@@ -45,28 +45,28 @@ export const composer = ({context, clearState}, onData) => {
       key: 'template-used',
       component: TemplateColumn,
       transform: 'renderTemplateTitle',
-      args: [ 'doc', 'text' ]
+      args: ['doc', 'text'],
     },
     {
       component: EditColumn,
-      key: 'edit-column'
-    }
+      key: 'edit-column',
+    },
   ];
 
   const props = {
     tableName,
     text,
-    columns
+    columns,
   };
 
   if (Meteor.subscribe('documents.all').ready() && Meteor.subscribe('templates.all').ready()) {
     const documents = Collections.Documents.find({
-      isTemplate: false
+      isTemplate: false,
     }, { sort }).fetch();
 
     onData(null, {
       documents,
-      ...props
+      ...props,
     });
   } else {
     onData(null, props);
@@ -91,10 +91,10 @@ export const depsMapper = (context, actions) => ({
   toggleSort: actions.documents.toggleSort,
   getSort: actions.documents.getSort,
   clearState: actions.documents.clearState,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(Documents);

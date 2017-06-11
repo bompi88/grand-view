@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Context Menus Actions
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 const actions = {
 
@@ -30,7 +30,7 @@ const actions = {
   removeRootNode({ NotificationManager, TAPi18n }) {
     NotificationManager.warning(
       TAPi18n.__('notifications.context_menu_root.message'),
-      TAPi18n.__('notifications.context_menu_root.title')
+      TAPi18n.__('notifications.context_menu_root.title'),
     );
   },
 
@@ -49,10 +49,10 @@ const actions = {
 
     const confirmationPrompt = {
       title: 'Bekreftelse på slettingen',
-      message: `Er du sikker på at du vil slette kapittelet "${name ? name : 'Uten navn'}", sammen med alle underkapitler og informasjonselement? NB! Du kan ikke angre på dette valget.`,
+      message: `Er du sikker på at du vil slette kapittelet "${name || 'Uten navn'}", sammen med alle underkapitler og informasjonselement? NB! Du kan ikke angre på dette valget.`,
       buttons: {
         cancel: {
-          label: 'Nei'
+          label: 'Nei',
         },
         confirm: {
           label: 'Ja',
@@ -63,12 +63,12 @@ const actions = {
               // Show sucess message
               NotificationManager.success(
                 'Kapittelet ble slettet fra systemet.',
-                'Sletting fullført'
+                'Sletting fullført',
               );
             }
-          }
-        }
-      }
+          },
+        },
+      },
     };
     bootbox.dialog(confirmationPrompt);
   },
@@ -89,15 +89,15 @@ const actions = {
       SelectedCtrl,
       Collections,
       TAPi18n,
-      bootbox
+      bootbox,
     } = context;
 
     const selectedIds = SelectedCtrl.getSelected(tableName);
 
     const nodes = Collections.Nodes.find({
       _id: {
-        $in: selectedIds
-      }
+        $in: selectedIds,
+      },
     });
 
 
@@ -115,7 +115,7 @@ const actions = {
       message,
       buttons: {
         cancel: {
-          label: 'Nei'
+          label: 'Nei',
         },
         confirm: {
           label: 'Ja',
@@ -129,15 +129,15 @@ const actions = {
               // Show sucess message
               NotificationManager.success(
                 'Informasjonselementene ble slettet fra systemet.',
-                'Sletting fullført'
+                'Sletting fullført',
               );
             }
-          }
-        }
-      }
+          },
+        },
+      },
     };
     bootbox.dialog(confirmationPrompt);
-  }
+  },
 };
 
 export default actions;
