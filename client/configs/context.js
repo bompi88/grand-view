@@ -1,3 +1,7 @@
+//--------------------------------------------------------------------------------------------------
+// Client Context
+//--------------------------------------------------------------------------------------------------
+
 import { NotificationManager } from 'react-notifications';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { ReactiveDict } from 'meteor/reactive-dict';

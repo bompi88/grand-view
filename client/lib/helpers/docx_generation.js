@@ -1,25 +1,8 @@
-// //////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------------------------------------
 // Office Word Document Generation
-// //////////////////////////////////////////////////////////////////////////////
-//
-// Copyright 2015 Concept
-//
-// Licensed under the Apache License, Version 2.0 (the 'License');
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an 'AS IS' BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-// //////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------------------------------------
 
-/* eslint camelcase: 0 */
 /* eslint no-console: 0 */
-/* globals _require */
 
 import { _ } from 'meteor/underscore';
 import { Meteor } from 'meteor/meteor';
@@ -124,8 +107,8 @@ const generationDocx = {
           par.addLineBreak();
 
           par.addText(`${TAPi18n.__('file_path')}: `, keywordHeaderText);
-          par.addText(`\"${file.path
-            }\"`, keywordText);
+          par.addText(`"${file.path
+            }"`, keywordText);
         }
 
         par.addLineBreak();
@@ -213,7 +196,8 @@ const generationDocx = {
           return lccomp || a > b ? 1 : a < b ? -1 : 0;
         })
         .forEach((tag) => {
-          if (tagsList.hasOwnProperty(tag) && (tag !== undefinedPropertyLabel)) {
+          const ownProp = Object.prototype.hasOwnProperty.call(tagsList, tag);
+          if (ownProp && (tag !== undefinedPropertyLabel)) {
             const ns = tagsList[tag];
             const par = docx.createP();
 
@@ -310,7 +294,6 @@ const generationDocx = {
             finalize(written) {
               console.log(`Finnished to write docx-file.\nBytes written: ${written}\n`);
 
-              // TODO: maybe remove this, and let the user open itself.
               Meteor.setTimeout(() => {
                 openFile(filePath, (error) => {
                   if (error) {
