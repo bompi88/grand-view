@@ -10,7 +10,6 @@ export default class ConfButton extends React.Component {
         <button
           aria-expanded="false"
           className="btn btn-default dropdown-toggle menu-button"
-          role="button"
           data-toggle="dropdown"
           type="button"
         >

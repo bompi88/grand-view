@@ -1,17 +1,15 @@
-import * as Collections from './../../lib/collections';
 import { Meteor } from 'meteor/meteor';
 import { Match } from 'meteor/check';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { ReactiveDict } from 'meteor/reactive-dict';
 import { Tracker } from 'meteor/tracker';
-import $ from 'jquery';
-import 'magnific-popup';
 import { _ } from 'meteor/underscore';
 import { TAPi18n } from 'meteor/tap:i18n';
-import { NotificationManager } from 'react-notifications';
 import { moment } from 'meteor/momentjs:moment';
+import { NotificationManager } from 'react-notifications';
+import $ from 'jquery';
+import 'magnific-popup';
 import bootbox from 'bootbox';
-
 import { reducer as formReducer } from 'redux-form';
 import {
   createStore,
@@ -20,6 +18,8 @@ import {
 } from 'redux';
 // import createLogger from 'redux-logger';
 import undoable from 'redux-undo';
+
+import * as Collections from './../../lib/collections';
 
 import Helpers from './../lib/helpers';
 import SelectedCtrl from './../lib/controllers/selected_nodes';
