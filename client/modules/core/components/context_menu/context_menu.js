@@ -11,7 +11,7 @@ export default class CtxMenu extends React.Component {
       const data = { node: item.data };
       return (
         <MenuItem key={item.id} data={data} onClick={item.handleClick}>
-          { item.icon ? (<span className={item.icon}></span>) : ''} {' ' + item.label}
+          { item.icon ? (<span className={item.icon} />) : ''} {` ${item.label}`}
         </MenuItem>
       );
     });

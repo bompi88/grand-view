@@ -32,8 +32,7 @@ export default function () {
    * Publish all resources linked to a doc;
    */
   Meteor.publish('documents.allByDocs', function (docIds) {
-
-    const ids = _.isArray(docIds) ? docIds : [ docIds ];
+    const ids = _.isArray(docIds) ? docIds : [docIds];
 
     // get the document
     const docs = Documents.find({
@@ -54,6 +53,6 @@ export default function () {
       },
     }).cursor;
 
-    return [ nodes, files, docs ];
+    return [nodes, files, docs];
   });
 }

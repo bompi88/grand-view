@@ -1,16 +1,16 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // moment.js locale configuration
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // moment.js locale configuration
 // locale : norwegian bokmål (nb)
 // authors : Espen Hovlandsdal : https://github.com/rexxars
 //           Sigurd Gartmann : https://github.com/sigurdga
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 /* eslint max-len: 0 */
 
-export default function ({moment}) {
+export default function ({ moment }) {
   moment.defineLocale('nb', {
     months: 'januar_februar_mars_april_mai_juni_juli_august_september_oktober_november_desember'.split('_'),
     monthsShort: 'jan._feb._mars_april_mai_juni_juli_aug._sep._okt._nov._des.'.split('_'),
@@ -23,7 +23,7 @@ export default function ({moment}) {
       L: 'DD.MM.YYYY',
       LL: 'D. MMMM YYYY',
       LLL: 'D. MMMM YYYY [kl.] HH:mm',
-      LLLL: 'dddd D. MMMM YYYY [kl.] HH:mm'
+      LLLL: 'dddd D. MMMM YYYY [kl.] HH:mm',
     },
     calendar: {
       sameDay: '[i dag kl.] LT',
@@ -31,7 +31,7 @@ export default function ({moment}) {
       nextWeek: 'dddd [kl.] LT',
       lastDay: '[i går kl.] LT',
       lastWeek: '[forrige] dddd [kl.] LT',
-      sameElse: 'L'
+      sameElse: 'L',
     },
     relativeTime: {
       future: 'om %s',
@@ -46,13 +46,13 @@ export default function ({moment}) {
       M: 'en måned',
       MM: '%d måneder',
       y: 'ett år',
-      yy: '%d år'
+      yy: '%d år',
     },
     ordinalParse: /\d{1,2}\./,
     ordinal: '%d.',
     week: {
       dow: 1, // Monday is the first day of the week.
-      doy: 4  // The week that contains Jan 4th is the first week of the year.
-    }
+      doy: 4,  // The week that contains Jan 4th is the first week of the year.
+    },
   });
 }

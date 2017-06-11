@@ -1,5 +1,5 @@
 import OptionsDropdown from '../components/options_dropdown/options_dropdown';
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
 export const composer = ({ context, isTemplate }, onData) => {
   const { TAPi18n } = context();
@@ -11,75 +11,75 @@ export const composer = ({ context, isTemplate }, onData) => {
       {
         icon: 'glyphicon glyphicon-plus',
         label: TAPi18n.__('dropdowns.document_options.create_chapter'),
-        func: 'createNewChapter'
+        func: 'createNewChapter',
       },
       {
-        divider: true
+        divider: true,
       },
       {
         icon: 'glyphicon glyphicon-resize-full',
         label: TAPi18n.__('dropdowns.document_options.expand_nodes'),
-        func: 'expandNodes'
+        func: 'expandNodes',
       },
       {
         icon: 'glyphicon glyphicon-resize-small',
         label: TAPi18n.__('dropdowns.document_options.collapse_nodes'),
-        func: 'collapseNodes'
+        func: 'collapseNodes',
       },
       {
-        divider: true
+        divider: true,
       },
       {
         icon: 'glyphicon glyphicon-export',
         label: TAPi18n.__('dropdowns.document_options.export_to_template_file'),
-        func: 'exportToTemplateFile'
-      }
+        func: 'exportToTemplateFile',
+      },
     ];
   } else {
     items = [
       {
         icon: 'glyphicon glyphicon-plus',
         label: TAPi18n.__('dropdowns.document_options.create_chapter'),
-        func: 'createNewChapter'
+        func: 'createNewChapter',
       },
       {
-        divider: true
+        divider: true,
       },
       {
         icon: 'glyphicon glyphicon-resize-full',
         label: TAPi18n.__('dropdowns.document_options.expand_nodes'),
-        func: 'expandNodes'
+        func: 'expandNodes',
       },
       {
         icon: 'glyphicon glyphicon-resize-small',
         label: TAPi18n.__('dropdowns.document_options.collapse_nodes'),
-        func: 'collapseNodes'
+        func: 'collapseNodes',
       },
       {
-        divider: true
+        divider: true,
       },
       {
         icon: 'glyphicon glyphicon-print',
         label: TAPi18n.__('dropdowns.document_options.generate_docx'),
-        func: 'generateDOCX'
+        func: 'generateDOCX',
       },
       {
         icon: 'glyphicon glyphicon-export',
         label: TAPi18n.__('dropdowns.document_options.export_to_file'),
-        func: 'exportToFile'
+        func: 'exportToFile',
       },
       {
-        divider: true
+        divider: true,
       },
       {
         icon: 'glyphicon glyphicon-duplicate',
         label: TAPi18n.__('dropdowns.document_options.make_template'),
-        func: 'makeTemplate'
-      }
+        func: 'makeTemplate',
+      },
     ];
   }
 
-  onData(null, {items});
+  onData(null, { items });
 };
 
 export const depsMapper = (context, actions) => ({
@@ -91,10 +91,10 @@ export const depsMapper = (context, actions) => ({
   exportToTemplateFile: actions.optionsDropdown.exportToTemplateFile,
   openHelpModal: actions.optionsDropdown.openHelpModal,
   makeTemplate: actions.optionsDropdown.makeTemplate,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(OptionsDropdown);

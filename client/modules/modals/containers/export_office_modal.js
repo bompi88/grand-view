@@ -1,10 +1,10 @@
 import {
-  useDeps, composeWithTracker, composeAll
+  useDeps, composeWithTracker, composeAll,
 } from 'mantra-core';
 import ExportOfficeModal from '../components/export_office_modal/export_office_modal';
 
-export const composer = ({context}, onData) => {
-  const {LocalState, TAPi18n} = context();
+export const composer = ({ context }, onData) => {
+  const { LocalState, TAPi18n } = context();
 
   const isOpen = LocalState.get('EXPORT_OFFICE_MODAL_VISIBLE') || false;
   const title = TAPi18n.__('modals.export_office_modal.title');
@@ -17,16 +17,16 @@ export const composer = ({context}, onData) => {
   const selectOptions = [
     {
       value: 'chapters',
-      label: TAPi18n.__('modals.export_office_modal.select.chapters')
+      label: TAPi18n.__('modals.export_office_modal.select.chapters'),
     },
     {
       value: 'tags',
-      label: TAPi18n.__('modals.export_office_modal.select.tags')
+      label: TAPi18n.__('modals.export_office_modal.select.tags'),
     },
     {
       value: 'references',
-      label: TAPi18n.__('modals.export_office_modal.select.references')
-    }
+      label: TAPi18n.__('modals.export_office_modal.select.references'),
+    },
   ];
 
   onData(null, {
@@ -37,17 +37,17 @@ export const composer = ({context}, onData) => {
     cancelBtn,
     selectOptions,
     selectLabel,
-    compactMode
+    compactMode,
   });
 };
 
 export const depsMapper = (context, actions) => ({
   generate: actions.exportOfficeModal.generate,
   close: actions.exportOfficeModal.close,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(ExportOfficeModal);

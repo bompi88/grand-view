@@ -5,7 +5,7 @@ import TrashTableDropdown from '../../containers/trash_table_dropdown';
 
 export default class Documents extends React.Component {
   render() {
-    const {text, docs, templates} = this.props;
+    const { text, docs, templates } = this.props;
 
     return (
       <div className="container default-container animated fadeIn">
@@ -13,7 +13,7 @@ export default class Documents extends React.Component {
           <div>
             <TrashTableDropdown {...this.props} dropdownClasses="pull-right" />
             <h3>
-              <span className="glyphicon glyphicon-trash"></span> {text.header}
+              <span className="glyphicon glyphicon-trash" /> {text.header}
             </h3>
             <DocumentTable
               dropdownClasses="pull-right"

@@ -11,7 +11,7 @@ class SelectBox extends Component {
     this.state = {
       isLoading: false,
       options: [],
-      text: ''
+      text: '',
     };
   }
 
@@ -37,11 +37,9 @@ class SelectBox extends Component {
       let adjustedValue;
 
       if (_.isArray(val)) {
-        adjustedValue = _.map(val, (i) => {
-          return { value: i.value, text: i.text };
-        });
+        adjustedValue = _.map(val, i => ({ value: i.value, text: i.text }));
       } else {
-        adjustedValue = [ _.omit(val, 'className') ];
+        adjustedValue = [_.omit(val, 'className')];
       }
       updateOnChange(adjustedValue, nodeId);
     }
@@ -76,7 +74,7 @@ class SelectBox extends Component {
       noResultsText,
       onMouseEnter,
       onMouseLeave,
-      options
+      options,
     } = this.props;
 
     let SelectComponent;
@@ -114,11 +112,10 @@ class SelectBox extends Component {
           onMouseLeave={onMouseLeave}
           autoBlur={false}
           shouldKeyDownEventCreateNewOption={this.shouldCreateNewOption.bind(this)}
-          optionRenderer={(option) => {
-            return (
-              <div>
-                {option.text}
-                {
+          optionRenderer={option => (
+            <div>
+              {option.text}
+              {
                   option.className !== 'Select-create-option-placeholder' ? (
                     <button
                       type="button"
@@ -128,26 +125,23 @@ class SelectBox extends Component {
                         this,
                         option.value,
                         this.setState.bind(this),
-                        this.state.options
+                        this.state.options,
                       )}
                     >
-                      <span className="glyphicon glyphicon-remove"></span> {removeText}
+                      <span className="glyphicon glyphicon-remove" /> {removeText}
                     </button>
                   ) : ''
                 }
-              </div>
-            );
-          }}
-          valueRenderer={(option) => {
-            return (
-              <div>{option.text}</div>
-            );
-          }}
-          ignoreCase={true}
-          ignoreAccents={true}
-          matchProp='text'
-          labelKey='text'
-          />
+            </div>
+            )}
+          valueRenderer={option => (
+            <div>{option.text}</div>
+            )}
+          ignoreCase
+          ignoreAccents
+          matchProp="text"
+          labelKey="text"
+        />
       </div>
     );
   }

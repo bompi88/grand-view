@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Document Table Row Component
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 
 import React from 'react';
@@ -23,11 +23,11 @@ import React from 'react';
 class DocumentTableRow extends React.Component {
 
   renderColumns(doc) {
-    const {columns, context} = this.props;
-    const {_} = context();
+    const { columns, context } = this.props;
+    const { _ } = context();
 
     return columns.map((column) => {
-      const {transform, field, label, key, args = []} = column;
+      const { transform, field, label, key, args = [] } = column;
 
       let value;
       if (transform) {
@@ -38,7 +38,7 @@ class DocumentTableRow extends React.Component {
       }
 
       if (column.component) {
-        return <column.component value={value} key={key} {...this.props}/>;
+        return <column.component value={value} key={key} {...this.props} />;
       }
 
       return <td key={label} className="row-item">{value}</td>;
@@ -52,7 +52,7 @@ class DocumentTableRow extends React.Component {
       toggleSelected,
       isSelected,
       tableName,
-      disablePointer
+      disablePointer,
     } = this.props;
 
     const checked = isSelected(doc._id, tableName) ? 'checked' : null;
@@ -68,7 +68,7 @@ class DocumentTableRow extends React.Component {
           onClick={(e) => { e.stopPropagation(); }}
           onChange={toggleSelected.bind(this, doc._id, tableName)}
         >
-          <input type="checkbox" className="checkbox" checked={checked}/>
+          <input type="checkbox" className="checkbox" checked={checked} />
         </td>
 
         {this.renderColumns(doc)}
@@ -83,12 +83,12 @@ DocumentTableRow.propTypes = {
     title: React.PropTypes.string.isRequired,
     createdAt: React.PropTypes.instanceOf(Date).isRequired,
     lastModified: React.PropTypes.instanceOf(Date).isRequired,
-    hasTemplate: React.PropTypes.string
+    hasTemplate: React.PropTypes.string,
   }).isRequired,
   text: React.PropTypes.shape({
     by: React.PropTypes.string,
     remove: React.PropTypes.string,
-    export: React.PropTypes.string
+    export: React.PropTypes.string,
   }),
   openDocument: React.PropTypes.func,
   exportDocument: React.PropTypes.func,
@@ -97,15 +97,15 @@ DocumentTableRow.propTypes = {
   toggleSelected: React.PropTypes.func.isRequired,
   isSelected: React.PropTypes.func.isRequired,
   showTemplates: React.PropTypes.bool,
-  showEditOptions: React.PropTypes.bool
+  showEditOptions: React.PropTypes.bool,
 };
 
 DocumentTableRow.defaultProps = {
   text: {
     by: 'by',
     remove: 'Remove',
-    export: 'Export'
-  }
+    export: 'Export',
+  },
 };
 
 export default DocumentTableRow;

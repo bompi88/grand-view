@@ -13,7 +13,7 @@ export default class Documents extends React.Component {
           <div>
             <DocumentTableDropdown {...this.props} dropdownClasses="pull-right" />
             <h3>
-              <span className="glyphicon glyphicon-book"></span> {text.header}
+              <span className="glyphicon glyphicon-book" /> {text.header}
             </h3>
             <DocumentTable {...this.props} />
           </div>

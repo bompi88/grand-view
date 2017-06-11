@@ -10,40 +10,40 @@ export const composer = ({ context }, onData) => {
   const text = {
     tree: TAPi18n.__('tree_view.tree'),
     tags: TAPi18n.__('tree_view.tags'),
-    references: TAPi18n.__('tree_view.references')
+    references: TAPi18n.__('tree_view.references'),
   };
 
   const props = {
     text,
-    currentView
+    currentView,
   };
 
   if (Meteor.subscribe('nodes.byParent', _id)) {
     const selector = {
       parent: _id,
-      nodeType: 'chapter'
+      nodeType: 'chapter',
     };
 
     const options = {
-      sort: { position: 1 }
+      sort: { position: 1 },
     };
 
     const nodes = Collections.Nodes.find(selector, options).fetch();
 
     onData(null, {
       nodes,
-      ...props
+      ...props,
     });
   } else {
     onData(null, props);
   }
 };
 
-export const depsMapper = (context) => ({
-  context: () => context
+export const depsMapper = context => ({
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(Tree);

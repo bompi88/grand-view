@@ -1,7 +1,7 @@
 export default {
 
-  insertNodeOfType({Collections, LocalState, Meteor, $}, parentNode, nodeType) {
-    const {_id: parent, level, userId} = parentNode;
+  insertNodeOfType({ Collections, LocalState, Meteor, $ }, parentNode, nodeType) {
+    const { _id: parent, level, userId } = parentNode;
 
     const children = Collections.Nodes.find({ parent, nodeType }).fetch();
     const position = children.length + 1;
@@ -13,7 +13,7 @@ export default {
       lastChanged: new Date(),
       position,
       nodeType,
-      mainDocId: LocalState.get('CURRENT_DOCUMENT')
+      mainDocId: LocalState.get('CURRENT_DOCUMENT'),
     };
 
     if (nodeType === 'chapter') {
@@ -28,9 +28,9 @@ export default {
       }
       if (nodeType === 'chapter') {
         Collections.Nodes.update({
-          _id: doc.parent
+          _id: doc.parent,
         }, {
-          $set: { isCollapsed: false }
+          $set: { isCollapsed: false },
         }, (err) => {
           if (err) {
             return console.log(error);
@@ -42,9 +42,9 @@ export default {
     });
   },
 
-  removeNode({Meteor}, node) {
+  removeNode({ Meteor }, node) {
     Meteor.call('document.removeNode', node, (err) => {
       console.log('removed');
     });
-  }
+  },
 };

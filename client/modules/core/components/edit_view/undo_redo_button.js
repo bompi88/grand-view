@@ -12,7 +12,7 @@ export default class UndoRedoButton extends React.Component {
         type="button"
         onClick={redo.bind(this)}
       >
-        <i className="fa fa-repeat"></i>
+        <i className="fa fa-repeat" />
       </button>
     );
   }
@@ -29,7 +29,7 @@ export default class UndoRedoButton extends React.Component {
         onClick={undo.bind(this)}
 
       >
-        <i className="fa fa-undo"></i>
+        <i className="fa fa-undo" />
       </button>
     );
   }

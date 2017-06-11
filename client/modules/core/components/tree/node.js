@@ -2,7 +2,7 @@ import React from 'react';
 
 import NodeContainer from '../../containers/node';
 import ContentEditable from 'react-contenteditable';
-import {ContextMenuLayer} from 'react-contextmenu';
+import { ContextMenuLayer } from 'react-contextmenu';
 import { DropArea, DropAreaZero } from './drop_area';
 import { DropTarget } from 'react-dnd';
 
@@ -13,7 +13,7 @@ class NodeElement extends React.Component {
     const { _id } = node;
     const { Collections } = context();
 
-    Collections.Nodes.update({ _id }, { $set: { name: name.replace(/&nbsp;/g, '').trim() }});
+    Collections.Nodes.update({ _id }, { $set: { name: name.replace(/&nbsp;/g, '').trim() } });
   }
 
   handleKeypress(e) {
@@ -33,7 +33,7 @@ class NodeElement extends React.Component {
     const { $, LocalState } = context();
 
     if (LocalState.get('RENAME_NODE')) {
-      var el = $('.tree li .element.nodes.rename div.node-text');
+      const el = $('.tree li .element.nodes.rename div.node-text');
       el.focus();
       document.execCommand('selectAll', false, null);
     }
@@ -56,14 +56,14 @@ class NodeElement extends React.Component {
       isDragging,
       connectDropTarget,
       isOver,
-      count
+      count,
     } = this.props;
-    const {_id, name, nodeType, isSelected} = node;
-    const pre = (nodeType === 'media') ? (<span className="glyphicon glyphicon-file"></span>) :
+    const { _id, name, nodeType, isSelected } = node;
+    const pre = (nodeType === 'media') ? (<span className="glyphicon glyphicon-file" />) :
       sectionLabel;
 
     const nodeTitle = name && name.length ? name : 'No title';
-    const countText = nodeType === 'media' ? '' : ' (' + count + ')';
+    const countText = nodeType === 'media' ? '' : ` (${count})`;
 
     const combined = nodeTitle + countText;
 
@@ -87,7 +87,7 @@ class NodeElement extends React.Component {
           title={combined}
           style={{
             textOverflow: renameNode === _id ? 'clip' : 'ellipsis',
-            opacity: isDragging ? 0.5 : 1
+            opacity: isDragging ? 0.5 : 1,
           }}
         >
           <span>{pre}{' '}</span>
@@ -99,11 +99,11 @@ class NodeElement extends React.Component {
             html={nodeTitle}
             disabled={!renameNode}
             style={{
-              display: 'inline'
+              display: 'inline',
             }}
           />
           <span>{countText}</span>
-        </span>
+        </span>,
       );
     }
 
@@ -114,7 +114,7 @@ class NodeElement extends React.Component {
         title={combined}
         style={{
           textOverflow: renameNode === _id ? 'clip' : 'ellipsis',
-          opacity: isDragging ? 0.5 : 1
+          opacity: isDragging ? 0.5 : 1,
         }}
       >
         <span>{pre}{' '}</span>
@@ -126,7 +126,7 @@ class NodeElement extends React.Component {
           html={nodeTitle}
           disabled={!renameNode}
           style={{
-            display: 'inline'
+            display: 'inline',
           }}
         />
         <span>{countText}</span>
@@ -135,20 +135,16 @@ class NodeElement extends React.Component {
   }
 }
 
-const ChapterNode = ContextMenuLayer('chapter', (props) => {
-  return props.node;
-})(NodeElement);
+const ChapterNode = ContextMenuLayer('chapter', props => props.node)(NodeElement);
 
-const MediaNode = ContextMenuLayer('media', (props) => {
-  return props.node;
-})(NodeElement);
+const MediaNode = ContextMenuLayer('media', props => props.node)(NodeElement);
 
 const dropSpecs = {
 
   drop(props, monitor) {
     const { _id } = monitor.getItem();
     const { putIntoChapterNode, node: parent } = props;
-    putIntoChapterNode({ parent: parent._id , _id });
+    putIntoChapterNode({ parent: parent._id, _id });
   },
 
   // canDrop(props) {
@@ -158,48 +154,43 @@ const dropSpecs = {
 
 };
 
-const collect = (connect, monitor) => {
-  return {
-    connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver()
-  };
-};
+const collect = (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+});
 
 class Node extends React.Component {
 
   renderNodes() {
-    const {nodes = [], sectionLabel} = this.props;
+    const { nodes = [], sectionLabel } = this.props;
     const Child = NodeContainer(Node);
-    return nodes.map((node) => {
-      return <Child
-        key={node._id}
-        node={node}
-        sectionLabel={sectionLabel.toString() + '.' + node.position}
-      />;
-    });
+    return nodes.map(node => (<Child
+      key={node._id}
+      node={node}
+      sectionLabel={`${sectionLabel.toString()}.${node.position}`}
+    />));
   }
 
   renderCollapseButton() {
-    const {node, nodes = [], expandNode, collapseNode} = this.props;
+    const { node, nodes = [], expandNode, collapseNode } = this.props;
     if (nodes.length > 0) {
-
       if (node.isCollapsed) {
         return (
           <span
             className="icon icon-plus show-node"
             onClick={expandNode.bind(this, node)}
-          ></span>
+          />
         );
       }
       return (
         <span
           className="icon icon-minus hide-node"
           onClick={collapseNode.bind(this, node)}
-        ></span>
+        />
       );
     }
     return (
-      <span></span>
+      <span />
     );
   }
 
@@ -207,30 +198,30 @@ class Node extends React.Component {
     const {
       node: {
         level,
-        parent
+        parent,
       },
       connectDropTarget,
       isOver,
-      setPosition
+      setPosition,
     } = this.props;
 
     if (level === 1) {
       const node = {
-        _id: parent
+        _id: parent,
       };
-      return <DropAreaZero
+      return (<DropAreaZero
         connectDropTarget={connectDropTarget}
         isOver={isOver}
         setPosition={setPosition}
         node={node}
-       />;
+      />);
     }
 
-    return <DropAreaZero { ...this.props} />;
+    return <DropAreaZero {...this.props} />;
   }
 
   render() {
-    const { nodes = [], node, index, connectDragSource, isDragging} = this.props;
+    const { nodes = [], node, index, connectDragSource, isDragging } = this.props;
 
     const DropTargetChapterNode = DropTarget('node', dropSpecs, collect)(ChapterNode);
 
@@ -238,19 +229,20 @@ class Node extends React.Component {
       <li
         className={node.nodeType === 'chapter' ? 'node chapter' : 'node media-node'}
         style={{
-          display: isDragging ? 'none' : 'block'
-        }}>
+          display: isDragging ? 'none' : 'block',
+        }}
+      >
         {this.renderCollapseButton()}
         { index === 0 ? this.renderFirstDropArea() : null }
         { node.nodeType === 'media' ? <MediaNode {...this.props} /> :
             connectDragSource(<div><DropTargetChapterNode {...this.props} /></div>)}
         { nodes.length > 0 ? (
           <ul>
-              { node.isCollapsed ? null : <DropAreaZero {...this.props}/>}
+            { node.isCollapsed ? null : <DropAreaZero {...this.props} />}
             { node.isCollapsed ? null : this.renderNodes()}
           </ul>
         ) : null }
-          <DropArea {...this.props}/>
+        <DropArea {...this.props} />
 
       </li>
     );
@@ -260,7 +252,7 @@ class Node extends React.Component {
 class NodeWrapper extends React.Component {
   render() {
     return (
-        <ul><Node {...this.props}/></ul>
+      <ul><Node {...this.props} /></ul>
     );
   }
 }

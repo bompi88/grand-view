@@ -1,8 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 // Edit View Container
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
-import {useDeps, composeAll, composeWithTracker} from 'mantra-core';
+import { useDeps, composeAll, composeWithTracker } from 'mantra-core';
 import EditView from '../components/edit_view/edit_view';
 
 const onPropsChange = ({ context, doc }, onData) => {
@@ -37,10 +37,10 @@ const onPropsChange = ({ context, doc }, onData) => {
 
 export const depsMapper = (context, actions) => ({
   unsetEditable: actions.editView.unsetEditable,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(onPropsChange),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(EditView);

@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Trash Actions
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 export default {
 
@@ -44,7 +44,7 @@ export default {
   },
 
   toggleSort({ LocalState }, field, tableName) {
-    let curSort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase());
+    let curSort = LocalState.get(`TABLE_SORT_${tableName.toUpperCase()}`);
 
     if (curSort && curSort[field]) {
       curSort[field] *= -1;
@@ -53,11 +53,11 @@ export default {
       sortObj[field] = 1;
       curSort = sortObj;
     }
-    LocalState.set('TABLE_SORT_' + tableName.toUpperCase(), curSort);
+    LocalState.set(`TABLE_SORT_${tableName.toUpperCase()}`, curSort);
   },
 
   getSort({ LocalState }, field, tableName) {
-    const sort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase()) || { title: 1 };
+    const sort = LocalState.get(`TABLE_SORT_${tableName.toUpperCase()}`) || { title: 1 };
     return sort[field];
   },
 
@@ -85,7 +85,7 @@ export default {
       message: `Er du sikker på at du vil slette prosjektet <b>${title}</b>?`,
       buttons: {
         cancel: {
-          label: 'Nei'
+          label: 'Nei',
         },
         confirm: {
           label: 'Ja',
@@ -96,23 +96,22 @@ export default {
                 if (err) {
                   NotificationManager.error(
                     TAPi18n.__('notifications.permanent_remove_failed.message'),
-                    TAPi18n.__('notifications.permanent_remove_failed.title')
+                    TAPi18n.__('notifications.permanent_remove_failed.title'),
                   );
                 } else {
                   SelectedCtrl.resetAll();
                   NotificationManager.success(
                     TAPi18n.__('notifications.permanent_remove_success.message'),
-                    TAPi18n.__('notifications.permanent_remove_success.title')
+                    TAPi18n.__('notifications.permanent_remove_success.title'),
                   );
                 }
               });
             }
-          }
-        }
-      }
+          },
+        },
+      },
     };
     bootbox.dialog(confirmationPrompt);
-
   },
 
   removeSelected({ Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox, Collections }) {
@@ -124,11 +123,11 @@ export default {
     let message = 'Er du sikker på at du vil slette de valgte elementene under?';
 
     const documentNames = Collections.Documents.find({
-      _id: { $in: selectedDocumentIds }
+      _id: { $in: selectedDocumentIds },
     }).map(doc => `<li>${doc.title}</li>`);
 
     const templateNames = Collections.Documents.find({
-      _id: { $in: selectedTemplateIds }
+      _id: { $in: selectedTemplateIds },
     }).map(doc => `<li>${doc.title}</li>`);
 
     if (documentNames.length) {
@@ -144,7 +143,7 @@ export default {
       message,
       buttons: {
         cancel: {
-          label: 'Nei'
+          label: 'Nei',
         },
         confirm: {
           label: 'Ja',
@@ -155,20 +154,20 @@ export default {
                 if (err) {
                   NotificationManager.error(
                     TAPi18n.__('notifications.permanent_remove_failed.message'),
-                    TAPi18n.__('notifications.permanent_remove_failed.title')
+                    TAPi18n.__('notifications.permanent_remove_failed.title'),
                   );
                 } else {
                   SelectedCtrl.resetAll();
                   NotificationManager.success(
                     TAPi18n.__('notifications.permanent_remove_success.message'),
-                    TAPi18n.__('notifications.permanent_remove_success.title')
+                    TAPi18n.__('notifications.permanent_remove_success.title'),
                   );
                 }
               });
             }
-          }
-        }
-      }
+          },
+        },
+      },
     };
     bootbox.dialog(confirmationPrompt);
   },
@@ -178,13 +177,13 @@ export default {
       if (err) {
         NotificationManager.error(
           TAPi18n.__('notifications.restore_failed.message'),
-          TAPi18n.__('notifications.restore_failed.title')
+          TAPi18n.__('notifications.restore_failed.title'),
         );
       } else {
         SelectedCtrl.resetAll();
         NotificationManager.success(
           TAPi18n.__('notifications.restore_success.message'),
-          TAPi18n.__('notifications.restore_success.title')
+          TAPi18n.__('notifications.restore_success.title'),
         );
         SelectedCtrl.resetAll();
       }
@@ -198,13 +197,13 @@ export default {
       if (err) {
         NotificationManager.error(
           TAPi18n.__('notifications.restore_failed.message'),
-          TAPi18n.__('notifications.restore_failed.title')
+          TAPi18n.__('notifications.restore_failed.title'),
         );
       } else {
         SelectedCtrl.resetAll();
         NotificationManager.success(
           TAPi18n.__('notifications.restore_success.message'),
-          TAPi18n.__('notifications.restore_success.title')
+          TAPi18n.__('notifications.restore_success.title'),
         );
         SelectedCtrl.resetAll();
       }
@@ -216,12 +215,12 @@ export default {
 
     const documentNames = Collections.Documents.find({
       removed: true,
-      isTemplate: false
+      isTemplate: false,
     }).map(doc => `<li>${doc.title}</li>`);
 
     const templateNames = Collections.Documents.find({
       removed: true,
-      isTemplate: true
+      isTemplate: true,
     }).map(doc => `<li>${doc.title}</li>`);
 
     if (documentNames.length) {
@@ -236,7 +235,7 @@ export default {
       message,
       buttons: {
         cancel: {
-          label: 'Nei'
+          label: 'Nei',
         },
         confirm: {
           label: 'Ja',
@@ -247,20 +246,20 @@ export default {
                 if (err) {
                   NotificationManager.error(
                     TAPi18n.__('notifications.empty_trash_failed.message'),
-                    TAPi18n.__('notifications.empty_trash_failed.title')
+                    TAPi18n.__('notifications.empty_trash_failed.title'),
                   );
                 } else {
                   SelectedCtrl.resetAll();
                   NotificationManager.success(
                     TAPi18n.__('notifications.empty_trash_success.message'),
-                    TAPi18n.__('notifications.empty_trash_success.title')
+                    TAPi18n.__('notifications.empty_trash_success.title'),
                   );
                 }
               });
             }
-          }
-        }
-      }
+          },
+        },
+      },
     };
     bootbox.dialog(confirmationPrompt);
   },
@@ -270,6 +269,6 @@ export default {
     LocalState.set('TABLE_SORT_TRASH_TEMPLATES', { title: 1 });
     SelectedCtrl.reset('trash_documents');
     SelectedCtrl.reset('trash_templates');
-  }
+  },
 
 };

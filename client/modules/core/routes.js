@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Client Routes
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,10 +15,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 import React from 'react';
-import {mount} from 'react-mounter';
+import { mount } from 'react-mounter';
 
 import MainLayout from './containers/main_layout';
 import Documents from './containers/documents';
@@ -27,7 +27,7 @@ import Trash from './containers/trash';
 import WorkArea from './containers/work_area';
 import Index from '/client/modules/index/containers/index';
 
-export default function (injectDeps, {FlowRouter}) {
+export default function (injectDeps, { FlowRouter }) {
   const MainLayoutCtx = injectDeps(MainLayout);
 
   // -- Document routes --------------------------------------------------------
@@ -39,9 +39,9 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'Index',
     action() {
       mount(MainLayoutCtx, {
-        content: () => <Index />
+        content: () => <Index />,
       });
-    }
+    },
   });
 
   /**
@@ -51,9 +51,9 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'Documents',
     action() {
       mount(MainLayoutCtx, {
-        content: () => <Documents />
+        content: () => <Documents />,
       });
-    }
+    },
   });
 
   /**
@@ -63,9 +63,9 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'Templates',
     action() {
       mount(MainLayoutCtx, {
-        content: () => <Templates />
+        content: () => <Templates />,
       });
-    }
+    },
   });
 
   // -- Miscellaneous routes ---------------------------------------------------
@@ -77,9 +77,9 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'WorkArea',
     action() {
       mount(MainLayoutCtx, {
-        content: () => <WorkArea />
+        content: () => <WorkArea />,
       });
-    }
+    },
   });
 
   /**
@@ -89,9 +89,8 @@ export default function (injectDeps, {FlowRouter}) {
     name: 'Trash',
     action() {
       mount(MainLayoutCtx, {
-        content: () => <Trash />
+        content: () => <Trash />,
       });
-    }
+    },
   });
-
 }

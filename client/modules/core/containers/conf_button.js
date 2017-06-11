@@ -9,7 +9,7 @@ export const composer = ({ context, clearState }, onData) => {
 
   const text = {
     collapsedMode: TAPi18n.__('edit_view.confButton.collapsedMode'),
-    expandedMode: TAPi18n.__('edit_view.confButton.expandedMode')
+    expandedMode: TAPi18n.__('edit_view.confButton.expandedMode'),
   };
 
   onData(null, { text, mode });
@@ -19,10 +19,10 @@ export const composer = ({ context, clearState }, onData) => {
 
 export const depsMapper = (context, actions) => ({
   changeMode: actions.editView.changeMode,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(ConfButton);

@@ -1,8 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 // References Selectbox Container
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
-import {useDeps, composeAll, composeWithTracker} from 'mantra-core';
+import { useDeps, composeAll, composeWithTracker } from 'mantra-core';
 import SelectBox from '../components/prototypes/select_box';
 
 const onPropsChange = ({ context }, onData) => {
@@ -19,10 +19,10 @@ export const depsMapper = (context, actions) => ({
   search: actions.editView.searchReferences,
   removeItem: actions.editView.removeReference,
   updateOnChange: actions.editView.setReferences,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(onPropsChange),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(SelectBox);

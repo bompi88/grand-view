@@ -1,5 +1,5 @@
 import TreeFooter from '../components/tree/tree_footer';
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
 export const composer = ({ context, isTemplate }, onData) => {
   const { TAPi18n } = context();
@@ -7,18 +7,18 @@ export const composer = ({ context, isTemplate }, onData) => {
   const items = [
     {
       state: 'tree',
-      label: TAPi18n.__('tree_view.tree')
-    }
+      label: TAPi18n.__('tree_view.tree'),
+    },
   ];
 
   if (!isTemplate) {
     items.push({
       state: 'tags',
-      label: TAPi18n.__('tree_view.tags')
+      label: TAPi18n.__('tree_view.tags'),
     });
     items.push({
       state: 'references',
-      label: TAPi18n.__('tree_view.references')
+      label: TAPi18n.__('tree_view.references'),
     });
   }
 
@@ -27,10 +27,10 @@ export const composer = ({ context, isTemplate }, onData) => {
 
 export const depsMapper = (context, actions) => ({
   changeState: actions.treeView.changeState,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(TreeFooter);
