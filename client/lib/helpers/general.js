@@ -70,23 +70,5 @@ export default {
 
   goToTemplate({}, id) {
     this.goto(id, true);
-  },
-
-
-  showEditWarning(callback) {
-    // TODO: Session
-    const dirty = Session.get('formDirty');
-
-    if (dirty) {
-      // TODO: React to html?
-      this.showConfirmationPrompt({
-        title: 'Lukking av tidligere redigering',
-        message: Blaze.toHTML(Template.CloseEditViewModal)
-      },
-        callback
-      );
-    } else {
-      return callback();
-    }
   }
 };

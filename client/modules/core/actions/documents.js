@@ -19,21 +19,21 @@
 
 const actions = {
 
-  formatDateRelative({moment}, time) {
+  formatDateRelative({ moment }, time) {
     return moment && moment(time).calendar();
   },
 
-  formatDateRegular({moment}, time) {
+  formatDateRegular({ moment }, time) {
     return moment && moment(time).format('L');
   },
 
-  renderTemplateTitle({Collections, moment}, _id, o) {
+  renderTemplateTitle({ Collections, moment }, _id, o) {
 
     if (!_id) {
       return '-';
     }
 
-    const {doc, text} = o;
+    const { doc, text } = o;
     const template = Collections.Documents.findOne({ _id });
 
     if (!template) {
@@ -44,36 +44,36 @@ const actions = {
     return title + ' (' + text.by + ' ' + moment(doc.createdAt).format('L') + ')';
   },
 
-  isDisabledOnManyAndNone({SelectedCtrl}, tableName) {
+  isDisabledOnManyAndNone({ SelectedCtrl }, tableName) {
     return SelectedCtrl.getSelected(tableName).length !== 1;
   },
 
-  isDisabledOnNone({SelectedCtrl}, tableName) {
+  isDisabledOnNone({ SelectedCtrl }, tableName) {
     return SelectedCtrl.getSelected(tableName).length === 0;
   },
 
-  getTemplateTitle({Collections}, _id) {
+  getTemplateTitle({ Collections }, _id) {
     const template = Collections.Documents.findOne({ _id });
     return template && template.title;
   },
 
-  createNewDocument({LocalState}) {
+  createNewDocument({ LocalState }) {
     LocalState.set('NEW_DOCUMENT_MODAL_VISIBLE', true);
   },
 
-  openDocument({LocalState, Collections, FlowRouter}, _id) {
+  openDocument({ LocalState, Collections, FlowRouter }, _id) {
     LocalState.set('CURRENT_DOCUMENT', _id);
     LocalState.set('TREE_VIEW_STATE', null);
     FlowRouter.go('WorkArea');
   },
 
-  openSelectedDocument({LocalState, Collections, FlowRouter, SelectedCtrl}, tableName) {
+  openSelectedDocument({ LocalState, Collections, FlowRouter, SelectedCtrl }, tableName) {
     const _id = SelectedCtrl.getSelected(tableName)[0];
     LocalState.set('CURRENT_DOCUMENT', _id);
     FlowRouter.go('WorkArea');
   },
 
-  toggleSelected({SelectedCtrl}, id, tableName, e) {
+  toggleSelected({ SelectedCtrl }, id, tableName, e) {
     e.stopPropagation();
     e.preventDefault();
 
@@ -84,7 +84,7 @@ const actions = {
     }
   },
 
-  toggleSort({LocalState}, field, tableName) {
+  toggleSort({ LocalState }, field, tableName) {
     let curSort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase());
 
     if (curSort && curSort[field]) {
@@ -97,36 +97,36 @@ const actions = {
     LocalState.set('TABLE_SORT_' + tableName.toUpperCase(), curSort);
   },
 
-  getSort({LocalState}, field, tableName) {
+  getSort({ LocalState }, field, tableName) {
     const sort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase()) || { title: 1 };
     return sort[field];
   },
 
-  isSelected({SelectedCtrl}, id, tableName) {
+  isSelected({ SelectedCtrl }, id, tableName) {
     return SelectedCtrl.isSelected(tableName, id);
   },
 
-  selectAll({SelectedCtrl}, ids, tableName) {
+  selectAll({ SelectedCtrl }, ids, tableName) {
     SelectedCtrl.addAll(tableName, ids);
   },
 
-  deselectAll({SelectedCtrl}, ids, tableName) {
+  deselectAll({ SelectedCtrl }, ids, tableName) {
     SelectedCtrl.removeAll(tableName, ids);
   },
 
-  hasAllSelected({SelectedCtrl}, len, tableName) {
+  hasAllSelected({ SelectedCtrl }, len, tableName) {
     const selected = SelectedCtrl.getSelected(tableName).length;
     return selected > 0 && selected === len;
   },
 
   exportDocument(context, id, e) {
     e.stopPropagation();
-    const {Helpers} = context;
+    const { Helpers } = context;
     Helpers.exportDocument(context, id);
   },
 
   exportSelectedDocuments(context, tableName) {
-    const {Helpers, SelectedCtrl} = context;
+    const { Helpers, SelectedCtrl } = context;
     const selectedIds = SelectedCtrl.getSelected(tableName);
     Helpers.exportDocument(context, selectedIds);
   },
@@ -136,11 +136,11 @@ const actions = {
       e.stopPropagation();
     }
 
-    const {Helpers} = context;
+    const { Helpers } = context;
     Helpers.importDocuments(context);
   },
 
-  removeDocument({Meteor, NotificationManager, TAPi18n, SelectedCtrl, LocalState}, id, e) {
+  removeDocument({ Meteor, NotificationManager, TAPi18n, SelectedCtrl, LocalState }, id, e) {
     e.stopPropagation();
 
     Meteor.call('documents.softRemove', id, (err) => {
@@ -165,7 +165,14 @@ const actions = {
   },
 
   removeSelectedDocuments(context, tableName) {
-    const {Meteor, NotificationManager, TAPi18n, SelectedCtrl, _, LocalState} = context;
+    const {
+      _,
+      Meteor,
+      TAPi18n,
+      LocalState,
+      SelectedCtrl,
+      NotificationManager
+    } = context;
     const selectedIds = SelectedCtrl.getSelected(tableName);
 
     Meteor.call('documents.softRemove', selectedIds, (err) => {
@@ -189,7 +196,7 @@ const actions = {
     });
   },
 
-  clearState({LocalState, SelectedCtrl}) {
+  clearState({ LocalState, SelectedCtrl }) {
     LocalState.set('TABLE_SORT_DOCUMENTS', { title: 1 });
     SelectedCtrl.reset('documents');
   }

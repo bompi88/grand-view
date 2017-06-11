@@ -19,20 +19,20 @@
 
 export default {
 
-  formatDateRelative({moment}, time) {
+  formatDateRelative({ moment }, time) {
     return moment && moment(time).calendar();
   },
 
-  isDisabledOnNone({SelectedCtrl}) {
+  isDisabledOnNone({ SelectedCtrl }) {
     return SelectedCtrl.getSelected('trash_documents').length === 0 &&
       SelectedCtrl.getSelected('trash_templates').length === 0;
   },
 
-  isDisabledNoDocs({Collections}) {
+  isDisabledNoDocs({ Collections }) {
     return Collections.Documents.find({ removed: true }).fetch().length === 0;
   },
 
-  toggleSelected({SelectedCtrl}, id, tableName, e) {
+  toggleSelected({ SelectedCtrl }, id, tableName, e) {
     e.stopPropagation();
     e.preventDefault();
 
@@ -43,7 +43,7 @@ export default {
     }
   },
 
-  toggleSort({LocalState}, field, tableName) {
+  toggleSort({ LocalState }, field, tableName) {
     let curSort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase());
 
     if (curSort && curSort[field]) {
@@ -56,29 +56,29 @@ export default {
     LocalState.set('TABLE_SORT_' + tableName.toUpperCase(), curSort);
   },
 
-  getSort({LocalState}, field, tableName) {
+  getSort({ LocalState }, field, tableName) {
     const sort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase()) || { title: 1 };
     return sort[field];
   },
 
-  isSelected({SelectedCtrl}, id, tableName) {
+  isSelected({ SelectedCtrl }, id, tableName) {
     return SelectedCtrl.isSelected(tableName, id);
   },
 
-  selectAll({SelectedCtrl}, ids, tableName) {
+  selectAll({ SelectedCtrl }, ids, tableName) {
     SelectedCtrl.addAll(tableName, ids);
   },
 
-  deselectAll({SelectedCtrl}, ids, tableName) {
+  deselectAll({ SelectedCtrl }, ids, tableName) {
     SelectedCtrl.removeAll(tableName, ids);
   },
 
-  hasAllSelected({SelectedCtrl}, len, tableName) {
+  hasAllSelected({ SelectedCtrl }, len, tableName) {
     const selected = SelectedCtrl.getSelected(tableName).length;
     return selected > 0 && selected === len;
   },
 
-  remove({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox, Collections}, _id) {
+  remove({ Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox, Collections }, _id) {
     const { title } = Collections.Documents.findOne({ _id });
     const confirmationPrompt = {
       title: 'Bekreftelse på slettingen',
@@ -115,7 +115,7 @@ export default {
 
   },
 
-  removeSelected({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox, Collections}) {
+  removeSelected({ Meteor, NotificationManager, TAPi18n, _, SelectedCtrl, bootbox, Collections }) {
     const selectedDocumentIds = SelectedCtrl.getSelected('trash_documents') || [];
     const selectedTemplateIds = SelectedCtrl.getSelected('trash_templates') || [];
 
@@ -173,7 +173,7 @@ export default {
     bootbox.dialog(confirmationPrompt);
   },
 
-  restore({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}, _id) {
+  restore({ Meteor, NotificationManager, TAPi18n, _, SelectedCtrl }, _id) {
     Meteor.call('documents.restore', _id, (err) => {
       if (err) {
         NotificationManager.error(
@@ -191,7 +191,7 @@ export default {
     });
   },
 
-  restoreSelected({Meteor, NotificationManager, TAPi18n, _, SelectedCtrl}) {
+  restoreSelected({ Meteor, NotificationManager, TAPi18n, _, SelectedCtrl }) {
     const selected = _.union(SelectedCtrl.getSelected('trash_documents'),
       SelectedCtrl.getSelected('trash_templates'));
     Meteor.call('documents.restore', selected, (err) => {
@@ -211,7 +211,7 @@ export default {
     });
   },
 
-  emptyTrash({Meteor, NotificationManager, TAPi18n, SelectedCtrl, bootbox, Collections}) {
+  emptyTrash({ Meteor, NotificationManager, TAPi18n, SelectedCtrl, bootbox, Collections }) {
     let message = 'Er du sikker på at du vil tømme papirkurven? Da vil følgende elementer bli slettet:';
 
     const documentNames = Collections.Documents.find({
@@ -265,7 +265,7 @@ export default {
     bootbox.dialog(confirmationPrompt);
   },
 
-  clearState({LocalState, SelectedCtrl}) {
+  clearState({ LocalState, SelectedCtrl }) {
     LocalState.set('TABLE_SORT_TRASH_DOCUMENTS', { title: 1 });
     LocalState.set('TABLE_SORT_TRASH_TEMPLATES', { title: 1 });
     SelectedCtrl.reset('trash_documents');

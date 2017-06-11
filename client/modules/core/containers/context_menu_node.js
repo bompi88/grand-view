@@ -43,7 +43,11 @@ export const composer = ({ context, actions }, onData) => {
                   a.contextMenus.removeMediaNode(e, selectedNode);
 
                   // Set parent node in focus
-                  Meteor.call('document.setSelectedNode', LocalState.get('CURRENT_DOCUMENT'), parent);
+                  Meteor.call(
+                    'document.setSelectedNode',
+                    LocalState.get('CURRENT_DOCUMENT'),
+                    parent
+                  );
                   LocalState.set('CURRENT_NODE', parent);
 
                   // Show sucess message

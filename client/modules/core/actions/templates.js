@@ -19,35 +19,35 @@
 
 export default {
 
-  formatDateRelative({moment}, time) {
+  formatDateRelative({ moment }, time) {
     return moment && moment(time).calendar();
   },
 
-  isDisabledOnManyAndNone({SelectedCtrl}, tableName) {
+  isDisabledOnManyAndNone({ SelectedCtrl }, tableName) {
     return SelectedCtrl.getSelected(tableName).length !== 1;
   },
 
-  isDisabledOnNone({SelectedCtrl}, tableName) {
+  isDisabledOnNone({ SelectedCtrl }, tableName) {
     return SelectedCtrl.getSelected(tableName).length === 0;
   },
 
-  createNewTemplate({LocalState}) {
+  createNewTemplate({ LocalState }) {
     LocalState.set('NEW_TEMPLATE_MODAL_VISIBLE', true);
   },
 
-  openTemplate({LocalState, Collections, FlowRouter}, _id) {
+  openTemplate({ LocalState, Collections, FlowRouter }, _id) {
     LocalState.set('CURRENT_DOCUMENT', _id);
     LocalState.set('TREE_VIEW_STATE', null);
     FlowRouter.go('WorkArea');
   },
 
-  openSelectedTemplate({LocalState, Collections, FlowRouter, SelectedCtrl}, tableName) {
+  openSelectedTemplate({ LocalState, Collections, FlowRouter, SelectedCtrl }, tableName) {
     const _id = SelectedCtrl.getSelected(tableName)[0];
     LocalState.set('CURRENT_DOCUMENT', _id);
     FlowRouter.go('WorkArea');
   },
 
-  toggleSelected({SelectedCtrl}, id, tableName, e) {
+  toggleSelected({ SelectedCtrl }, id, tableName, e) {
     e.stopPropagation();
     e.preventDefault();
 
@@ -58,7 +58,7 @@ export default {
     }
   },
 
-  toggleSort({LocalState}, field, tableName) {
+  toggleSort({ LocalState }, field, tableName) {
     let curSort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase());
 
     if (curSort && curSort[field]) {
@@ -71,36 +71,36 @@ export default {
     LocalState.set('TABLE_SORT_' + tableName.toUpperCase(), curSort);
   },
 
-  getSort({LocalState}, field, tableName) {
+  getSort({ LocalState }, field, tableName) {
     const sort = LocalState.get('TABLE_SORT_' + tableName.toUpperCase()) || { title: 1 };
     return sort[field];
   },
 
-  isSelected({SelectedCtrl}, id, tableName) {
+  isSelected({ SelectedCtrl }, id, tableName) {
     return SelectedCtrl.isSelected(tableName, id);
   },
 
-  selectAll({SelectedCtrl}, ids, tableName) {
+  selectAll({ SelectedCtrl }, ids, tableName) {
     SelectedCtrl.addAll(tableName, ids);
   },
 
-  deselectAll({SelectedCtrl}, ids, tableName) {
+  deselectAll({ SelectedCtrl }, ids, tableName) {
     SelectedCtrl.removeAll(tableName, ids);
   },
 
-  hasAllSelected({SelectedCtrl}, len, tableName) {
+  hasAllSelected({ SelectedCtrl }, len, tableName) {
     const selected = SelectedCtrl.getSelected(tableName).length;
     return selected > 0 && selected === len;
   },
 
   exportTemplate(context, id, e) {
     e.stopPropagation();
-    const {Helpers} = context;
+    const { Helpers } = context;
     Helpers.exportDocument(context, id, true);
   },
 
   exportSelectedTemplates(context, tableName) {
-    const {Helpers, SelectedCtrl} = context;
+    const { Helpers, SelectedCtrl } = context;
     const selectedIds = SelectedCtrl.getSelected(tableName);
     Helpers.exportDocument(context, selectedIds, true);
   },
@@ -110,11 +110,11 @@ export default {
       e.stopPropagation();
     }
 
-    const {Helpers} = context;
+    const { Helpers } = context;
     Helpers.importDocuments(context, true);
   },
 
-  removeTemplate({Meteor, NotificationManager, TAPi18n, SelectedCtrl, LocalState}, id, e) {
+  removeTemplate({ Meteor, NotificationManager, TAPi18n, SelectedCtrl, LocalState }, id, e) {
     e.stopPropagation();
 
     Meteor.call('documents.softRemove', id, (err) => {
@@ -139,7 +139,7 @@ export default {
   },
 
   removeSelectedTemplates(context, tableName) {
-    const {Meteor, NotificationManager, TAPi18n, SelectedCtrl, _, LocalState} = context;
+    const { Meteor, NotificationManager, TAPi18n, SelectedCtrl, _, LocalState } = context;
     const selectedIds = SelectedCtrl.getSelected(tableName);
 
     Meteor.call('documents.softRemove', selectedIds, (err) => {
@@ -163,7 +163,7 @@ export default {
     });
   },
 
-  clearState({LocalState, SelectedCtrl}) {
+  clearState({ LocalState, SelectedCtrl }) {
     LocalState.set('TABLE_SORT_TEMPLATES', { title: 1 });
     SelectedCtrl.reset('templates');
   }

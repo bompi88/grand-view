@@ -3,7 +3,6 @@ import EditViewForm from '../../containers/edit_view_form';
 import EditRootViewForm from '../../containers/edit_root_view_form';
 import MediaNodesTable from '../../containers/media_nodes_table';
 import ConfButton from '../../containers/conf_button';
-import UndoRedoButton from '../../containers/undo_redo_button';
 
 const styles = {
   header: {
@@ -72,7 +71,9 @@ class EditView extends React.Component {
             {nodeType === 'media' ? this.renderMediaNodeHeader() : null }
           </div>
           <div style={styles.container} className="edit-view-container">
-            { nodeType === 'root' ? <EditRootViewForm initialValues={node} nodeId={node._id}/> : null }
+            { nodeType === 'root' ? (
+              <EditRootViewForm initialValues={node} nodeId={node._id}/>
+            ) : null }
             { nodeType === 'media' ? <EditViewForm initialValues={node} nodeId={node._id}/> : null }
             { nodeType === 'chapter' ? <MediaNodesTable chapterNode={node} mode={mode}/> : null }
           </div>

@@ -49,7 +49,7 @@ class OptionsDropdown extends React.Component {
   }
 
   renderItems() {
-    const {items} = this.props;
+    const { items } = this.props;
 
     return items.map((item, index) => {
       return this.renderItem(item, index);

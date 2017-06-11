@@ -16,7 +16,7 @@ const onPropsChange = ({ context }, onData) => {
   onData(null, { text });
 };
 
-export const depsMapper = (context, actions) => ({
+export const depsMapper = (context) => ({
   // setName: actions.editView.setName,
   // setDescription: actions.editView.setDescription,
   context: () => context

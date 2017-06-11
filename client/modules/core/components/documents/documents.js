@@ -5,7 +5,7 @@ import DocumentTableDropdown from '../../containers/document_table_dropdown';
 
 export default class Documents extends React.Component {
   render() {
-    const {text} = this.props;
+    const { text } = this.props;
 
     return (
       <div className="container default-container animated fadeIn">

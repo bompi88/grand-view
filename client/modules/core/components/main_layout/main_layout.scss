@@ -49,22 +49,23 @@ body {
   // background-color: #f8f8f8;
 }
 
-#react-root, #react-root > div {
+#react-root,
+#react-root > div {
   height: 100%;
 }
 
 .notification-container {
   box-sizing: border-box;
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 999999;
-  width: 500px;
-  padding: 0 15px;
   max-height: calc(100% - 30px);
   overflow-x: hidden;
   overflow-y: auto;
+  padding: 0 15px;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 500px;
   word-wrap: break-word;
+  z-index: 999999;
 }
 
 .btn-delete {
@@ -125,7 +126,7 @@ thead {
   text-align: center;
 }
 
-.modal:before {
+.modal::before {
   content: ' ';
   display: inline-block;
   height: 100%;
@@ -166,12 +167,5 @@ thead {
   }
 }
 
-textarea:focus::-webkit-input-placeholder { color:transparent; }
-textarea:focus:-moz-placeholder { color:transparent; } /* FF 4-18 */
-textarea:focus::-moz-placeholder { color:transparent; } /* FF 19+ */
-textarea:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
-
-input:focus::-webkit-input-placeholder { color:transparent; }
-input:focus:-moz-placeholder { color:transparent; } /* FF 4-18 */
-input:focus::-moz-placeholder { color:transparent; } /* FF 19+ */
-input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
+textarea:focus::-webkit-input-placeholder { color: transparent; }
+input:focus::-webkit-input-placeholder { color: transparent; }

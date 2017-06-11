@@ -22,12 +22,12 @@ const actions = {
   addChapter(context, e, data) {
     const { node } = data;
     const { Helpers, Collections } = context;
-    const parent = Collections.Documents.findOne({_id: node.node});
+    const parent = Collections.Documents.findOne({ _id: node.node });
 
     Helpers.insertNodeOfType(context, parent, 'chapter');
   },
 
-  removeRootNode({NotificationManager, TAPi18n}) {
+  removeRootNode({ NotificationManager, TAPi18n }) {
     NotificationManager.warning(
       TAPi18n.__('notifications.context_menu_root.message'),
       TAPi18n.__('notifications.context_menu_root.title')
@@ -35,15 +35,7 @@ const actions = {
   },
 
   addSubchapter(context, e, parent) {
-    const { Helpers, NotificationManager, TAPi18n } = context;
-
-    // if (parent.level >= 4) {
-    //   return NotificationManager.warning(
-    //     TAPi18n.__('notifications.max_number_of_subchapters.message'),
-    //     TAPi18n.__('notifications.max_number_of_subchapters.title')
-    //   );
-    // }
-
+    const { Helpers } = context;
     Helpers.insertNodeOfType(context, parent, 'chapter');
   },
 
@@ -83,10 +75,10 @@ const actions = {
 
   removeMediaNode(context, e, { _id, mainDocId }) {
     const { Helpers } = context;
-    Helpers.removeNode(context, {_id, mainDocId});
+    Helpers.removeNode(context, { _id, mainDocId });
   },
 
-  editMediaNode({Meteor, LocalState}, _id) {
+  editMediaNode({ Meteor, LocalState }, _id) {
     Meteor.call('document.setSelectedNode', LocalState.get('CURRENT_DOCUMENT'), _id);
     LocalState.set('CURRENT_NODE', _id);
   },

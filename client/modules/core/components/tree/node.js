@@ -50,7 +50,6 @@ class NodeElement extends React.Component {
   render() {
     const {
       node,
-      nodes = [],
       handleClick,
       sectionLabel,
       renameNode,
