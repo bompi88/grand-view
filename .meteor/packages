@@ -36,3 +36,9 @@ standard-minifier-js@1.2.3
 shell-server
 ostrio:files
 seba:minifiers-autoprefixer
+practicalmeteor:mocha
+practicalmeteor:mocha-console-runner
+practicalmeteor:chai
+xolvio:cleaner
+dburles:factory
+hwillson:stub-collections

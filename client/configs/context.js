@@ -25,12 +25,14 @@ import undoable from 'redux-undo';
 
 import * as Collections from './../../lib/collections';
 
+
 import Helpers from './../lib/helpers';
 import SelectedCtrl from './../lib/controllers/selected_nodes';
 import ReferencesCtrl from './../lib/controllers/references';
 import ShowMoreCtrl from './../lib/controllers/show_more';
 import TagsCtrl from './../lib/controllers/tags';
 
+const electron = _require('electron');
 const LocalState = new ReactiveDict();
 
 export default function ({ reducers }) {
@@ -64,6 +66,7 @@ export default function ({ reducers }) {
     _,
     Store,
     bootbox,
+    electron,
     dispatch: Store.dispatch,
   };
 }
