@@ -17,7 +17,7 @@ export default class NodesTableRow extends React.Component {
   }
 
   handleClick(e) {
-    const { unsetEditable, nodeId } = this.props;
+    const { unsetNodeEditable, nodeId } = this.props;
     const target = ReactDOM.findDOMNode(this.refs.target);
 
     if (!target || (e.target.className && e.target.className.indexOf('mfp') > -1)) {
@@ -28,14 +28,14 @@ export default class NodesTableRow extends React.Component {
       return;
     }
 
-    unsetEditable(nodeId);
+    unsetNodeEditable(nodeId);
   }
 
   handleKeyPress(e) {
-    const { unsetEditable, node: { _id: nodeId } } = this.props;
+    const { unsetNodeEditable, node: { _id: nodeId } } = this.props;
 
     if (e.keyCode === 27) {
-      unsetEditable(nodeId);
+      unsetNodeEditable(nodeId);
     }
   }
 
@@ -120,7 +120,7 @@ export default class NodesTableRow extends React.Component {
   render() {
     const {
       node = {},
-      setAsEditable,
+      setNodeEditable,
       isSelected,
       tableName,
       disablePointer,
@@ -160,7 +160,7 @@ export default class NodesTableRow extends React.Component {
           <td
             key="informationelement"
             className="row-item"
-            onClick={isInEditMode ? null : setAsEditable.bind(this, node._id)}
+            onClick={isInEditMode ? null : setNodeEditable.bind(this, node._id)}
           >
             { isInEditMode ? (
               <div>
@@ -201,7 +201,7 @@ export default class NodesTableRow extends React.Component {
         <td
           key="informationelement"
           className="row-item"
-          onClick={isInEditMode ? null : setAsEditable.bind(this, node._id)}
+          onClick={isInEditMode ? null : setNodeEditable.bind(this, node._id)}
         >
           { isInEditMode ? (
             <div>

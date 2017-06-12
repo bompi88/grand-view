@@ -21,7 +21,7 @@
 
 import debounce from 'debounce';
 // import { ActionCreators } from 'redux-undo';
-const { sh } = _require('electron');
+// const { sh } = _require('electron');
 
 export default {
 
@@ -119,11 +119,11 @@ export default {
     });
   },
 
-  setAsEditable({ LocalState, Meteor, $ }, nodeId) {
+  setNodeEditable({ LocalState, Meteor, $ }, nodeId) {
     LocalState.set('EDIT_NODE', nodeId);
   },
 
-  unsetEditable({ LocalState }, prevNodeId) {
+  unsetNodeEditable({ LocalState }, prevNodeId) {
     if (prevNodeId === LocalState.get('EDIT_NODE')) {
       LocalState.set('EDIT_NODE', null);
     }
@@ -151,7 +151,7 @@ export default {
     Meteor.call('insertReferences', references);
   },
 
-  openLink({}, e) {
+  openLink({ electron: { sh } }, e) {
     e.preventDefault();
     e.stopPropagation();
 

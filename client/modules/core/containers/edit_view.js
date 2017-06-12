@@ -36,7 +36,7 @@ const onPropsChange = ({ context, doc }, onData) => {
 };
 
 export const depsMapper = (context, actions) => ({
-  unsetEditable: actions.editView.unsetEditable,
+  unsetNodeEditable: actions.editView.unsetNodeEditable,
   context: () => context,
 });
 
