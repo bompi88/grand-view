@@ -101,9 +101,8 @@
     "build:win:x64": "node .scripts/download --platform=win32 --arch=x64 && node .scripts/prepare --platform=win32 --arch=x64 && build --win --x64 --config ./packager.json --publish never",
     "lint": "eslint ./lib ./client ./server --ext .js",
     "lintfix": "npm run lint -- --fix",
-    "testonly": "mocha meteor/client/**/tests/**/*.js --compilers js:babel-core/register",
     "test:build": "node .scripts/test_build",
-    "test": "npm run testonly",
+    "test": "meteor test --driver-package=practicalmeteor:mocha",
     "pretest": "npm run lint --silent",
     "test-watch": "npm run testonly -- --watch --watch-extensions js,jsx"
   },
