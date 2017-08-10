@@ -26,7 +26,7 @@
       "tagsLabel": "Lag eller søk etter nøkkelord i listen",
       "referencesPlaceholder": "Kilder",
       "referencesLabel": "Lag eller søk etter kilder i listen",
-      "name": "Navn på informasjonselement (valgfritt)",
+      "name": "Navn på informasjonselement",
       "description": "Informasjonselement",
       "createTag": "Klikk for å opprette nøkkelordet",
       "createReference": "Klikk for å opprette kilden",
