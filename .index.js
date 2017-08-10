@@ -22,14 +22,18 @@
 
 'use strict';
 
-const BrowserWindow = require('electron').BrowserWindow;
+const { app, BrowserWindow, protocol, ipcMain }= require('electron');
+const { autoUpdater } = require('electron-updater');
 const childProcess = require('child_process');
 const pjson = require('./package.json');
-const app = require('electron').app;
+const log = require('electron-log');
 const path = require('path');
 const net = require('net');
 const os = require('os');
 const fs = require('fs');
+
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
 
 // Set in package.json
 const appName = pjson.name;
@@ -313,6 +317,11 @@ if (shouldQuit) {
   return;
 }
 
+function sendStatusToWindow(text) {
+  log.info(text);
+  mainWindow.webContents.send('message', text);
+}
+
 // Emitted when Electron has done all of the initialization.
 function createWindow() {
   let splashScreen;
@@ -413,6 +422,58 @@ function createWindow() {
 
   });
 }
+
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
+});
+
+autoUpdater.on('update-available', (info) => {
+  // sendStatusToWindow('Update available.');
+});
+
+autoUpdater.on('update-not-available', (info) => {
+  // sendStatusToWindow('Update not available.');
+});
+
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater.');
+});
+
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  sendStatusToWindow(log_message);
+});
+
+autoUpdater.on('update-downloaded', (info) => {
+  sendStatusToWindow('Update downloaded; will install in 5 seconds');
+});
+
+// autoUpdater.on('checking-for-update', () => {
+// })
+// autoUpdater.on('update-available', (info) => {
+// })
+// autoUpdater.on('update-not-available', (info) => {
+// })
+// autoUpdater.on('error', (err) => {
+// })
+// autoUpdater.on('download-progress', (progressObj) => {
+// })
+autoUpdater.on('update-downloaded', (info) => {
+  // Wait 5 seconds, then quit and install
+  // In your application, you don't need to wait 5 seconds.
+  // You could call autoUpdater.quitAndInstall(); immediately
+  // setTimeout(function() {
+  //   autoUpdater.quitAndInstall();
+  // }, 5000);
+})
+
+app.on('ready', function() {
+  setTimeout(function() {
+    autoUpdater.checkForUpdates();
+  }, 10000);
+});
 
 app.on('ready', createWindow);
 

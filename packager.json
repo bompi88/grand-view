@@ -14,7 +14,11 @@
   ],
   "mac": {
     "category": "public.app-category.productivity",
-    "icon": ".assets/osx/grandview.icns"
+    "icon": ".assets/osx/grandview.icns",
+    "target": [
+      "zip",
+      "dmg"
+    ]
   },
   "dmg": {
     "title": "GrandView",
@@ -38,6 +42,9 @@
   "win": {
     "icon": ".assets/win/grandview.ico"
   },
+  "nsis": {
+    "perMachine": true
+  },
   "linux": {
     "icon": ".assets/linux",
     "target": [
@@ -48,5 +55,10 @@
   "directories": {
     "app": ".app",
     "output": ".dist"
-  }
+  },
+  "publish": [{
+    "provider": "github",
+    "owner": "bompi88",
+    "repo": "grand-view"
+  }]
 }
