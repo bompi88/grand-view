@@ -298,6 +298,21 @@ app.on('activate-with-no-open-windows', () => {
 
 let mainWindow;
 
+const shouldQuit = app.makeSingleInstance(function (commandLine, workingDirectory) {
+  // Someone tried to run a second instance, we should focus our window.
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore();
+    }
+    mainWindow.focus();
+  }
+});
+
+if (shouldQuit) {
+  app.quit();
+  return;
+}
+
 // Emitted when Electron has done all of the initialization.
 function createWindow() {
   let splashScreen;
