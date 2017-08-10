@@ -26,7 +26,7 @@
       "tagsLabel": "Select tags",
       "referencesPlaceholder": "References",
       "referencesLabel": "Select references",
-      "name": "Name (Optional)",
+      "name": "Name",
       "description": "Information element",
       "createTag": "Click to create the tag",
       "createReference": "Click to create the reference",
