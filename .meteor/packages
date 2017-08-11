@@ -42,3 +42,4 @@ practicalmeteor:chai
 xolvio:cleaner
 dburles:factory
 hwillson:stub-collections
+percolate:migrations

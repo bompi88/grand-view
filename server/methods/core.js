@@ -151,7 +151,7 @@ export default function () {
               value: tag.value.toLowerCase(),
             }, {
               $setOnInsert: {
-                text: tag.label,
+                text: tag.text || tag.label,
               },
             }, {
               upsert: true,
@@ -165,7 +165,7 @@ export default function () {
               value: reference.value.toLowerCase(),
             }, {
               $setOnInsert: {
-                text: reference.label,
+                text: reference.text || reference.label,
               },
             }, {
               upsert: true,
@@ -239,11 +239,11 @@ export default function () {
     },
 
     insertTags(tags) {
-      tags.forEach(({ value, label }) => {
+      tags.forEach(({ value, text }) => {
         if (!Tags.findOne({ value })) {
           Tags.insert({
             value,
-            label,
+            text,
             count: 1,
           });
         } else {
@@ -262,11 +262,11 @@ export default function () {
     },
 
     insertReferences(references) {
-      references.forEach(({ value, label }) => {
+      references.forEach(({ value, text }) => {
         if (!References.findOne({ value })) {
           References.insert({
             value,
-            label,
+            text,
             count: 1,
           });
         } else {
