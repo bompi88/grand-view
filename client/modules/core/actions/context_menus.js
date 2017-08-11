@@ -82,9 +82,39 @@ const actions = {
     Helpers.removeNode(context, { _id, mainDocId });
   },
 
+  removeMediaNodeConfirmation(context, e, node) {
+    const { NotificationManager, bootbox } = context;
+    const message = `Er du sikker på at du vil slette informasjonselement <b>${node.name}</b>? NB: ` +
+      'Dette vil slette alle filer og data knyttet til disse informasjonselementene</br></br>';
+
+    const confirmationPrompt = {
+      title: 'Bekreftelse på slettingen',
+      message,
+      buttons: {
+        cancel: {
+          label: 'Nei',
+        },
+        confirm: {
+          label: 'Ja',
+          callback(result) {
+            if (result) {
+              // Remove the media nodes
+              actions.removeMediaNode(context, e, node);
+              // Show sucess message
+              NotificationManager.success(
+                'Informasjonselementet ble slettet fra systemet.',
+                'Sletting fullført',
+              );
+            }
+          },
+        },
+      },
+    };
+    bootbox.dialog(confirmationPrompt);
+  },
+
   editMediaNode({ Meteor, LocalState }, _id) {
-    Meteor.call('document.setSelectedNode', LocalState.get('CURRENT_DOCUMENT'), _id);
-    LocalState.set('CURRENT_NODE', _id);
+    LocalState.set('EDIT_NODE', _id);
   },
 
   removeSelectedNodes(context, tableName, e) {
