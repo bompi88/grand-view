@@ -37,6 +37,11 @@ $table-row-hover-text-color: #008cba;
   }
 }
 
+.row-item .react-context-menu-wrapper {
+  height: 100%;
+  padding-top: 10px;
+}
+
 .Select-menu-outer .Select-menu {
   z-index: 100000;
 }

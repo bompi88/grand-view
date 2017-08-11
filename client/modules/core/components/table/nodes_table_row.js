@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Linkify from 'react-linkify';
+import { ContextMenuLayer } from 'react-contextmenu';
 
 import EditViewForm from '../../containers/edit_view_form';
 
-
-export default class NodesTableRow extends React.Component {
+class NodesTableRow extends React.Component {
 
   constructor(props) {
     super(props);
@@ -59,26 +59,34 @@ export default class NodesTableRow extends React.Component {
   }
 
   renderNode(node) {
-    const { mode, text, openLink } = this.props;
+    const { mode, text, openLink, tableName } = this.props;
+
     if (mode === 'easy') {
+      const wrappedItem = ContextMenuLayer('media', () => { return { tableName, ...node }; })(() => {
+        return (
+          <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
+            <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
+          </div>
+        );
+      });
+      return React.createElement(wrappedItem, {});
+    }
+
+    const wrappedItem = ContextMenuLayer('media', () => { return { tableName, ...node }; })(() => {
       return (
         <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
           <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
+          {node.description ? (
+            <Linkify properties={{ onClick: openLink }}>
+              <p>{node.description.trim()}</p>
+            </Linkify>
+          ) : null}
+          {this.renderCategorization(node)}
         </div>
       );
-    }
+    });
 
-    return (
-      <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
-        <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
-        {node.description ? (
-          <Linkify properties={{ onClick: openLink }}>
-            <p>{node.description.trim()}</p>
-          </Linkify>
-        ) : null}
-        {this.renderCategorization(node)}
-      </div>
-    );
+    return React.createElement(wrappedItem, {});
   }
 
   renderReferences(references) {
@@ -160,10 +168,17 @@ export default class NodesTableRow extends React.Component {
           <td
             key="informationelement"
             className="row-item"
+            style={{
+              paddingTop: 0,
+              paddingBottom: 0,
+            }}
             onClick={isInEditMode ? null : setNodeEditable.bind(this, node._id)}
           >
             { isInEditMode ? (
-              <div>
+              <div style={{
+                paddingTop: '10px',
+                paddingBottom: '10px',
+              }} >
                 <div
                   className="alert alert-info" dangerouslySetInnerHTML={{
                     __html: text.closeFormInfo,
@@ -223,3 +238,5 @@ export default class NodesTableRow extends React.Component {
     );
   }
 }
+
+export default NodesTableRow;
