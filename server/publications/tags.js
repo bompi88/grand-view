@@ -12,7 +12,7 @@ export default function () {
    */
   Meteor.publish('searchTags', function (queryText = '') {
     return Tags.find({
-      label: { $regex: queryText, $options: 'i' },
+      text: { $regex: queryText, $options: 'i' },
     });
   });
 

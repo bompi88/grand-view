@@ -12,7 +12,7 @@ export default function () {
    */
   Meteor.publish('searchReferences', function (queryText = '') {
     return References.find({
-      label: { $regex: queryText, $options: 'i' },
+      text: { $regex: queryText, $options: 'i' },
     });
   });
 

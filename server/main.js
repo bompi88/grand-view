@@ -20,7 +20,9 @@
 import publications from './publications';
 import initElectron from './configs/electron';
 import methods from './methods';
+import runMigrations from './migrations';
 
+runMigrations();
 publications();
 methods();
 
