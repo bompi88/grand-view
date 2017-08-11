@@ -5,6 +5,7 @@
     "add_media_node": "Add media node",
     "remove": "Remove",
     "rename": "Rename",
+    "duplicate": "Duplicate",
     "edit": "Edit"
   }
 }

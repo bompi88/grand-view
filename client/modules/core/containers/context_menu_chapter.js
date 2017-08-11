@@ -15,6 +15,15 @@ export const composer = ({ context, actions }, onData) => {
       handleClick: a.contextMenus.addSubchapter,
     },
     {
+      id: 'duplicate-node',
+      label: TAPi18n.__('context_menus.duplicate'),
+      icon: 'glyphicon glyphicon-duplicate',
+      handleClick: (e, data) => {
+        const { _id } = data;
+        a.contextMenus.duplicateChapterNode(_id);
+      },
+    },
+    {
       id: 'rename-chapter',
       label: TAPi18n.__('context_menus.rename'),
       icon: 'glyphicon glyphicon-pencil',

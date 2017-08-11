@@ -171,5 +171,75 @@ export default function () {
 
       return true;
     },
+    'document.duplicateChapterNode'(docId, nodeId) {
+      check(docId, String);
+      check(nodeId, String);
+
+      // Duplicate parent node and set position to be below the selected node
+      const selectedNode = Collections.Nodes.findOne(nodeId);
+
+      if (!selectedNode) {
+        return;
+      }
+
+      const { position, parent, _id: selectedNodeId, ...dupNode } = selectedNode;
+
+      // update positions for nodes with position > selected position => position + 1
+      Collections.Nodes.update({
+        parent,
+        position: { $gt: position },
+      }, {
+        $inc: {
+          position: 1,
+        },
+      }, {
+        multi: true,
+      });
+
+      // insert new node at selected position + 1
+      const ourParentNodeId = Collections.Nodes.insert({
+        parent,
+        position: position + 1,
+        ...dupNode,
+      });
+
+      // map to store old parent to new parent values
+      const parentMap = {
+        [selectedNodeId]: ourParentNodeId,
+      };
+
+      const parentQueue = [selectedNodeId];
+
+      while (parentQueue.length > 0) {
+        const currentParent = parentQueue.shift();
+
+        Collections.Nodes.find({
+          parent: currentParent,
+        }).forEach(function({ parent: ourParent, _id: willQueue, ...ourNode }) {
+          const { nodeType } = ourNode;
+
+          if (nodeType !== 'chapter') {
+            return;
+          }
+
+          const newParentRef = parentMap[ourParent];
+          const newNodeId = Collections.Nodes.insert({
+            parent: newParentRef,
+            ...ourNode,
+          });
+          parentQueue.push(willQueue);
+          parentMap[willQueue] = newNodeId;
+        });
+      }
+
+      // update last changed
+      Collections.Documents.update({
+        _id: docId,
+      }, {
+        $set: {
+          lastChanged: new Date(),
+        },
+      });
+    },
   });
 }
