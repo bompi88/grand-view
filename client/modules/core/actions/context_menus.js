@@ -73,6 +73,10 @@ const actions = {
     bootbox.dialog(confirmationPrompt);
   },
 
+  duplicateChapterNode({ Meteor, LocalState }, nodeId) {
+    Meteor.call('document.duplicateChapterNode', LocalState.get('CURRENT_DOCUMENT'), nodeId);
+  },
+
   removeMediaNode(context, e, { _id, mainDocId }) {
     const { Helpers } = context;
     Helpers.removeNode(context, { _id, mainDocId });

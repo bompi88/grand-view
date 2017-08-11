@@ -5,6 +5,7 @@
     "add_media_node": "Legg til informasjonselement",
     "remove": "Slett",
     "rename": "Gi nytt navn",
+    "duplicate": "Dupliser",
     "edit": "Rediger"
   }
 }
