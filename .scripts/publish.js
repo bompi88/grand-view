@@ -68,10 +68,12 @@ builder.build({
     }],
     afterPack() {
       console.log('Test if app starts');
-
-      // return new Promise(function(resolve, reject) {
-      //   reject();
-      // }); 
+      return new Promise(function(resolve, reject) {
+        const testRun = cp.spawn('./test_build');
+        testRun.on('exit', (code) => {
+          code === 1 ? reject(new Error('App not starting.')) : resolve();
+        });
+      }); 
     }
   }
 })

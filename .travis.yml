@@ -67,7 +67,6 @@ matrix:
 
 branches:
   only:
-    - /v\d+\.\d+\.\d+((-beta.\d+)|(-\d+))?/
     - devel
 
 install:
