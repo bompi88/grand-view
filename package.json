@@ -32,7 +32,7 @@
     "chai": "3.x.x",
     "colors": "^1.1.2",
     "electron": "^1.6.10",
-    "electron-builder": "^18.6.2",
+    "electron-builder": "^19.27.7",
     "electron-packager": "^8.7.1",
     "electron-rebuild": "^1.5.7",
     "enzyme": "^2.2.0",
