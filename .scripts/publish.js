@@ -1,7 +1,25 @@
 const builder = require('electron-builder');
+const Arch = builder.Arch;
 const Platform = builder.Platform;
 
+const args = require('minimist')(process.argv.slice(2));
+
+const { arch, platform } = args;
+
+const selectedArch = arch === 'x64' ? Arch.x64 : Arch.ia32;
+
+let target;
+
+if (platform === 'darwin') {
+  target = Platform.MAC.createTarget(null, selectedArch);
+} else if (platform === 'linux') {
+  target = Platform.LINUX.createTarget(null, selectedArch);
+} else {
+  target = Platform.WINDOWS.createTarget(null, selectedArch);
+}
+
 builder.build({
+  targets: target,
   config: {
     asarUnpack: [
       '**/programs/server/assets/app/*',
@@ -60,22 +78,19 @@ builder.build({
       app: '.app',
       output: '.dist'
     },
-    publish: [{
-      provider: 'github',
-      owner: 'bompi88',
-      repo: 'grand-view',
-      private: false
-    }],
     afterPack() {
       console.log('Test if app starts');
-      return new Promise(function(resolve, reject) {
-        const testRun = cp.spawn('./test_build');
-        testRun.on('exit', (code) => {
-          code === 1 ? reject(new Error('App not starting.')) : resolve();
-        });
-      }); 
+      // return new Promise(function(resolve, reject) {
+      //   const testRun = cp.spawn('./test_build');
+      //   testRun.on('exit', (code) => {
+      //     code === 1 ? reject(new Error('App not starting.')) : resolve();
+      //   });
+      // });
+
+      return Promise.resolve();
     }
-  }
+  },
+  publish: "always"
 })
 .then(() => {
   // handle result
