@@ -31,10 +31,6 @@ if (!platform) {
   throw new Error('Platform not specified...'.bold.red);
 }
 
-if (!arch) {
-  throw new Error('Architecture not specified...'.bold.red);
-}
-
 const onWindows = currentPlatform === 'win32';
 
 console.log('Target platform: '.bold.white, platform);
@@ -100,6 +96,12 @@ function copyStartupFiles(os) {
     postinstall: `${rebuildPath} --arch ${arch === 'x64' ? arch : 'ia32'} --version ${pjson.electron_version} --module-dir ./`
   };
 
+  if (os === 'win32') {
+    pjson.scripts = {
+      postinstall: `${rebuildPath} --arch x64 --version ${pjson.electron_version} --module-dir ./ && ${rebuildPath} --arch ia32 --version ${pjson.electron_version} --module-dir ./`
+    };
+  }
+
   const bundlePjson = require('../.bundle/bundle/programs/server/package.json');
   const bundleDependencies = bundlePjson.dependencies;
 
@@ -143,10 +145,20 @@ function copyBinaryFiles(os, architecture) {
       mkdir(resourceDir);
 
       const mongodbPostfix = (os === 'win32') ? 'mongod.exe' : 'mongod';
-      const mp = path.join('.cache', `mongodb-${os}-${architecture}`);
-
-      cp(path.join(mp, 'bin', mongodbPostfix), resourceDir);
-      cp(path.join(mp, 'GNU-AGPL-3.0'), resourceDir);
+      if (os === 'win32') {
+        const mpx86 = path.join('.cache', `mongodb-${os}-ia32`);
+        const mpx64 = path.join('.cache', `mongodb-${os}-x64`);
+        
+        cp(path.join(mpx86, 'bin', mongodbPostfix), resourceDir);
+        cp(path.join(mpx86, 'GNU-AGPL-3.0'), resourceDir);
+        cp(path.join(mpx64, 'bin', mongodbPostfix), resourceDir);
+        cp(path.join(mpx64, 'GNU-AGPL-3.0'), resourceDir);
+      } else {
+        const mp = path.join('.cache', `mongodb-${os}-${architecture}`);
+  
+        cp(path.join(mp, 'bin', mongodbPostfix), resourceDir);
+        cp(path.join(mp, 'GNU-AGPL-3.0'), resourceDir);
+      }
       break;
 
     default:

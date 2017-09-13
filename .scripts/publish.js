@@ -15,7 +15,7 @@ if (platform === 'darwin') {
 } else if (platform === 'linux') {
   target = Platform.LINUX.createTarget(null, selectedArch);
 } else {
-  target = Platform.WINDOWS.createTarget(null, selectedArch);
+  target = Platform.WINDOWS.createTarget(null, [Arch.x64, Arch.ia32]);
 }
 
 builder.build({
