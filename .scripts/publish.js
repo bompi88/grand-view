@@ -15,7 +15,7 @@ if (platform === 'darwin') {
 } else if (platform === 'linux') {
   target = Platform.LINUX.createTarget(null, selectedArch);
 } else {
-  target = Platform.WINDOWS.createTarget(null, [Arch.x64, Arch.ia32]);
+  target = Platform.WINDOWS.createTarget('nsis-web', [Arch.x64, Arch.ia32]);
 }
 
 builder.build({
@@ -64,7 +64,7 @@ builder.build({
     win: {
       icon: '.assets/win/grandview.ico'
     },
-    nsis: {
+    nsisWeb: {
       perMachine: true
     },
     linux: {
