@@ -8,22 +8,30 @@ branches:
 platform:
   - x64
 
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 install:
   - ps: $env:APP_VERSION = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
   - ps: Install-Product node $env:nodejs_version $env:platform
-  # Install modules
-  - npm install
   # Install build tools
   - npm install --global --production windows-build-tools
+  # Install modules
+  - npm install --no-bin-links
   # Download Meteor
-  - ps: Start-FileDownload 'https://s3.amazonaws.com/meteor-windows/InstallMeteor.exe'
+  - choco install meteor --params "'/RELEASE:1.4.3.2'"
+  # - ps: Start-FileDownload 'https://s3.amazonaws.com/meteor-windows/InstallMeteor.exe'
   # Install meteor
-  - .\installMeteor.exe /passive
+  # - .\installMeteor.exe /passive
+  - refreshenv
   # Restart
-  - ps: Start-Sleep -s 5
-  - ps: Restart-Computer -Force
-  - ps: Start-Sleep -s 5
+  # - ps: Start-Sleep -s 5
+  # - ps: Restart-Computer -Force
+  # - ps: Start-Sleep -s 5
 
 build_script:
   - echo %platform%
   - npm run build:win:%platform%
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
