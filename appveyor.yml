@@ -1,5 +1,5 @@
-environment:
-  nodejs_version: "8.1.0"
+# environment:
+#   nodejs_version: "8.8.1"
 
 branches:
   only:
@@ -13,25 +13,29 @@ init:
 
 install:
   - ps: $env:APP_VERSION = (Get-Content -Raw -Path package.json | ConvertFrom-Json).version
-  - ps: Install-Product node $env:nodejs_version $env:platform
+  - choco install nodejs.install --version 8.8.1
+  # - ps: Install-Product node $env:nodejs_version $env:platform
   # Install build tools
   - npm install --global --production windows-build-tools
-  # Install modules
-  - npm install --no-bin-links
   # Download Meteor
-  - choco install meteor --params "'/RELEASE:1.4.3.2'"
+  - choco install meteor --params "'/RELEASE:1.6'"
   # - ps: Start-FileDownload 'https://s3.amazonaws.com/meteor-windows/InstallMeteor.exe'
   # Install meteor
   # - .\installMeteor.exe /passive
   - refreshenv
+  # Install modules
+  - meteor npm install
   # Restart
-  # - ps: Start-Sleep -s 5
-  # - ps: Restart-Computer -Force
-  # - ps: Start-Sleep -s 5
+  - ps: Start-Sleep -s 5
+  - ps: Restart-Computer -Force
+  - ps: Start-Sleep -s 5
 
 build_script:
   - echo %platform%
-  - npm run build:win:%platform%
+  - node .scripts/download --platform=win32
+  - node .scripts/prepare --platform=win32
+  - node ./.scripts/publish.js --platform=win32
+  # - npm run build:win:%platform%
 
 on_finish:
   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))

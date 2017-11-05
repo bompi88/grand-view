@@ -49,7 +49,7 @@ echo('-----> Building bundle from Meteor app, this may take a few minutes...'.ye
 cd(base);
 
 const meteorCommand = (onWindows === true) ? 'meteor' : 'meteor';
-exec(meteorCommand + ' build --verbose --directory .bundle');
+exec(meteorCommand + ' build --verbose --debug --directory .bundle');
 
 
 // -- Remove node_modules inside meteor bundle -----------------------------------------------------
@@ -151,8 +151,8 @@ function copyBinaryFiles(os, architecture) {
         
         cp(path.join(mpx86, 'bin', mongodbPostfix), resourceDir);
         cp(path.join(mpx86, 'GNU-AGPL-3.0'), resourceDir);
-        cp(path.join(mpx64, 'bin', mongodbPostfix), resourceDir);
-        cp(path.join(mpx64, 'GNU-AGPL-3.0'), resourceDir);
+        // cp(path.join(mpx64, 'bin', mongodbPostfix), resourceDir);
+        // cp(path.join(mpx64, 'GNU-AGPL-3.0'), resourceDir);
       } else {
         const mp = path.join('.cache', `mongodb-${os}-${architecture}`);
   
