@@ -49,7 +49,9 @@ echo('-----> Building bundle from Meteor app, this may take a few minutes...'.ye
 cd(base);
 
 const meteorCommand = (onWindows === true) ? 'meteor' : 'meteor';
-exec(meteorCommand + ' build --verbose --directory .bundle');
+exec(meteorCommand + ' build --verbose --directory .bundle', { env: {
+  'METEOR_DISABLE_FS_FIBERS': 1
+}});
 
 
 // -- Remove node_modules inside meteor bundle -----------------------------------------------------
