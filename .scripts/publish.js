@@ -96,5 +96,6 @@ builder.build({
   // handle result
 })
 .catch((error) => {
+  console.log(error);
   // handle error
 })

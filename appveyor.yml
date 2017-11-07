@@ -17,7 +17,7 @@ install:
   # Install build tools
   - npm install --global --production windows-build-tools
   # Install modules
-  - npm install --no-bin-links
+  - npm install
   # Download Meteor
   - choco install meteor --params "'/RELEASE:1.4.3.2'"
   # - ps: Start-FileDownload 'https://s3.amazonaws.com/meteor-windows/InstallMeteor.exe'
