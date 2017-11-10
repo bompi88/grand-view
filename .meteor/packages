@@ -33,6 +33,6 @@ underscorestring:underscore.string
 fortawesome:fontawesome
 qnub:emojione
 standard-minifier-css@1.3.4
-standard-minifier-js@1.2.3
+standard-minifier-js
 shell-server
 ostrio:files
