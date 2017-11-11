@@ -36,10 +36,6 @@ if (!platform) {
   throw new Error('Platform not specified...'.bold.red);
 }
 
-if (!arch) {
-  throw new Error('Architecture not specified...'.bold.red);
-}
-
 console.log('Target platform: '.bold.white, platform);
 console.log('Target architecture: '.bold.white, arch);
 
@@ -77,20 +73,17 @@ const unzip = function (file, unzipPath, message, zip) {
 
 // -- Determine the files to fetch ---------------------------------------------
 
-let mongoFile = '';
+let mongoFiles = [];
 
 if (platform === 'win32') {
-  const archName = (arch === 'x86') ? '-i386-' : '-x86_64-2008plus-';
-
-  mongoFile = 'mongodb-' + platform + archName + mongoVersion + '.zip';
+  mongoFiles.push({ arch: 'ia32', file: 'mongodb-' + platform + '-i386-' + mongoVersion + '.zip' });
+  mongoFiles.push({ arch: 'x64', file: 'mongodb-' + platform + '-x86_64-2008plus-' + mongoVersion + '.zip' });
+} else if (platform === 'darwin') {
+  mongoFiles.push({ arch: 'x64', file: 'mongodb-osx-x86_64-' + mongoVersion + '.tgz'});
 } else {
   const archName = (arch === 'x86') ? '-i686-' : '-x86_64-';
-
-  mongoFile = 'mongodb-' + platform + archName + mongoVersion + '.tgz';
-
-  if (platform === 'darwin') {
-    mongoFile = 'mongodb-osx-x86_64-' + mongoVersion + '.tgz';
-  }
+  
+  mongoFiles.push({ arch, file: 'mongodb-' + platform + archName + mongoVersion + '.tgz'});
 }
 
 // -- Create cache folder if it do not exists ----------------------------------
@@ -105,37 +98,40 @@ cd('.cache');
 
 // -- Download MongoDB ---------------------------------------------------------
 
-if (!test('-f', mongoFile)) {
+for (const mongoFile of mongoFiles) {
 
-  echo('-----> Downloading MongoDB...'.yellow + ' (version: ' + mongoVersion + ')');
+  if (!test('-f', mongoFile.file)) {
 
-  const os = platform === 'darwin' ? 'osx' : platform;
-  const mongoCurl = 'curl -L -o ' +
-    mongoFile +
-    ' https://fastdl.mongodb.org/' +
-    os + '/' +
-    mongoFile;
+    echo('-----> Downloading MongoDB...'.yellow + ' (version: ' + mongoVersion + ')');
 
-  exec(mongoCurl);
-  echo('-----> Unzipping MongoDB...'.yellow);
+    const os = platform === 'darwin' ? 'osx' : platform;
+    const mongoCurl = 'curl -L -o ' +
+      mongoFile.file +
+      ' https://fastdl.mongodb.org/' +
+      os + '/' +
+      mongoFile.file;
 
-  const p = 'mongodb-' + platform + '-' + arch;
-  if (!test('-d', p)) {
-    mkdir(p);
-  }
+    exec(mongoCurl);
+    echo('-----> Unzipping MongoDB...'.yellow);
 
-  if (platform === 'win32') {
-    unzip(mongoFile, p, 'MongoDB unzipped.'.green, true);
-    const outDir = removeExtension(mongoFile);
-    mv(base + '/.cache/' + outDir + '/*', base + '/.cache/' + p);
-    fs.removeSync(base + '/.cache/' + outDir);
+    const p = 'mongodb-' + platform + '-' + mongoFile.arch;
+    if (!test('-d', p)) {
+      mkdir(p);
+    }
+
+    if (platform === 'win32') {
+      unzip(mongoFile.file, p, 'MongoDB unzipped.'.green, true);
+      const outDir = removeExtension(mongoFile.file);
+      mv(base + '/.cache/' + outDir + '/*', base + '/.cache/' + p);
+      fs.removeSync(base + '/.cache/' + outDir);
+
+    } else {
+      unzip(mongoFile.file, p, 'MongoDB unzipped.'.green);
+    }
 
   } else {
-    unzip(mongoFile, p, 'MongoDB unzipped.'.green);
+    echo('MongoDB already downloaded.');
   }
-
-} else {
-  echo('MongoDB already downloaded.');
 }
 
 echo('Finished downloading!'.green);

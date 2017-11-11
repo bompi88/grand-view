@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Document Table Dropdown Component
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 
 import React from 'react';
@@ -29,7 +29,7 @@ class OptionsDropdown extends React.Component {
 
   renderItem(item, index) {
     if (item.divider) {
-      return <li key={index} role="presentation" className="divider"></li>;
+      return <li key={index} role="presentation" className="divider" />;
     }
 
     const disabled = item.disabled;
@@ -42,18 +42,16 @@ class OptionsDropdown extends React.Component {
           href="#"
           onClick={disabled ? null : this.handleClick.bind(this, item.func)}
         >
-          <span className={item.icon} aria-hidden="true"></span> {item.label}
+          <span className={item.icon} aria-hidden="true" /> {item.label}
         </a>
       </li>
     );
   }
 
   renderItems() {
-    const {items} = this.props;
+    const { items } = this.props;
 
-    return items.map((item, index) => {
-      return this.renderItem(item, index);
-    });
+    return items.map((item, index) => this.renderItem(item, index));
   }
 
   render() {
@@ -65,7 +63,7 @@ class OptionsDropdown extends React.Component {
           data-toggle="dropdown"
           type="button"
         >
-          <span className="glyphicon glyphicon-option-horizontal"></span>
+          <span className="glyphicon glyphicon-option-horizontal" />
         </button>
 
         <ul className="dropdown-menu" role="menu">
@@ -82,8 +80,8 @@ OptionsDropdown.propTypes = {
     icon: React.PropTypes.string,
     func: React.PropTypes.string,
     disabledOn: React.PropTypes.string,
-    divider: React.PropTypes.bool
-  }))
+    divider: React.PropTypes.bool,
+  })),
 };
 
 export default OptionsDropdown;

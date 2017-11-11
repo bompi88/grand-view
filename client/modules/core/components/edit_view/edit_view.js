@@ -3,7 +3,6 @@ import EditViewForm from '../../containers/edit_view_form';
 import EditRootViewForm from '../../containers/edit_root_view_form';
 import MediaNodesTable from '../../containers/media_nodes_table';
 import ConfButton from '../../containers/conf_button';
-import UndoRedoButton from '../../containers/undo_redo_button';
 
 const styles = {
   header: {
@@ -11,13 +10,13 @@ const styles = {
   },
   headerIcon: {
     fontSize: '15px',
-    margin: '0 5px'
+    margin: '0 5px',
   },
   container: {
     padding: '20px',
     height: 'calc(100% - 40px)',
-    overflowY: 'scroll'
-  }
+    overflowY: 'scroll',
+  },
 };
 
 class EditView extends React.Component {
@@ -26,8 +25,7 @@ class EditView extends React.Component {
 
     return (
       <h4 className="header-text">
-        <span className="glyphicon glyphicon-book" style={styles.headerIcon}>
-        </span> {text.projectDescription}
+        <span className="glyphicon glyphicon-book" style={styles.headerIcon} /> {text.projectDescription}
       </h4>
     );
   }
@@ -41,8 +39,7 @@ class EditView extends React.Component {
         {/* <UndoRedoButton isRedo={true} />
         <UndoRedoButton /> */}
         <h4 className="header-text">
-          <span className="glyphicon glyphicon-list" style={styles.headerIcon}>
-          </span> {text.chapterView}
+          <span className="glyphicon glyphicon-list" style={styles.headerIcon} /> {text.chapterView}
         </h4>
       </div>
     );
@@ -53,8 +50,7 @@ class EditView extends React.Component {
 
     return (
       <h4 className="header-text">
-        <span className="glyphicon glyphicon-leaf" style={styles.headerIcon}>
-        </span> {text.mediaView}
+        <span className="glyphicon glyphicon-leaf" style={styles.headerIcon} /> {text.mediaView}
       </h4>
     );
   }
@@ -72,9 +68,11 @@ class EditView extends React.Component {
             {nodeType === 'media' ? this.renderMediaNodeHeader() : null }
           </div>
           <div style={styles.container} className="edit-view-container">
-            { nodeType === 'root' ? <EditRootViewForm initialValues={node} nodeId={node._id}/> : null }
-            { nodeType === 'media' ? <EditViewForm initialValues={node} nodeId={node._id}/> : null }
-            { nodeType === 'chapter' ? <MediaNodesTable chapterNode={node} mode={mode}/> : null }
+            { nodeType === 'root' ? (
+              <EditRootViewForm initialValues={node} nodeId={node._id} />
+            ) : null }
+            { nodeType === 'media' ? <EditViewForm initialValues={node} nodeId={node._id} /> : null }
+            { nodeType === 'chapter' ? <MediaNodesTable chapterNode={node} mode={mode} /> : null }
           </div>
         </div>
       </div>

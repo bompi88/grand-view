@@ -5,7 +5,7 @@ import TemplateTableDropdown from '../../containers/template_table_dropdown';
 
 export default class Templates extends React.Component {
   render() {
-    const {text} = this.props;
+    const { text } = this.props;
 
     return (
       <div className="container default-container animated fadeIn">
@@ -13,9 +13,9 @@ export default class Templates extends React.Component {
           <div>
             <TemplateTableDropdown {...this.props} dropdownClasses="pull-right" />
             <h3>
-              <span className="glyphicon glyphicon-tree-conifer"></span> {text.header}
+              <span className="glyphicon glyphicon-tree-conifer" /> {text.header}
             </h3>
-            <DocumentTable {...this.props}/>
+            <DocumentTable {...this.props} />
           </div>
         </div>
       </div>

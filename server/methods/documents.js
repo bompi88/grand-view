@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 // Meteor methods related to Documents view
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2017 Bjørn Bråthen, Concept NTNU
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
@@ -25,10 +25,9 @@ import { Random } from 'meteor/random';
 import * as Collections from '/lib/collections';
 
 export default function () {
-
   Meteor.methods({
 
-    'documents.create'({title, isTemplate = false, hasTemplate = 'none'}) {
+    'documents.create'({ title, isTemplate = false, hasTemplate = 'none' }) {
       check(title, String);
       check(isTemplate, Boolean);
       check(hasTemplate, String);
@@ -37,7 +36,7 @@ export default function () {
         title,
         isTemplate,
         lastModified: new Date(),
-        createdAt: new Date()
+        createdAt: new Date(),
       };
       const updateWithTemplate = hasTemplate.length && hasTemplate !== 'none';
 
@@ -49,8 +48,8 @@ export default function () {
       Collections.Documents.update({ _id: mainDocId }, {
         $set: {
           selectedNode: mainDocId,
-          isSelected: true
-        }
+          isSelected: true,
+        },
       });
 
       if (!updateWithTemplate) {
@@ -64,8 +63,8 @@ export default function () {
 
       const chapterNodes = Collections.Nodes.find({
         nodeType: 'chapter',
-        mainDocId: hasTemplate
-      }).fetch().map(node => {
+        mainDocId: hasTemplate,
+      }).fetch().map((node) => {
         node._parent = node.parent;
         delete node.parent;
         const nodeId = Random.id();
@@ -81,17 +80,17 @@ export default function () {
         const newParent = idHashMap[oldParent];
 
         Collections.Nodes.update({
-          _parent: oldParent
+          _parent: oldParent,
         }, {
           $set: {
-            parent: newParent
+            parent: newParent,
           },
           $unset: {
-            _parent: ''
-          }
+            _parent: '',
+          },
         }, {
           multi: true,
-          upsert: false
+          upsert: false,
         });
       });
 
@@ -99,7 +98,7 @@ export default function () {
     },
 
     'documents.softRemove'(ids) {
-      check(ids, Match.OneOf(String, [ String ]));
+      check(ids, Match.OneOf(String, [String]));
 
       if (_.isArray(ids)) {
         Collections.Documents.softRemove({ _id: { $in: ids } });
@@ -109,12 +108,12 @@ export default function () {
     },
 
     'documents.remove'(ids) {
-      check(ids, Match.OneOf(String, [ String ]));
+      check(ids, Match.OneOf(String, [String]));
 
       if (_.isArray(ids)) {
         Collections.Documents.remove({ _id: { $in: ids } });
-        Collections.Nodes.remove({ mainDocId: { $in: ids }});
-        Collections.Files.remove({ 'meta.docId': { $in: ids }});
+        Collections.Nodes.remove({ mainDocId: { $in: ids } });
+        Collections.Files.remove({ 'meta.docId': { $in: ids } });
       } else {
         Collections.Documents.remove({ _id: ids });
         Collections.Nodes.remove({ mainDocId: ids });
@@ -123,7 +122,7 @@ export default function () {
     },
 
     'documents.restore'(ids) {
-      check(ids, Match.OneOf(String, [ String ]));
+      check(ids, Match.OneOf(String, [String]));
       if (_.isArray(ids)) {
         ids.forEach((id) => {
           Collections.Documents.restore(id);
@@ -137,8 +136,8 @@ export default function () {
       const removedDocs = Collections.Documents.find({ removed: true }).fetch();
 
       const ids = _.pluck(removedDocs, '_id');
-      Collections.Documents.remove({ _id: { $in: ids }});
-    }
+      Collections.Documents.remove({ _id: { $in: ids } });
+    },
 
   });
 }

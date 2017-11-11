@@ -1,8 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 // Edit View Form Container
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
-import {useDeps, composeAll, compose} from 'mantra-core';
+import { useDeps, composeAll, compose } from 'mantra-core';
 import Dropzone from '../components/edit_view/dropzone';
 
 const onPropsChange = ({ context }, onData) => {
@@ -10,19 +10,19 @@ const onPropsChange = ({ context }, onData) => {
 
   const text = {
     uploadFiles: TAPi18n.__('edit_view.form.uploadFiles'),
-    uploadingFile: TAPi18n.__('edit_view.form.uploadingFile')
+    uploadingFile: TAPi18n.__('edit_view.form.uploadingFile'),
   };
 
   onData(null, { text });
 };
 
-export const depsMapper = (context, actions) => ({
+export const depsMapper = context => ({
   // setName: actions.editView.setName,
   // setDescription: actions.editView.setDescription,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   compose(onPropsChange),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(Dropzone);

@@ -5,15 +5,13 @@ import { Modal, FormGroup, ControlLabel, FormControl, Button, Checkbox } from 'r
 class CreateModal extends React.Component {
 
   renderSelectOptions() {
-    const {selectOptions} = this.props;
+    const { selectOptions } = this.props;
 
-    return selectOptions.map((option) => {
-      return <option key={option.value} value={option.value}>{option.label}</option>;
-    });
+    return selectOptions.map(option => <option key={option.value} value={option.value}>{option.label}</option>);
   }
 
   generate() {
-    const {generate} = this.props;
+    const { generate } = this.props;
     const format = ReactDOM.findDOMNode(this.refs.format).value;
     const compact = this.compact.checked;
     generate(format, compact);
@@ -28,7 +26,7 @@ class CreateModal extends React.Component {
       cancelBtn,
       generateBtn,
       selectLabel,
-      compactMode
+      compactMode,
     } = this.props;
 
     return (
@@ -47,7 +45,7 @@ class CreateModal extends React.Component {
               <FormControl ref="format" componentClass="select" placeholder="select">
                 {this.renderSelectOptions()}
               </FormControl>
-              <Checkbox inputRef={ref => { this.compact = ref; }}>
+              <Checkbox inputRef={(ref) => { this.compact = ref; }}>
                 {compactMode}
               </Checkbox>
             </FormGroup>
@@ -78,8 +76,8 @@ CreateModal.propTypes = {
   selectLabel: React.PropTypes.string,
   selectOptions: React.PropTypes.arrayOf(React.PropTypes.shape({
     value: React.PropTypes.string,
-    label: React.PropTypes.string
-  })).isRequired
+    label: React.PropTypes.string,
+  })).isRequired,
 };
 
 export default CreateModal;

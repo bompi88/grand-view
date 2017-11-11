@@ -1,9 +1,9 @@
 import ContextMenu from '../components/context_menu/context_menu';
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 import bootbox from 'bootbox';
 
 export const composer = ({ context, actions }, onData) => {
-  const { Meteor, TAPi18n, LocalState, NotificationManager } = context();
+  const { Meteor, TAPi18n, LocalState, NotificationManager, SelectedCtrl } = context();
   const a = actions();
 
   const node = LocalState.get('SELECTED_NODE');
@@ -15,50 +15,36 @@ export const composer = ({ context, actions }, onData) => {
       id: 'edit-node',
       label: TAPi18n.__('context_menus.edit'),
       icon: 'glyphicon glyphicon-pencil',
-      handleClick: (e, data) => {
+      handleClick: (e, { tableName, ...data }) => {
         const { _id } = data;
         a.contextMenus.editMediaNode(_id);
-      }
+      },
     },
     {
       data: { node },
       id: 'remove-node',
       label: TAPi18n.__('context_menus.remove'),
       icon: 'glyphicon glyphicon-remove',
-      handleClick: (e, selectedNode) => {
-        const { parent } = selectedNode;
-        const confirmationPrompt = {
-          title: 'Bekreftelse på slettingen',
-          message: 'Er du sikker på at du vil slette informasjonselementet? NB: ' +
-                    'Dette vil slette alle filer og data knyttet til dette informasjonselementet',
-          buttons: {
-            cancel: {
-              label: 'Nei'
-            },
-            confirm: {
-              label: 'Ja',
-              callback(result) {
-                if (result) {
-                  // Remove the media node
-                  a.contextMenus.removeMediaNode(e, selectedNode);
-
-                  // Set parent node in focus
-                  Meteor.call('document.setSelectedNode', LocalState.get('CURRENT_DOCUMENT'), parent);
-                  LocalState.set('CURRENT_NODE', parent);
-
-                  // Show sucess message
-                  NotificationManager.success(
-                    'Informasjonselementet ble slettet fra systemet.',
-                    'Sletting fullført'
-                  );
-                }
-              }
-            }
-          }
-        };
-        bootbox.dialog(confirmationPrompt);
-      }
-    }
+      handleClick: (e, { tableName, ...data }) => {
+        a.contextMenus.removeMediaNodeConfirmation(e, data);
+      },
+    },
+    {
+      data: { node },
+      id: 'remove-nodes',
+      label: TAPi18n.__('context_menus.removeSelected'),
+      icon: 'glyphicon glyphicon-remove',
+      handleClick: (e, { tableName }) => {
+        const hasSelected = SelectedCtrl.getSelected(tableName).length;
+        if (hasSelected) {
+          return a.contextMenus.removeSelectedNodes(tableName);
+        }
+        return NotificationManager.warning(
+          'Det var ingen markerte informasjonselementer i tabellen. Prøv å markere et eller flere elementer før du bruker denne funksjonen.',
+          'Ingen elementer å slette'
+        );
+      },
+    },
   ];
 
   onData(null, { menuItems, identifier });
@@ -66,5 +52,5 @@ export const composer = ({ context, actions }, onData) => {
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps()
+  useDeps(),
 )(ContextMenu);

@@ -1,23 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Linkify from 'react-linkify';
+import { ContextMenuLayer } from 'react-contextmenu';
 
 import EditViewForm from '../../containers/edit_view_form';
 
-
-export default class NodesTableRow extends React.Component {
+class NodesTableRow extends React.Component {
 
   constructor(props) {
     super(props);
     this.setDragable = this.setDragable.bind(this);
     this.unsetDragable = this.unsetDragable.bind(this);
     this.state = {
-      dragable: true
+      dragable: true,
     };
   }
 
   handleClick(e) {
-    const { unsetEditable, nodeId } = this.props;
+    const { unsetNodeEditable, nodeId } = this.props;
     const target = ReactDOM.findDOMNode(this.refs.target);
 
     if (!target || (e.target.className && e.target.className.indexOf('mfp') > -1)) {
@@ -28,14 +28,14 @@ export default class NodesTableRow extends React.Component {
       return;
     }
 
-    unsetEditable(nodeId);
+    unsetNodeEditable(nodeId);
   }
 
   handleKeyPress(e) {
-    const { unsetEditable, node: { _id: nodeId } } = this.props;
+    const { unsetNodeEditable, node: { _id: nodeId } } = this.props;
 
     if (e.keyCode === 27) {
-      unsetEditable(nodeId);
+      unsetNodeEditable(nodeId);
     }
   }
 
@@ -53,45 +53,53 @@ export default class NodesTableRow extends React.Component {
     const { text } = this.props;
     return (
       <li className="node-list-item">
-        <b>{text.tags}:</b> {tags.map((n) => n.label).join(', ')}
+        <b>{text.tags}:</b> {tags.map(n => n.label).join(', ')}
       </li>
     );
   }
 
   renderNode(node) {
-    const { mode, text, openLink } = this.props;
+    const { mode, text, openLink, tableName } = this.props;
+
     if (mode === 'easy') {
+      const wrappedItem = ContextMenuLayer('media', () => { return { tableName, ...node }; })(() => {
+        return (
+          <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
+            <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
+          </div>
+        );
+      });
+      return React.createElement(wrappedItem, {});
+    }
+
+    const wrappedItem = ContextMenuLayer('media', () => { return { tableName, ...node }; })(() => {
       return (
         <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
           <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
+          {node.description ? (
+            <Linkify properties={{ onClick: openLink }}>
+              <p>{node.description.trim()}</p>
+            </Linkify>
+          ) : null}
+          {this.renderCategorization(node)}
         </div>
       );
-    }
+    });
 
-    return (
-      <div style={{ lineHeight: '1.3em', whiteSpace: 'pre-wrap' }}>
-        <h5 style={{ marginTop: '0' }}>{node.name ? node.name : text.noName}</h5>
-        {node.description ? (
-          <Linkify properties={{ onClick: openLink }}>
-            <p>{node.description.trim()}</p>
-          </Linkify>
-        ) : null}
-        {this.renderCategorization(node)}
-      </div>
-    );
+    return React.createElement(wrappedItem, {});
   }
 
   renderReferences(references) {
     const { text } = this.props;
     return (
       <li className="node-list-item">
-        <b>{text.references}:</b> {references.map((n) => n.label).join(', ')}
+        <b>{text.references}:</b> {references.map(n => n.label).join(', ')}
       </li>
     );
   }
 
   renderCategorization(node) {
-    const { tags = [], references = []} = node;
+    const { tags = [], references = [] } = node;
 
     if (!tags.length && !references.length) {
       return null;
@@ -107,20 +115,20 @@ export default class NodesTableRow extends React.Component {
 
   setDragable() {
     this.setState({
-      dragable: true
+      dragable: true,
     });
   }
 
   unsetDragable() {
     this.setState({
-      dragable: false
+      dragable: false,
     });
   }
 
   render() {
     const {
       node = {},
-      setAsEditable,
+      setNodeEditable,
       isSelected,
       tableName,
       disablePointer,
@@ -130,7 +138,7 @@ export default class NodesTableRow extends React.Component {
       connectDragSource,
       connectDropTarget,
       toggleSelected,
-      sortable = true
+      sortable = true,
     } = this.props;
 
     const opacity = isDragging ? 0 : 1;
@@ -151,23 +159,31 @@ export default class NodesTableRow extends React.Component {
             className="row-item"
             onClick={toggleSelected.bind(this, node._id, tableName)}
             style={{
-              width: '20px'
+              width: '20px',
             }}
           >
-            <input type="checkbox" className="checkbox" checked={checked}/>
+            <input type="checkbox" className="checkbox" checked={checked} />
           </td>
 
           <td
             key="informationelement"
             className="row-item"
-            onClick={isInEditMode ? null : setAsEditable.bind(this, node._id)}
+            style={{
+              paddingTop: 0,
+              paddingBottom: 0,
+            }}
+            onClick={isInEditMode ? null : setNodeEditable.bind(this, node._id)}
           >
             { isInEditMode ? (
-              <div>
-                <div className="alert alert-info" dangerouslySetInnerHTML={{
-                  __html: text.closeFormInfo
-                }}>
-                </div>
+              <div style={{
+                paddingTop: '10px',
+                paddingBottom: '10px',
+              }} >
+                <div
+                  className="alert alert-info" dangerouslySetInnerHTML={{
+                    __html: text.closeFormInfo,
+                  }}
+                />
                 <EditViewForm
                   initialValues={node}
                   nodeId={node._id}
@@ -177,7 +193,7 @@ export default class NodesTableRow extends React.Component {
               </div>
             ) : this.renderNode(node)}
           </td>
-        </tr>
+        </tr>,
       )));
     }
 
@@ -191,23 +207,24 @@ export default class NodesTableRow extends React.Component {
           className="row-item"
           onClick={toggleSelected.bind(this, node._id, tableName)}
           style={{
-            width: '20px'
+            width: '20px',
           }}
         >
-          <input type="checkbox" className="checkbox" checked={checked}/>
+          <input type="checkbox" className="checkbox" checked={checked} />
         </td>
 
         <td
           key="informationelement"
           className="row-item"
-          onClick={isInEditMode ? null : setAsEditable.bind(this, node._id)}
+          onClick={isInEditMode ? null : setNodeEditable.bind(this, node._id)}
         >
           { isInEditMode ? (
             <div>
-              <div className="alert alert-info" dangerouslySetInnerHTML={{
-                __html: text.closeFormInfo
-              }}>
-              </div>
+              <div
+                className="alert alert-info" dangerouslySetInnerHTML={{
+                  __html: text.closeFormInfo,
+                }}
+              />
               <EditViewForm
                 initialValues={node}
                 nodeId={node._id}
@@ -221,3 +238,5 @@ export default class NodesTableRow extends React.Component {
     );
   }
 }
+
+export default NodesTableRow;

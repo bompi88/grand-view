@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Edit View Actions
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,13 +15,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 /* globals _require */
 
 import debounce from 'debounce';
 // import { ActionCreators } from 'redux-undo';
-const { sh } = _require('electron');
+// const { sh } = _require('electron');
 
 export default {
 
@@ -34,12 +34,9 @@ export default {
         return;
       }
       setState({
-        options: options.filter((option) => {
-          return option.value !== value;
-        })
+        options: options.filter(option => option.value !== value),
       });
     });
-
   },
 
   setCurrentTag({ LocalState }, tag) {
@@ -77,7 +74,7 @@ export default {
           return reject(err);
         }
         return resolve(Collections.Tags.find({
-          text: { $regex: inputText, $options: 'i' }
+          text: { $regex: inputText, $options: 'i' },
         }).fetch() || []);
       });
     });
@@ -85,8 +82,8 @@ export default {
 
   setTags({ LocalState, Collections, Meteor }, tags, _id) {
     Collections.Nodes.update({ _id }, { $set: {
-      tags
-    }});
+      tags,
+    } });
 
     Meteor.call('insertTags', tags);
   },
@@ -100,12 +97,9 @@ export default {
         return;
       }
       setState({
-        options: options.filter((option) => {
-          return option.value !== value;
-        })
+        options: options.filter(option => option.value !== value),
       });
     });
-
   },
 
   searchReferences({ Collections, Meteor }, inputText) {
@@ -119,17 +113,17 @@ export default {
           return reject(err);
         }
         return resolve(Collections.References.find({
-          text: { $regex: inputText, $options: 'i' }
+          text: { $regex: inputText, $options: 'i' },
         }).fetch() || []);
       });
     });
   },
 
-  setAsEditable({ LocalState, Meteor, $ }, nodeId) {
+  setNodeEditable({ LocalState, Meteor, $ }, nodeId) {
     LocalState.set('EDIT_NODE', nodeId);
   },
 
-  unsetEditable({ LocalState }, prevNodeId) {
+  unsetNodeEditable({ LocalState }, prevNodeId) {
     if (prevNodeId === LocalState.get('EDIT_NODE')) {
       LocalState.set('EDIT_NODE', null);
     }
@@ -143,7 +137,7 @@ export default {
     Meteor.setTimeout(() => {
       $('.row-item form')[0].scrollIntoView({
         behavior: 'smooth',
-        block: 'start'
+        block: 'start',
       });
       $('.row-item form input[name="name"]').focus();
     }, 500);
@@ -151,13 +145,13 @@ export default {
 
   setReferences({ LocalState, Collections, Meteor }, references, _id) {
     Collections.Nodes.update({ _id }, { $set: {
-      references
-    }});
+      references,
+    } });
 
     Meteor.call('insertReferences', references);
   },
 
-  openLink({}, e) {
+  openLink({ electron: { sh } }, e) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -165,28 +159,28 @@ export default {
     sh.openExternal(link);
   },
 
-  setDescription: debounce(({LocalState, Collections}, description, _id) => {
+  setDescription: debounce(({ LocalState, Collections }, description, _id) => {
     Collections.Nodes.update({ _id }, { $set: {
-      description
-    }});
+      description,
+    } });
   }, 200),
 
-  setName: debounce(({LocalState, Collections}, name, _id) => {
+  setName: debounce(({ LocalState, Collections }, name, _id) => {
     Collections.Nodes.update({ _id }, { $set: {
-      name
-    }});
+      name,
+    } });
   }, 20),
 
-  setRootDescription: debounce(({LocalState, Collections}, description, _id) => {
+  setRootDescription: debounce(({ LocalState, Collections }, description, _id) => {
     Collections.Documents.update({ _id }, { $set: {
-      description
-    }});
+      description,
+    } });
   }, 200),
 
-  setTitle: debounce(({LocalState, Collections}, title, _id) => {
+  setTitle: debounce(({ LocalState, Collections }, title, _id) => {
     Collections.Documents.update({ _id }, { $set: {
-      title
-    }});
-  }, 200)
+      title,
+    } });
+  }, 200),
 
 };

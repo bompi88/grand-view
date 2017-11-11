@@ -24,8 +24,8 @@ import 'react-select/dist/react-select.css';
 
 const styles = {
   marginBottom: {
-    marginBottom: '15px'
-  }
+    marginBottom: '15px',
+  },
 };
 
 const uint8Tobase64 = (uint8) => {
@@ -36,34 +36,26 @@ const uint8Tobase64 = (uint8) => {
   return window.btoa(binary);
 };
 
-const str2uint8 = (str) => {
-  const uint = new Uint8Array(str.length);
-  for (let i = 0, j = str.length; i < j; ++i) {
-    uint[i] = str.charCodeAt(i);
-  }
-  return uint;
-};
-
 class EditViewForm extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       showDialog: false,
-      file: {}
+      file: {},
     };
   }
 
   handleShowDialog(file) {
     this.setState({
       showDialog: true,
-      file
+      file,
     });
   }
 
   handleHideDialog() {
     this.setState({
-      showDialog: false
+      showDialog: false,
     });
   }
 
@@ -85,7 +77,7 @@ class EditViewForm extends React.Component {
       message: 'Er du sikker på at du vil slette Filen?',
       buttons: {
         cancel: {
-          label: 'Nei'
+          label: 'Nei',
         },
         confirm: {
           label: 'Ja',
@@ -96,12 +88,12 @@ class EditViewForm extends React.Component {
               // Show sucess message
               NotificationManager.success(
                 'Filen ble slettet fra systemet.',
-                'Sletting fullført'
+                'Sletting fullført',
               );
             }
-          }
-        }
-      }
+          },
+        },
+      },
     };
     bootbox.dialog(confirmationPrompt);
   }
@@ -110,24 +102,26 @@ class EditViewForm extends React.Component {
     const { Collections } = this.props.context();
     return (
       <li className="media" key={file._id}>
-        <div className="media-left" style={{
-          width: '120px',
-          overflow: 'hidden',
-          minWidth: '120px',
-          maxWidth: '120px',
-          margin: '0 10px'
-        }}>
-            {file.isImage ? (
-              <a
-                href="#"
-                className="image-preview center-block"
-                onClick={this.handleShowDialog.bind(this, file)}
-              >
-                <img
-                  src={Collections.Files.link(file)}
-                  height="70"
-                />
-              </a>
+        <div
+          className="media-left" style={{
+            width: '120px',
+            overflow: 'hidden',
+            minWidth: '120px',
+            maxWidth: '120px',
+            margin: '0 10px',
+          }}
+        >
+          {file.isImage ? (
+            <a
+              href="#"
+              className="image-preview center-block"
+              onClick={this.handleShowDialog.bind(this, file)}
+            >
+              <img
+                src={Collections.Files.link(file)}
+                height="70"
+              />
+            </a>
             ) : (
               <img
                 src="/images/placeholder-icon.png"
@@ -135,34 +129,32 @@ class EditViewForm extends React.Component {
               />
             )}
         </div>
-        <div className="media-body" style={{ paddingLeft: '10px'}} >
+        <div className="media-body" style={{ paddingLeft: '10px' }} >
           <h4 className="media-heading">{file.name}</h4>
           <button
             className="btn btn-xs btn-primary"
             onClick={this.openFile.bind(this, file.path)}
             style={{ marginRight: '10px' }}
-          ><span className="glyphicon glyphicon-open-file"></span> Åpne</button>
+          ><span className="glyphicon glyphicon-open-file" /> Åpne</button>
           <a
             download={file.meta && file.meta.name || file.name}
             href={Collections.Files.link(file)}
             className="btn btn-xs btn-default"
             style={{ marginRight: '10px' }}
           >
-            <span className="glyphicon glyphicon-floppy-disk"></span> Lagre som
+            <span className="glyphicon glyphicon-floppy-disk" /> Lagre som
           </a>
           <button
             className="btn btn-xs btn-danger"
             onClick={this.removeFile.bind(this, file)}
-          ><span className="glyphicon glyphicon-trash"></span> Slett</button>
+          ><span className="glyphicon glyphicon-trash" /> Slett</button>
         </div>
       </li>
     );
   }
 
   renderFiles(files) {
-    const filesRendered = files.map((file) => {
-      return this.renderFile(file);
-    });
+    const filesRendered = files.map(file => this.renderFile(file));
 
     return (
       <ul className="media-list">
@@ -186,12 +178,12 @@ class EditViewForm extends React.Component {
     return (
       <div>
 
-          <MagnificPopup
-            open={this.state.showDialog}
-            onClose={this.handleHideDialog.bind(this)}
-            src={Collections.Files.link(file)}
-            type={type}
-          />
+        <MagnificPopup
+          open={this.state.showDialog}
+          onClose={this.handleHideDialog.bind(this)}
+          src={Collections.Files.link(file)}
+          type={type}
+        />
 
       </div>
     );
@@ -201,18 +193,18 @@ class EditViewForm extends React.Component {
     const { Collections, LocalState } = this.props.context();
     const { Files } = Collections;
 
-    let uploadInstance = Files.insert({
+    const uploadInstance = Files.insert({
       file,
-      fileName: 'clipboard.' + ext,
+      fileName: `clipboard.${ext}`,
       isBase64: true,
       type,
       meta: {
         nodeId: LocalState.get('EDIT_NODE'),
-        docId: LocalState.get('CURRENT_DOCUMENT')
+        docId: LocalState.get('CURRENT_DOCUMENT'),
       },
       streams: 'dynamic',
       chunkSize: 'dynamic',
-      allowWebWorkers: true
+      allowWebWorkers: true,
     }, false);
 
     // self.setState({
@@ -245,12 +237,12 @@ class EditViewForm extends React.Component {
     });
 
     uploadInstance.on('error', (error, fileObj) => {
-      console.log('Error during upload: ' + error);
+      console.log(`Error during upload: ${error}`);
       cb(false);
     });
 
     uploadInstance.on('progress', (progress, fileObj) => {
-      console.log('Upload Percentage: ' + progress);
+      console.log(`Upload Percentage: ${progress}`);
       // Update our progress bar
       // self.setState({
       //   progress
@@ -261,7 +253,6 @@ class EditViewForm extends React.Component {
   }
 
   handlePasteMac(cb) {
-
     if (clipboard.has('public.file-url')) {
       const rawFilePath = clipboard.read('public.file-url');
       const filePath = rawFilePath.replace('file://', '');
@@ -344,7 +335,7 @@ class EditViewForm extends React.Component {
     if (hasFormat('CF_BITMAP') && hasFormat('CF_DIB')) {
       const uint8 = winClipboard.getData('CF_DIB');
 
-      var bmpHeader = new Buffer(14);
+      const bmpHeader = new Buffer(14);
       bmpHeader.writeUInt16LE(0x4d42, 0);
       bmpHeader.writeUInt32LE(uint8.byteLength + 14, 2); // size of BMP
       bmpHeader.writeUInt16LE(0, 6); // bfreserved1
@@ -387,7 +378,7 @@ class EditViewForm extends React.Component {
           if (!pasted) {
             NotificationManager.warning(
               TAPi18n.__('notifications.could_not_paste_as_file.message'),
-              TAPi18n.__('notifications.could_not_paste_as_file.title')
+              TAPi18n.__('notifications.could_not_paste_as_file.title'),
             );
           }
         });
@@ -398,7 +389,7 @@ class EditViewForm extends React.Component {
           if (!pasted) {
             NotificationManager.warning(
               TAPi18n.__('notifications.could_not_paste_as_file.message'),
-              TAPi18n.__('notifications.could_not_paste_as_file.title')
+              TAPi18n.__('notifications.could_not_paste_as_file.title'),
             );
           }
         });
@@ -407,7 +398,7 @@ class EditViewForm extends React.Component {
       if (platform === 'linux') {
         NotificationManager.warning(
           'Lim inn som fil er dessverre ikke støttet på Linux-plattformer enda.',
-          TAPi18n.__('notifications.could_not_paste_as_file.title')
+          TAPi18n.__('notifications.could_not_paste_as_file.title'),
         );
       }
     }
@@ -422,7 +413,7 @@ class EditViewForm extends React.Component {
       text,
       files,
       setDragable,
-      unsetDragable
+      unsetDragable,
     } = this.props;
 
     const file = this.state.file;
@@ -461,12 +452,12 @@ class EditViewForm extends React.Component {
         <Field
           name="tags"
           component={TagsSelector}
-          multi={true}
+          multi
           label={text.tagsPlaceholder}
           placeholder={text.tagsLabel}
           style={styles.marginBottom}
           nodeId={nodeId}
-          promptTextCreator={(i) => { return text.createTag + ' \"' + i + '\"'; }}
+          promptTextCreator={i => `${text.createTag} \"${i}\"`}
           removeText={text.removeItem}
           noResultsText={text.noResultsText}
           onMouseEnter={unsetDragable}
@@ -475,21 +466,21 @@ class EditViewForm extends React.Component {
         <Field
           name="references"
           component={ReferencesSelector}
-          multi={true}
+          multi
           label={text.referencesPlaceholder}
           placeholder={text.referencesLabel}
           style={styles.marginBottom}
           nodeId={nodeId}
-          promptTextCreator={(i) => { return text.createReference + ' \"' + i + '\"'; }}
+          promptTextCreator={i => `${text.createReference} \"${i}\"`}
           removeText={text.removeItem}
           noResultsText={text.noResultsText}
           onMouseEnter={unsetDragable}
           onMouseLeave={setDragable}
         />
-      <label>{text.attachments}</label>
-      { files ? this.renderFiles(files) : null }
-      <Dropzone />
-      { file ? this.renderMagnificPopup(file) : null }
+        <label>{text.attachments}</label>
+        { files ? this.renderFiles(files) : null }
+        <Dropzone />
+        { file ? this.renderMagnificPopup(file) : null }
       </form>
     );
   }
@@ -501,5 +492,5 @@ export default reduxForm({
     return state.form && state.form.present;
   },
   enableReinitialize: true,
-  destroyOnUnmount: false
+  destroyOnUnmount: false,
 })(EditViewForm);

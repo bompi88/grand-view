@@ -1,8 +1,8 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 // Form prototypes
 //--------------------------------------------------------------------------------------------------
 // Methods used to render inputs by redux-form.
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 
@@ -18,7 +18,7 @@ export const renderTextInput = (field) => {
     label,
     onChange,
     onMouseEnter,
-    onMouseLeave
+    onMouseLeave,
   } = field;
 
   let customInput;
@@ -28,7 +28,7 @@ export const renderTextInput = (field) => {
       ...input,
       onChange: (e) => {
         onChange(e, input.onChange);
-      }
+      },
     };
   } else {
     customInput = input;
@@ -48,7 +48,7 @@ export const renderTextInput = (field) => {
         onMouseLeave={onMouseLeave}
         {...customInput}
       />
-      <FormControl.Feedback className="form-control-feedback-default"/>
+      <FormControl.Feedback className="form-control-feedback-default" />
     </FormGroup>
   );
 };

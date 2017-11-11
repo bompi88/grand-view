@@ -1,6 +1,6 @@
 import NodesTable from '../components/table/nodes_table_category';
 
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
 export const composer = ({
   context,
@@ -8,11 +8,11 @@ export const composer = ({
   nodes,
   category,
   type,
-  text: { tableHeader, isEmpty }
+  text: { tableHeader, isEmpty },
 }, onData) => {
   const { TAPi18n, LocalState } = context();
 
-  const tableName = 'mediaNodes' + type + category;
+  const tableName = `mediaNodes${type}${category}`;
   const editNode = LocalState.get('EDIT_NODE');
   const text = {
     informationelement: TAPi18n.__('edit_view.informationelement'),
@@ -24,19 +24,19 @@ export const composer = ({
     noName: TAPi18n.__('no_title'),
     chooseAction: TAPi18n.__('chooseAction'),
     removeSelected: TAPi18n.__('removeSelected'),
-    tableHeader
+    tableHeader,
   };
 
   const props = {
     tableName,
     text,
-    editNode
+    editNode,
   };
 
   if (nodes) {
     onData(null, {
       nodes,
-      ...props
+      ...props,
     });
   } else {
     onData(null, props);
@@ -47,22 +47,22 @@ export const composer = ({
 
 export const depsMapper = (context, actions) => ({
   addMediaNode: actions.editView.addMediaNode,
-  unsetEditable: actions.editView.unsetEditable,
+  unsetNodeEditable: actions.editView.unsetNodeEditable,
   toggleSelected: actions.templates.toggleSelected,
   isSelected: actions.templates.isSelected,
   selectAll: actions.templates.selectAll,
   deselectAll: actions.templates.deselectAll,
   hasAllSelected: actions.templates.hasAllSelected,
   isDisabledOnNone: actions.templates.isDisabledOnNone,
-  setAsEditable: actions.editView.setAsEditable,
+  setNodeEditable: actions.editView.setNodeEditable,
   clearState: actions.templates.clearState,
   openLink: actions.editView.openLink,
   updateMediaNodePosition: actions.editView.updateMediaNodePosition,
   removeSelectedNodes: actions.contextMenus.removeSelectedNodes,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(NodesTable);

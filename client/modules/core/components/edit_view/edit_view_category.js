@@ -9,13 +9,13 @@ const styles = {
   },
   headerIcon: {
     fontSize: '15px',
-    margin: '0 5px'
+    margin: '0 5px',
   },
   container: {
     padding: '20px',
     height: 'calc(100% - 40px)',
-    overflowY: 'scroll'
-  }
+    overflowY: 'scroll',
+  },
 };
 
 class EditViewCategory extends React.Component {
@@ -29,8 +29,7 @@ class EditViewCategory extends React.Component {
         {/* <UndoRedoButton isRedo={true} />
         <UndoRedoButton /> */}
         <h4 className="header-text">
-          <span className="glyphicon glyphicon-list" style={styles.headerIcon}>
-          </span> {text.header}
+          <span className="glyphicon glyphicon-list" style={styles.headerIcon} /> {text.header}
         </h4>
       </div>
     );
@@ -52,7 +51,8 @@ class EditViewCategory extends React.Component {
                 mode={mode}
                 text={text}
                 category={category}
-                type={type} />
+                type={type}
+              />
             ) : (
               <p>{text.selectToProceed}</p>
             )}

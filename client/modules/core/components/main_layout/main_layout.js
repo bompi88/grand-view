@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // TopNavbar SCSS Styles
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,13 +15,13 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 import 'react-notifications/lib/notifications.css';
 
 import React from 'react';
 import { Provider } from 'react-redux';
-import {NotificationContainer} from 'react-notifications';
+import { NotificationContainer } from 'react-notifications';
 import TopNavBar from '../../containers/top_nav_bar';
 import Modals from '../modals/modals';
 import ContextMenuRoot from '../../containers/context_menu_root';
@@ -42,12 +42,12 @@ class MainLayout extends React.Component {
 
           <TopNavBar />
 
-          <div className="clippy"></div>
+          <div className="clippy" />
 
           {content()}
 
           <Modals />
-          <NotificationContainer/>
+          <NotificationContainer />
         </div>
       </Provider>
     );

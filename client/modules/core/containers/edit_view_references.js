@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 // Edit View Container
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
 import { useDeps, composeAll, composeWithTracker } from 'mantra-core';
 import EditViewCategory from '../components/edit_view/edit_view_category';
@@ -26,7 +26,7 @@ const onPropsChange = ({ context, doc }, onData) => {
     header: TAPi18n.__('edit_view.referenceHeader'),
     tableHeader: TAPi18n.__('edit_view.tableHeaderReferences'),
     isEmpty: TAPi18n.__('edit_view.isEmptyReferences'),
-    selectToProceed: TAPi18n.__('edit_view.selectToProceedReferences')
+    selectToProceed: TAPi18n.__('edit_view.selectToProceedReferences'),
   };
 
   if (reference && Meteor.subscribe('nodes.byReference', docId, reference).ready()) {
@@ -35,26 +35,26 @@ const onPropsChange = ({ context, doc }, onData) => {
     if (reference === 'undefined') {
       fetchedNodes = Collections.Nodes.find({
         mainDocId: docId,
-        $or: [ { references: { $exists: false } }, { references: { $size: 0 } } ],
-        nodeType: 'media'
+        $or: [{ references: { $exists: false } }, { references: { $size: 0 } }],
+        nodeType: 'media',
       }, {
         sort: { name: 1 },
-        reactive: false
+        reactive: false,
       }).fetch();
     } else {
       fetchedNodes = Collections.Nodes.find({
         mainDocId: docId,
         'references.label': reference,
-        nodeType: 'media'
+        nodeType: 'media',
       }, {
         sort: { name: 1 },
-        reactive: false
+        reactive: false,
       }).fetch();
     }
 
     const nodes = fetchedNodes.sort((a, b) => {
-      let nameA = prepareName(a.name, text.noName);
-      let nameB = prepareName(b.name, text.noName);
+      const nameA = prepareName(a.name, text.noName);
+      const nameB = prepareName(b.name, text.noName);
 
       return nameA.toLowerCase().localeCompare(nameB.toLowerCase(), 'nb');
     });
@@ -65,11 +65,11 @@ const onPropsChange = ({ context, doc }, onData) => {
 };
 
 export const depsMapper = (context, actions) => ({
-  unsetEditable: actions.editView.unsetEditable,
-  context: () => context
+  unsetNodeEditable: actions.editView.unsetNodeEditable,
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(onPropsChange),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(EditViewCategory);

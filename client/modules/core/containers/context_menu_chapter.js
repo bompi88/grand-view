@@ -12,7 +12,16 @@ export const composer = ({ context, actions }, onData) => {
       id: 'add-subchapter',
       label: TAPi18n.__('context_menus.add_subchapter'),
       icon: 'glyphicon glyphicon-plus',
-      handleClick: a.contextMenus.addSubchapter
+      handleClick: a.contextMenus.addSubchapter,
+    },
+    {
+      id: 'duplicate-node',
+      label: TAPi18n.__('context_menus.duplicate'),
+      icon: 'glyphicon glyphicon-duplicate',
+      handleClick: (e, data) => {
+        const { _id } = data;
+        a.contextMenus.duplicateChapterNode(_id);
+      },
     },
     {
       id: 'rename-chapter',
@@ -21,14 +30,14 @@ export const composer = ({ context, actions }, onData) => {
       handleClick: (e, data) => {
         const { _id } = data;
         a.node.renameNode(_id);
-      }
+      },
     },
     {
       id: 'remove-chapter',
       label: TAPi18n.__('context_menus.remove'),
       icon: 'glyphicon glyphicon-remove',
-      handleClick: a.contextMenus.removeChapter
-    }
+      handleClick: a.contextMenus.removeChapter,
+    },
   ];
 
   onData(null, { menuItems, identifier });
@@ -36,5 +45,5 @@ export const composer = ({ context, actions }, onData) => {
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps()
+  useDeps(),
 )(ContextMenu);

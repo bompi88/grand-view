@@ -27,14 +27,14 @@ export default class MagnificPopup extends React.Component {
           src: props.src,
           type: props.type ? props.type : 'inline',
           iframe: {
-            preload: false
+            preload: false,
           },
         },
         callbacks: {
           close() {
             self.props.onClose();
-          }
-        }
+          },
+        },
       });
     } else {
       $.magnificPopup.close();

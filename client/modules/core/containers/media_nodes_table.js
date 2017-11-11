@@ -1,12 +1,12 @@
 import NodesTable from '../components/table/nodes_table';
 
-import {useDeps, composeWithTracker, composeAll} from 'mantra-core';
+import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
 export const composer = ({ context, clearState, chapterNode }, onData) => {
   const { Meteor, Collections, TAPi18n, LocalState } = context();
 
   const { _id: parent } = chapterNode;
-  const tableName = 'mediaNodes' + parent;
+  const tableName = `mediaNodes${parent}`;
   const editNode = LocalState.get('EDIT_NODE');
 
   const text = {
@@ -19,29 +19,29 @@ export const composer = ({ context, clearState, chapterNode }, onData) => {
     attachments: TAPi18n.__('edit_view.attachments'),
     noName: TAPi18n.__('no_title'),
     chooseAction: TAPi18n.__('chooseAction'),
-    removeSelected: TAPi18n.__('removeSelected')
+    removeSelected: TAPi18n.__('removeSelected'),
   };
 
   const props = {
     tableName,
     text,
-    editNode
+    editNode,
   };
 
 
   if (Meteor.subscribe('nodes.byParent', parent).ready()) {
     const nodeList = Collections.Nodes.find({
       parent,
-      nodeType: 'media'
+      nodeType: 'media',
     }, {
       sort: {
-        position: 1
-      }
+        position: 1,
+      },
     }).fetch();
 
     onData(null, {
       nodes: nodeList,
-      ...props
+      ...props,
     });
   } else {
     onData(null, props);
@@ -52,22 +52,22 @@ export const composer = ({ context, clearState, chapterNode }, onData) => {
 
 export const depsMapper = (context, actions) => ({
   addMediaNode: actions.editView.addMediaNode,
-  unsetEditable: actions.editView.unsetEditable,
+  unsetNodeEditable: actions.editView.unsetNodeEditable,
   toggleSelected: actions.templates.toggleSelected,
   isSelected: actions.templates.isSelected,
   selectAll: actions.templates.selectAll,
   deselectAll: actions.templates.deselectAll,
   hasAllSelected: actions.templates.hasAllSelected,
   isDisabledOnNone: actions.templates.isDisabledOnNone,
-  setAsEditable: actions.editView.setAsEditable,
+  setNodeEditable: actions.editView.setNodeEditable,
   clearState: actions.templates.clearState,
   openLink: actions.editView.openLink,
   updateMediaNodePosition: actions.editView.updateMediaNodePosition,
   removeSelectedNodes: actions.contextMenus.removeSelectedNodes,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(NodesTable);

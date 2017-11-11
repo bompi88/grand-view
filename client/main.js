@@ -1,8 +1,9 @@
-import {createApp} from 'mantra-core';
+import { createApp } from 'mantra-core';
 import initContext from './configs/context';
 import initMenu from './configs/menu';
 import initi18n from './configs/i18n';
 import initMoment from './configs/moment';
+import autoUpdater from './configs/autoupdate-notify';
 
 // Modules
 import coreModule from './modules/core';
@@ -13,7 +14,7 @@ import modalsModule from './modules/modals';
 const coreReducers = coreModule.reducers;
 
 const reducers = {
-  ...coreReducers
+  ...coreReducers,
 };
 
 // Init context
@@ -23,6 +24,7 @@ const context = initContext({ reducers });
 initMenu(context);
 initi18n(context);
 initMoment(context);
+autoUpdater(context);
 
 // Create app
 const app = createApp(context);

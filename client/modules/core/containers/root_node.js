@@ -7,10 +7,10 @@ export const composer = ({ context }, onData) => {
 
 export const depsMapper = (context, actions) => ({
   handleClick: actions.node.handleClick,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(RootNode);

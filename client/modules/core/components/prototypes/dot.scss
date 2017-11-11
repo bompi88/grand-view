@@ -21,7 +21,6 @@ $waves-fully-transparent-color: rgba(0, 150, 255, 0);
 }
 
 .dot-bright-blue:focus {
-  -webkit-animation: vibrate .1s linear infinite;
   animation: vibrate .1s linear infinite;
   box-shadow: 0 0 0 8px $waves-fully-transparent-color, 0 0 0 16px $waves-transparent-color;
   outline: 0;
@@ -33,18 +32,7 @@ $waves-fully-transparent-color: rgba(0, 150, 255, 0);
 }
 
 .waves {
-  -webkit-animation: waves 1s linear infinite;
   animation: waves 1s linear infinite;
-}
-
-@-webkit-keyframes waves {
-  from {
-    box-shadow: 0 0 $waves-fully-transparent-color, 0 0 0 1px $waves-transparent-color;
-  }
-
-  to {
-    box-shadow: 0 0 0 8px $waves-fully-transparent-color, 0 0 0 16px $waves-fully-transparent-color;
-  }
 }
 
 @keyframes waves {

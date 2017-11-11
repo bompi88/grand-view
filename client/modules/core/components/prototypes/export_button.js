@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // ExportButton Component
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 import React from 'react';
 
@@ -23,13 +23,13 @@ import React from 'react';
 class ExportButton extends React.Component {
 
   render() {
-    const {onClick} = this.props;
-    const classes = 'btn btn-default export' +
-      (this.props.className ? ' ' + this.props.className : '');
+    const { onClick } = this.props;
+    const classes = `btn btn-default export${
+      this.props.className ? ` ${this.props.className}` : ''}`;
 
     return (
       <div className={classes} onClick={onClick}>
-        <span className="glyphicon glyphicon-export" aria-hidden="true"></span> {this.props.label}
+        <span className="glyphicon glyphicon-export" aria-hidden="true" /> {this.props.label}
       </div>
     );
   }

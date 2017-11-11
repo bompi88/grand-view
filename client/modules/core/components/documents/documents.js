@@ -5,7 +5,7 @@ import DocumentTableDropdown from '../../containers/document_table_dropdown';
 
 export default class Documents extends React.Component {
   render() {
-    const {text} = this.props;
+    const { text } = this.props;
 
     return (
       <div className="container default-container animated fadeIn">
@@ -13,7 +13,7 @@ export default class Documents extends React.Component {
           <div>
             <DocumentTableDropdown {...this.props} dropdownClasses="pull-right" />
             <h3>
-              <span className="glyphicon glyphicon-book"></span> {text.header}
+              <span className="glyphicon glyphicon-book" /> {text.header}
             </h3>
             <DocumentTable {...this.props} />
           </div>

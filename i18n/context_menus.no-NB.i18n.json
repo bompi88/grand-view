@@ -4,7 +4,9 @@
     "add_subchapter": "Legg til underkapittel",
     "add_media_node": "Legg til informasjonselement",
     "remove": "Slett",
+    "removeSelected": "Slett markerte",
     "rename": "Gi nytt navn",
+    "duplicate": "Dupliser",
     "edit": "Rediger"
   }
 }

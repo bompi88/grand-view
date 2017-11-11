@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Context Menus Actions
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,35 +15,27 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 const actions = {
 
   addChapter(context, e, data) {
     const { node } = data;
     const { Helpers, Collections } = context;
-    const parent = Collections.Documents.findOne({_id: node.node});
+    const parent = Collections.Documents.findOne({ _id: node.node });
 
     Helpers.insertNodeOfType(context, parent, 'chapter');
   },
 
-  removeRootNode({NotificationManager, TAPi18n}) {
+  removeRootNode({ NotificationManager, TAPi18n }) {
     NotificationManager.warning(
       TAPi18n.__('notifications.context_menu_root.message'),
-      TAPi18n.__('notifications.context_menu_root.title')
+      TAPi18n.__('notifications.context_menu_root.title'),
     );
   },
 
   addSubchapter(context, e, parent) {
-    const { Helpers, NotificationManager, TAPi18n } = context;
-
-    // if (parent.level >= 4) {
-    //   return NotificationManager.warning(
-    //     TAPi18n.__('notifications.max_number_of_subchapters.message'),
-    //     TAPi18n.__('notifications.max_number_of_subchapters.title')
-    //   );
-    // }
-
+    const { Helpers } = context;
     Helpers.insertNodeOfType(context, parent, 'chapter');
   },
 
@@ -57,10 +49,10 @@ const actions = {
 
     const confirmationPrompt = {
       title: 'Bekreftelse på slettingen',
-      message: `Er du sikker på at du vil slette kapittelet "${name ? name : 'Uten navn'}", sammen med alle underkapitler og informasjonselement? NB! Du kan ikke angre på dette valget.`,
+      message: `Er du sikker på at du vil slette kapittelet "${name || 'Uten navn'}", sammen med alle underkapitler og informasjonselement? NB! Du kan ikke angre på dette valget.`,
       buttons: {
         cancel: {
-          label: 'Nei'
+          label: 'Nei',
         },
         confirm: {
           label: 'Ja',
@@ -71,24 +63,58 @@ const actions = {
               // Show sucess message
               NotificationManager.success(
                 'Kapittelet ble slettet fra systemet.',
-                'Sletting fullført'
+                'Sletting fullført',
               );
             }
-          }
-        }
-      }
+          },
+        },
+      },
     };
     bootbox.dialog(confirmationPrompt);
   },
 
-  removeMediaNode(context, e, { _id, mainDocId }) {
-    const { Helpers } = context;
-    Helpers.removeNode(context, {_id, mainDocId});
+  duplicateChapterNode({ Meteor, LocalState }, nodeId) {
+    Meteor.call('document.duplicateChapterNode', LocalState.get('CURRENT_DOCUMENT'), nodeId);
   },
 
-  editMediaNode({Meteor, LocalState}, _id) {
-    Meteor.call('document.setSelectedNode', LocalState.get('CURRENT_DOCUMENT'), _id);
-    LocalState.set('CURRENT_NODE', _id);
+  removeMediaNode(context, e, { _id, mainDocId }) {
+    const { Helpers } = context;
+    Helpers.removeNode(context, { _id, mainDocId });
+  },
+
+  removeMediaNodeConfirmation(context, e, node) {
+    const { NotificationManager, bootbox } = context;
+    const message = `Er du sikker på at du vil slette informasjonselement <b>${node.name}</b>? NB: ` +
+      'Dette vil slette alle filer og data knyttet til disse informasjonselementene</br></br>';
+
+    const confirmationPrompt = {
+      title: 'Bekreftelse på slettingen',
+      message,
+      buttons: {
+        cancel: {
+          label: 'Nei',
+        },
+        confirm: {
+          label: 'Ja',
+          callback(result) {
+            if (result) {
+              // Remove the media nodes
+              actions.removeMediaNode(context, e, node);
+              // Show sucess message
+              NotificationManager.success(
+                'Informasjonselementet ble slettet fra systemet.',
+                'Sletting fullført',
+              );
+            }
+          },
+        },
+      },
+    };
+    bootbox.dialog(confirmationPrompt);
+  },
+
+  editMediaNode({ Meteor, LocalState }, _id) {
+    LocalState.set('EDIT_NODE', _id);
   },
 
   removeSelectedNodes(context, tableName, e) {
@@ -97,15 +123,15 @@ const actions = {
       SelectedCtrl,
       Collections,
       TAPi18n,
-      bootbox
+      bootbox,
     } = context;
 
     const selectedIds = SelectedCtrl.getSelected(tableName);
 
     const nodes = Collections.Nodes.find({
       _id: {
-        $in: selectedIds
-      }
+        $in: selectedIds,
+      },
     });
 
 
@@ -123,7 +149,7 @@ const actions = {
       message,
       buttons: {
         cancel: {
-          label: 'Nei'
+          label: 'Nei',
         },
         confirm: {
           label: 'Ja',
@@ -137,15 +163,15 @@ const actions = {
               // Show sucess message
               NotificationManager.success(
                 'Informasjonselementene ble slettet fra systemet.',
-                'Sletting fullført'
+                'Sletting fullført',
               );
             }
-          }
-        }
-      }
+          },
+        },
+      },
     };
     bootbox.dialog(confirmationPrompt);
-  }
+  },
 };
 
 export default actions;

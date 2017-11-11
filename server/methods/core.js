@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 // Server Methods
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2017 Bjørn Bråthen, Concept NTNU
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
@@ -32,7 +32,7 @@ const contentTypes = [
   'image/png',
   'image/gif',
   'image/tif',
-  'application/pdf'
+  'application/pdf',
 ];
 
 const getSupportedLocaleFromElectron = (locale) => {
@@ -47,14 +47,13 @@ const getSupportedLocaleFromElectron = (locale) => {
 };
 
 export default function () {
-
   Meteor.methods({
 
     setLocale(locale = 'en') {
       if (Settings.find().count() === 0) {
         Settings.insert({
           _id: 'user',
-          language: getSupportedLocaleFromElectron(locale)
+          language: getSupportedLocaleFromElectron(locale),
         });
       }
     },
@@ -66,12 +65,12 @@ export default function () {
 
       HTTP.call('GET', url, {
         npmRequestOptions: {
-          encoding: null
+          encoding: null,
         },
-        followRedirects: true
+        followRedirects: true,
       }, (error, response) => {
         if (error) {
-          console.log( error );
+          console.log(error);
 
         // If the link is accessible
         } else if (response.statusCode === 200) {
@@ -82,8 +81,8 @@ export default function () {
               fileName: 'Uten Navn',
               meta: {
                 nodeId,
-                docId
-              }
+                docId,
+              },
             });
           }
         }
@@ -94,11 +93,11 @@ export default function () {
       check(mainDocId, String);
 
       Nodes.update({
-        mainDocId
+        mainDocId,
       }, {
-        $set: { isCollapsed: true }
+        $set: { isCollapsed: true },
       }, {
-        multi: true
+        multi: true,
       });
     },
 
@@ -107,21 +106,20 @@ export default function () {
 
       Nodes.update({
         mainDocId,
-        isCollapsed: true
+        isCollapsed: true,
       }, {
-        $set: { isCollapsed: false }
+        $set: { isCollapsed: false },
       }, {
-        multi: true
+        multi: true,
       });
     },
 
     importResources(docs = [], nodes = [], fileDocs = [], srcPath) {
-
       const idTableNodes = {};
 
-      const importDocs = _.isArray(docs) ? docs : [ docs ];
-      const importNodes = _.isArray(nodes) ? nodes : [ nodes ];
-      const importFileDocs = _.isArray(fileDocs) ? fileDocs : [ fileDocs ];
+      const importDocs = _.isArray(docs) ? docs : [docs];
+      const importNodes = _.isArray(nodes) ? nodes : [nodes];
+      const importFileDocs = _.isArray(fileDocs) ? fileDocs : [fileDocs];
 
       _.each(importDocs, (doc, key, obj) => {
         const { _id } = doc;
@@ -131,7 +129,7 @@ export default function () {
           'restoredBy',
           'restored',
           'selectedNode',
-          'isSelected'
+          'isSelected',
         ]);
 
         idTableNodes[_id] = Documents.insert(importDoc);
@@ -142,7 +140,7 @@ export default function () {
       // Import nodes
       _.each(importNodes, (node) => {
         const { _id, tags, references } = node;
-        const newNode = _.omit(node, [ '_id', 'isSelected' ]);
+        const newNode = _.omit(node, ['_id', 'isSelected']);
         newNode.mainDocId = idTableNodes[newNode.mainDocId];
 
         idTableNodes[_id] = Nodes.insert(newNode);
@@ -150,13 +148,13 @@ export default function () {
         if (tags && tags.length) {
           _.each(tags, (tag) => {
             Tags.update({
-              value: tag.value.toLowerCase()
+              value: tag.value.toLowerCase(),
             }, {
               $setOnInsert: {
-                text: tag.label
-              }
+                text: tag.text || tag.label,
+              },
             }, {
-              upsert: true
+              upsert: true,
             });
           });
         }
@@ -164,13 +162,13 @@ export default function () {
         if (references && references.length) {
           _.each(references, (reference) => {
             References.update({
-              value: reference.value.toLowerCase()
+              value: reference.value.toLowerCase(),
             }, {
               $setOnInsert: {
-                text: reference.label
-              }
+                text: reference.text || reference.label,
+              },
             }, {
-              upsert: true
+              upsert: true,
             });
           });
         }
@@ -184,38 +182,37 @@ export default function () {
           name,
           type,
           size,
-          ext
+          ext,
         } = fileObj;
 
         const oldPath = path.resolve(path.join(srcPath, _id));
         const fileId = Random.id();
-        const newPath = path.resolve(Globals.basePath, 'files', fileId + '.' + ext);
+        const newPath = path.resolve(Globals.basePath, 'files', `${fileId}.${ext}`);
 
         fs.rename(oldPath, newPath, () => {
           Files.addFile(newPath, {
             fileName: name,
             meta: {
               nodeId: idTableNodes[nodeId],
-              docId: idTableNodes[docId]
+              docId: idTableNodes[docId],
             },
             type,
             size,
-            fileId
+            fileId,
           }, (error, fileRef) => {
-
             if (error) {
               return console.log(error);
             }
 
             Nodes.update({
-              _id
+              _id,
             }, {
               $set: {
-                fileId: fileRef._id
-              }
+                fileId: fileRef._id,
+              },
             }, {
               multi: true,
-              upsert: false
+              upsert: false,
             });
           });
         });
@@ -225,11 +222,11 @@ export default function () {
       // Update parent refs in children
       nodes.forEach(({ _id: nodeId, parent }) => {
         Nodes.update({
-          _id: idTableNodes[nodeId]
+          _id: idTableNodes[nodeId],
         }, {
           $set: {
-            parent: idTableNodes[parent]
-          }
+            parent: idTableNodes[parent],
+          },
         });
       });
 
@@ -242,18 +239,18 @@ export default function () {
     },
 
     insertTags(tags) {
-      tags.forEach(({ value, label }) => {
+      tags.forEach(({ value, text }) => {
         if (!Tags.findOne({ value })) {
           Tags.insert({
             value,
-            label,
-            count: 1
+            text,
+            count: 1,
           });
         } else {
           Tags.update({
-            value
+            value,
           }, {
-            $inc: { count: 1 }
+            $inc: { count: 1 },
           });
         }
       });
@@ -265,32 +262,31 @@ export default function () {
     },
 
     insertReferences(references) {
-      references.forEach(({ value, label }) => {
+      references.forEach(({ value, text }) => {
         if (!References.findOne({ value })) {
           References.insert({
             value,
-            label,
-            count: 1
+            text,
+            count: 1,
           });
         } else {
           References.update({
-            value
+            value,
           }, {
-            $inc: { count: 1 }
+            $inc: { count: 1 },
           });
         }
       });
     },
 
-    updateMediaNodePosition({ toPos, _id, toParent}) {
-
+    updateMediaNodePosition({ toPos, _id, toParent }) {
       let newParent;
 
       const node = Nodes.findOne({ _id });
 
       const {
         parent: oldParent,
-        position: fromPos
+        position: fromPos,
       } = node;
 
       if (!toParent) {
@@ -300,42 +296,42 @@ export default function () {
       Nodes.update({
         parent: oldParent,
         position: {
-          $gt: fromPos
+          $gt: fromPos,
         },
         nodeType: 'media',
-        _id: { $ne: _id }
+        _id: { $ne: _id },
       }, {
         $inc: {
-          position: -1
-        }
+          position: -1,
+        },
       }, {
         multi: true,
-        upsert: false
+        upsert: false,
       }, () => {
         Nodes.update({
           parent: newParent,
           position: {
-            $gte: toPos + 1
+            $gte: toPos + 1,
           },
           nodeType: 'media',
-          _id: { $ne: _id }
+          _id: { $ne: _id },
         }, {
           $inc: {
-            position: 1
-          }
+            position: 1,
+          },
         }, {
           multi: true,
-          upsert: false
+          upsert: false,
         }, () => {
           Nodes.update({
-            _id
+            _id,
           }, {
             $set: {
               parent: newParent,
-              position: toPos + 1
-            }
+              position: toPos + 1,
+            },
           }, {
-            upsert: false
+            upsert: false,
           });
         });
       });
@@ -347,17 +343,17 @@ export default function () {
       Nodes.update({
         parent: fromParent,
         position: {
-          $gt: fromPos
+          $gt: fromPos,
         },
         nodeType: 'chapter',
-        _id: { $ne: _id }
+        _id: { $ne: _id },
       }, {
         $inc: {
-          position: -1
-        }
+          position: -1,
+        },
       }, {
         multi: true,
-        upsert: false
+        upsert: false,
       }, () => {
         let toPosOriginal;
         if (nodeAboveId) {
@@ -367,28 +363,28 @@ export default function () {
         Nodes.update({
           parent: toParent,
           position: {
-            $gte: toPos || toPosOriginal + 1
+            $gte: toPos || toPosOriginal + 1,
           },
           nodeType: 'chapter',
-          _id: { $ne: _id }
+          _id: { $ne: _id },
         }, {
           $inc: {
-            position: 1
-          }
+            position: 1,
+          },
         }, {
           multi: true,
-          upsert: false
+          upsert: false,
         }, () => {
           Nodes.update({
-            _id
+            _id,
           }, {
             $set: {
               parent: toParent,
               position: toPos || toPosOriginal + 1,
-              level: newParent && newParent.level + 1 || 1
-            }
+              level: newParent && newParent.level + 1 || 1,
+            },
           }, {
-            upsert: false
+            upsert: false,
           });
         });
       });
@@ -404,30 +400,30 @@ export default function () {
       Nodes.update({
         parent: droppedNode.parent,
         position: {
-          $gt: droppedNode.position
+          $gt: droppedNode.position,
         },
         nodeType: 'chapter',
-        _id: { $ne: _id }
+        _id: { $ne: _id },
       }, {
         $inc: {
-          position: -1
-        }
+          position: -1,
+        },
       }, {
         multi: true,
-        upsert: false
+        upsert: false,
       }, () => {
         Nodes.update({
-          _id
+          _id,
         }, {
           $set: {
             parent,
             position,
-            level: parentNode.level + 1
-          }
+            level: parentNode.level + 1,
+          },
         }, {
-          upsert: false
+          upsert: false,
         });
       });
-    }
+    },
   });
 }

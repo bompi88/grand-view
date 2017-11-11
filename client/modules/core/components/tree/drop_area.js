@@ -8,16 +8,16 @@ class DropAreaComponent extends Component {
 
     return connectDropTarget(
       <span
-      className={className}
-      style={{
-        height: isOver ? '30px' : '15px',
-        display: 'block',
-        backgroundColor: isOver ? '#ddd' : 'inherit',
-        border: isOver ? '2px dashed #ccc' : 0,
-        marginTop: isOver ? '5px' : 0,
-        marginBottom: isOver ? '5px' : 0
-      }}
-      ></span>
+        className={className}
+        style={{
+          height: isOver ? '30px' : '15px',
+          display: 'block',
+          backgroundColor: isOver ? '#ddd' : 'inherit',
+          border: isOver ? '2px dashed #ccc' : 0,
+          marginTop: isOver ? '5px' : 0,
+          marginBottom: isOver ? '5px' : 0,
+        }}
+      />,
     );
   }
 }
@@ -45,7 +45,7 @@ const dropSpecs = {
     const { nodeType } = monitor.getItem() || {};
 
     return nodeType !== 'media';
-  }
+  },
 
 };
 
@@ -54,7 +54,7 @@ const collect = (connect, monitor) => {
   const isPossible = nodeType !== 'media';
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: isPossible ? monitor.isOver() : false
+    isOver: isPossible ? monitor.isOver() : false,
   };
 };
 
@@ -79,7 +79,7 @@ const dropSpecsZero = {
     const { nodeType } = monitor.getItem() || {};
 
     return nodeType !== 'media';
-  }
+  },
 
 };
 
@@ -88,7 +88,7 @@ const collectZero = (connect, monitor) => {
   const isPossible = nodeType !== 'media';
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: isPossible ? monitor.isOver() : false
+    isOver: isPossible ? monitor.isOver() : false,
   };
 };
 

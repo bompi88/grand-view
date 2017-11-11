@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 // Meteor methods operating on a single document
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2017 Bjørn Bråthen, Concept NTNU
 //
@@ -15,7 +15,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
 import { Meteor } from 'meteor/meteor';
 import { check, Match } from 'meteor/check';
@@ -24,7 +24,6 @@ import { Random } from 'meteor/random';
 import * as Collections from '/lib/collections';
 
 export default function () {
-
   Meteor.methods({
 
     'document.setSelectedNode'(_id, nodeId) {
@@ -32,56 +31,56 @@ export default function () {
       check(nodeId, String);
 
       Collections.Documents.update({
-        _id
+        _id,
       }, {
         $set: {
-          selectedNode: nodeId
-        }
+          selectedNode: nodeId,
+        },
       });
 
       Collections.Nodes.update({
-        mainDocId: _id
+        mainDocId: _id,
       }, {
         $set: {
-          isSelected: false
-        }
+          isSelected: false,
+        },
       }, {
-        multi: true
+        multi: true,
       });
 
       Collections.Documents.update({
-        _id
+        _id,
       }, {
         $set: {
-          isSelected: false
-        }
+          isSelected: false,
+        },
       }, {
-        multi: false
+        multi: false,
       });
 
       if (_id === nodeId) {
         Collections.Documents.update({
-          _id: nodeId
+          _id: nodeId,
         }, {
           $set: {
-            isSelected: true
-          }
+            isSelected: true,
+          },
         });
       } else {
         Collections.Nodes.update({
-          _id: nodeId
+          _id: nodeId,
         }, {
           $set: {
-            isSelected: true
-          }
+            isSelected: true,
+          },
         });
       }
     },
 
-    'document.removeNode'({_id, mainDocId, files}) {
+    'document.removeNode'({ _id, mainDocId, files }) {
       check(_id, String);
       check(mainDocId, String);
-      check(undefined, Match.Maybe([ String ]));
+      check(undefined, Match.Maybe([String]));
 
       const node2beRemoved = Collections.Nodes.findOne({ _id });
 
@@ -109,16 +108,16 @@ export default function () {
       Collections.Nodes.update({
         parent: node2beRemoved.parent,
         position: {
-          $gt: node2beRemoved.position
+          $gt: node2beRemoved.position,
         },
-        _id: { $ne: node2beRemoved._id }
+        _id: { $ne: node2beRemoved._id },
       }, {
         $inc: {
-          position: -1
-        }
+          position: -1,
+        },
       }, {
         multi: true,
-        upsert: false
+        upsert: false,
       }, () => {
         removeNode({ _id, mainDocId, files });
       });
@@ -131,7 +130,7 @@ export default function () {
         ...doc,
         isTemplate: true,
         lastChanged: new Date(),
-        createdAt: new Date()
+        createdAt: new Date(),
       });
 
       const idHashMap = {};
@@ -139,8 +138,8 @@ export default function () {
 
       const chapterNodes = Collections.Nodes.find({
         nodeType: 'chapter',
-        mainDocId: oldDocId
-      }).fetch().map(node => {
+        mainDocId: oldDocId,
+      }).fetch().map((node) => {
         node._parent = node.parent;
         delete node.parent;
         const nodeId = Random.id();
@@ -156,21 +155,91 @@ export default function () {
         const newParent = idHashMap[oldParent];
 
         Collections.Nodes.update({
-          _parent: oldParent
+          _parent: oldParent,
         }, {
           $set: {
-            parent: newParent
+            parent: newParent,
           },
           $unset: {
-            _parent: ''
-          }
+            _parent: '',
+          },
         }, {
           multi: true,
-          upsert: false
+          upsert: false,
         });
       });
 
       return true;
-    }
+    },
+    'document.duplicateChapterNode'(docId, nodeId) {
+      check(docId, String);
+      check(nodeId, String);
+
+      // Duplicate parent node and set position to be below the selected node
+      const selectedNode = Collections.Nodes.findOne(nodeId);
+
+      if (!selectedNode) {
+        return;
+      }
+
+      const { position, parent, _id: selectedNodeId, ...dupNode } = selectedNode;
+
+      // update positions for nodes with position > selected position => position + 1
+      Collections.Nodes.update({
+        parent,
+        position: { $gt: position },
+      }, {
+        $inc: {
+          position: 1,
+        },
+      }, {
+        multi: true,
+      });
+
+      // insert new node at selected position + 1
+      const ourParentNodeId = Collections.Nodes.insert({
+        parent,
+        position: position + 1,
+        ...dupNode,
+      });
+
+      // map to store old parent to new parent values
+      const parentMap = {
+        [selectedNodeId]: ourParentNodeId,
+      };
+
+      const parentQueue = [selectedNodeId];
+
+      while (parentQueue.length > 0) {
+        const currentParent = parentQueue.shift();
+
+        Collections.Nodes.find({
+          parent: currentParent,
+        }).forEach(function({ parent: ourParent, _id: willQueue, ...ourNode }) {
+          const { nodeType } = ourNode;
+
+          if (nodeType !== 'chapter') {
+            return;
+          }
+
+          const newParentRef = parentMap[ourParent];
+          const newNodeId = Collections.Nodes.insert({
+            parent: newParentRef,
+            ...ourNode,
+          });
+          parentQueue.push(willQueue);
+          parentMap[willQueue] = newNodeId;
+        });
+      }
+
+      // update last changed
+      Collections.Documents.update({
+        _id: docId,
+      }, {
+        $set: {
+          lastChanged: new Date(),
+        },
+      });
+    },
   });
 }

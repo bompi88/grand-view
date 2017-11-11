@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 // Clippy Component
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 //
 // Copyright 2015 Concept
 //
@@ -15,10 +15,10 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////
 
 import React from 'react';
-import {clippy} from 'meteor/macrozone:clippy';
+import { clippy } from 'meteor/macrozone:clippy';
 
 class Clippy extends React.Component {
 
@@ -28,13 +28,13 @@ class Clippy extends React.Component {
   }
 
   mountClippy() {
-    const {openLanguageModal, text} = this.props;
-    const {$} = this.props.context();
+    const { openLanguageModal, text } = this.props;
+    const { $ } = this.props.context();
 
     clippy.load('Peedy', (agent) => {
       const uuid = Math.random().toString();
 
-      this.setState({agent, uuid});
+      this.setState({ agent, uuid });
 
       agent.show();
 
@@ -52,9 +52,9 @@ class Clippy extends React.Component {
           top = event.pageY;
         },
         mouseup(event) {
-          var deltaX = event.pageX - left;
-          var deltaY = event.pageY - top;
-          var euclidean = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+          const deltaX = event.pageX - left;
+          const deltaY = event.pageY - top;
+          const euclidean = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
           if (euclidean < 5) {
             agent.stopCurrent();
@@ -63,17 +63,17 @@ class Clippy extends React.Component {
               openLanguageModal();
             });
           }
-        }
+        },
       });
     });
   }
 
   unMountClippy(cb) {
-    const {$} = this.props.context();
+    const { $ } = this.props.context();
 
     if (this.state.agent) {
       this.state.agent.hide(false, () => {
-        $('.clippy[data-uuid="' + this.state.uuid + '"]').remove();
+        $(`.clippy[data-uuid="${this.state.uuid}"]`).remove();
         $('.clippy-balloon').remove();
 
         if (cb) {
@@ -96,16 +96,16 @@ class Clippy extends React.Component {
   }
 
   render() {
-    return <div></div>;
+    return <div />;
   }
 }
 
 Clippy.propTypes = {
   text: React.PropTypes.shape({
     welcome: React.PropTypes.string.isRequired,
-    hideMe: React.PropTypes.string.isRequired
+    hideMe: React.PropTypes.string.isRequired,
   }),
-  openLanguageModal: React.PropTypes.func.isRequired
+  openLanguageModal: React.PropTypes.func.isRequired,
 };
 
 export default Clippy;

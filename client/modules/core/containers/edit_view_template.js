@@ -1,6 +1,6 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 // Edit View Container
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////////////////////////////
 
 import { useDeps, composeAll, composeWithTracker } from 'mantra-core';
 import EditViewTemplate from '../components/edit_view/edit_view_template';
@@ -11,7 +11,7 @@ const onPropsChange = ({ context, doc }, onData) => {
   const docId = LocalState.get('CURRENT_DOCUMENT');
 
   const text = {
-    header: TAPi18n.__('edit_view.chapterView')
+    header: TAPi18n.__('edit_view.chapterView'),
   };
 
 
@@ -34,5 +34,5 @@ const onPropsChange = ({ context, doc }, onData) => {
 
 export default composeAll(
   composeWithTracker(onPropsChange),
-  useDeps()
+  useDeps(),
 )(EditViewTemplate);

@@ -1,24 +1,9 @@
-////////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------------------------------------
 // Selected Elements Controller
-////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright 2015 Concept
-//
-// Licensed under the Apache License, Version 2.0 (the 'License');
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an 'AS IS' BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-////////////////////////////////////////////////////////////////////////////////
+//--------------------------------------------------------------------------------------------------
 
-import {Tracker} from 'meteor/tracker';
-import {_} from 'meteor/underscore';
+import { Tracker } from 'meteor/tracker';
+import { _ } from 'meteor/underscore';
 
 export default {
   selectedItems: {},
@@ -40,7 +25,7 @@ export default {
     this.dep.depend();
 
     if (this.selectedItems[table]) {
-      var diff = _.difference(ids, this.selectedItems[table]);
+      const diff = _.difference(ids, this.selectedItems[table]);
       return ids && ids.length && diff.length === 0;
     }
 
@@ -48,7 +33,7 @@ export default {
   },
 
   addAll(table, ids) {
-    var tmp = this.selectedItems[table];
+    const tmp = this.selectedItems[table];
     if (tmp && tmp.length) {
       this.selectedItems[table] = _.union(tmp, ids);
     } else {
@@ -64,7 +49,7 @@ export default {
       this.selectedItems[table] = [];
     }
 
-    var index = this.selectedItems[table].indexOf(id);
+    const index = this.selectedItems[table].indexOf(id);
 
     if (index === -1) {
       this.selectedItems[table].push(id);
@@ -75,9 +60,9 @@ export default {
   },
 
   remove(table, id) {
-    if (!this.selectedItems[table]) { return; }
+    if (!this.selectedItems[table]) { return []; }
 
-    var index = this.selectedItems[table].indexOf(id);
+    const index = this.selectedItems[table].indexOf(id);
 
     if (index > -1) {
       this.selectedItems[table].splice(index, 1);
@@ -88,14 +73,12 @@ export default {
   },
 
   removeAll(table, ids) {
+    if (!this.selectedItems[table]) { return []; }
 
-    if (!this.selectedItems[table]) { return; }
-
-    var selected = this.selectedItems;
+    const selected = this.selectedItems;
 
     ids.forEach((id) => {
-
-      var index = selected[table].indexOf(id);
+      const index = selected[table].indexOf(id);
 
       if (index > -1) {
         selected[table].splice(index, 1);
@@ -118,5 +101,5 @@ export default {
 
     this.dep.changed();
     return this.selectedItems;
-  }
+  },
 };

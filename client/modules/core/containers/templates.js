@@ -4,7 +4,7 @@ import EditColumn from '../components/table/edit_column';
 import { useDeps, composeWithTracker, composeAll } from 'mantra-core';
 
 export const composer = ({ context, clearState }, onData) => {
-  const {Meteor, Collections, TAPi18n, LocalState} = context();
+  const { Meteor, Collections, TAPi18n, LocalState } = context();
 
   const tableName = 'templates';
 
@@ -17,7 +17,7 @@ export const composer = ({ context, clearState }, onData) => {
     lastModified: TAPi18n.__('templates.last_modified'),
     isEmpty: TAPi18n.__('templates.is_empty'),
     remove: TAPi18n.__('templates.remove'),
-    export: TAPi18n.__('templates.export')
+    export: TAPi18n.__('templates.export'),
   };
 
   const columns = [
@@ -25,42 +25,42 @@ export const composer = ({ context, clearState }, onData) => {
       label: TAPi18n.__('templates.title'),
       field: 'title',
       key: 'title',
-      sortable: true
+      sortable: true,
     },
     {
       label: TAPi18n.__('templates.created_at'),
       field: 'createdAt',
       key: 'created-at',
       sortable: true,
-      transform: 'formatDateRelative'
+      transform: 'formatDateRelative',
     },
     {
       label: TAPi18n.__('templates.last_modified'),
       field: 'lastModified',
       key: 'last-modified',
       sortable: true,
-      transform: 'formatDateRelative'
+      transform: 'formatDateRelative',
     },
     {
       component: EditColumn,
-      key: 'edit-column'
-    }
+      key: 'edit-column',
+    },
   ];
 
   const props = {
     tableName,
     text,
-    columns
+    columns,
   };
 
   if (Meteor.subscribe('templates.all').ready() && Meteor.subscribe('templates.all').ready()) {
     const documents = Collections.Documents.find({
-      isTemplate: true
+      isTemplate: true,
     }, { sort }).fetch();
 
     onData(null, {
       documents,
-      ...props
+      ...props,
     });
   } else {
     onData(null, props);
@@ -83,10 +83,10 @@ export const depsMapper = (context, actions) => ({
   toggleSort: actions.templates.toggleSort,
   getSort: actions.templates.getSort,
   clearState: actions.templates.clearState,
-  context: () => context
+  context: () => context,
 });
 
 export default composeAll(
   composeWithTracker(composer),
-  useDeps(depsMapper)
+  useDeps(depsMapper),
 )(Templates);
