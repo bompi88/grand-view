@@ -93,8 +93,10 @@ builder.build({
   publish: "always"
 })
 .then(() => {
+  console.log('finnished')
   // handle result
 })
 .catch((error) => {
+  console.log(error);
   // handle error
 })
