@@ -20,7 +20,7 @@
   "mongo_version": "3.2.0",
   "devDependencies": {
     "@meteorjs/eslint-config-meteor": "^1.0.5",
-    "adm-zip": "^0.4.7",
+    "adm-zip": "^0.4.11",
     "babel-core": "6.x.x",
     "babel-eslint": "^7.2.3",
     "babel-plugin-react-require": "2.x.x",
