@@ -31,7 +31,7 @@
     "babel-root-slash-import": "^1.1.0",
     "chai": "3.x.x",
     "colors": "^1.1.2",
-    "electron": "^1.6.10",
+    "electron": "^9.4.0",
     "electron-builder": "^19.27.7",
     "electron-packager": "^8.7.1",
     "electron-rebuild": "^1.5.7",
