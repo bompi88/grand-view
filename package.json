@@ -49,7 +49,7 @@
     "react-addons-test-utils": "^15.0.0",
     "shelljs": "^0.5.3",
     "sinon": "1.17.x",
-    "tar": "^2.2.1"
+    "tar": "^4.4.18"
   },
   "dependencies": {
     "archiver": "^1.0.0",
