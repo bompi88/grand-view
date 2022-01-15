@@ -47,7 +47,7 @@
     "minimist": "^1.2.0",
     "mocha": "2.x.x",
     "react-addons-test-utils": "^15.0.0",
-    "shelljs": "^0.5.3",
+    "shelljs": "^0.8.5",
     "sinon": "1.17.x",
     "tar": "^2.2.1"
   },
