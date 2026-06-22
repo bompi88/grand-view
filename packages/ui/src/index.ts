@@ -6,6 +6,7 @@ export {
   useWorkspace,
   type Workspace,
   type OpenedDoc,
+  type SyncMode,
 } from './providers/WorkspaceContext.js';
 export { useDocVersion } from './hooks/useDocVersion.js';
 export { useNodeTree } from './hooks/useNodeTree.js';

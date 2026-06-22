@@ -5,8 +5,13 @@ import {
   createLibrary,
   LIBRARY_GUID,
 } from '@gv/core';
-import { LocalIndexeddbProvider, P2pProvider, type SyncProvider } from '@gv/sync-providers';
-import type { Workspace, OpenedDoc } from '@gv/ui';
+import {
+  LocalIndexeddbProvider,
+  P2pProvider,
+  RelayProvider,
+  type SyncProvider,
+} from '@gv/sync-providers';
+import type { Workspace, OpenedDoc, SyncMode } from '@gv/ui';
 import { newDeviceId, type DocumentId, type PresenceUser } from '@gv/shared';
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
@@ -21,6 +26,13 @@ const SIGNALING = String(import.meta.env.VITE_GV_SIGNALING ?? '')
   .split(',')
   .map((s: string) => s.trim())
   .filter(Boolean);
+
+/** Self-hosted relay URL (enables 'relay' sync mode), e.g. wss://gv-relay.fly.dev */
+const RELAY_URL = String(import.meta.env.VITE_GV_RELAY ?? '').trim();
+
+function syncModeKey(id: DocumentId): string {
+  return `gv-sync-mode:${id}`;
+}
 
 const NAMES = ['Otter', 'Falcon', 'Birch', 'Cedar', 'Heron', 'Lynx', 'Fjord', 'Aurora'];
 const COLORS = ['#3b5bdb', '#2f9e44', '#e8590c', '#9c36b5', '#0c8599', '#c2255c'];
@@ -52,7 +64,8 @@ function localUser(): PresenceUser {
 interface Internal {
   doc: import('yjs').Doc;
   persistence: SyncProvider;
-  live: P2pProvider;
+  /** The live provider (absent in local-only mode). */
+  live?: SyncProvider & { setUser?: (u: PresenceUser) => void };
 }
 
 /**
@@ -66,6 +79,16 @@ export async function createLocalWorkspace(): Promise<Workspace> {
   await libProvider.connect(library, LIBRARY_GUID);
 
   const opened = new Map<DocumentId, Internal>();
+
+  function getMode(id: DocumentId): SyncMode {
+    try {
+      const v = localStorage.getItem(syncModeKey(id)) as SyncMode | null;
+      if (v === 'local' || v === 'p2p' || v === 'relay') return v;
+    } catch {
+      /* ignore */
+    }
+    return 'p2p';
+  }
 
   /** Load a document's content with its own provider, not tracked in `opened`. */
   async function loadDetached(id: DocumentId): Promise<{ doc: import('yjs').Doc; dispose: () => Promise<void> }> {
@@ -96,30 +119,37 @@ export async function createLocalWorkspace(): Promise<Workspace> {
   return {
     library,
     async open(id): Promise<OpenedDoc> {
-      const existing = opened.get(id);
       const room = `gv-doc-${id}`;
-      if (!existing) {
+      if (!opened.get(id)) {
         const { doc } = createDocument({ id, createdAt: Date.now() });
         const persistence = new LocalIndexeddbProvider();
         await persistence.connect(doc, room);
-        const live = new P2pProvider({ signaling: SIGNALING, user });
-        await live.connect(doc, room);
+
+        const mode = getMode(id);
+        let live: Internal['live'];
+        if (mode === 'relay' && RELAY_URL) {
+          live = new RelayProvider({ url: RELAY_URL, user });
+        } else if (mode !== 'local') {
+          live = new P2pProvider({ signaling: SIGNALING, user });
+        }
+        if (live) await live.connect(doc, room);
         opened.set(id, { doc, persistence, live });
       }
       const rec = opened.get(id)!;
+      const active = rec.live ?? rec.persistence;
       return {
         doc: rec.doc,
-        provider: rec.live,
-        awareness: rec.live.awareness,
+        provider: active,
+        awareness: rec.live?.awareness,
         user,
-        setUser: (u) => rec.live.setUser(u),
+        setUser: (u) => rec.live?.setUser?.(u),
       };
     },
     async close(id) {
       const rec = opened.get(id);
       if (!rec) return;
       opened.delete(id);
-      await rec.live.disconnect();
+      await rec.live?.disconnect();
       await rec.persistence.disconnect();
       rec.doc.destroy();
     },
@@ -135,5 +165,14 @@ export async function createLocalWorkspace(): Promise<Workspace> {
     instantiateTemplate(templateId, title) {
       return fork(templateId, title, false);
     },
+    getSyncMode: getMode,
+    setSyncMode(id, mode) {
+      try {
+        localStorage.setItem(syncModeKey(id), mode);
+      } catch {
+        /* ignore */
+      }
+    },
+    relayConfigured: RELAY_URL.length > 0,
   };
 }

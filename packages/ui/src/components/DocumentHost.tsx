@@ -9,6 +9,7 @@ import { useNav } from '../state/nav.js';
 import { useSelection } from '../state/selection.js';
 import { usePresence } from '../hooks/usePresence.js';
 import { PresenceBar } from './presence/PresenceBar.js';
+import { SyncMenu } from './SyncMenu.js';
 import { WorkArea } from './WorkArea.js';
 import { Icon } from './Icon.js';
 
@@ -33,6 +34,7 @@ export function DocumentHost({ id }: { id: DocumentId }) {
   const goLibrary = useNav((s) => s.goLibrary);
   const select = useSelection((s) => s.select);
   const [opened, setOpened] = useState<OpenedDoc | null>(null);
+  const [epoch, setEpoch] = useState(0);
   const presence = usePresence(opened?.awareness);
 
   useEffect(() => {
@@ -47,7 +49,7 @@ export function DocumentHost({ id }: { id: DocumentId }) {
       active = false;
       void ws.close(id);
     };
-  }, [ws, id, select]);
+  }, [ws, id, select, epoch]);
 
   if (!opened) {
     return <div className="gv-loading">Opening…</div>;
@@ -72,6 +74,11 @@ export function DocumentHost({ id }: { id: DocumentId }) {
             </div>
             <div className="gv-doc-bar-right">
               <PresenceBar users={presence} />
+              <SyncMenu
+                id={id}
+                provider={opened.provider}
+                onReload={() => setEpoch((e) => e + 1)}
+              />
             </div>
           </div>
           <WorkArea />

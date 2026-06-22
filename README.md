@@ -109,9 +109,19 @@ library + workspace; **templates** (save-as-template / new-from-template, deep
 copy with id remap); **collaborative cursors** in note bodies; and the open
 document is remembered across reloads (per-tab).
 
-**Next:** the global tag/reference registry; more sync providers (self-hosted
-relay, file-sync via iCloud/Dropbox); then Phase 3 (DOCX export, `.gvd`/`.gvt`
-import/export + legacy migration, code signing, auto-update).
+**Phase 2 (collaboration & sync) — complete.** Pluggable sync providers, all on
+the same Yjs core, selectable per document with a live status indicator:
+- **P2P** (y-webrtc) — same-origin tabs over BroadcastChannel (zero infra);
+  cross-device with `VITE_GV_SIGNALING`.
+- **File-sync** (`FileSyncProvider`) — per-device append-only logs in a
+  cloud-replicated folder (iCloud/Dropbox/Syncthing); merge-on-open, converges
+  with no clobber (unit-tested).
+- **Relay** (`@gv/relay-server`, Hocuspocus) — self-hostable Docker/binary for
+  always-on cross-device collaboration (`VITE_GV_RELAY`); round-trip tested.
+- Presence avatars + collaborative cursors.
+
+**Next — Phase 3:** DOCX export, `.gvd`/`.gvt` import/export + legacy migration,
+code signing, auto-update, i18n completion.
 
 ## License
 

@@ -993,6 +993,34 @@ button {
   color: var(--muted);
 }
 
+/* sync menu + status dot */
+.gv-sync {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gv-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--faint);
+  flex-shrink: 0;
+}
+
+.gv-dot-connected {
+  background: #2f9e44;
+  box-shadow: 0 0 0 3px rgba(47, 158, 68, 0.18);
+}
+
+.gv-dot-connecting {
+  background: var(--warn);
+}
+
+.gv-dot-error {
+  background: var(--danger);
+}
+
 /* ---- misc ---- */
 .gv-muted-text {
   color: var(--muted);

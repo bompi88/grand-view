@@ -1,0 +1,27 @@
+{
+  "name": "@gv/relay-server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "gv-relay": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/index.js",
+    "lint": "eslint src",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@hocuspocus/server": "^2.15.2"
+  },
+  "devDependencies": {
+    "@gv/sync-providers": "workspace:*",
+    "@gv/shared": "workspace:*",
+    "@types/node": "^22.10.5",
+    "@types/ws": "^8.5.13",
+    "ws": "^8.18.0",
+    "y-websocket": "^2.1.0",
+    "yjs": "^13.6.20"
+  }
+}

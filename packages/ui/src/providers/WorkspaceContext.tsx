@@ -3,6 +3,9 @@ import type * as Y from 'yjs';
 import type { DocumentId, PresenceUser } from '@gv/shared';
 import type { Awareness, SyncProvider } from '@gv/sync-providers';
 
+/** Per-document live sync transport. */
+export type SyncMode = 'local' | 'p2p' | 'relay';
+
 export interface OpenedDoc {
   doc: Y.Doc;
   /** The live provider whose kind is surfaced in the UI. */
@@ -33,6 +36,12 @@ export interface Workspace {
   makeTemplate(sourceId: DocumentId, title: string): Promise<DocumentId>;
   /** Create a new document from a template. Returns the new document's id. */
   instantiateTemplate(templateId: DocumentId, title: string): Promise<DocumentId>;
+  /** This device's chosen sync mode for a document (default 'p2p'). */
+  getSyncMode(id: DocumentId): SyncMode;
+  /** Set this device's sync mode for a document (applied on next open). */
+  setSyncMode(id: DocumentId, mode: SyncMode): void;
+  /** Whether a relay URL is configured (enables the 'relay' mode). */
+  readonly relayConfigured: boolean;
 }
 
 const WorkspaceContext = createContext<Workspace | null>(null);
