@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { newFileId, type FileMeta, type NodeId } from '@gv/shared';
 import { usePlatform } from '../../providers/PlatformContext.js';
 import { useNodeOps } from '../../hooks/useNodeOps.js';
+import { Icon } from '../Icon.js';
 
 function FileThumb({ blobRef }: { blobRef: string }) {
   const platform = usePlatform();
@@ -63,18 +64,33 @@ export function Attachments({ nodeId, files }: { nodeId: NodeId; files: FileMeta
 
   return (
     <div className="gv-attachments" data-testid="attachments">
-      <label className="gv-labels-title">Attachments</label>
+      <label className="gv-labels-title">
+        <Icon name="image" size={13} />
+        Attachments
+      </label>
 
       {files.length > 0 && (
         <ul className="gv-file-list">
           {files.map((f) => (
             <li key={f.id} className="gv-file" data-testid={`file-${f.id}`}>
-              {f.isImage ? <FileThumb blobRef={f.blobRef} /> : <span className="gv-file-icon">📄</span>}
+              {f.isImage ? (
+                <FileThumb blobRef={f.blobRef} />
+              ) : (
+                <span className="gv-file-badge">
+                  <Icon name="note" size={18} />
+                </span>
+              )}
               <span className="gv-file-name">{f.name}</span>
               <span className="gv-file-actions">
-                <button onClick={() => void open(f)}>Open</button>
-                <button onClick={() => void download(f)}>Download</button>
-                <button onClick={() => void remove(f)}>Delete</button>
+                <button className="gv-icon-btn" title="Open" onClick={() => void open(f)}>
+                  <Icon name="open" size={15} />
+                </button>
+                <button className="gv-icon-btn" title="Download" onClick={() => void download(f)}>
+                  <Icon name="download" size={15} />
+                </button>
+                <button className="gv-icon-btn" title="Delete" onClick={() => void remove(f)}>
+                  <Icon name="trash" size={15} />
+                </button>
               </span>
             </li>
           ))}
@@ -108,7 +124,7 @@ export function Attachments({ nodeId, files }: { nodeId: NodeId; files: FileMeta
             }}
           />
         </label>
-        <span> · drag &amp; drop · </span>
+        <span className="gv-muted-text">· drag &amp; drop ·</span>
         <button className="gv-link" onClick={() => void onPasteImage()}>
           paste image
         </button>

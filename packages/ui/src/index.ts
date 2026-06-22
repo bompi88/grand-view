@@ -15,6 +15,7 @@ export { usePresence } from './hooks/usePresence.js';
 export { useSelection } from './state/selection.js';
 export { useNav } from './state/nav.js';
 export { PresenceBar } from './components/presence/PresenceBar.js';
+export { Icon } from './components/Icon.js';
 export { TreeView } from './components/TreeView.js';
 export { Tree } from './components/tree/Tree.js';
 export { WorkArea } from './components/WorkArea.js';

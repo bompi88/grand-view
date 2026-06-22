@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Label, NodeId } from '@gv/shared';
 import { useNodeOps } from '../../hooks/useNodeOps.js';
+import { Icon } from '../Icon.js';
 
 /**
  * Edit a node's tags or references. Labels are {value,label}; here value==label
@@ -41,14 +42,17 @@ export function LabelEditor({
   }
 
   return (
-    <div className="gv-labels" data-testid={`labels-${kind}`}>
-      <label className="gv-labels-title">{title}</label>
+    <div className="gv-field" data-testid={`labels-${kind}`}>
+      <label className="gv-labels-title">
+        <Icon name={kind === 'tags' ? 'template' : 'open'} size={13} />
+        {title}
+      </label>
       <div className="gv-chips">
         {labels.map((l) => (
           <span key={l.value} className="gv-chip">
             {l.label}
             <button aria-label={`Remove ${l.label}`} onClick={() => remove(l.value)}>
-              ×
+              <Icon name="x" size={12} />
             </button>
           </span>
         ))}

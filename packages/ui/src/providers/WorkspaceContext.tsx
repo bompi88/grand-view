@@ -9,6 +9,8 @@ export interface OpenedDoc {
   provider: SyncProvider;
   /** Presence/awareness, when a live provider is attached. */
   awareness?: Awareness;
+  /** This client's presence identity. */
+  user?: PresenceUser;
   /** Update this client's presence identity. */
   setUser?: (user: PresenceUser) => void;
 }
@@ -27,6 +29,10 @@ export interface Workspace {
   close(id: DocumentId): Promise<void>;
   /** Permanently drop a document's persisted content + attachments. */
   destroyContent(id: DocumentId): Promise<void>;
+  /** Create a template from an existing document. Returns the new template's id. */
+  makeTemplate(sourceId: DocumentId, title: string): Promise<DocumentId>;
+  /** Create a new document from a template. Returns the new document's id. */
+  instantiateTemplate(templateId: DocumentId, title: string): Promise<DocumentId>;
 }
 
 const WorkspaceContext = createContext<Workspace | null>(null);

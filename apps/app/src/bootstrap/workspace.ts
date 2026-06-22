@@ -1,7 +1,15 @@
-import { createDocument, createLibrary, LIBRARY_GUID } from '@gv/core';
+import {
+  addDocumentEntry,
+  copyDocumentContent,
+  createDocument,
+  createLibrary,
+  LIBRARY_GUID,
+} from '@gv/core';
 import { LocalIndexeddbProvider, P2pProvider, type SyncProvider } from '@gv/sync-providers';
 import type { Workspace, OpenedDoc } from '@gv/ui';
 import { newDeviceId, type DocumentId, type PresenceUser } from '@gv/shared';
+
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
 /**
  * Signaling servers for cross-device WebRTC. Empty by default → same-origin
@@ -59,6 +67,32 @@ export async function createLocalWorkspace(): Promise<Workspace> {
 
   const opened = new Map<DocumentId, Internal>();
 
+  /** Load a document's content with its own provider, not tracked in `opened`. */
+  async function loadDetached(id: DocumentId): Promise<{ doc: import('yjs').Doc; dispose: () => Promise<void> }> {
+    const { doc } = createDocument({ id, createdAt: Date.now() });
+    const provider = new LocalIndexeddbProvider();
+    await provider.connect(doc, `gv-doc-${id}`);
+    return {
+      doc,
+      dispose: async () => {
+        await provider.disconnect();
+        doc.destroy();
+      },
+    };
+  }
+
+  /** Copy source content into a freshly-registered library entry. */
+  async function fork(sourceId: DocumentId, title: string, isTemplate: boolean): Promise<DocumentId> {
+    const targetId = addDocumentEntry(library, { title, isTemplate, createdAt: Date.now() });
+    const src = await loadDetached(sourceId);
+    const tgt = await loadDetached(targetId);
+    copyDocumentContent(src.doc, tgt.doc);
+    await sleep(700); // let IndexedDB persist the copied content
+    await src.dispose();
+    await tgt.dispose();
+    return targetId;
+  }
+
   return {
     library,
     async open(id): Promise<OpenedDoc> {
@@ -77,6 +111,7 @@ export async function createLocalWorkspace(): Promise<Workspace> {
         doc: rec.doc,
         provider: rec.live,
         awareness: rec.live.awareness,
+        user,
         setUser: (u) => rec.live.setUser(u),
       };
     },
@@ -93,6 +128,12 @@ export async function createLocalWorkspace(): Promise<Workspace> {
         const req = indexedDB.deleteDatabase(`gv-doc-${id}`);
         req.onsuccess = req.onerror = req.onblocked = () => resolve();
       });
+    },
+    makeTemplate(sourceId, title) {
+      return fork(sourceId, title, true);
+    },
+    instantiateTemplate(templateId, title) {
+      return fork(templateId, title, false);
     },
   };
 }

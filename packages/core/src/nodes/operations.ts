@@ -8,9 +8,10 @@ import {
   type NodeId,
   type NodeType,
 } from '@gv/shared';
-import { buildNodeMap, nodesMap, trashMap, type NodeMap } from '../doc/schema.js';
+import { buildNodeMap, nodesMap, trashMap } from '../doc/schema.js';
 import { keyBetween, keyForAppend } from '../ordering/fractional.js';
 import { getChildren } from './selectors.js';
+import { cloneNodeWith, deepCloneNodeMap } from './clone.js';
 
 /** Where to place a node among its siblings. Defaults to appending at the end. */
 export type Anchor =
@@ -127,80 +128,6 @@ function collectSubtree(doc: Y.Doc, rootId: NodeId): NodeId[] {
   return out;
 }
 
-// ---- Deep clone of a node's contents (incl. collaborative description) ----
-
-function cloneXmlNode(src: Y.XmlElement | Y.XmlText | Y.XmlHook): Y.XmlElement | Y.XmlText {
-  if (src instanceof Y.XmlText) {
-    const t = new Y.XmlText();
-    t.applyDelta(src.toDelta());
-    return t;
-  }
-  const el = new Y.XmlElement((src as Y.XmlElement).nodeName);
-  const attrs = (src as Y.XmlElement).getAttributes();
-  for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v as string);
-  const children = (src as Y.XmlElement).toArray().map((c) => cloneXmlNode(c));
-  if (children.length) el.insert(0, children as (Y.XmlElement | Y.XmlText)[]);
-  return el;
-}
-
-function cloneXmlFragment(src: Y.XmlFragment): Y.XmlFragment {
-  const frag = new Y.XmlFragment();
-  const children = src.toArray().map((c) => cloneXmlNode(c));
-  if (children.length) frag.insert(0, children as (Y.XmlElement | Y.XmlText)[]);
-  return frag;
-}
-
-function cloneLabelArray(src: Y.Array<Y.Map<unknown>> | undefined): Y.Array<Y.Map<unknown>> {
-  const arr = new Y.Array<Y.Map<unknown>>();
-  if (!src) return arr;
-  const copies = src.toArray().map((m) => {
-    const c = new Y.Map();
-    for (const [k, v] of m.entries()) c.set(k, v);
-    return c;
-  });
-  if (copies.length) arr.insert(0, copies);
-  return arr;
-}
-
-/** Deep-clone a single value held in a node Y.Map (Y types must be detached to re-attach). */
-function cloneValue(v: unknown): unknown {
-  if (v instanceof Y.XmlFragment) return cloneXmlFragment(v);
-  if (v instanceof Y.Array) return cloneLabelArray(v as Y.Array<Y.Map<unknown>>);
-  if (v instanceof Y.Map) {
-    const m = new Y.Map();
-    for (const [k, val] of v.entries()) m.set(k, cloneValue(val));
-    return m;
-  }
-  return v;
-}
-
-/** Faithful detached copy of a node Y.Map (preserves id/parentId/position/removedAt/etc.). */
-function deepCloneNodeMap(src: NodeMap): NodeMap {
-  const node: NodeMap = new Y.Map();
-  for (const [k, v] of src.entries()) node.set(k, cloneValue(v));
-  return node;
-}
-
-/** Build a detached copy of a node Y.Map with a new id/parentId/position. */
-function cloneNode(src: NodeMap, id: NodeId, parentId: NodeId, position: string): NodeMap {
-  const node: NodeMap = new Y.Map();
-  node.set('id', id);
-  node.set('parentId', parentId);
-  node.set('nodeType', src.get('nodeType'));
-  node.set('position', position);
-  node.set('name', src.get('name') ?? '');
-  node.set('isCollapsed', Boolean(src.get('isCollapsed')));
-  node.set('tags', cloneLabelArray(src.get('tags') as Y.Array<Y.Map<unknown>> | undefined));
-  node.set(
-    'references',
-    cloneLabelArray(src.get('references') as Y.Array<Y.Map<unknown>> | undefined),
-  );
-  node.set('files', cloneLabelArray(src.get('files') as Y.Array<Y.Map<unknown>> | undefined));
-  const desc = src.get('description');
-  if (desc instanceof Y.XmlFragment) node.set('description', cloneXmlFragment(desc));
-  return node;
-}
-
 /**
  * Duplicate a subtree under the same parent, immediately after the original,
  * with fresh ids throughout (old->new id remap, like the legacy idHashMap).
@@ -224,7 +151,7 @@ export function duplicateSubtree(doc: Y.Doc, rootId: NodeId): NodeId | null {
       const oldParent = src.get('parentId') as NodeId;
       const newParent = oldId === rootId ? rootParent : idMap.get(oldParent)!;
       const position = oldId === rootId ? rootPosition : String(src.get('position'));
-      nodes.set(newId, cloneNode(src, newId, newParent, position));
+      nodes.set(newId, cloneNodeWith(src, { id: newId, parentId: newParent, position }));
     }
   });
   return newRootId;

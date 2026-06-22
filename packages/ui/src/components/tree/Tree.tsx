@@ -18,6 +18,7 @@ import type { NodeId, NodeView } from '@gv/shared';
 import { useFlatTree, type FlatRow } from '../../hooks/useFlatTree.js';
 import { useNodeOps } from '../../hooks/useNodeOps.js';
 import { useSelection } from '../../state/selection.js';
+import { Icon } from '../Icon.js';
 
 function Row({ row }: { row: FlatRow }) {
   const { node, depth, hasChildren } = row;
@@ -32,17 +33,21 @@ function Row({ row }: { row: FlatRow }) {
   return (
     <li
       ref={setNodeRef}
-      style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 }}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.4 : 1,
+      }}
       className="gv-row-li"
     >
       <div
         className={`gv-row${selectedId === node.id ? ' gv-row-selected' : ''}`}
-        style={{ paddingLeft: depth * 16 + 4 }}
+        style={{ paddingLeft: depth * 16 + 6 }}
         onClick={() => select(node.id)}
         data-testid={`node-${node.id}`}
       >
-        <span className="gv-drag" {...attributes} {...listeners} aria-label="Drag">
-          ⠿
+        <span className="gv-drag" {...attributes} {...listeners} aria-label="Drag to reorder">
+          <Icon name="grip" size={15} />
         </span>
         {isChapter ? (
           <button
@@ -54,21 +59,56 @@ function Row({ row }: { row: FlatRow }) {
             }}
             disabled={!hasChildren}
           >
-            {hasChildren ? (node.isCollapsed ? '▸' : '▾') : '·'}
+            {hasChildren ? (
+              <Icon name={node.isCollapsed ? 'chevron-right' : 'chevron-down'} size={14} />
+            ) : (
+              <span style={{ width: 14 }} />
+            )}
           </button>
         ) : (
-          <span className="gv-twisty gv-media-dot">◆</span>
+          <span className="gv-twisty" />
         )}
+        <span className={`gv-node-icon${isChapter ? ' gv-node-icon-chapter' : ''}`}>
+          <Icon name={isChapter ? 'folder' : 'note'} size={15} />
+        </span>
         <span className="gv-name">{node.name || (isChapter ? 'Untitled chapter' : 'Note')}</span>
         <span className="gv-actions" onClick={(e) => e.stopPropagation()}>
           {isChapter && (
             <>
-              <button title="Add chapter" onClick={() => ops.insert({ parentId: node.id, nodeType: 'chapter', name: 'New chapter' })}>+Ch</button>
-              <button title="Add note" onClick={() => ops.insert({ parentId: node.id, nodeType: 'media', name: 'New note' })}>+Note</button>
+              <button
+                className="gv-icon-btn"
+                title="Add sub-chapter"
+                data-testid="add-subchapter"
+                onClick={() => ops.insert({ parentId: node.id, nodeType: 'chapter', name: 'New chapter' })}
+              >
+                <Icon name="folder" size={14} />
+              </button>
+              <button
+                className="gv-icon-btn"
+                title="Add note"
+                data-testid="add-note"
+                onClick={() => ops.insert({ parentId: node.id, nodeType: 'media', name: 'New note' })}
+              >
+                <Icon name="plus" size={14} />
+              </button>
             </>
           )}
-          <button title="Duplicate" onClick={() => ops.duplicate(node.id)}>Dup</button>
-          <button title="Move to trash" onClick={() => ops.remove(node.id)}>Del</button>
+          <button
+            className="gv-icon-btn"
+            title="Duplicate"
+            data-testid="dup-node"
+            onClick={() => ops.duplicate(node.id)}
+          >
+            <Icon name="copy" size={14} />
+          </button>
+          <button
+            className="gv-icon-btn"
+            title="Move to trash"
+            data-testid="del-node"
+            onClick={() => ops.remove(node.id)}
+          >
+            <Icon name="trash" size={14} />
+          </button>
         </span>
       </div>
     </li>
@@ -91,10 +131,8 @@ export function Tree() {
     if (!overRow) return;
     const target = overRow.node;
     if (target.nodeType === 'chapter') {
-      // Drop onto a chapter → become its (appended) child.
       ops.move(activeId, target.id, { type: 'append' });
     } else {
-      // Drop onto a note → become a sibling immediately after it.
       ops.move(activeId, target.parentId, { type: 'after', id: target.id });
     }
   }

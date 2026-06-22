@@ -1,13 +1,31 @@
 import { useEffect, useState } from 'react';
+import { getDocumentMeta, renameDocumentEntry } from '@gv/core';
 import type { DocumentId } from '@gv/shared';
 import { DocProvider } from '../providers/DocContext.js';
 import { UndoProvider } from '../providers/UndoContext.js';
+import { LiveProvider } from '../providers/LiveContext.js';
 import { useWorkspace, type OpenedDoc } from '../providers/WorkspaceContext.js';
 import { useNav } from '../state/nav.js';
 import { useSelection } from '../state/selection.js';
 import { usePresence } from '../hooks/usePresence.js';
 import { PresenceBar } from './presence/PresenceBar.js';
 import { WorkArea } from './WorkArea.js';
+import { Icon } from './Icon.js';
+
+function DocTitle({ id }: { id: DocumentId }) {
+  const ws = useWorkspace();
+  const [title, setTitle] = useState(() => getDocumentMeta(ws.library, id)?.title ?? '');
+  return (
+    <input
+      className="gv-doc-name-inline"
+      data-testid="doc-title"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      onBlur={() => renameDocumentEntry(ws.library, id, title || 'Untitled document')}
+      placeholder="Untitled document"
+    />
+  );
+}
 
 /** Opens a document's content (async) and hosts the editing surface. */
 export function DocumentHost({ id }: { id: DocumentId }) {
@@ -37,20 +55,29 @@ export function DocumentHost({ id }: { id: DocumentId }) {
 
   return (
     <DocProvider key={id} doc={opened.doc}>
-      <UndoProvider>
+      <LiveProvider value={{ awareness: opened.awareness, user: opened.user }}>
+        <UndoProvider>
         <div className="gv-doc-host">
           <div className="gv-doc-bar">
-            <button data-testid="back-to-library" onClick={goLibrary}>
-              ← Documents
-            </button>
+            <div className="gv-doc-bar-left">
+              <button
+                className="gv-icon-btn"
+                title="Back to documents"
+                data-testid="back-to-library"
+                onClick={goLibrary}
+              >
+                <Icon name="back" />
+              </button>
+              <DocTitle id={id} />
+            </div>
             <div className="gv-doc-bar-right">
               <PresenceBar users={presence} />
-              <span className="gv-muted-text">live: {opened.provider.kind}</span>
             </div>
           </div>
           <WorkArea />
         </div>
-      </UndoProvider>
+        </UndoProvider>
+      </LiveProvider>
     </DocProvider>
   );
 }

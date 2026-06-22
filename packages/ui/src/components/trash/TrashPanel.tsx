@@ -16,15 +16,24 @@ export function TrashPanel() {
     <div className="gv-detail" data-testid="trash-panel">
       <div className="gv-detail-head">
         <h2>Trash</h2>
-        <div>
-          <button disabled={entries.length === 0} onClick={() => ops.emptyTrash()}>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            className="gv-btn gv-btn-outline gv-btn-sm"
+            disabled={entries.length === 0}
+            onClick={() => ops.emptyTrash()}
+          >
             Empty trash
           </button>
-          <button onClick={() => setShowTrash(false)}>Close</button>
+          <button className="gv-btn gv-btn-sm" onClick={() => setShowTrash(false)}>
+            Close
+          </button>
         </div>
       </div>
       {entries.length === 0 ? (
-        <p className="gv-muted-text">Trash is empty.</p>
+        <div className="gv-empty">
+          <span className="gv-empty-emoji">🗑️</span>
+          Trash is empty.
+        </div>
       ) : (
         <ul className="gv-trash-list">
           {entries.map((e) => (
@@ -33,7 +42,9 @@ export function TrashPanel() {
                 {e.node.name || (e.node.nodeType === 'chapter' ? 'Untitled chapter' : 'Note')}
               </span>
               <span className="gv-muted-text">{e.count} item(s)</span>
-              <button onClick={() => ops.restore(e.node.id)}>Restore</button>
+              <button className="gv-btn gv-btn-outline gv-btn-sm" onClick={() => ops.restore(e.node.id)}>
+                Restore
+              </button>
             </li>
           ))}
         </ul>

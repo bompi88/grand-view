@@ -57,6 +57,9 @@ export {
 // Maintenance
 export { normalizeSiblingPositions, maxKeyLength } from './nodes/normalize.js';
 
+// Templates
+export { copyDocumentContent } from './templates/templates.js';
+
 // Undo / redo
 export { createUndoController, LOCAL_ORIGIN, type UndoController } from './undo/undo.js';
 

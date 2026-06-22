@@ -11,13 +11,17 @@ export function App({ boot }: { boot: BootContext }) {
       <WorkspaceProvider workspace={boot.workspace}>
         <div className="gv-app">
           <header className="gv-header">
-            <div>
-              <h1>{t('app.title')}</h1>
-              <p className="gv-tagline">{t('app.tagline')}</p>
+            <div className="gv-brand">
+              <span className="gv-logo">G</span>
+              <div>
+                <h1>{t('app.title')}</h1>
+                <p className="gv-tagline">{t('app.tagline')}</p>
+              </div>
             </div>
             <label className="gv-lang">
-              {t('lang.label')}:{' '}
+              {t('lang.label')}
               <select
+                className="gv-select"
                 value={i18n.language}
                 onChange={(e) => void i18n.changeLanguage(e.target.value)}
               >

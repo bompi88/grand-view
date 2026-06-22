@@ -7,6 +7,7 @@ import { ROOT_PARENT, type NodeId } from '@gv/shared';
 import { Tree } from './tree/Tree.js';
 import { NodeDetail } from './editor/NodeDetail.js';
 import { TrashPanel } from './trash/TrashPanel.js';
+import { Icon } from './Icon.js';
 
 /** Set every chapter's collapsed flag (collapse-all / expand-all). */
 function useSetAllCollapsed() {
@@ -33,21 +34,45 @@ export function WorkArea() {
       <aside className="gv-sidebar">
         <div className="gv-toolbar">
           <button
+            className="gv-btn gv-btn-primary gv-btn-sm"
             data-testid="add-chapter"
             onClick={() => ops.insert({ parentId: ROOT_PARENT, nodeType: 'chapter', name: 'New chapter' })}
           >
-            + Chapter
-          </button>
-          <button data-testid="undo" disabled={!canUndo} onClick={() => controller.undo()}>
-            ↶
-          </button>
-          <button data-testid="redo" disabled={!canRedo} onClick={() => controller.redo()}>
-            ↷
+            <Icon name="plus" size={14} /> Chapter
           </button>
           <span className="gv-spacer" />
-          <button title="Collapse all" onClick={() => setAllCollapsed(true)}>⊟</button>
-          <button title="Expand all" onClick={() => setAllCollapsed(false)}>⊞</button>
-          <button data-testid="show-trash" onClick={() => setShowTrash(true)}>🗑</button>
+          <button
+            className="gv-icon-btn"
+            title="Undo"
+            data-testid="undo"
+            disabled={!canUndo}
+            onClick={() => controller.undo()}
+          >
+            <Icon name="undo" />
+          </button>
+          <button
+            className="gv-icon-btn"
+            title="Redo"
+            data-testid="redo"
+            disabled={!canRedo}
+            onClick={() => controller.redo()}
+          >
+            <Icon name="redo" />
+          </button>
+          <button className="gv-icon-btn" title="Collapse all" onClick={() => setAllCollapsed(true)}>
+            <Icon name="collapse-all" />
+          </button>
+          <button className="gv-icon-btn" title="Expand all" onClick={() => setAllCollapsed(false)}>
+            <Icon name="expand-all" />
+          </button>
+          <button
+            className="gv-icon-btn"
+            title="Trash"
+            data-testid="show-trash"
+            onClick={() => setShowTrash(true)}
+          >
+            <Icon name="trash" />
+          </button>
         </div>
         <Tree />
       </aside>

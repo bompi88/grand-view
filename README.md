@@ -103,9 +103,15 @@ live multi-client editing + **presence avatars**. Same-origin tabs sync over
 `VITE_GV_SIGNALING` to a self-hosted signaling URL upgrades it to cross-device
 collaboration at no hosting cost.
 
-**Next:** templates and the global tag/reference registry; more sync providers
-(self-hosted relay, file-sync via iCloud/Dropbox); collaborative TipTap cursors;
-then Phase 3 (DOCX, `.gvd`/`.gvt`, code signing, auto-update).
+**Polish & more features — done.** A full design system (tokens, inline SVG
+icon set, light/dark via `prefers-color-scheme`, micro-interactions); a slick
+library + workspace; **templates** (save-as-template / new-from-template, deep
+copy with id remap); **collaborative cursors** in note bodies; and the open
+document is remembered across reloads (per-tab).
+
+**Next:** the global tag/reference registry; more sync providers (self-hosted
+relay, file-sync via iCloud/Dropbox); then Phase 3 (DOCX export, `.gvd`/`.gvt`
+import/export + legacy migration, code signing, auto-update).
 
 ## License
 
