@@ -1,0 +1,23 @@
+{
+  "name": "@gv/sync-providers",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "lint": "eslint src",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@gv/core": "workspace:*",
+    "@gv/shared": "workspace:*",
+    "y-indexeddb": "^9.0.12",
+    "y-protocols": "^1.0.6",
+    "y-webrtc": "^10.3.0",
+    "y-websocket": "^2.1.0",
+    "yjs": "^13.6.20"
+  }
+}

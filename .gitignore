@@ -1,11 +1,37 @@
-.meteor/local
-.meteor/meteorite
-node_modules/*
-.app/*
-.cache/*
-.dist
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+build/
+*.tsbuildinfo
+coverage/
+
+# turbo
+.turbo/
+
+# tauri
+apps/app/src-tauri/target/
+
+# capacitor native build artifacts
+apps/app/ios/App/Pods/
+apps/app/ios/App/build/
+apps/app/android/.gradle/
+apps/app/android/app/build/
+apps/app/android/build/
+
+# vite
+apps/app/dist/
+
+# env / local
+.env
+.env.local
+*.local
+
+# editor / os
 .DS_Store
 .idea/
-*.iml
-.bundle/*
-npm-debug.log
+.vscode/*
+!.vscode/extensions.json
+*.log

@@ -1,0 +1,7 @@
+legacy/
+dist/
+build/
+coverage/
+.turbo/
+pnpm-lock.yaml
+apps/app/src-tauri/target/

@@ -1,0 +1,21 @@
+{
+  "name": "@gv/core",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "lint": "eslint src",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@gv/shared": "workspace:*",
+    "docx": "^9.1.1",
+    "fflate": "^0.8.2",
+    "fractional-indexing": "^3.2.0",
+    "yjs": "^13.6.20"
+  }
+}
