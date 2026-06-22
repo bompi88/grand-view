@@ -7,7 +7,7 @@ import {
   type NodeType,
   type NodeView,
 } from '@gv/shared';
-import { nodesMap, type NodeMap } from '../doc/schema.js';
+import { nodesMap, trashMap, type NodeMap } from '../doc/schema.js';
 import { comparePosition } from '../ordering/fractional.js';
 
 /** Synthetic parent under which orphaned subtrees are surfaced (never persisted). */
@@ -131,4 +131,39 @@ export function getChildren(doc: Y.Doc, parentId: NodeId): NodeView[] {
   return getNodeViews(doc)
     .filter((v) => v.parentId === parentId)
     .sort(comparePosition);
+}
+
+export interface TrashEntry {
+  node: NodeView;
+  removedAt: number;
+  /** Number of nodes in this trashed subtree (including the root). */
+  count: number;
+}
+
+/** Roots of trashed subtrees (entries stamped with removedAt), newest first. */
+export function getTrashRoots(doc: Y.Doc): TrashEntry[] {
+  const trash = trashMap(doc);
+  const all = [...trash.values()];
+  const out: TrashEntry[] = [];
+  for (const node of trash.values()) {
+    const removedAt = node.get('removedAt');
+    if (typeof removedAt !== 'number') continue;
+    const rootId = node.get('id') as NodeId;
+    const count = all.filter((n) => descendsFrom(n, rootId, trash)).length;
+    out.push({ node: toNodeView(node), removedAt, count });
+  }
+  return out.sort((a, b) => b.removedAt - a.removedAt);
+}
+
+function descendsFrom(node: NodeMap, rootId: NodeId, trash: Y.Map<NodeMap>): boolean {
+  let cur: NodeMap | undefined = node;
+  const seen = new Set<NodeId>();
+  while (cur) {
+    const id = cur.get('id') as NodeId;
+    if (id === rootId) return true;
+    if (seen.has(id)) return false;
+    seen.add(id);
+    cur = trash.get(cur.get('parentId') as NodeId);
+  }
+  return false;
 }

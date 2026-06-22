@@ -49,6 +49,151 @@ body {
   padding: 16px 20px;
 }
 
+.gv-main-flex {
+  padding: 0;
+  min-height: 0;
+  display: flex;
+}
+
+.gv-workarea {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(260px, 32%) 1fr;
+  min-height: 0;
+}
+
+.gv-sidebar {
+  border-right: 1px solid var(--gv-border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px;
+}
+
+.gv-content {
+  padding: 16px 20px;
+  overflow: auto;
+}
+
+.gv-spacer {
+  flex: 1;
+}
+
+.gv-row-li {
+  list-style: none;
+}
+
+.gv-row-selected {
+  background: #dfe3fb !important;
+}
+
+.gv-drag {
+  cursor: grab;
+  color: #b9b9c2;
+  user-select: none;
+}
+
+.gv-detail {
+  max-width: 760px;
+}
+
+.gv-detail-empty,
+.gv-muted-text {
+  color: var(--gv-muted);
+}
+
+.gv-detail-name {
+  width: 100%;
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  border-bottom: 1px solid var(--gv-border);
+  padding: 6px 2px;
+  margin-bottom: 12px;
+  background: transparent;
+}
+
+.gv-detail-body {
+  border: 1px solid var(--gv-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  background: var(--gv-panel);
+}
+
+.gv-prose {
+  outline: none;
+  min-height: 120px;
+}
+
+.gv-prose p {
+  margin: 0 0 8px;
+}
+
+.gv-labels {
+  margin-top: 12px;
+}
+
+.gv-labels-title {
+  display: block;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gv-muted);
+  margin-bottom: 4px;
+}
+
+.gv-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.gv-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #eef0fb;
+  border-radius: 12px;
+  padding: 2px 4px 2px 10px;
+  font-size: 13px;
+}
+
+.gv-chip button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--gv-muted);
+}
+
+.gv-chip-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  min-width: 80px;
+}
+
+.gv-detail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gv-trash-list {
+  list-style: none;
+  padding: 0;
+}
+
+.gv-trash-list li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--gv-border);
+}
+
 .gv-toolbar {
   margin-bottom: 12px;
 }

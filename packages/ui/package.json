@@ -12,11 +12,20 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@gv/core": "workspace:*",
     "@gv/platform-adapters": "workspace:*",
     "@gv/shared": "workspace:*",
     "@gv/sync-providers": "workspace:*",
-    "yjs": "^13.6.20"
+    "@tiptap/extension-collaboration": "^2.11.5",
+    "@tiptap/pm": "^2.11.5",
+    "@tiptap/react": "^2.11.5",
+    "@tiptap/starter-kit": "^2.11.5",
+    "y-prosemirror": "^1.2.15",
+    "yjs": "^13.6.20",
+    "zustand": "^5.0.3"
   },
   "peerDependencies": {
     "react": "^18.3.1",

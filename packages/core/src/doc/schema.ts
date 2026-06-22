@@ -37,6 +37,12 @@ export function trashMap(doc: Y.Doc): Y.Map<NodeMap> {
   return doc.getMap<NodeMap>(TRASH);
 }
 
+/** The collaborative rich-text body of a media node, or null if absent. */
+export function nodeDescriptionFragment(doc: Y.Doc, nodeId: NodeId): Y.XmlFragment | null {
+  const desc = nodesMap(doc).get(nodeId)?.get('description');
+  return desc instanceof Y.XmlFragment ? desc : null;
+}
+
 /** Initialize a fresh document's metadata. `createdAt` must be supplied by the caller. */
 export function initDocument(doc: Y.Doc, opts: CreateDocumentOptions = {}): Y.Doc {
   const meta = metaMap(doc);

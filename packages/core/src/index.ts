@@ -5,6 +5,7 @@ export {
   metaMap,
   nodesMap,
   trashMap,
+  nodeDescriptionFragment,
   buildNodeMap,
   META,
   NODES,
@@ -44,10 +45,15 @@ export {
   buildTree,
   getNodeViews,
   getChildren,
+  getTrashRoots,
   toNodeView,
   RECOVERED_ROOT,
   type TreeResult,
+  type TrashEntry,
 } from './nodes/selectors.js';
 
 // Maintenance
 export { normalizeSiblingPositions, maxKeyLength } from './nodes/normalize.js';
+
+// Undo / redo
+export { createUndoController, LOCAL_ORIGIN, type UndoController } from './undo/undo.js';

@@ -84,9 +84,16 @@ test).
 macOS). Capacitor iOS/Android config + scripts added; native projects build
 on a machine with the mobile toolchains (see above).
 
-**Next — Phase 1 (single-user feature parity):** dnd-kit drag-drop tree, TipTap
-node bodies, tags/references with a global registry, file attachments,
-templates, and the Trash UI.
+**Phase 1 (single-user feature parity) — in progress.** Done and verified
+end-to-end in a headless browser: a WorkArea with a dnd-kit drag-drop tree
+(reparenting + keyboard-accessible), per-user Yjs undo/redo (origin-scoped),
+a TipTap collaborative editor bound to each note's `Y.XmlFragment`,
+tags/references editing, and a Trash panel (restore / empty) — all persisted
+to IndexedDB across reloads.
+
+**Next:** file attachments (drag-drop, paste-from-clipboard, preview),
+templates, a document library/router (multiple Grand Views), and the global
+tag/reference registry. Then Phase 2 (sync providers + real-time collab).
 
 ## License
 
