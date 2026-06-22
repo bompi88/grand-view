@@ -1,0 +1,18 @@
+{
+  "name": "@gv/adapter-web",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "lint": "eslint src"
+  },
+  "dependencies": {
+    "@gv/platform-adapters": "workspace:*",
+    "@gv/shared": "workspace:*",
+    "idb-keyval": "^6.2.1"
+  }
+}
