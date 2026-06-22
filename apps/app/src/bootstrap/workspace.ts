@@ -1,37 +1,91 @@
 import { createDocument, createLibrary, LIBRARY_GUID } from '@gv/core';
-import { LocalIndexeddbProvider } from '@gv/sync-providers';
+import { LocalIndexeddbProvider, P2pProvider, type SyncProvider } from '@gv/sync-providers';
 import type { Workspace, OpenedDoc } from '@gv/ui';
-import type { DocumentId } from '@gv/shared';
+import { newDeviceId, type DocumentId, type PresenceUser } from '@gv/shared';
 
 /**
- * Local-first workspace: the library and every document persist to IndexedDB.
- * Phase 2 will let `open` layer a live sync provider (P2P / relay / file-sync)
- * on top of the local persistence base.
+ * Signaling servers for cross-device WebRTC. Empty by default → same-origin
+ * tabs collaborate over BroadcastChannel with zero infrastructure. Set
+ * VITE_GV_SIGNALING (comma-separated) to a self-hosted signaling URL to enable
+ * cross-device, zero-cost collaboration.
+ */
+const SIGNALING = String(import.meta.env.VITE_GV_SIGNALING ?? '')
+  .split(',')
+  .map((s: string) => s.trim())
+  .filter(Boolean);
+
+const NAMES = ['Otter', 'Falcon', 'Birch', 'Cedar', 'Heron', 'Lynx', 'Fjord', 'Aurora'];
+const COLORS = ['#3b5bdb', '#2f9e44', '#e8590c', '#9c36b5', '#0c8599', '#c2255c'];
+
+/**
+ * Presence identity: a stable name/color per browser (persisted), but a fresh
+ * deviceId each session so two tabs/windows appear as two collaborators.
+ */
+function localUser(): PresenceUser {
+  const KEY = 'gv-identity';
+  const pick = <T,>(a: T[]) => a[Math.floor(Math.random() * a.length)]!;
+  let name = pick(NAMES);
+  let color = pick(COLORS);
+  try {
+    const saved = localStorage.getItem(KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved) as { name: string; color: string };
+      name = parsed.name;
+      color = parsed.color;
+    } else {
+      localStorage.setItem(KEY, JSON.stringify({ name, color }));
+    }
+  } catch {
+    /* ignore */
+  }
+  return { name, color, deviceId: newDeviceId() };
+}
+
+interface Internal {
+  doc: import('yjs').Doc;
+  persistence: SyncProvider;
+  live: P2pProvider;
+}
+
+/**
+ * Local-first workspace: every document persists to IndexedDB (base layer) and
+ * is layered with a live P2P provider for real-time collaboration + presence.
  */
 export async function createLocalWorkspace(): Promise<Workspace> {
+  const user = localUser();
   const library = createLibrary();
   const libProvider = new LocalIndexeddbProvider();
   await libProvider.connect(library, LIBRARY_GUID);
 
-  const opened = new Map<DocumentId, OpenedDoc>();
+  const opened = new Map<DocumentId, Internal>();
 
   return {
     library,
-    async open(id) {
+    async open(id): Promise<OpenedDoc> {
       const existing = opened.get(id);
-      if (existing) return existing;
-      const { doc } = createDocument({ id, createdAt: Date.now() });
-      const provider = new LocalIndexeddbProvider();
-      await provider.connect(doc, `gv-doc-${id}`);
-      const rec: OpenedDoc = { doc, provider };
-      opened.set(id, rec);
-      return rec;
+      const room = `gv-doc-${id}`;
+      if (!existing) {
+        const { doc } = createDocument({ id, createdAt: Date.now() });
+        const persistence = new LocalIndexeddbProvider();
+        await persistence.connect(doc, room);
+        const live = new P2pProvider({ signaling: SIGNALING, user });
+        await live.connect(doc, room);
+        opened.set(id, { doc, persistence, live });
+      }
+      const rec = opened.get(id)!;
+      return {
+        doc: rec.doc,
+        provider: rec.live,
+        awareness: rec.live.awareness,
+        setUser: (u) => rec.live.setUser(u),
+      };
     },
     async close(id) {
       const rec = opened.get(id);
       if (!rec) return;
       opened.delete(id);
-      await rec.provider.disconnect();
+      await rec.live.disconnect();
+      await rec.persistence.disconnect();
       rec.doc.destroy();
     },
     async destroyContent(id) {

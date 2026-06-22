@@ -5,6 +5,8 @@ import { UndoProvider } from '../providers/UndoContext.js';
 import { useWorkspace, type OpenedDoc } from '../providers/WorkspaceContext.js';
 import { useNav } from '../state/nav.js';
 import { useSelection } from '../state/selection.js';
+import { usePresence } from '../hooks/usePresence.js';
+import { PresenceBar } from './presence/PresenceBar.js';
 import { WorkArea } from './WorkArea.js';
 
 /** Opens a document's content (async) and hosts the editing surface. */
@@ -13,6 +15,7 @@ export function DocumentHost({ id }: { id: DocumentId }) {
   const goLibrary = useNav((s) => s.goLibrary);
   const select = useSelection((s) => s.select);
   const [opened, setOpened] = useState<OpenedDoc | null>(null);
+  const presence = usePresence(opened?.awareness);
 
   useEffect(() => {
     let active = true;
@@ -40,7 +43,10 @@ export function DocumentHost({ id }: { id: DocumentId }) {
             <button data-testid="back-to-library" onClick={goLibrary}>
               ← Documents
             </button>
-            <span className="gv-muted-text">provider: {opened.provider.kind}</span>
+            <div className="gv-doc-bar-right">
+              <PresenceBar users={presence} />
+              <span className="gv-muted-text">live: {opened.provider.kind}</span>
+            </div>
           </div>
           <WorkArea />
         </div>

@@ -1,11 +1,16 @@
 import { createContext, useContext, type ReactNode } from 'react';
 import type * as Y from 'yjs';
-import type { DocumentId } from '@gv/shared';
-import type { SyncProvider } from '@gv/sync-providers';
+import type { DocumentId, PresenceUser } from '@gv/shared';
+import type { Awareness, SyncProvider } from '@gv/sync-providers';
 
 export interface OpenedDoc {
   doc: Y.Doc;
+  /** The live provider whose kind is surfaced in the UI. */
   provider: SyncProvider;
+  /** Presence/awareness, when a live provider is attached. */
+  awareness?: Awareness;
+  /** Update this client's presence identity. */
+  setUser?: (user: PresenceUser) => void;
 }
 
 /**

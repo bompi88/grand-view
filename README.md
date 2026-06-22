@@ -96,8 +96,16 @@ a headless browser:
   image thumbnails, open / download / delete, via the platform blob store.
 - All state persists to IndexedDB across reloads and close/reopen.
 
-**Next:** templates (create-from-doc / doc-from-template) and the global
-tag/reference registry, then **Phase 2** (sync providers + real-time collab).
+**Phase 2 (real-time collaboration) — started.** Verified with two browser
+tabs: a `P2pProvider` (y-webrtc) layered on the local persistence base gives
+live multi-client editing + **presence avatars**. Same-origin tabs sync over
+**BroadcastChannel with zero infrastructure / no signaling**; setting
+`VITE_GV_SIGNALING` to a self-hosted signaling URL upgrades it to cross-device
+collaboration at no hosting cost.
+
+**Next:** templates and the global tag/reference registry; more sync providers
+(self-hosted relay, file-sync via iCloud/Dropbox); collaborative TipTap cursors;
+then Phase 3 (DOCX, `.gvd`/`.gvt`, code signing, auto-update).
 
 ## License
 
