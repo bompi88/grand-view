@@ -3,11 +3,11 @@ import { createRoot } from 'react-dom/client';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n.js';
 import { App } from './App.js';
-import { wireWeb } from './bootstrap/wireWeb.js';
+import { bootstrap } from './bootstrap/bootstrap.js';
 import './styles.css';
 
 async function main() {
-  const boot = await wireWeb();
+  const boot = await bootstrap();
   const root = createRoot(document.getElementById('root')!);
   root.render(
     <StrictMode>

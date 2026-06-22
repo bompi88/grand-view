@@ -47,6 +47,30 @@ pnpm lint         # eslint incl. architecture boundary checks
 pnpm build        # build all packages + the web app
 ```
 
+### Desktop (Tauri 2 — macOS / Windows / Linux)
+
+Requires Rust (`rustup`). On Linux also the WebKitGTK dev packages
+(see `.github/workflows/desktop-release.yml`).
+
+```bash
+pnpm --filter @gv/app tauri dev      # run the desktop app against the Vite dev server
+pnpm --filter @gv/app tauri build    # produce a desktop bundle
+```
+
+### Mobile (Capacitor — iOS / Android)
+
+The same web app, wrapped in a native webview. Generating/building the native
+projects requires platform toolchains **not** needed for web/desktop:
+iOS → Xcode + CocoaPods; Android → JDK + Android SDK.
+
+```bash
+pnpm --filter @gv/app build
+pnpm --filter @gv/app exec cap add ios       # one-time (macOS + Xcode + CocoaPods)
+pnpm --filter @gv/app exec cap add android   # one-time (JDK + Android SDK)
+pnpm --filter @gv/app cap:sync               # after each web build
+pnpm --filter @gv/app exec cap open ios      # open in Xcode / Android Studio to run
+```
+
 ## Status
 
 **Phase 0 (scaffolding) — done.** Monorepo, package skeletons, the
@@ -56,9 +80,13 @@ structurally and covered by convergence tests), and a working web app with
 IndexedDB persistence — all verified (unit tests + a headless-browser smoke
 test).
 
-**Next — Phase 1 (single-user feature parity):** dnd-kit tree, TipTap node
-bodies, tags/references, attachments, templates, trash UI, plus the Tauri
-(desktop) and Capacitor (mobile) shells.
+**Shells:** Tauri 2 desktop shell added and verified (compiles + launches on
+macOS). Capacitor iOS/Android config + scripts added; native projects build
+on a machine with the mobile toolchains (see above).
+
+**Next — Phase 1 (single-user feature parity):** dnd-kit drag-drop tree, TipTap
+node bodies, tags/references with a global registry, file attachments,
+templates, and the Trash UI.
 
 ## License
 

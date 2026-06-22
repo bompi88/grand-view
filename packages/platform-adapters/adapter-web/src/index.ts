@@ -131,9 +131,16 @@ const picker = {
   },
 };
 
-export function createWebAdapter(): PlatformAdapter {
+/**
+ * Browser-API adapter. The `platform` tag may be overridden to 'tauri' or
+ * 'capacitor' when the same web app runs inside those webviews and is still
+ * using browser APIs (native-specific adapters land in Phase 2).
+ */
+export function createWebAdapter(
+  platform: PlatformAdapter['platform'] = 'web',
+): PlatformAdapter {
   return {
-    platform: 'web',
+    platform,
     fs,
     dialogs,
     clipboard,

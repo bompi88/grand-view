@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { DocProvider, PlatformProvider, TreeView } from '@gv/ui';
-import type { BootContext } from './bootstrap/wireWeb.js';
+import type { BootContext } from './bootstrap/bootstrap.js';
 import { SUPPORTED_LANGUAGES } from './i18n.js';
 
 export function App({ boot }: { boot: BootContext }) {

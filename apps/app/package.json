@@ -9,9 +9,14 @@
     "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint src",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "cap": "cap",
+    "cap:sync": "pnpm build && cap sync"
   },
   "dependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/ios": "^6.2.0",
     "@gv/adapter-web": "workspace:*",
     "@gv/core": "workspace:*",
     "@gv/platform-adapters": "workspace:*",
@@ -25,6 +30,8 @@
     "yjs": "^13.6.20"
   },
   "devDependencies": {
+    "@capacitor/cli": "^6.2.0",
+    "@tauri-apps/cli": "^2.2.0",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.3.4",
