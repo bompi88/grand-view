@@ -5,14 +5,17 @@ import {
   emptyTrash,
   insertNode,
   moveNode,
+  removeLabelEverywhere,
   removeNodeFile,
   removeToTrash,
+  renameLabel,
   renameNode,
   restoreFromTrash,
   setCollapsed,
   setNodeLabels,
   type Anchor,
   type InsertNodeOptions,
+  type LabelKind,
 } from '@gv/core';
 import type { FileId, FileMeta, Label, NodeId } from '@gv/shared';
 import { useDoc } from '../providers/DocContext.js';
@@ -60,6 +63,10 @@ export function useNodeOps() {
         });
         return blobRef;
       },
+      renameLabel: (kind: LabelKind, value: string, newLabel: string) =>
+        tx(() => renameLabel(doc, kind, value, newLabel)),
+      removeLabel: (kind: LabelKind, value: string) =>
+        tx(() => removeLabelEverywhere(doc, kind, value)),
     };
   }, [doc, controller]);
 }

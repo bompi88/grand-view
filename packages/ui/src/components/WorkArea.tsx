@@ -7,7 +7,10 @@ import { ROOT_PARENT, type NodeId } from '@gv/shared';
 import { Tree } from './tree/Tree.js';
 import { NodeDetail } from './editor/NodeDetail.js';
 import { TrashPanel } from './trash/TrashPanel.js';
+import { CategoryList } from './category/CategoryList.js';
+import { FilteredNotes } from './category/FilteredNotes.js';
 import { Icon } from './Icon.js';
+import type { SidebarView } from '../state/selection.js';
 
 /** Set every chapter's collapsed flag (collapse-all / expand-all). */
 function useSetAllCollapsed() {
@@ -22,16 +25,42 @@ function useSetAllCollapsed() {
   };
 }
 
+const VIEWS: { id: SidebarView; label: string }[] = [
+  { id: 'structure', label: 'Structure' },
+  { id: 'tags', label: 'Tags' },
+  { id: 'references', label: 'References' },
+];
+
 export function WorkArea() {
   const ops = useNodeOps();
   const { controller, canUndo, canRedo } = useUndo();
   const showTrash = useSelection((s) => s.showTrash);
   const setShowTrash = useSelection((s) => s.setShowTrash);
+  const view = useSelection((s) => s.view);
+  const setView = useSelection((s) => s.setView);
+  const filterValue = useSelection((s) => s.filterValue);
   const setAllCollapsed = useSetAllCollapsed();
+  const kind = view === 'references' ? 'references' : 'tags';
 
   return (
     <div className="gv-workarea">
       <aside className="gv-sidebar">
+        <div className="gv-segmented" role="tablist">
+          {VIEWS.map((v) => (
+            <button
+              key={v.id}
+              role="tab"
+              aria-selected={view === v.id}
+              className={`gv-seg${view === v.id ? ' gv-seg-active' : ''}`}
+              data-testid={`view-${v.id}`}
+              onClick={() => setView(v.id)}
+            >
+              {v.label}
+            </button>
+          ))}
+        </div>
+        {view === 'structure' && (
+          <>
         <div className="gv-toolbar">
           <button
             className="gv-btn gv-btn-primary gv-btn-sm"
@@ -75,8 +104,19 @@ export function WorkArea() {
           </button>
         </div>
         <Tree />
+          </>
+        )}
+        {view !== 'structure' && <CategoryList kind={kind} />}
       </aside>
-      <section className="gv-content">{showTrash ? <TrashPanel /> : <NodeDetail />}</section>
+      <section className="gv-content">
+        {showTrash ? (
+          <TrashPanel />
+        ) : view !== 'structure' && filterValue != null ? (
+          <FilteredNotes kind={kind} />
+        ) : (
+          <NodeDetail />
+        )}
+      </section>
     </div>
   );
 }

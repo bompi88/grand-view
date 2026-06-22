@@ -60,6 +60,17 @@ export { normalizeSiblingPositions, maxKeyLength } from './nodes/normalize.js';
 // Templates
 export { copyDocumentContent } from './templates/templates.js';
 
+// Labels (tags / references) — usage, filtering, rename
+export {
+  listLabelUsage,
+  nodesWithLabel,
+  nodesWithoutLabels,
+  renameLabel,
+  removeLabelEverywhere,
+  type LabelKind,
+  type LabelUsage,
+} from './labels/labels.js';
+
 // Undo / redo
 export { createUndoController, LOCAL_ORIGIN, type UndoController } from './undo/undo.js';
 
