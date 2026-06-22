@@ -60,6 +60,24 @@ export { normalizeSiblingPositions, maxKeyLength } from './nodes/normalize.js';
 // Templates
 export { copyDocumentContent } from './templates/templates.js';
 
+// DOCX export
+export { buildOutline, fragmentToParagraphs, type OutlineItem } from './docx/outline.js';
+export { exportDocx, imageBlobRefs, type ImageMap } from './docx/export.js';
+
+// Archives (.gvd / .gvt) + legacy migration
+export {
+  exportArchive,
+  parseArchive,
+  documentFromSnapshot,
+  ARCHIVE_FORMAT,
+  ARCHIVE_VERSION,
+  type ArchiveManifest,
+  type ParsedArchive,
+} from './archive/archive.js';
+export { importLegacyTar } from './archive/legacy.js';
+export { untar, type TarEntry } from './archive/untar.js';
+export { documentFiles } from './nodes/selectors.js';
+
 // Labels (tags / references) — usage, filtering, rename
 export {
   listLabelUsage,

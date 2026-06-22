@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { listLabelUsage, nodesWithoutLabels, type LabelKind } from '@gv/core';
 import { useDoc } from '../../providers/DocContext.js';
 import { useDocVersion } from '../../hooks/useDocVersion.js';
@@ -55,6 +56,7 @@ function CategoryRow({ kind, value, label, count }: { kind: LabelKind; value: st
 }
 
 export function CategoryList({ kind }: { kind: LabelKind }) {
+  const { t } = useTranslation();
   const doc = useDoc();
   const version = useDocVersion(doc);
   const filterValue = useSelection((s) => s.filterValue);
@@ -73,7 +75,7 @@ export function CategoryList({ kind }: { kind: LabelKind }) {
         <li className={`gv-cat-row${filterValue === UNLABELLED ? ' gv-cat-row-active' : ''}`}>
           <button className="gv-cat-main" onClick={() => setFilter(UNLABELLED)}>
             <span className="gv-cat-label gv-muted-text">
-              {kind === 'tags' ? 'Untagged' : 'Unreferenced'}
+              {kind === 'tags' ? t('common.untagged') : t('common.unreferenced')}
             </span>
             <span className="gv-count">{unlabelledCount}</span>
           </button>

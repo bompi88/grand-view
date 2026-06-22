@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   addDocumentEntry,
   deleteDocumentEntry,
@@ -10,6 +11,7 @@ import {
 } from '@gv/core';
 import type { DocumentId, DocumentMeta } from '@gv/shared';
 import { useWorkspace } from '../../providers/WorkspaceContext.js';
+import { usePlatform } from '../../providers/PlatformContext.js';
 import { useDocVersion } from '../../hooks/useDocVersion.js';
 import { useNav } from '../../state/nav.js';
 import { Icon } from '../Icon.js';
@@ -20,10 +22,23 @@ function fmtDate(ms: number): string {
 }
 
 export function LibraryScreen() {
+  const { t } = useTranslation();
   const ws = useWorkspace();
+  const platform = usePlatform();
   const lib = ws.library;
   const version = useDocVersion(lib);
   const openDoc = useNav((s) => s.openDoc);
+
+  async function importFile() {
+    const picked = await platform.picker.openFile(['.gvd', '.gvt']);
+    if (!picked) return;
+    // New archives are zip (PK..); legacy archives are tar. Try new first.
+    const isZip = picked.bytes[0] === 0x50 && picked.bytes[1] === 0x4b;
+    const id = isZip
+      ? await ws.importArchive(picked.bytes)
+      : await ws.importLegacy(picked.bytes);
+    openDoc(id);
+  }
 
   const { docs, templates, trash } = useMemo(
     () => ({
@@ -56,16 +71,21 @@ export function LibraryScreen() {
   return (
     <div className="gv-library">
       <div className="gv-lib-head">
-        <h2>My Documents</h2>
-        <button className="gv-btn gv-btn-primary" data-testid="new-document" onClick={createNew}>
-          <Icon name="doc-plus" /> New document
-        </button>
+        <h2>{t('library.heading')}</h2>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="gv-btn gv-btn-outline" data-testid="import-doc" onClick={() => void importFile()}>
+            <Icon name="open" /> {t('library.import')}
+          </button>
+          <button className="gv-btn gv-btn-primary" data-testid="new-document" onClick={createNew}>
+            <Icon name="doc-plus" /> {t('library.new')}
+          </button>
+        </div>
       </div>
 
       {docs.length === 0 ? (
         <div className="gv-empty">
           <span className="gv-empty-emoji">📚</span>
-          No documents yet — create one to start structuring your information.
+          {t('library.empty')}
         </div>
       ) : (
         <ul className="gv-doc-list" data-testid="doc-list">
@@ -102,7 +122,7 @@ export function LibraryScreen() {
 
       {templates.length > 0 && (
         <>
-          <h3 className="gv-section-title">Templates</h3>
+          <h3 className="gv-section-title">{t('library.templates')}</h3>
           <ul className="gv-doc-list" data-testid="template-list">
             {templates.map((d) => (
               <li key={d.id} className="gv-doc-card">
@@ -138,7 +158,7 @@ export function LibraryScreen() {
 
       {trash.length > 0 && (
         <>
-          <h3 className="gv-section-title">Trash</h3>
+          <h3 className="gv-section-title">{t('library.trash')}</h3>
           <ul className="gv-doc-list">
             {trash.map((d) => (
               <li key={d.id} className="gv-doc-card">

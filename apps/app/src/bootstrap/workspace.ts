@@ -1,8 +1,16 @@
+import * as Y from 'yjs';
 import {
   addDocumentEntry,
   copyDocumentContent,
   createDocument,
   createLibrary,
+  documentFiles,
+  documentFromSnapshot,
+  exportArchive,
+  getDocumentMeta,
+  importLegacyTar,
+  metaMap,
+  parseArchive,
   LIBRARY_GUID,
 } from '@gv/core';
 import {
@@ -11,8 +19,9 @@ import {
   RelayProvider,
   type SyncProvider,
 } from '@gv/sync-providers';
+import type { BlobStoreAdapter } from '@gv/platform-adapters';
 import type { Workspace, OpenedDoc, SyncMode } from '@gv/ui';
-import { newDeviceId, type DocumentId, type PresenceUser } from '@gv/shared';
+import { newDeviceId, newDocumentId, type DocumentId, type PresenceUser } from '@gv/shared';
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 
@@ -72,7 +81,7 @@ interface Internal {
  * Local-first workspace: every document persists to IndexedDB (base layer) and
  * is layered with a live P2P provider for real-time collaboration + presence.
  */
-export async function createLocalWorkspace(): Promise<Workspace> {
+export async function createLocalWorkspace(blobStore: BlobStoreAdapter): Promise<Workspace> {
   const user = localUser();
   const library = createLibrary();
   const libProvider = new LocalIndexeddbProvider();
@@ -102,6 +111,19 @@ export async function createLocalWorkspace(): Promise<Workspace> {
         doc.destroy();
       },
     };
+  }
+
+  /** Persist a freshly-built document (with content) under its id. */
+  async function persistBuilt(newId: DocumentId, built: Y.Doc): Promise<void> {
+    const update = Y.encodeStateAsUpdate(built);
+    built.destroy();
+    const { doc } = createDocument({ id: newId, createdAt: Date.now() });
+    const provider = new LocalIndexeddbProvider();
+    await provider.connect(doc, `gv-doc-${newId}`);
+    Y.applyUpdate(doc, update); // fires updates → persisted by the provider
+    await sleep(700);
+    await provider.disconnect();
+    doc.destroy();
   }
 
   /** Copy source content into a freshly-registered library entry. */
@@ -164,6 +186,50 @@ export async function createLocalWorkspace(): Promise<Workspace> {
     },
     instantiateTemplate(templateId, title) {
       return fork(templateId, title, false);
+    },
+    async exportArchive(id) {
+      const meta = getDocumentMeta(library, id);
+      const src = await loadDetached(id);
+      const blobs = new Map<string, Uint8Array>();
+      for (const f of documentFiles(src.doc)) {
+        try {
+          blobs.set(f.blobRef, await blobStore.get(f.blobRef));
+        } catch {
+          /* skip missing blob */
+        }
+      }
+      const isTemplate = Boolean(meta?.isTemplate);
+      const bytes = exportArchive(src.doc, blobs, { isTemplate, title: meta?.title ?? '' });
+      await src.dispose();
+      const ext = isTemplate ? 'gvt' : 'gvd';
+      return { bytes, filename: `${meta?.title || 'document'}.${ext}` };
+    },
+    async importArchive(bytes) {
+      const parsed = parseArchive(bytes);
+      const newId = newDocumentId();
+      const now = Date.now();
+      addDocumentEntry(library, {
+        id: newId,
+        title: parsed.manifest.title || 'Imported document',
+        isTemplate: parsed.manifest.isTemplate,
+        createdAt: now,
+      });
+      const built = documentFromSnapshot(parsed.snapshot, newId, now);
+      await persistBuilt(newId, built);
+      for (const [ref, blob] of parsed.blobs) {
+        await blobStore.putAt(ref, blob, parsed.manifest.blobs[ref] ?? 'application/octet-stream');
+      }
+      return newId;
+    },
+    async importLegacy(bytes) {
+      const newId = newDocumentId();
+      const now = Date.now();
+      const built = importLegacyTar(bytes, newId, now);
+      const title = String(metaMap(built).get('title') ?? 'Imported document');
+      const isTemplate = Boolean(metaMap(built).get('isTemplate'));
+      addDocumentEntry(library, { id: newId, title, isTemplate, createdAt: now });
+      await persistBuilt(newId, built);
+      return newId;
     },
     getSyncMode: getMode,
     setSyncMode(id, mode) {

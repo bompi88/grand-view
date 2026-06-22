@@ -1,6 +1,20 @@
 {
   "app.title": "GrandView",
   "app.tagline": "Structure your information.",
-  "tree.empty": "No chapters yet. Add one to get started.",
-  "lang.label": "Language"
+  "lang.label": "Language",
+  "library.heading": "My Documents",
+  "library.new": "New document",
+  "library.import": "Import",
+  "library.empty": "No documents yet — create one to start structuring your information.",
+  "library.templates": "Templates",
+  "library.trash": "Trash",
+  "view.structure": "Structure",
+  "view.tags": "Tags",
+  "view.references": "References",
+  "tree.addChapter": "Chapter",
+  "common.untagged": "Untagged",
+  "common.unreferenced": "Unreferenced",
+  "common.untitled": "Untitled",
+  "common.restore": "Restore",
+  "common.deleteForever": "Delete forever"
 }

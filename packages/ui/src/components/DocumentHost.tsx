@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { getDocumentMeta, renameDocumentEntry } from '@gv/core';
+import { exportDocx, getDocumentMeta, imageBlobRefs, renameDocumentEntry } from '@gv/core';
 import type { DocumentId } from '@gv/shared';
-import { DocProvider } from '../providers/DocContext.js';
+import { DocProvider, useDoc } from '../providers/DocContext.js';
+import { usePlatform } from '../providers/PlatformContext.js';
 import { UndoProvider } from '../providers/UndoContext.js';
 import { LiveProvider } from '../providers/LiveContext.js';
 import { useWorkspace, type OpenedDoc } from '../providers/WorkspaceContext.js';
@@ -12,6 +13,66 @@ import { PresenceBar } from './presence/PresenceBar.js';
 import { SyncMenu } from './SyncMenu.js';
 import { WorkArea } from './WorkArea.js';
 import { Icon } from './Icon.js';
+
+const DOCX_MIME =
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+function ExportButton({ id }: { id: DocumentId }) {
+  const doc = useDoc();
+  const platform = usePlatform();
+  const ws = useWorkspace();
+  const [busy, setBusy] = useState(false);
+
+  async function onExport() {
+    setBusy(true);
+    try {
+      const images = new Map<string, Uint8Array>();
+      for (const ref of imageBlobRefs(doc)) {
+        try {
+          images.set(ref, await platform.blobStore.get(ref));
+        } catch {
+          /* skip missing blob */
+        }
+      }
+      const bytes = await exportDocx(doc, images);
+      const title = getDocumentMeta(ws.library, id)?.title || 'document';
+      await platform.picker.saveFile({ suggestedName: `${title}.docx`, mime: DOCX_MIME, bytes });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <button
+      className="gv-icon-btn"
+      title="Export to Word (.docx)"
+      data-testid="export-docx"
+      disabled={busy}
+      onClick={() => void onExport()}
+    >
+      <Icon name="download" />
+    </button>
+  );
+}
+
+function ArchiveExportButton({ id }: { id: DocumentId }) {
+  const platform = usePlatform();
+  const ws = useWorkspace();
+  async function onExport() {
+    const { bytes, filename } = await ws.exportArchive(id);
+    await platform.picker.saveFile({ suggestedName: filename, mime: 'application/zip', bytes });
+  }
+  return (
+    <button
+      className="gv-icon-btn"
+      title="Export as GrandView file (.gvd)"
+      data-testid="export-gvd"
+      onClick={() => void onExport()}
+    >
+      <Icon name="share" />
+    </button>
+  );
+}
 
 function DocTitle({ id }: { id: DocumentId }) {
   const ws = useWorkspace();
@@ -73,6 +134,8 @@ export function DocumentHost({ id }: { id: DocumentId }) {
               <DocTitle id={id} />
             </div>
             <div className="gv-doc-bar-right">
+              <ArchiveExportButton id={id} />
+              <ExportButton id={id} />
               <PresenceBar users={presence} />
               <SyncMenu
                 id={id}

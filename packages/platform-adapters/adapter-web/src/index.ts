@@ -23,6 +23,9 @@ const blobStore: BlobStoreAdapter = {
     await set(ref, { bytes, mime });
     return ref;
   },
+  async putAt(ref, bytes, mime) {
+    await set(ref, { bytes, mime });
+  },
   async get(ref) {
     const v = await get<{ bytes: Uint8Array }>(ref);
     if (!v) throw new Error(`blob not found: ${ref}`);

@@ -26,6 +26,6 @@ function detectPlatform(): PlatformAdapter['platform'] {
  */
 export async function bootstrap(): Promise<BootContext> {
   const adapter = createWebAdapter(detectPlatform());
-  const workspace = await createLocalWorkspace();
+  const workspace = await createLocalWorkspace(adapter.blobStore);
   return { adapter, workspace };
 }

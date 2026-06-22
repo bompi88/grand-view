@@ -126,6 +126,15 @@ export function buildTree(doc: Y.Doc): TreeResult {
   };
 }
 
+/** All attached files across the document (for archive export). */
+export function documentFiles(doc: Y.Doc): { blobRef: string; mime: string }[] {
+  const out: { blobRef: string; mime: string }[] = [];
+  for (const v of getNodeViews(doc)) {
+    for (const f of v.files) out.push({ blobRef: f.blobRef, mime: f.mime });
+  }
+  return out;
+}
+
 /** Sorted live children of a given parent. */
 export function getChildren(doc: Y.Doc, parentId: NodeId): NodeView[] {
   return getNodeViews(doc)

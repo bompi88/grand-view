@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@gv/shared": "workspace:*",
+    "docx": "^9.1.1",
+    "fflate": "^0.8.2",
     "fractional-indexing": "^3.2.0",
     "yjs": "^13.6.20"
   }

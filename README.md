@@ -120,8 +120,19 @@ the same Yjs core, selectable per document with a live status indicator:
   always-on cross-device collaboration (`VITE_GV_RELAY`); round-trip tested.
 - Presence avatars + collaborative cursors.
 
-**Next — Phase 3:** DOCX export, `.gvd`/`.gvt` import/export + legacy migration,
-code signing, auto-update, i18n completion.
+**Phase 3 (interop & distribution) — complete.**
+- **DOCX export** (`docx`): numbered chapters (1, 1.1, 1.1.1), embedded images,
+  tag/reference metadata; produced in-memory, saved via the platform layer.
+- **`.gvd`/`.gvt` archives** (fflate zip: manifest + Yjs snapshot + blobs);
+  import mints a fresh Y.Doc with remapped ids (a fork, not a re-join).
+- **Legacy migration**: imports old tar `.gvd`/`.gvt` (integer positions →
+  fractional, plaintext → paragraphs, tags/references normalized).
+- **Releasing** (`RELEASING.md`): CI wired for Tauri auto-update signing +
+  macOS/Windows code signing (needs your keys/certs); mobile store steps.
+- **i18n**: English + Norwegian across the main surfaces (live language switch).
+
+All phases (0–3) are complete and verified by unit tests, a relay integration
+test, and 9 headless-browser end-to-end flows.
 
 ## License
 

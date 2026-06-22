@@ -1,6 +1,20 @@
 {
   "app.title": "GrandView",
   "app.tagline": "Strukturer informasjonen din.",
-  "tree.empty": "Ingen kapitler ennå. Legg til ett for å komme i gang.",
-  "lang.label": "Språk"
+  "lang.label": "Språk",
+  "library.heading": "Mine dokumenter",
+  "library.new": "Nytt dokument",
+  "library.import": "Importer",
+  "library.empty": "Ingen dokumenter ennå — opprett ett for å begynne å strukturere informasjonen din.",
+  "library.templates": "Maler",
+  "library.trash": "Papirkurv",
+  "view.structure": "Struktur",
+  "view.tags": "Nøkkelord",
+  "view.references": "Kilder",
+  "tree.addChapter": "Kapittel",
+  "common.untagged": "Uten nøkkelord",
+  "common.unreferenced": "Uten kilder",
+  "common.untitled": "Uten tittel",
+  "common.restore": "Gjenopprett",
+  "common.deleteForever": "Slett for alltid"
 }

@@ -42,6 +42,12 @@ export interface Workspace {
   setSyncMode(id: DocumentId, mode: SyncMode): void;
   /** Whether a relay URL is configured (enables the 'relay' mode). */
   readonly relayConfigured: boolean;
+  /** Pack a document into a `.gvd`/`.gvt` archive (bytes + suggested filename). */
+  exportArchive(id: DocumentId): Promise<{ bytes: Uint8Array; filename: string }>;
+  /** Import a GrandView `.gvd`/`.gvt` archive. Returns the new document id. */
+  importArchive(bytes: Uint8Array): Promise<DocumentId>;
+  /** Import a legacy (tar) `.gvd`/`.gvt`. Returns the new document id. */
+  importLegacy(bytes: Uint8Array): Promise<DocumentId>;
 }
 
 const WorkspaceContext = createContext<Workspace | null>(null);

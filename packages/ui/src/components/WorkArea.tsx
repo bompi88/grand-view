@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useNodeOps } from '../hooks/useNodeOps.js';
 import { useUndo } from '../providers/UndoContext.js';
 import { useSelection } from '../state/selection.js';
@@ -25,13 +26,14 @@ function useSetAllCollapsed() {
   };
 }
 
-const VIEWS: { id: SidebarView; label: string }[] = [
-  { id: 'structure', label: 'Structure' },
-  { id: 'tags', label: 'Tags' },
-  { id: 'references', label: 'References' },
+const VIEWS: { id: SidebarView; key: string }[] = [
+  { id: 'structure', key: 'view.structure' },
+  { id: 'tags', key: 'view.tags' },
+  { id: 'references', key: 'view.references' },
 ];
 
 export function WorkArea() {
+  const { t } = useTranslation();
   const ops = useNodeOps();
   const { controller, canUndo, canRedo } = useUndo();
   const showTrash = useSelection((s) => s.showTrash);
@@ -55,7 +57,7 @@ export function WorkArea() {
               data-testid={`view-${v.id}`}
               onClick={() => setView(v.id)}
             >
-              {v.label}
+              {t(v.key)}
             </button>
           ))}
         </div>
@@ -67,7 +69,7 @@ export function WorkArea() {
             data-testid="add-chapter"
             onClick={() => ops.insert({ parentId: ROOT_PARENT, nodeType: 'chapter', name: 'New chapter' })}
           >
-            <Icon name="plus" size={14} /> Chapter
+            <Icon name="plus" size={14} /> {t('tree.addChapter')}
           </button>
           <span className="gv-spacer" />
           <button

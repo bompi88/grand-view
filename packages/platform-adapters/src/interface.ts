@@ -44,6 +44,8 @@ export interface ClipboardAdapter {
 /** Content-addressed-ish blob storage for file attachments. */
 export interface BlobStoreAdapter {
   put(bytes: Uint8Array, mime: string): Promise<string>; // returns blobRef
+  /** Store bytes under a specific ref (used when importing an archive). */
+  putAt(blobRef: string, bytes: Uint8Array, mime: string): Promise<void>;
   get(blobRef: string): Promise<Uint8Array>;
   delete(blobRef: string): Promise<void>;
   /** A URL usable as <img src> / download target for the blob. */
