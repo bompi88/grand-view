@@ -84,16 +84,20 @@ test).
 macOS). Capacitor iOS/Android config + scripts added; native projects build
 on a machine with the mobile toolchains (see above).
 
-**Phase 1 (single-user feature parity) — in progress.** Done and verified
-end-to-end in a headless browser: a WorkArea with a dnd-kit drag-drop tree
-(reparenting + keyboard-accessible), per-user Yjs undo/redo (origin-scoped),
-a TipTap collaborative editor bound to each note's `Y.XmlFragment`,
-tags/references editing, and a Trash panel (restore / empty) — all persisted
-to IndexedDB across reloads.
+**Phase 1 (single-user feature parity) — mostly done.** Verified end-to-end in
+a headless browser:
 
-**Next:** file attachments (drag-drop, paste-from-clipboard, preview),
-templates, a document library/router (multiple Grand Views), and the global
-tag/reference registry. Then Phase 2 (sync providers + real-time collab).
+- **Document library** — multiple Grand Views: create / open / list / soft-delete
+  / restore / delete-forever, each document a separate IndexedDB-persisted Y.Doc.
+- **WorkArea** — dnd-kit drag-drop tree (reparenting, keyboard-accessible),
+  per-user Yjs undo/redo (origin-scoped), TipTap collaborative editor bound to
+  each note's `Y.XmlFragment`, tags/references editing, Trash panel.
+- **File attachments** — drag-drop / file-picker / paste-from-clipboard upload,
+  image thumbnails, open / download / delete, via the platform blob store.
+- All state persists to IndexedDB across reloads and close/reopen.
+
+**Next:** templates (create-from-doc / doc-from-template) and the global
+tag/reference registry, then **Phase 2** (sync providers + real-time collab).
 
 ## License
 

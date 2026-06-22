@@ -2,6 +2,8 @@ import * as Y from 'yjs';
 import {
   ROOT_PARENT,
   newNodeId,
+  type FileId,
+  type FileMeta,
   type Label,
   type NodeId,
   type NodeType,
@@ -316,4 +318,40 @@ export function setCollapsed(doc: Y.Doc, nodeId: NodeId, collapsed: boolean): bo
   if (!node) return false;
   doc.transact(() => node.set('isCollapsed', collapsed));
   return true;
+}
+
+/** Attach a file (its bytes live in the platform blob store, referenced by blobRef). */
+export function addNodeFile(doc: Y.Doc, nodeId: NodeId, meta: FileMeta): boolean {
+  const node = nodesMap(doc).get(nodeId);
+  if (!node) return false;
+  doc.transact(() => {
+    const files = node.get('files') as Y.Array<Y.Map<unknown>>;
+    const m = new Y.Map();
+    m.set('id', meta.id);
+    m.set('name', meta.name);
+    m.set('mime', meta.mime);
+    m.set('size', meta.size);
+    m.set('isImage', meta.isImage);
+    m.set('blobRef', meta.blobRef);
+    files.push([m]);
+  });
+  return true;
+}
+
+/** Detach a file from a node. Returns the removed blobRef (for blob-store cleanup). */
+export function removeNodeFile(doc: Y.Doc, nodeId: NodeId, fileId: FileId): string | null {
+  const node = nodesMap(doc).get(nodeId);
+  if (!node) return null;
+  const files = node.get('files') as Y.Array<Y.Map<unknown>>;
+  let blobRef: string | null = null;
+  doc.transact(() => {
+    for (let i = 0; i < files.length; i++) {
+      if ((files.get(i).get('id') as FileId) === fileId) {
+        blobRef = String(files.get(i).get('blobRef') ?? '');
+        files.delete(i, 1);
+        break;
+      }
+    }
+  });
+  return blobRef;
 }

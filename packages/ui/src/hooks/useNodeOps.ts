@@ -1,9 +1,11 @@
 import { useMemo } from 'react';
 import {
+  addNodeFile,
   duplicateSubtree,
   emptyTrash,
   insertNode,
   moveNode,
+  removeNodeFile,
   removeToTrash,
   renameNode,
   restoreFromTrash,
@@ -12,7 +14,7 @@ import {
   type Anchor,
   type InsertNodeOptions,
 } from '@gv/core';
-import type { Label, NodeId } from '@gv/shared';
+import type { FileId, FileMeta, Label, NodeId } from '@gv/shared';
 import { useDoc } from '../providers/DocContext.js';
 import { useUndo } from '../providers/UndoContext.js';
 
@@ -50,6 +52,14 @@ export function useNodeOps() {
         tx(() => setCollapsed(doc, id, collapsed)),
       setLabels: (id: NodeId, kind: 'tags' | 'references', labels: Label[]) =>
         tx(() => setNodeLabels(doc, id, kind, labels)),
+      addFile: (id: NodeId, meta: FileMeta) => tx(() => addNodeFile(doc, id, meta)),
+      removeFile: (id: NodeId, fileId: FileId): string | null => {
+        let blobRef: string | null = null;
+        tx(() => {
+          blobRef = removeNodeFile(doc, id, fileId);
+        });
+        return blobRef;
+      },
     };
   }, [doc, controller]);
 }

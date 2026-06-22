@@ -6,6 +6,7 @@ import { useNodeView } from '../../hooks/useNodeView.js';
 import { useSelection } from '../../state/selection.js';
 import { TipTapEditor } from './TipTapEditor.js';
 import { LabelEditor } from './LabelEditor.js';
+import { Attachments } from './Attachments.js';
 
 export function NodeDetail() {
   const doc = useDoc();
@@ -40,6 +41,8 @@ export function NodeDetail() {
           <TipTapEditor fragment={fragment} />
         </div>
       )}
+
+      {node.nodeType === 'media' && <Attachments nodeId={selectedId} files={node.files} />}
 
       <LabelEditor nodeId={selectedId} kind="tags" labels={node.tags} title="Tags" />
       <LabelEditor

@@ -35,6 +35,8 @@ export {
   setNodeLabels,
   renameNode,
   setCollapsed,
+  addNodeFile,
+  removeNodeFile,
   type Anchor,
   type InsertNodeOptions,
   type MoveNodeOptions,
@@ -57,3 +59,21 @@ export { normalizeSiblingPositions, maxKeyLength } from './nodes/normalize.js';
 
 // Undo / redo
 export { createUndoController, LOCAL_ORIGIN, type UndoController } from './undo/undo.js';
+
+// Document library
+export {
+  createLibrary,
+  libraryDocs,
+  addDocumentEntry,
+  renameDocumentEntry,
+  touchDocumentEntry,
+  softRemoveDocumentEntry,
+  restoreDocumentEntry,
+  deleteDocumentEntry,
+  listDocuments,
+  listTemplates,
+  listDocumentTrash,
+  getDocumentMeta,
+  LIBRARY_GUID,
+  type AddDocumentInput,
+} from './library/library.js';

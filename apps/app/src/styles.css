@@ -194,6 +194,152 @@ body {
   border-bottom: 1px solid var(--gv-border);
 }
 
+/* Library screen */
+.gv-library {
+  flex: 1;
+  overflow: auto;
+  padding: 20px 24px;
+}
+
+.gv-lib-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.gv-lib-head h2 {
+  margin: 0;
+}
+
+.gv-doc-list {
+  list-style: none;
+  margin: 0 0 24px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.gv-doc-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--gv-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: var(--gv-panel);
+}
+
+.gv-doc-open {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.gv-doc-title {
+  font-weight: 600;
+}
+
+/* Document host */
+.gv-doc-host {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.gv-doc-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--gv-border);
+  background: var(--gv-panel);
+}
+
+.gv-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gv-muted);
+}
+
+/* Attachments */
+.gv-attachments {
+  margin-top: 16px;
+}
+
+.gv-file-list {
+  list-style: none;
+  margin: 4px 0;
+  padding: 0;
+}
+
+.gv-file {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--gv-border);
+}
+
+.gv-file-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #eef0fb;
+}
+
+.gv-file-thumb-empty {
+  display: inline-block;
+}
+
+.gv-file-icon {
+  font-size: 24px;
+}
+
+.gv-file-name {
+  flex: 1;
+}
+
+.gv-file-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.gv-dropzone {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px dashed var(--gv-border);
+  border-radius: 8px;
+  text-align: center;
+  color: var(--gv-muted);
+  font-size: 13px;
+}
+
+.gv-dropzone-active {
+  border-color: var(--gv-accent);
+  background: #eef0fb;
+}
+
+.gv-link {
+  color: var(--gv-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
 .gv-toolbar {
   margin-bottom: 12px;
 }
